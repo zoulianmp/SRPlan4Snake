@@ -2,14 +2,14 @@
 include(${SRPlan_CMAKE_DIR}/SRPlanMacroBuildQtModule.cmake)
 
 set(qtmodules
-  AtlasCreator
+ # AtlasCreator
   Cameras
   Units
   Colors
   SubjectHierarchy
   Transforms
   Annotations
-  Data
+  #Data
   DoubleArrays
   #Markups
   #Measurements
@@ -37,27 +37,13 @@ if(SRPlan_BUILD_DIFFUSION_SUPPORT)
     )
 endif()
 
-#foreach(module ${qtmodules})
-#  list(FIND SRPlan_QTLOADABLEMODULES_DISABLED ${module} _module_disabled)
-#  if(${_module_disabled} STREQUAL "-1")
-#    add_subdirectory(${module})
-#  endif()
-#endforeach(module)
+foreach(module ${qtmodules})
+  list(FIND SRPlan_QTLOADABLEMODULES_DISABLED ${module} _module_disabled)
+  if(${_module_disabled} STREQUAL "-1")
+    add_subdirectory(${module})
+  endif()
+endforeach(module)
 
-
-
-#Code by ZouLian for Debug
-add_subdirectory(SlicerWelcome)
-
-#Informatic
-add_subdirectory(Colors)
-add_subdirectory(SubjectHierarchy)
-add_subdirectory(Data)
-add_subdirectory(Cameras)
-add_subdirectory(DoubleArrays)
-add_subdirectory(Volumes)
-
-#EndCode by ZouLian for Debug
 
 
 # External modules have been moved to Modules/Remote/CMakeLists.txt
