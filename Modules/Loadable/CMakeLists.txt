@@ -9,7 +9,7 @@ set(qtmodules
   SubjectHierarchy
   Transforms
   Annotations
-  #Data
+  Data
   DoubleArrays
   #Markups
   #Measurements
