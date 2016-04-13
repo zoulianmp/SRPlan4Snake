@@ -24,6 +24,10 @@ set(qtmodules
   #ViewControllers
   Volumes
   #VolumeRendering # Volume Rendering depends of Volumes
+  Segmentations
+ # SegmentComparison
+  SegmentMorphology
+  
   )
 if(SRPlan_BUILD_CLI_SUPPORT)
   list(APPEND qtmodules
