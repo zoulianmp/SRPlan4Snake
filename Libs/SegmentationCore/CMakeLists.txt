@@ -57,9 +57,20 @@ set(lib_name ${PROJECT_NAME})
 SET (vtkSegmentationCore_LIBS ${vtkSegmentationCore_LIBS}
   ${VTK_LIBRARIES}
   MRMLCore
+  vtkAddon
   )
 
-INCLUDE_DIRECTORIES( ${vtkSegmentationCore_INCLUDE_DIRS} )
+
+set(include_dirs
+  ${MRMLCore_INCLUDE_DIRS}
+  ${vtkSegmentationCore_INCLUDE_DIRS}
+  ${vtkAddon_INCLUDE_DIRS}
+  )
+
+include_directories(${include_dirs})
+
+#INCLUDE_DIRECTORIES( ${vtkSegmentationCore_INCLUDE_DIRS} )
+
 ADD_LIBRARY(${lib_name} ${vtkSegmentationCore_SRCS})
 TARGET_LINK_LIBRARIES( ${lib_name} ${vtkSegmentationCore_LIBS} )
 

@@ -38,15 +38,39 @@ SET (SlicerRtCommon_LIBS ${SlicerRtCommon_LIBS}
   vtkSegmentationCore
   )
 
-INCLUDE_DIRECTORIES( ${SlicerRtCommon_INCLUDE_DIRS} )
+  
+
+
+
+
+
+  
+set(include_dirs
+  ${SlicerRtCommon_INCLUDE_DIRS}
+  ${vtkSegmentationCore_INCLUDE_DIRS}
+  ${MRMLCore_INCLUDE_DIRS}
+  )
+
+include_directories(${include_dirs})
+
+
+#INCLUDE_DIRECTORIES( ${SlicerRtCommon_INCLUDE_DIRS} )
 ADD_LIBRARY(${lib_name} ${SlicerRtCommon_SRCS})
 TARGET_LINK_LIBRARIES( ${lib_name} ${SlicerRtCommon_LIBS} )
 
+if(NOT DEFINED ${PROJECT_NAME}_INSTALL_BIN_DIR)
+  set(${PROJECT_NAME}_INSTALL_BIN_DIR bin)
+endif()
+if(NOT DEFINED ${PROJECT_NAME}_INSTALL_LIB_DIR)
+  set(${PROJECT_NAME}_INSTALL_LIB_DIR lib/${PROJECT_NAME})
+endif()
+
+
 # Set loadable modules output
 set_target_properties(${lib_name} PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${Slicer_QTLOADABLEMODULES_BIN_DIR}"
-  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${Slicer_QTLOADABLEMODULES_LIB_DIR}"
-  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${Slicer_QTLOADABLEMODULES_LIB_DIR}"
+  RUNTIME_OUTPUT_DIRECTORY "${PROJECT_NAME}_INSTALL_BIN_DIR"
+  LIBRARY_OUTPUT_DIRECTORY "${PROJECT_NAME}_INSTALL_BIN_DIR"
+  ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_NAME}_INSTALL_BIN_DIR"
   )
 
 IF (CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" AND NOT WIN32)
@@ -57,9 +81,9 @@ ENDIF()
 # Install library
 # --------------------------------------------------------------------------
 install(TARGETS ${lib_name}
-  RUNTIME DESTINATION ${Slicer_INSTALL_QTLOADABLEMODULES_BIN_DIR} COMPONENT RuntimeLibraries
-  LIBRARY DESTINATION ${Slicer_INSTALL_QTLOADABLEMODULES_LIB_DIR} COMPONENT RuntimeLibraries
-  ARCHIVE DESTINATION ${Slicer_INSTALL_QTLOADABLEMODULES_LIB_DIR} COMPONENT Development
+  RUNTIME DESTINATION ${PROJECT_NAME}_INSTALL_BIN_DIR COMPONENT RuntimeLibraries
+  LIBRARY DESTINATION ${PROJECT_NAME}_INSTALL_BIN_DIR COMPONENT RuntimeLibraries
+  ARCHIVE DESTINATION ${PROJECT_NAME}_INSTALL_BIN_DIR COMPONENT Development
   )
 
 # --------------------------------------------------------------------------

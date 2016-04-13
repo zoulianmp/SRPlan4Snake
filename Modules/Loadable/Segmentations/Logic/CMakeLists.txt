@@ -1,4 +1,4 @@
-project(vtkSlicer${MODULE_NAME}ModuleLogic)
+project(vtkSRPlan${MODULE_NAME}ModuleLogic)
 
 set(KIT ${PROJECT_NAME})
 

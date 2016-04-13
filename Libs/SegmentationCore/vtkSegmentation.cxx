@@ -29,7 +29,7 @@
 #include "vtkCalculateOversamplingFactor.h"
 
 // MRML includes
-//#include <vtkEventBroker.h> // Only using the event broker mechanism from MRML, otherwise no dependence
+#include <vtkEventBroker.h> // Only using the event broker mechanism from MRML, otherwise no dependence
 
 // VTK includes
 #include <vtkNew.h>

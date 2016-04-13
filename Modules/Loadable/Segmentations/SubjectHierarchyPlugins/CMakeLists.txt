@@ -1,4 +1,4 @@
-project(qSlicer${MODULE_NAME}SubjectHierarchyPlugins)
+project(qSRPlan${MODULE_NAME}SubjectHierarchyPlugins)
 
 set(KIT ${PROJECT_NAME})
 

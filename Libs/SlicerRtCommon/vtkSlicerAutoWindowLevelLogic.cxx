@@ -14,6 +14,8 @@
 
 ==============================================================================*/
 
+#include <algorithm>
+
 // AutoWindowLevel Logic includes
 #include "vtkSlicerAutoWindowLevelLogic.h"
 

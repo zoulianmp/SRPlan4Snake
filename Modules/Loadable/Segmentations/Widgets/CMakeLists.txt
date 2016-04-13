@@ -1,4 +1,4 @@
-project(qSlicer${MODULE_NAME}ModuleWidgets)
+project(qSRPlan${MODULE_NAME}ModuleWidgets)
 
 set(KIT ${PROJECT_NAME})
 

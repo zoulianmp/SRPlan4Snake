@@ -1,4 +1,4 @@
-project(vtkSlicer${MODULE_NAME}ModuleMRML)
+project(vtkSRPlan${MODULE_NAME}ModuleMRML)
 
 set(KIT ${PROJECT_NAME})
 

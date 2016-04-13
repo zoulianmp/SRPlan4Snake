@@ -25,7 +25,7 @@
 #include "vtkCalculateOversamplingFactor.h"
 
 // Slicer includes
-//#include "vtkLoggingMacros.h"
+#include "vtkLoggingMacros.h"
 
 // VTK includes
 #include <vtkObjectFactory.h>
