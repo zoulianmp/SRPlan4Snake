@@ -29,14 +29,14 @@
 // Segmentation includes
 #include "vtkSegmentation.h"
 
-#include "vtkSlicerSegmentationsModuleMRMLExport.h"
+#include "vtkSRPlanSegmentationsModuleMRMLExport.h"
 
 class vtkCallbackCommand;
 class vtkMRMLScene;
 class vtkMRMLSubjectHierarchyNode;
 
 /// \ingroup Segmentations
-class VTK_SLICER_SEGMENTATIONS_MODULE_MRML_EXPORT vtkMRMLSegmentationNode : public vtkMRMLLabelMapVolumeNode
+class VTK_SRPlan_SEGMENTATIONS_MODULE_MRML_EXPORT vtkMRMLSegmentationNode : public vtkMRMLLabelMapVolumeNode
 {
 public:
   // Define constants

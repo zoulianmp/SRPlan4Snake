@@ -17,7 +17,7 @@
 
 #include "vtkMRMLLabelMapVolumeDisplayNode.h"
 
-#include "vtkSlicerSegmentationsModuleMRMLExport.h"
+#include "vtkSRPlanSegmentationsModuleMRMLExport.h"
 
 #include <set>
 
@@ -28,7 +28,7 @@ class vtkVector3d;
 /// \brief MRML node for representing segmentation display attributes.
 ///
 /// vtkMRMLSegmentationDisplayNode nodes describe how volume is displayed.
-class VTK_SLICER_SEGMENTATIONS_MODULE_MRML_EXPORT vtkMRMLSegmentationDisplayNode : public vtkMRMLLabelMapVolumeDisplayNode
+class VTK_SRPlan_SEGMENTATIONS_MODULE_MRML_EXPORT vtkMRMLSegmentationDisplayNode : public vtkMRMLLabelMapVolumeDisplayNode
 {
 public:
   // Define constants

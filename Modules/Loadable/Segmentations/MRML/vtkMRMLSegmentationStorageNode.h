@@ -22,7 +22,7 @@
 #define __vtkMRMLSegmentationStorageNode_h
 
 // Segmentation includes
-#include "vtkSlicerSegmentationsModuleMRMLExport.h"
+#include "vtkSRPlanSegmentationsModuleMRMLExport.h"
 
 // MRML includes
 #include "vtkMRMLStorageNode.h"
@@ -42,7 +42,7 @@ class vtkInformationIntegerVectorKey;
 /// \brief MRML node for segmentation storage on disk.
 ///
 /// Storage nodes has methods to read/write segmentations to/from disk.
-class VTK_SLICER_SEGMENTATIONS_MODULE_MRML_EXPORT vtkMRMLSegmentationStorageNode : public vtkMRMLStorageNode
+class VTK_SRPlan_SEGMENTATIONS_MODULE_MRML_EXPORT vtkMRMLSegmentationStorageNode : public vtkMRMLStorageNode
 {
   // Although internally binary labelmap representations can be of unsigned char, unsigned short
   // or short types, the output file is always unsigned char

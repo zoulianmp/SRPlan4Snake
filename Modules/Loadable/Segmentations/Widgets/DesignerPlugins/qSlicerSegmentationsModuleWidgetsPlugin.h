@@ -31,7 +31,7 @@
 #include "qMRMLSegmentSelectorWidgetPlugin.h"
 
 // \class Group the plugins in one library
-class Q_SLICER_MODULE_SEGMENTATIONS_WIDGETS_PLUGINS_EXPORT qSlicerSegmentationsModuleWidgetsPlugin
+class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_PLUGINS_EXPORT qSlicerSegmentationsModuleWidgetsPlugin
   : public QObject
   , public QDesignerCustomWidgetCollectionInterface
 {

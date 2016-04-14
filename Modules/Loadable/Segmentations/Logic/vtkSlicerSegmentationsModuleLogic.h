@@ -28,7 +28,7 @@
 
 // Slicer includes
 #include "vtkSlicerModuleLogic.h"
-#include "vtkSlicerSegmentationsModuleLogicExport.h"
+#include "vtkSRPlanSegmentationsModuleLogicExport.h"
 
 // Segmentations includes
 #include "vtkMRMLSegmentationNode.h"
@@ -44,7 +44,7 @@ class vtkMRMLLabelMapVolumeNode;
 class vtkMRMLModelNode;
 
 /// \ingroup SlicerRt_QtModules_Segmentations
-class VTK_SLICER_SEGMENTATIONS_LOGIC_EXPORT vtkSlicerSegmentationsModuleLogic :
+class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT vtkSlicerSegmentationsModuleLogic :
   public vtkSlicerModuleLogic
 {
 public:

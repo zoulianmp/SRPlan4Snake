@@ -22,9 +22,9 @@
 #define __qSlicerSegmentationsModuleWidgetsAbstractPlugin_h
 
 #include <QDesignerCustomWidgetInterface>
-#include "qSlicerSegmentationsModuleWidgetsPluginsExport.h"
+#include "qSRPlanSegmentationsModuleWidgetsPluginsExport.h"
 
-class Q_SLICER_MODULE_SEGMENTATIONS_WIDGETS_PLUGINS_EXPORT qSlicerSegmentationsModuleWidgetsAbstractPlugin
+class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_PLUGINS_EXPORT qSlicerSegmentationsModuleWidgetsAbstractPlugin
     : public QDesignerCustomWidgetInterface
 {
   Q_INTERFACES(QDesignerCustomWidgetInterface);

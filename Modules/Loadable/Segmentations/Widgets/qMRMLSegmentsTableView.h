@@ -27,7 +27,7 @@
 #include <QWidget>
 
 // MRMLWidgets includes
-#include "qSlicerSegmentationsModuleWidgetsExport.h"
+#include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
 // CTK includes
 #include <ctkPimpl.h>
@@ -39,7 +39,7 @@ class QTableWidgetItem;
 class QItemSelection;
 
 /// \ingroup SlicerRt_QtModules_Segmentations_Widgets
-class Q_SLICER_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentsTableView : public QWidget
+class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentsTableView : public QWidget
 {
   Q_OBJECT
   QVTK_OBJECT

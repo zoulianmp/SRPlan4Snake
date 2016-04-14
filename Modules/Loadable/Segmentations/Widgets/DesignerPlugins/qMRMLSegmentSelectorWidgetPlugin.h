@@ -23,7 +23,7 @@
 
 #include "qSlicerSegmentationsModuleWidgetsAbstractPlugin.h"
 
-class Q_SLICER_MODULE_SEGMENTATIONS_WIDGETS_PLUGINS_EXPORT qMRMLSegmentSelectorWidgetPlugin
+class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_PLUGINS_EXPORT qMRMLSegmentSelectorWidgetPlugin
   : public QObject
   , public qSlicerSegmentationsModuleWidgetsAbstractPlugin
 {

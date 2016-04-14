@@ -28,11 +28,11 @@
 #include <QModelIndex>
 
 // MRMLWidgets includes
-#include "qSlicerSegmentationsModuleWidgetsExport.h"
+#include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
 // \brief Delegate for displaying opacity spinbox that has 0.1 step size
 //        (the ctkSliderWidget is positioned through the edge of the screen and is unusable)
-class Q_SLICER_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLDoubleSpinBoxDelegate : public QStyledItemDelegate
+class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLDoubleSpinBoxDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
 

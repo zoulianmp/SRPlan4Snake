@@ -24,14 +24,14 @@
 // Subject Hierarchy includes
 #include "qSlicerSubjectHierarchyAbstractPlugin.h"
 
-#include "qSlicerSegmentationsSubjectHierarchyPluginsExport.h"
+#include "qSRPlanSegmentationsSubjectHierarchyPluginsExport.h"
 
 class qSlicerSubjectHierarchySegmentsPluginPrivate;
 class vtkMRMLNode;
 class vtkMRMLSubjectHierarchyNode;
 
 /// \ingroup SlicerRt_QtModules_Segmentations
-class Q_SLICER_SEGMENTATIONS_PLUGINS_EXPORT qSlicerSubjectHierarchySegmentsPlugin : public qSlicerSubjectHierarchyAbstractPlugin
+class Q_SRPlan_SEGMENTATIONS_PLUGINS_EXPORT qSlicerSubjectHierarchySegmentsPlugin : public qSlicerSubjectHierarchyAbstractPlugin
 {
 public:
   Q_OBJECT

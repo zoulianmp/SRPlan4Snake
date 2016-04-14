@@ -1,6 +1,6 @@
 set(KIT ${PROJECT_NAME}Plugins)
 
-set(${KIT}_EXPORT "Q_SLICER_MODULE_${MODULE_NAME_UPPER}_WIDGETS_PLUGINS_EXPORT")
+set(${KIT}_EXPORT "Q_SRPlan_MODULE_${MODULE_NAME_UPPER}_WIDGETS_PLUGINS_EXPORT")
 
 set(${KIT}_SRCS
   qSlicerSegmentationsModuleWidgetsAbstractPlugin.cxx
@@ -26,7 +26,7 @@ set(${KIT}_MOC_SRCS
   )
 
 set(${KIT}_TARGET_LIBRARIES
-  qSlicerSegmentationsModuleWidgets
+  qSRPlanSegmentationsModuleWidgets
   )
 
 #-----------------------------------------------------------------------------

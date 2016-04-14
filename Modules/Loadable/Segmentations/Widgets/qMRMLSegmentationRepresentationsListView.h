@@ -27,7 +27,7 @@
 #include <QWidget>
 
 // Segmentations includes
-#include "qSlicerSegmentationsModuleWidgetsExport.h"
+#include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
 // CTK includes
 #include <ctkPimpl.h>
@@ -36,7 +36,7 @@
 class vtkMRMLNode;
 class qMRMLSegmentationRepresentationsListViewPrivate;
 
-class Q_SLICER_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentationRepresentationsListView : public QWidget
+class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentationRepresentationsListView : public QWidget
 {
   Q_OBJECT
   QVTK_OBJECT

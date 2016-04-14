@@ -24,7 +24,7 @@
 // MRMLDisplayableManager includes
 #include "vtkMRMLAbstractThreeDViewDisplayableManager.h"
 
-#include "vtkSlicerSegmentationsModuleMRMLDisplayableManagerExport.h"
+#include "vtkSRPlanSegmentationsModuleMRMLDisplayableManagerExport.h"
 
 /// \brief Display segmentations in 3D views
 ///
@@ -33,7 +33,7 @@
 /// Otherwise show first poly data representation if any.
 /// Otherwise try converting to closed surface representation
 ///
-class VTK_SLICER_SEGMENTATIONS_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLSegmentationsDisplayableManager3D
+class VTK_SRPlan_SEGMENTATIONS_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLSegmentationsDisplayableManager3D
   : public vtkMRMLAbstractThreeDViewDisplayableManager
 {
 public:

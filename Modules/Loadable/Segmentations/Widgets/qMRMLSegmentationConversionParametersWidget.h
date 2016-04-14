@@ -27,7 +27,7 @@
 #include <QWidget>
 
 // Segmentations includes
-#include "qSlicerSegmentationsModuleWidgetsExport.h"
+#include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
 #include "vtkSegmentationConverter.h"
 #include "vtkSegmentationConverterRule.h"
@@ -41,7 +41,7 @@ class qMRMLSegmentationConversionParametersWidgetPrivate;
 class QTableWidgetItem;
 class QItemSelectionModel;
 
-class Q_SLICER_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentationConversionParametersWidget : public QWidget
+class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentationConversionParametersWidget : public QWidget
 {
   Q_OBJECT
   QVTK_OBJECT

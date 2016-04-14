@@ -2,16 +2,16 @@ project(qSRPlan${MODULE_NAME}SubjectHierarchyPlugins)
 
 set(KIT ${PROJECT_NAME})
 
-set(${KIT}_EXPORT_DIRECTIVE "Q_SLICER_${MODULE_NAME_UPPER}_PLUGINS_EXPORT")
+set(${KIT}_EXPORT_DIRECTIVE "Q_SRPlan_${MODULE_NAME_UPPER}_PLUGINS_EXPORT")
 
 set(${KIT}_INCLUDE_DIRECTORIES
   ${SlicerRtCommon_INCLUDE_DIRS}
-  ${vtkSlicerSegmentationsModuleMRML_INCLUDE_DIRS}
-  ${vtkSlicerSegmentationsModuleLogic_INCLUDE_DIRS}
-  ${qSlicerSegmentationsModule_INCLUDE_DIRS}
-  ${qSlicerSubjectHierarchyModuleWidgets_INCLUDE_DIRS}
+  ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
+  ${vtkSRPlanSegmentationsModuleLogic_INCLUDE_DIRS}
+  ${qSRPlanSegmentationsModule_INCLUDE_DIRS}
+  ${qSRPlanSubjectHierarchyModuleWidgets_INCLUDE_DIRS}
   ${MRMLCore_INCLUDE_DIRS}
-  ${Slicer_Base_INCLUDE_DIRS}
+  ${SRPlan_Base_INCLUDE_DIRS}
   )
 
 set(${KIT}_SRCS
@@ -33,14 +33,33 @@ set(${KIT}_RESOURCES
   Resources/${KIT}.qrc
   )
 
-SET (${KIT}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${qSlicerSubjectHierarchyModuleWidgets_INCLUDE_DIRS} CACHE INTERNAL "" FORCE)
+#   ${vtkSRPlanSubjectHierarchyModuleLogic_INCLUDE_DIRS}
+#  ${qSRPlanSubjectHierarchyModuleWidgets_INCLUDE_DIRS}
+
+SET (${KIT}_INCLUDE_DIRS 
+     ${CMAKE_CURRENT_SOURCE_DIR} 
+     ${CMAKE_CURRENT_BINARY_DIR} 
+     ${qSRPlanSubjectHierarchyModuleWidgets_INCLUDE_DIRS} 
+	 ${vtkSRPlanSubjectHierarchyModuleLogic_INCLUDE_DIRS}
+     ${qSRPlanSubjectHierarchyModuleWidgets_INCLUDE_DIRS}
+     ${MRMLCore_INCLUDE_DIRS}
+     ${MRMLLogic_INCLUDE_DIRS}
+     ${qMRMLWidgets_INCLUDE_DIRS}
+	 ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
+     CACHE INTERNAL "" FORCE)
+
+
+
+
+	 
+
 
 #-----------------------------------------------------------------------------
 set(${KIT}_TARGET_LIBRARIES
   vtkSlicerRtCommon
-  vtkSlicerSegmentationsModuleMRML
-  vtkSlicerSegmentationsModuleLogic
-  qSlicerSubjectHierarchyModuleWidgets
+  vtkSRPlanSegmentationsModuleMRML
+  vtkSRPlanSegmentationsModuleLogic
+  qSRPlanSubjectHierarchyModuleWidgets
   MRMLCore
   )
 

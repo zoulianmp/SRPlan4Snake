@@ -26,7 +26,7 @@
 // MRMLWidgets includes
 #include "qMRMLWidget.h"
 
-#include "qSlicerSegmentationsModuleWidgetsExport.h"
+#include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
 // CTK includes
 #include <ctkPimpl.h>
@@ -40,7 +40,7 @@ class QItemSelection;
 /// \brief Qt widget for selecting a single segment from a segmentation.
 ///   If multiple segments are needed, then use \sa qMRMLSegmentsTableView instead in SimpleListMode
 /// \ingroup SlicerRt_QtModules_Segmentations_Widgets
-class Q_SLICER_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentSelectorWidget : public qMRMLWidget
+class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentSelectorWidget : public qMRMLWidget
 {
   Q_OBJECT
   QVTK_OBJECT

@@ -27,12 +27,12 @@
 // SlicerQt includes
 #include "qSlicerLoadableModule.h"
 
-#include "qSlicerSegmentationsModuleExport.h"
+#include "qSRPlanSegmentationsModuleExport.h"
 
 class qSlicerSegmentationsModulePrivate;
 
 /// \ingroup SlicerRt_QtModules_Segmentations
-class Q_SLICER_QTMODULES_SEGMENTATIONS_EXPORT qSlicerSegmentationsModule :
+class Q_SRPlan_QTMODULES_SEGMENTATIONS_EXPORT qSlicerSegmentationsModule :
   public qSlicerLoadableModule
 {
   Q_OBJECT
