@@ -26,12 +26,12 @@
 #include <vtkMRML.h>
 #include <vtkMRMLNode.h>
 
-#include "vtkSlicerSegmentMorphologyModuleLogicExport.h"
+#include "vtkSRPlanSegmentMorphologyModuleLogicExport.h"
 
 class vtkMRMLSegmentationNode;
 
 /// \ingroup SlicerRt_QtModules_SegmentMorphology
-class VTK_SLICER_SEGMENTMORPHOLOGY_MODULE_LOGIC_EXPORT vtkMRMLSegmentMorphologyNode : public vtkMRMLNode
+class VTK_SRPlan_SEGMENTMORPHOLOGY_MODULE_LOGIC_EXPORT vtkMRMLSegmentMorphologyNode : public vtkMRMLNode
 {
 public:
   enum SegmentMorphologyOperationType

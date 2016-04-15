@@ -36,6 +36,8 @@ class Q_SRPlan_QTMODULES_SEGMENTATIONS_EXPORT qSlicerSegmentationsModule :
   public qSlicerLoadableModule
 {
   Q_OBJECT
+  Q_PLUGIN_METADATA(IID "qSRPlanSegmentationsModule" FILE "qSRPlanSegmentationsModule.JSON")
+
   Q_INTERFACES(qSlicerLoadableModule);
   QVTK_OBJECT
 

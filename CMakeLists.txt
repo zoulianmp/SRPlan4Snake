@@ -152,6 +152,10 @@ endif()
 
 include(SRPlanBuildOutputOptions)
 
+if(SRPlan_OUT_UNIFY)
+   file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/share DESTINATION ${SRPlan_OUT_ROOT})
+
+endif()
 
 #-----------------------------------------------------------------------------
 # SRPlan install directories

@@ -16,12 +16,14 @@ add_subdirectory(Widgets)
 
 set(MODULE_EXPORT_DIRECTIVE "Q_SRPlan_QTMODULES_${MODULE_NAME_UPPER}_EXPORT")
 
+
+
 set(MODULE_INCLUDE_DIRECTORIES
-  ${vtkSlicerSegmentationsModuleMRML_INCLUDE_DIRS}
-  ${vtkSlicerSegmentationsModuleLogic_INCLUDE_DIRS}
-  ${vtkSlicerSegmentationsModuleMRMLDisplayableManager_INCLUDE_DIRS}
-  ${qSlicerSegmentationsModuleWidgets_INCLUDE_DIRS}
-  ${qSlicerSegmentationsSubjectHierarchyPlugins_INCLUDE_DIRS}
+  ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
+  ${vtkSRPlanSegmentationsModuleLogic_INCLUDE_DIRS}
+  ${vtkSRPlanSegmentationsModuleMRMLDisplayableManager_INCLUDE_DIRS}
+  ${qSRPlanSegmentationsModuleWidgets_INCLUDE_DIRS}
+  ${qSRPlanSegmentationsSubjectHierarchyPlugins_INCLUDE_DIRS}
   )
 
   set(MODULE_SRCS
@@ -44,15 +46,15 @@ set(MODULE_UI_SRCS
   )
 
 set(MODULE_TARGET_LIBRARIES
-  vtkSlicer${MODULE_NAME}ModuleMRML
-  vtkSlicer${MODULE_NAME}ModuleLogic
-  vtkSlicer${MODULE_NAME}ModuleMRMLDisplayableManager
-  qSlicer${MODULE_NAME}ModuleWidgets
-  qSlicer${MODULE_NAME}SubjectHierarchyPlugins
+  vtkSRPlan${MODULE_NAME}ModuleMRML
+  vtkSRPlan${MODULE_NAME}ModuleLogic
+  vtkSRPlan${MODULE_NAME}ModuleMRMLDisplayableManager
+  qSRPlan${MODULE_NAME}ModuleWidgets
+  qSRPlan${MODULE_NAME}SubjectHierarchyPlugins
   )
 
 set(MODULE_RESOURCES
-  Resources/qSlicer${MODULE_NAME}Module.qrc
+  Resources/qSRPlan${MODULE_NAME}Module.qrc
   )
 
 #-----------------------------------------------------------------------------

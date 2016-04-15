@@ -26,7 +26,7 @@ set(qtmodules
   #VolumeRendering # Volume Rendering depends of Volumes
   Segmentations
  # SegmentComparison
- # SegmentMorphology
+  SegmentMorphology
   
   )
 if(SRPlan_BUILD_CLI_SUPPORT)

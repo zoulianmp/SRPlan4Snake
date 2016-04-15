@@ -34,6 +34,7 @@ class Q_SRPlan_QTMODULES_SEGMENTMORPHOLOGY_EXPORT qSlicerSegmentMorphologyModule
   public qSlicerLoadableModule
 {
   Q_OBJECT
+  Q_PLUGIN_METADATA(IID "qSRPlanSegmentMorphologyModule" FILE "qSRPlanSegmentMorphologyModule.JSON")
   Q_INTERFACES(qSlicerLoadableModule);
 
 public:

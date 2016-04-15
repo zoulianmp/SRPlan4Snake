@@ -18,7 +18,7 @@ set(MODULE_INCLUDE_DIRECTORIES
   ${CMAKE_CURRENT_SOURCE_DIR}/Logic
   ${CMAKE_CURRENT_BINARY_DIR}/Logic
   ${SlicerRtCommon_INCLUDE_DIRS}
-  ${qSlicerSegmentationsModuleWidgets_INCLUDE_DIRS}
+  ${qSRPlanSegmentationsModuleWidgets_INCLUDE_DIRS}
   )
 
 set(MODULE_SRCS
@@ -38,12 +38,12 @@ set(MODULE_UI_SRCS
   )
 
 set(MODULE_TARGET_LIBRARIES
-  vtkSlicer${MODULE_NAME}ModuleLogic
-  qSlicerSegmentationsModuleWidgets
+  vtkSRPlan${MODULE_NAME}ModuleLogic
+  qSRPlanSegmentationsModuleWidgets
   )
 
 set(MODULE_RESOURCES
-  Resources/qSlicer${MODULE_NAME}Module.qrc
+  Resources/qSRPlan${MODULE_NAME}Module.qrc
   )
 
 #-----------------------------------------------------------------------------

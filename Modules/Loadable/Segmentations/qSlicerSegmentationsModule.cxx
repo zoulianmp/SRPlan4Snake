@@ -46,7 +46,7 @@
 #include <vtkMRMLSubjectHierarchyNode.h>
 
 //-----------------------------------------------------------------------------
-Q_EXPORT_PLUGIN2(qSlicerSegmentationsModule, qSlicerSegmentationsModule);
+//Q_EXPORT_PLUGIN2(qSlicerSegmentationsModule, qSlicerSegmentationsModule);
 
 //-----------------------------------------------------------------------------
 /// \ingroup SlicerRt_QtModules_Segmentations
@@ -85,7 +85,7 @@ QString qSlicerSegmentationsModule::helpText()const
   QString help = 
     "The Segmentations module manages segmentations. "
     "For more information see <a href=\"%1/Documentation/%2.%3/Modules/Segmentations\">%1/Documentation/%2.%3/Modules/Segmentations</a><br>";
-  return help.arg(this->slicerWikiUrl()).arg(Slicer_VERSION_MAJOR).arg(Slicer_VERSION_MINOR);
+  return help.arg(this->slicerWikiUrl()).arg(SRPlan_VERSION_MAJOR).arg(SRPlan_VERSION_MINOR);
 }
 
 //-----------------------------------------------------------------------------

@@ -2,12 +2,12 @@ project(vtkSRPlan${MODULE_NAME}ModuleLogic)
 
 set(KIT ${PROJECT_NAME})
 
-set(${KIT}_EXPORT_DIRECTIVE "VTK_SLICER_${MODULE_NAME_UPPER}_MODULE_LOGIC_EXPORT")
+set(${KIT}_EXPORT_DIRECTIVE "VTK_SRPlan_${MODULE_NAME_UPPER}_MODULE_LOGIC_EXPORT")
 
 set(${KIT}_INCLUDE_DIRECTORIES
   ${SlicerRtCommon_INCLUDE_DIRS}
-  ${vtkSlicerSegmentationsModuleMRML_INCLUDE_DIRS}
-  ${vtkSlicerSegmentationsModuleLogic_INCLUDE_DIRS}
+  ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
+  ${vtkSRPlanSegmentationsModuleLogic_INCLUDE_DIRS}
   )
 
 set(${KIT}_SRCS
@@ -19,9 +19,9 @@ set(${KIT}_SRCS
 
 set(${KIT}_TARGET_LIBRARIES
   vtkSlicerRtCommon
-  vtkSlicerSegmentationsModuleMRML
-  vtkSlicerSegmentationsModuleLogic
-  qSlicerSegmentationsSubjectHierarchyPlugins
+  vtkSRPlanSegmentationsModuleMRML
+  vtkSRPlanSegmentationsModuleLogic
+  qSRPlanSegmentationsSubjectHierarchyPlugins
   )
 
 #-----------------------------------------------------------------------------

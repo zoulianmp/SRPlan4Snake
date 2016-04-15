@@ -31,12 +31,12 @@
 // Slicer includes
 #include "vtkSlicerModuleLogic.h"
 
-#include "vtkSlicerSegmentMorphologyModuleLogicExport.h"
+#include "vtkSRPlanSegmentMorphologyModuleLogicExport.h"
 
 class vtkMRMLSegmentMorphologyNode;
 
 /// \ingroup SlicerRt_QtModules_SegmentMorphology
-class VTK_SLICER_SEGMENTMORPHOLOGY_MODULE_LOGIC_EXPORT vtkSlicerSegmentMorphologyModuleLogic :
+class VTK_SRPlan_SEGMENTMORPHOLOGY_MODULE_LOGIC_EXPORT vtkSlicerSegmentMorphologyModuleLogic :
   public vtkSlicerModuleLogic
 {
 public:

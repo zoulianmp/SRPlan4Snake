@@ -30,7 +30,7 @@
 #include "qSlicerSegmentMorphologyModuleWidget.h"
 
 //-----------------------------------------------------------------------------
-Q_EXPORT_PLUGIN2(qSlicerSegmentMorphologyModule, qSlicerSegmentMorphologyModule);
+//Q_EXPORT_PLUGIN2(qSlicerSegmentMorphologyModule, qSlicerSegmentMorphologyModule);
 
 //-----------------------------------------------------------------------------
 /// \ingroup SlicerRt_QtModules_SegmentMorphology
@@ -69,7 +69,7 @@ QString qSlicerSegmentMorphologyModule::helpText()const
   QString help = 
     "The Segment morphology module performs simualtion study of patient motion. "
     "For more information see <a href=\"%1/Documentation/%2.%3/Modules/SegmentMorphology\">%1/Documentation/%2.%3/Modules/SegmentMorphology</a><br>";
-  return help.arg(this->slicerWikiUrl()).arg(Slicer_VERSION_MAJOR).arg(Slicer_VERSION_MINOR);
+  return help.arg(this->slicerWikiUrl()).arg(SRPlan_VERSION_MAJOR).arg(SRPlan_VERSION_MINOR);
 }
 
 //-----------------------------------------------------------------------------
