@@ -27,10 +27,10 @@ set(KIT_SRCS
   EventBroker/qSlicerEventBrokerModuleWidget.cxx
   EventBroker/qSlicerEventBrokerModuleWidget.h
 
-  ROI/qSlicerROIModule.cxx
-  ROI/qSlicerROIModule.h
-  ROI/qSlicerROIModuleWidget.cxx
-  ROI/qSlicerROIModuleWidget.h
+#  ROI/qSlicerROIModule.cxx
+#  ROI/qSlicerROIModule.h
+#  ROI/qSlicerROIModuleWidget.cxx
+#  ROI/qSlicerROIModuleWidget.h
   )
 
 # Headers that should run through moc
@@ -40,15 +40,15 @@ set(KIT_MOC_SRCS
   EventBroker/qSlicerEventBrokerModule.h
   EventBroker/qSlicerEventBrokerModuleWidget.h
 
-  ROI/qSlicerROIModule.h
-  ROI/qSlicerROIModuleWidget.h
+#  ROI/qSlicerROIModule.h
+#  ROI/qSlicerROIModuleWidget.h
 
   )
 
 # UI files
 set(KIT_UI_SRCS
   Resources/UI/qSlicerEventBrokerModuleWidget.ui
-  Resources/UI/qSlicerROIModuleWidget.ui
+#  Resources/UI/qSlicerROIModuleWidget.ui
   )
 
 # Additional Target libraries (QT libs already included)
