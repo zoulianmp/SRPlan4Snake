@@ -206,6 +206,8 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   QObject::connect(this->ModuleSelectorToolBar, SIGNAL(moduleSelected(QString)),
                    this->PanelDockWidget, SLOT(show()));
 
+
+  /*
   //----------------------------------------------------------------------------
   // MouseMode ToolBar
   //----------------------------------------------------------------------------
@@ -247,6 +249,7 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
     {
     this->CaptureToolBar->setPopupsTimeOut(true);
     }
+	*/
 
   QList<QAction*> toolBarActions;
   toolBarActions << this->MainToolBar->toggleViewAction();
@@ -254,11 +257,11 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   toolBarActions << this->ModuleSelectorToolBar->toggleViewAction();
   toolBarActions << this->ModuleToolBar->toggleViewAction();
   toolBarActions << this->ViewToolBar->toggleViewAction();
-  //toolBarActions << this->LayoutToolBar->toggleViewAction();
-  toolBarActions << this->MouseModeToolBar->toggleViewAction();
-  toolBarActions << this->CaptureToolBar->toggleViewAction();
+  toolBarActions << this->LayoutToolBar->toggleViewAction();
+ // toolBarActions << this->MouseModeToolBar->toggleViewAction();
+ // toolBarActions << this->CaptureToolBar->toggleViewAction();
   toolBarActions << this->ViewersToolBar->toggleViewAction();
-  toolBarActions << this->DialogToolBar->toggleViewAction();
+ // toolBarActions << this->DialogToolBar->toggleViewAction();
 
   this->WindowToolBarsMenu->insertActions(
     this->WindowToolbarsResetToDefaultAction, toolBarActions);
@@ -284,17 +287,33 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   this->LayoutToolBar = 0;
 
   // Color of the spacing between views:
-  QFrame* layoutFrame = new QFrame(this->CentralWidget);
-  layoutFrame->setObjectName("CentralWidgetLayoutFrame");
-  QHBoxLayout* centralLayout = new QHBoxLayout(this->CentralWidget);
+  //QFrame* layoutFrame = new QFrame(this->CentralWidget);
+  QFrame* layoutFrame = this->layoutFrame;
+  
+
+  QVBoxLayout* centralLayout = new QVBoxLayout(this->CentralWidget);
   centralLayout->setContentsMargins(0, 0, 0, 0);
   centralLayout->addWidget(layoutFrame);
+ // centralLayout->addWidget(this->planTabWidget);
 
   QColor windowColor = this->CentralWidget->palette().color(QPalette::Window);
   QPalette centralPalette = this->CentralWidget->palette();
   centralPalette.setColor(QPalette::Window, QColor(95, 95, 113));
   this->CentralWidget->setAutoFillBackground(true);
   this->CentralWidget->setPalette(centralPalette);
+
+  
+  /*  
+  layoutFrame->setObjectName("CentralWidgetLayoutFrame");
+ 
+
+  QColor windowColor = this->CentralWidget->palette().color(QPalette::Window);
+  QPalette centralPalette = this->CentralWidget->palette();
+  centralPalette.setColor(QPalette::Window, QColor(95, 95, 113));
+  this->CentralWidget->setAutoFillBackground(true);
+  this->CentralWidget->setPalette(centralPalette);
+
+  */
 
   // Restore the palette for the children
   centralPalette.setColor(QPalette::Window, windowColor);
@@ -468,20 +487,6 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   this->ErrorLogWidget->setErrorLogModel(
     qSlicerApplication::application()->errorLogModel());
 
-  //----------------------------------------------------------------------------
-  // Python console
-  //----------------------------------------------------------------------------
-#ifdef SRPlan_USE_PYTHONQT
-  if (q->pythonConsole())
-    {
-    QObject::connect(q->pythonConsole(), SIGNAL(aboutToExecute(const QString&)),
-      q, SLOT(onPythonConsoleUserInput(const QString&)));
-    }
-  else
-    {
-    qWarning("qSlicerAppMainWindowPrivate::setupUi: Failed to create Python console");
-    }
-#endif
 
 }
 

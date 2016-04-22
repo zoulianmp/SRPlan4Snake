@@ -1,6 +1,9 @@
 <RCC>
   <qresource>
-    <file>Icons/Chat.png</file> <!-- Adapted from http://openclipart.org/detail/170274/chat-button-by-scyg -->
+    <file>Images/SRPlanIntro.png</file>
+    <file>Icons/NewPatient.ico</file>
+    <file>Icons/OpenPatient.ico</file>
+    <file>Icons/Chat.png</file>
     <file>Icons/SlicerWelcome.png</file>
   </qresource>
   <qresource>
@@ -35,11 +38,11 @@
     <file>HTML/Community.html</file>
     <file>HTML/Feedback.html</file>
     <file>Images/WelcomeCommunity.png</file>
-    <file>Images/SlicerLoadDicom-Original.png</file>    
-    <file>Images/SlicerLoadData-Original.png</file>    
-    <file>Images/SlicerLoadVolume-Original.png</file>    
-    <file>Images/SlicerWWW-Original.png</file>    
-    <file>Images/SlicerViewTutorials-Original.png</file>    
+    <file>Images/SlicerLoadDicom-Original.png</file>
+    <file>Images/SlicerLoadData-Original.png</file>
+    <file>Images/SlicerLoadVolume-Original.png</file>
+    <file>Images/SlicerWWW-Original.png</file>
+    <file>Images/SlicerViewTutorials-Original.png</file>
     <file>Images/SlicerAdvancedGear-Original.png</file>
     <file>Images/WelcomeVolumeRendering.png</file>
     <file>Images/WelcomeCrossReference.png</file>

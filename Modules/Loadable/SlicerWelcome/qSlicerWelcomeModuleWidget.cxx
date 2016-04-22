@@ -72,6 +72,7 @@ void qSlicerWelcomeModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
 {
   this->Ui_qSlicerWelcomeModuleWidget::setupUi(widget);
 
+  /*
   // Create the button group ensuring that only one collabsibleWidgetButton will be open at a time
   ctkButtonGroup * group = new ctkButtonGroup(widget);
 
@@ -81,6 +82,8 @@ void qSlicerWelcomeModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
     {
     group->addButton(collapsible);
     }
+
+  */
 }
 
 //-----------------------------------------------------------------------------
@@ -131,6 +134,7 @@ void qSlicerWelcomeModuleWidget::setup()
   Q_D(qSlicerWelcomeModuleWidget);
   d->setupUi(this);
 
+  /*
   connect(d->LoadDicomDataButton, SIGNAL(clicked()),
           this, SLOT (loadDicomData()));
   connect(d->LoadNonDicomDataButton, SIGNAL(clicked()),
@@ -144,6 +148,7 @@ void qSlicerWelcomeModuleWidget::setup()
   d->LoadDicomDataButton->setDisabled(true);
 #endif
 
+  */
   this->Superclass::setup();
 }
 
