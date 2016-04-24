@@ -413,7 +413,7 @@ add_library(${lib_name}
   ${MRMLWidgets_QRC_CXX}
   )
 
-SET(QT_LIBRARIES Qt5::Gui Qt5::WebKitWidgets)
+SET(QT_LIBRARIES Qt5::Gui Qt5::WebEngineWidgets)
 
 set(MRMLWidgets_LIBRARIES
   ${QT_LIBRARIES}

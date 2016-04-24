@@ -2,7 +2,7 @@
 include(${SRPlan_CMAKE_DIR}/SRPlanMacroBuildQtModule.cmake)
 
 set(qtmodules
- # AtlasCreator
+#  AtlasCreator
 #  Cameras
 #  Units
 #  Colors
@@ -11,7 +11,7 @@ set(qtmodules
 #  Annotations
 #  Data
 #  DoubleArrays
-  #Markups
+ # Markups
   #Measurements
 #  Models
 #  ModelMirror

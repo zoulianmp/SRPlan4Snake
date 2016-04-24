@@ -24,7 +24,7 @@
 #include <QNetworkReply>
 #include <QTime>
 #include <QUrl>
-#include <QWebFrame>
+//#include <QWebFrame>
 
 // QtCore includes
 #include <qSlicerPersistentCookieJar.h>
@@ -46,7 +46,8 @@ public:
   void init();
 
   /// Convenient function to return the mainframe
-  QWebFrame* mainFrame();
+  // by zoulian
+  //QWebFrame* mainFrame();
 
   /// Convenient method to set "document.webkitHidden" property
   void setDocumentWebkitHidden(bool value);
@@ -68,9 +69,12 @@ void qSlicerWebWidgetPrivate::init()
   this->setupUi(q);
   this->WebView->installEventFilter(q);
 
+
+  /*
   QNetworkAccessManager * networkAccessManager = this->WebView->page()->networkAccessManager();;
   Q_ASSERT(networkAccessManager);
   networkAccessManager->setCookieJar(new qSlicerPersistentCookieJar());
+  */
 
   QObject::connect(this->WebView, SIGNAL(loadStarted()),
                    q, SLOT(onLoadStarted()));
@@ -81,14 +85,16 @@ void qSlicerWebWidgetPrivate::init()
   QObject::connect(this->WebView, SIGNAL(loadProgress(int)),
                    this->ProgressBar, SLOT(setValue(int)));
 
+  /*
   QObject::connect(this->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()),
                    q, SLOT(initJavascript()));
 
-  this->WebView->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+  this->webView()->settings()->setAttribute(QWebEngineSettings::DeveloperExtrasEnabled, true);
+  */
 
   this->ProgressBar->setVisible(false);
 
-  this->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOn);
+  //q->webView()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOn);
 
   QObject::connect(this->WebView->page(), SIGNAL(linkClicked(QUrl)),
                    q, SLOT(onLinkClicked(QUrl)));
@@ -100,12 +106,15 @@ void qSlicerWebWidgetPrivate::init()
 #endif
 }
 
+/* No QWebFrame by zoulian
 // --------------------------------------------------------------------------
 QWebFrame* qSlicerWebWidgetPrivate::mainFrame()
 {
   return this->WebView->page()->mainFrame();
 }
 
+
+*/
 // --------------------------------------------------------------------------
 void qSlicerWebWidgetPrivate::setDocumentWebkitHidden(bool value)
 {
@@ -128,17 +137,17 @@ qSlicerWebWidget::~qSlicerWebWidget()
 }
 
 // --------------------------------------------------------------------------
-QWebView * qSlicerWebWidget::webView()
+QWebEngineView * qSlicerWebWidget::webView()
 {
   Q_D(qSlicerWebWidget);
   return d->WebView;
 }
 
 //-----------------------------------------------------------------------------
-QString qSlicerWebWidget::evalJS(const QString &js)
+void qSlicerWebWidget::evalJS(const QString &js)
 {
   Q_D(qSlicerWebWidget);
-  return d->mainFrame()->evaluateJavaScript(js).toString();
+  return d->WebView->page()->runJavaScript(js);
 }
 
 // --------------------------------------------------------------------------
@@ -188,11 +197,13 @@ void qSlicerWebWidget::onDownloadFinished(QNetworkReply* reply)
 }
 
 // --------------------------------------------------------------------------
+
 void qSlicerWebWidget::initJavascript()
 {
   Q_D(qSlicerWebWidget);
   d->setDocumentWebkitHidden(!d->WebView->isVisible());
 }
+
 
 // --------------------------------------------------------------------------
 void qSlicerWebWidget::onLoadStarted()

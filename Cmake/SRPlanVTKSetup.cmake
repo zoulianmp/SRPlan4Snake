@@ -24,10 +24,10 @@
 #-----------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------
-# VTKv6 - SRPlan_VTK_COMPONENTS
+# VTKv7.0.0 - SRPlan_VTK_COMPONENTS
 #-----------------------------------------------------------------------------
 set(SRPlan_VTK_RENDERING_BACKEND "OpenGL" CACHE STRING "Choose the rendering backend.")
-set_property(CACHE SRPlan_VTK_RENDERING_BACKEND PROPERTY STRINGS "OpenGL" "OpenGL2")
+set_property(CACHE SRPlan_VTK_RENDERING_BACKEND PROPERTY STRINGS "OpenGL2" "OpenGL")
 
 set(SRPlan_VTK_RENDERING_USE_${SRPlan_VTK_RENDERING_BACKEND}_BACKEND 1)
 
@@ -36,7 +36,7 @@ set(SRPlan_VTK_COMPONENTS
   vtkFiltersFlowPaths
   vtkFiltersGeometry
   vtkGUISupportQtOpenGL
-  vtkGUISupportQtWebkit
+  vtkGUISupportQtWebEngine
   vtkGUISupportQtSQL
   vtkIOImage
   vtkIOLegacy
@@ -60,7 +60,7 @@ set(SRPlan_VTK_COMPONENTS
 
 
 
-find_package(VTK 6.3 COMPONENTS ${SRPlan_VTK_COMPONENTS} REQUIRED NO_MODULE)
+find_package(VTK "7.0.0" COMPONENTS ${SRPlan_VTK_COMPONENTS} REQUIRED NO_MODULE)
 if(NOT TARGET vtkGUISupportQt)
   message(FATAL_ERROR "error: VTK was not configured to use QT, you probably need "
                     "to recompile it with VTK_USE_GUISUPPORT ON, VTK_Group_Qt ON, "

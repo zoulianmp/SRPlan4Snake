@@ -18,7 +18,8 @@ endif()
 set(SRPlan_REQUIRED_QT_MODULES
     Core Gui Network OpenGL
 	UiTools Xml XmlPatterns 
-	Webkit Svg Sql webkitwidgets 
+	WebEngine Svg Sql 
+	WebEngineCore  WebEngineWidgets 
 	UiPlugin PrintSupport Designer
 
    )

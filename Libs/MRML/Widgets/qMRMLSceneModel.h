@@ -58,7 +58,7 @@ class qMRMLSceneModelPrivate;
 class QMRML_WIDGETS_EXPORT qMRMLSceneModel : public QStandardItemModel
 {
   Q_OBJECT
-  QVTK_OBJECT
+  QVTK_OBJECT 
 
   Q_ENUMS(NodeTypes)
 

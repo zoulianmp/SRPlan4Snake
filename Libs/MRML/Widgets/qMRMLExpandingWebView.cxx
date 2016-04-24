@@ -20,7 +20,9 @@
 #include <QEvent>
 #include <QFileInfo>
 #include <QHBoxLayout>
-#include <QWebFrame>
+//#include <QWebFrame>
+
+
 
 // CTK includes
 #include <ctkLogger.h>
