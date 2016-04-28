@@ -3,10 +3,10 @@ include(${SRPlan_CMAKE_DIR}/SRPlanMacroBuildQtModule.cmake)
 
 set(qtmodules
 #  AtlasCreator
-#  Cameras
-#  Units
-#  Colors
-#  SubjectHierarchy
+  Cameras
+  Units
+  Colors
+ # SubjectHierarchy
 #  Transforms
 #  Annotations
 #  Data
@@ -22,7 +22,7 @@ set(qtmodules
   #Tables
   #Reformat
   #ViewControllers
-#  Volumes
+  Volumes
   #VolumeRendering # Volume Rendering depends of Volumes
 #  Segmentations
  # SegmentComparison

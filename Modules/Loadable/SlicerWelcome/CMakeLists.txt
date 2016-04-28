@@ -12,6 +12,10 @@ set(MODULE_EXPORT_DIRECTIVE "Q_SRPlan_QTMODULES_${MODULE_NAME_UPPER}_EXPORT")
 set(MODULE_INCLUDE_DIRECTORIES
   ${CMAKE_CURRENT_SOURCE_DIR}/Widgets
   ${CMAKE_CURRENT_BINARY_DIR}/Widgets
+  ${qSRPlanCameras_INCLUDE_DIRS}
+  ${vtkSRPlanCamerasModuleLogic_INCLUDE_DIRS}
+  ${vtkSRPlanColorsModuleLogic_INCLUDE_DIRS}
+  ${qMRMLWidgets_INCLUDE_DIRS}
   )
 
 set(MODULE_SRCS
@@ -19,6 +23,15 @@ set(MODULE_SRCS
   qSlicer${MODULE_NAME}Module.h
   qSlicer${MODULE_NAME}ModuleWidget.cxx
   qSlicer${MODULE_NAME}ModuleWidget.h
+  
+  
+  qSlicerSceneIOOptionsWidget.cxx
+  qSlicerSceneIOOptionsWidget.h
+  qSlicerSceneReader.cxx
+  qSlicerSceneReader.h
+  qSlicerSceneWriter.cxx
+  qSlicerSceneWriter.h
+  
   )
 
 set(MODULE_MOC_SRCS
@@ -28,6 +41,7 @@ set(MODULE_MOC_SRCS
 
 set(MODULE_UI_SRCS
   Resources/UI/qSlicer${MODULE_NAME}ModuleWidget.ui
+  Resources/UI/qSlicerSceneIOOptionsWidget.ui
   )
 
 set(MODULE_RESOURCES
@@ -35,6 +49,8 @@ set(MODULE_RESOURCES
   )
 
 set(MODULE_TARGET_LIBRARIES
+   vtkSRPlanCamerasModuleLogic
+   vtkSRPlanColorsModuleLogic
   )
 
 #-----------------------------------------------------------------------------

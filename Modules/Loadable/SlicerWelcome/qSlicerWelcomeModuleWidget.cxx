@@ -134,11 +134,16 @@ void qSlicerWelcomeModuleWidget::setup()
   Q_D(qSlicerWelcomeModuleWidget);
   d->setupUi(this);
 
+  
+  
+
+  connect(d->OpenPatientButton, SIGNAL(clicked()),
+          this, SLOT (loadNonDicomData()));
+
   /*
   connect(d->LoadDicomDataButton, SIGNAL(clicked()),
-          this, SLOT (loadDicomData()));
-  connect(d->LoadNonDicomDataButton, SIGNAL(clicked()),
-          this, SLOT (loadNonDicomData()));
+	  this, SLOT(loadDicomData()));
+
   connect(d->LoadSampleDataButton, SIGNAL(clicked()),
           this, SLOT (loadRemoteSampleData()));
   connect(d->EditApplicationSettingsButton, SIGNAL(clicked()),
@@ -149,6 +154,7 @@ void qSlicerWelcomeModuleWidget::setup()
 #endif
 
   */
+
   this->Superclass::setup();
 }
 

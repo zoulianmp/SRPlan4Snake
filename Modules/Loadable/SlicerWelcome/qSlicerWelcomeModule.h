@@ -49,8 +49,11 @@ public:
 
   qSlicerGetTitleMacro(QTMODULE_TITLE);
 
+  virtual void setup();
+
   virtual QStringList categories()const;
   virtual QIcon icon()const;
+  virtual QStringList dependencies()const;
 
   /// Help to use the module
   virtual QString helpText()const;
