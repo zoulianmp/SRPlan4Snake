@@ -1,21 +1,21 @@
 
 #-----------------------------------------------------------------------------
-set(MODULE_NAME Colors)
-set(MODULE_TITLE "${MODULE_NAME}")
+set(MODULE_NAME Welcome)
+set(MODULE_TITLE "Welcome to SRPlan")
 
 string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
-
-#-----------------------------------------------------------------------------
-add_subdirectory(VTKWidgets)
-add_subdirectory(Logic)
 
 #-----------------------------------------------------------------------------
 set(MODULE_EXPORT_DIRECTIVE "Q_SRPlan_QTMODULES_${MODULE_NAME_UPPER}_EXPORT")
 
 # Additional includes - Current_{source,binary} and SRPlan_{Libs,Base} already included
 set(MODULE_INCLUDE_DIRECTORIES
-  ${CMAKE_CURRENT_SOURCE_DIR}/Logic
-  ${CMAKE_CURRENT_BINARY_DIR}/Logic
+  ${CMAKE_CURRENT_SOURCE_DIR}/Widgets
+  ${CMAKE_CURRENT_BINARY_DIR}/Widgets
+  ${qSRPlanCameras_INCLUDE_DIRS}
+  ${vtkSRPlanCamerasModuleLogic_INCLUDE_DIRS}
+  ${vtkSRPlanColorsModuleLogic_INCLUDE_DIRS}
+  ${qMRMLWidgets_INCLUDE_DIRS}
   )
 
 set(MODULE_SRCS
@@ -23,30 +23,39 @@ set(MODULE_SRCS
   qSlicer${MODULE_NAME}Module.h
   qSlicer${MODULE_NAME}ModuleWidget.cxx
   qSlicer${MODULE_NAME}ModuleWidget.h
-  qSlicer${MODULE_NAME}Reader.cxx
-  qSlicer${MODULE_NAME}Reader.h
+  
+  
+  qSlicerSceneIOOptionsWidget.cxx
+  qSlicerSceneIOOptionsWidget.h
+  qSlicerSceneReader.cxx
+  qSlicerSceneReader.h
+  qSlicerSceneWriter.cxx
+  qSlicerSceneWriter.h
+  
   )
 
 set(MODULE_MOC_SRCS
   qSlicer${MODULE_NAME}Module.h
   qSlicer${MODULE_NAME}ModuleWidget.h
-  qSlicer${MODULE_NAME}Reader.h
+  
+
+  qSlicerSceneIOOptionsWidget.h
+  qSlicerSceneReader.h
+  qSlicerSceneWriter.h
   )
 
 set(MODULE_UI_SRCS
   Resources/UI/qSlicer${MODULE_NAME}ModuleWidget.ui
-  )
-
-set(MODULE_TARGET_LIBRARIES
-  vtkSRPlan${MODULE_NAME}ModuleVTKWidgets
-  vtkSRPlan${MODULE_NAME}ModuleLogic
-
-  CTKVisualizationVTKWidgets
-
+  Resources/UI/qSlicerSceneIOOptionsWidget.ui
   )
 
 set(MODULE_RESOURCES
   Resources/qSlicer${MODULE_NAME}Module.qrc
+  )
+
+set(MODULE_TARGET_LIBRARIES
+   vtkSRPlanCamerasModuleLogic
+   vtkSRPlanColorsModuleLogic
   )
 
 #-----------------------------------------------------------------------------
@@ -63,11 +72,3 @@ SRPlanMacroBuildLoadableModule(
   WITH_GENERIC_TESTS
   )
 
-
-
-
-
-#-----------------------------------------------------------------------------
-if(BUILD_TESTING)
-  add_subdirectory(Testing)
-endif()

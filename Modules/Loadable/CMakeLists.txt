@@ -2,20 +2,20 @@
 include(${SRPlan_CMAKE_DIR}/SRPlanMacroBuildQtModule.cmake)
 
 set(qtmodules
-#  AtlasCreator
+  AtlasCreator
   Cameras
   Units
   Colors
- # SubjectHierarchy
-#  Transforms
-#  Annotations
-#  Data
-#  DoubleArrays
+  SubjectHierarchy
+  Transforms
+  Annotations
+  Data
+  DoubleArrays
  # Markups
   #Measurements
-#  Models
-#  ModelMirror
-#  ModelTransform
+  Models
+  ModelMirror
+  ModelTransform
   #FiberBundles
   #SceneViews
   SlicerWelcome
