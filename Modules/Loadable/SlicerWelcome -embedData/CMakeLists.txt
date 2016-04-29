@@ -25,6 +25,12 @@ set(MODULE_SRCS
   qSlicer${MODULE_NAME}ModuleWidget.h
   
   
+  qSlicerSceneIOOptionsWidget.cxx
+  qSlicerSceneIOOptionsWidget.h
+  qSlicerSceneReader.cxx
+  qSlicerSceneReader.h
+  qSlicerSceneWriter.cxx
+  qSlicerSceneWriter.h
   
   )
 
@@ -33,6 +39,9 @@ set(MODULE_MOC_SRCS
   qSlicer${MODULE_NAME}ModuleWidget.h
   
 
+  qSlicerSceneIOOptionsWidget.h
+  qSlicerSceneReader.h
+  qSlicerSceneWriter.h
   )
 
 set(MODULE_UI_SRCS
