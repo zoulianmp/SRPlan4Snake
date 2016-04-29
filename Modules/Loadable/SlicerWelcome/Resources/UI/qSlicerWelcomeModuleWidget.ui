@@ -32,6 +32,9 @@
      <property name="pixmap">
       <pixmap resource="../qSlicerWelcomeModule.qrc">:/Images/WelcomeLogo.png</pixmap>
      </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    <item>
@@ -1416,6 +1419,9 @@
      </property>
      <property name="pixmap">
       <pixmap resource="../qSlicerWelcomeModule.qrc">:/Images/SRPlanIntro.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

@@ -40,6 +40,9 @@ set(MODULE_UI_SRCS
 set(MODULE_TARGET_LIBRARIES
   vtkSRPlan${MODULE_NAME}ModuleVTKWidgets
   vtkSRPlan${MODULE_NAME}ModuleLogic
+
+  CTKVisualizationVTKWidgets
+
   )
 
 set(MODULE_RESOURCES
