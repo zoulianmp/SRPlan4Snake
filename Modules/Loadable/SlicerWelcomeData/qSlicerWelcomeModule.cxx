@@ -25,8 +25,32 @@
 #include "qSlicerWelcomeModule.h"
 #include "qSlicerWelcomeModuleWidget.h"
 
+// SlicerQt includes
+#include "qSlicerApplication.h"
+#include "qSlicerIOManager.h"
+#include "qSlicerModuleManager.h"
 
 
+
+// Data includes
+#include "qSlicerDataDialog.h"
+
+#include "qSlicerSaveDataDialog.h"
+#include "qSlicerSceneBundleReader.h"
+#include "qSlicerSceneReader.h"
+#include "qSlicerSceneWriter.h"
+#include "qSlicerSlicer2SceneReader.h"
+#include "qSlicerXcedeCatalogReader.h"
+
+
+// SlicerLogic includes
+#include <vtkSlicerApplicationLogic.h>
+
+
+
+// Logic includes
+#include <vtkMRMLColorLogic.h>
+#include <vtkSlicerCamerasModuleLogic.h>
 
 // VTK includes
 #include <vtkSmartPointer.h>
@@ -93,6 +117,49 @@ QStringList qSlicerWelcomeModule::contributors()const
 }
 
 
+
+//-----------------------------------------------------------------------------
+QStringList qSlicerWelcomeModule::dependencies() const
+{
+  QStringList moduleDependencies;
+  // Colors: Required to have a valid color logic for XcedeCatalogUI.
+  // Cameras: Required in qSlicerSceneReader
+  moduleDependencies << "Colors" << "Cameras";
+  return moduleDependencies;
+}
+
+
+
+//-----------------------------------------------------------------------------
+void qSlicerWelcomeModule::setup()
+{
+  this->Superclass::setup();
+
+  qSlicerAbstractCoreModule* colorsModule =
+    qSlicerCoreApplication::application()->moduleManager()->module("Colors");
+  vtkMRMLColorLogic* colorLogic =
+    vtkMRMLColorLogic::SafeDownCast(colorsModule ? colorsModule->logic() : 0);
+
+  qSlicerAbstractCoreModule* camerasModule =
+    qSlicerCoreApplication::application()->moduleManager()->module("Cameras");
+  vtkSlicerCamerasModuleLogic* camerasLogic =
+    vtkSlicerCamerasModuleLogic::SafeDownCast(camerasModule ? camerasModule->logic() : 0);
+
+  qSlicerIOManager* ioManager = qSlicerApplication::application()->ioManager();
+
+  // Readers
+  ioManager->registerIO(new qSlicerSceneReader(camerasLogic, this));
+  ioManager->registerIO(new qSlicerSceneBundleReader(this));
+  ioManager->registerIO(new qSlicerSlicer2SceneReader(this->appLogic(), this));
+  ioManager->registerIO(new qSlicerXcedeCatalogReader(colorLogic, this));
+
+  // Writers
+  ioManager->registerIO(new qSlicerSceneWriter(this));
+
+  // Dialogs
+  ioManager->registerDialog(new qSlicerDataDialog(this));
+  ioManager->registerDialog(new qSlicerSaveDataDialog(this));
+}
 
 
 //-----------------------------------------------------------------------------

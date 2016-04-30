@@ -2,7 +2,7 @@
 include(${SRPlan_CMAKE_DIR}/SRPlanMacroBuildQtModule.cmake)
 
 set(qtmodules
-  AtlasCreator
+ 
   Cameras
   Units
   Colors
@@ -19,6 +19,7 @@ set(qtmodules
   #FiberBundles
   #SceneViews
   SlicerWelcome
+  #SlicerWelcomeData
   #Tables
   #Reformat
   #ViewControllers
