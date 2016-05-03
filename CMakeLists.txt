@@ -365,4 +365,4 @@ else()
    )
 endif()
 
-
+add_subdirectory(SelfDebug)

@@ -723,7 +723,8 @@ void qMRMLNodeComboBox::setMRMLScene(vtkMRMLScene* scene)
   d->updateNoneItem(false);
   d->updateActionItems(false);
 
-  //qDebug()<< "setMRMLScene:" << this->model()->index(0, 0);
+  qDebug()<< "setMRMLScene:" << this->model()->index(0, 0); //by zoulian
+
   // updating the action items reset the root model index. Set it back
   // setting the rootmodel index looses the current item
   d->ComboBox->setRootModelIndex(this->model()->index(0, 0));
@@ -743,7 +744,8 @@ void qMRMLNodeComboBox::setMRMLScene(vtkMRMLScene* scene)
   // would be selected and "Scene" would be displayed (see vtkMRMLNodeComboboxTest5)
   else
     {
-    this->setCurrentNodeID(this->currentNodeID());
+		qDebug() << "setMRMLScene:" << this->currentNodeID(); //by zoulian
+        this->setCurrentNodeID(this->currentNodeID());
     }
 
   this->setEnabled(scene != 0);
@@ -1090,7 +1092,7 @@ void qMRMLNodeComboBox::emitNodesAdded(const QModelIndex & parent, int start, in
   Q_ASSERT(this->model());
   for(int i = start; i <= end; ++i)
     {
-    vtkMRMLNode* node = d->mrmlNodeFromIndex(this->model()->index(start, 0, parent));
+     vtkMRMLNode* node = d->mrmlNodeFromIndex(this->model()->index(start, 0, parent));
     if (node)
       {
       emit nodeAdded(node);

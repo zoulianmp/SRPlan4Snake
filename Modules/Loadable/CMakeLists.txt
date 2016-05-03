@@ -2,15 +2,17 @@
 include(${SRPlan_CMAKE_DIR}/SRPlanMacroBuildQtModule.cmake)
 
 set(qtmodules
- 
+  Annotations
   Cameras
+  Colors  
+ # Data 
+  DoubleArrays
   Units
-  Colors
+
   SubjectHierarchy
   Transforms
-  Annotations
-  Data
-  DoubleArrays
+
+
  # Markups
   #Measurements
   Models
@@ -18,10 +20,10 @@ set(qtmodules
   ModelTransform
   #FiberBundles
   #SceneViews
-  SlicerWelcome
-  #SlicerWelcomeData
+  #SlicerWelcome
+  SlicerWelcomeData
   #Tables
-  #Reformat
+  Reformat
   #ViewControllers
   Volumes
   #VolumeRendering # Volume Rendering depends of Volumes
