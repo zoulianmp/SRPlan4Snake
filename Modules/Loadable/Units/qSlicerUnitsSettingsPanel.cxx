@@ -193,7 +193,10 @@ void qSlicerUnitsSettingsPanelPrivate::setMRMLScene(vtkMRMLScene* scene)
   //q->registerProperty("Units", q, "quantities",
   //  SIGNAL(quantitiesChanged(QStringList)));
   QStringList quantities; // delete this when "un-hardcoding" quantities
-  quantities << "length" << "time" << "frequency" << "velocity" << "intensity";
+
+  //quantities << "length" << "time" << "frequency" << "velocity" << "intensity"; by zoulian test
+
+  quantities << "length" ;
   q->setQuantities(quantities);
 
   foreach (qMRMLSettingsUnitWidget* widget, this->Quantities.values())
@@ -292,7 +295,8 @@ void qSlicerUnitsSettingsPanel::onUnitsLogicModified()
     return;
     }
 
-  d->setMRMLScene(d->Logic->GetMRMLScene());
+  d->setMRMLScene(d->Logic->GetMRMLScene()); 
+
 }
 
 // --------------------------------------------------------------------------
