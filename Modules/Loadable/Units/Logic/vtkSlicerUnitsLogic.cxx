@@ -162,29 +162,47 @@ void vtkSlicerUnitsLogic::ObserveMRMLScene()
 //---------------------------------------------------------------------------
 void vtkSlicerUnitsLogic::AddDefaultsUnits()
 {
-  vtkMRMLUnitNode* node =
-    this->AddUnitNode("ApplicationLength", "length", "", "mm", 3);
-  node->SetSaveWithScene(false);
-  this->SetDefaultUnit(node->GetQuantity(), node->GetID());
 
-  /* by zoulian test
 
-  node = this->AddUnitNode("ApplicationTime", "time", "", "s", 3);
-  node->SetSaveWithScene(false);
-  this->SetDefaultUnit(node->GetQuantity(), node->GetID());
 
-  node = this->AddUnitNode("ApplicationFrequency", "frequency", "", "Hz", 3);
-  node->SetSaveWithScene(false);
-  this->SetDefaultUnit(node->GetQuantity(), node->GetID());
+	vtkMRMLUnitNode* node = NULL;
 
-  node = this->AddUnitNode("ApplicationVelocity", "velocity", "", "m/s", 3);
-  node->SetSaveWithScene(false);
-  this->SetDefaultUnit(node->GetQuantity(), node->GetID());
+	//Rank 5 has problem
+	node = this->AddUnitNode("ApplicationIntensity", "intensity", "", "W/m\xB2", 3);
+	node->SetSaveWithScene(false);
+	this->SetDefaultUnit(node->GetQuantity(), node->GetID());
 
-  node = this->AddUnitNode("ApplicationIntensity", "intensity", "", "W/m\xB2", 3);
-  node->SetSaveWithScene(false);
-  this->SetDefaultUnit(node->GetQuantity(), node->GetID());
-  */ 
+
+	/* by zoulian test
+
+
+	// rank 4
+	node = this->AddUnitNode("ApplicationVelocity", "velocity", "", "m/s", 3);
+	node->SetSaveWithScene(false);
+	this->SetDefaultUnit(node->GetQuantity(), node->GetID());
+
+
+	
+	//Rank 3
+	node = this->AddUnitNode("ApplicationFrequency", "frequency", "", "Hz", 3);
+	node->SetSaveWithScene(false);
+	this->SetDefaultUnit(node->GetQuantity(), node->GetID());
+
+
+
+	// rank 2
+	node = this->AddUnitNode("ApplicationTime", "time", "", "s", 3);
+	node->SetSaveWithScene(false);
+	this->SetDefaultUnit(node->GetQuantity(), node->GetID());
+
+
+
+	//rank 1
+	node = this->AddUnitNode("ApplicationLength", "length", "", "mm", 3);
+	node->SetSaveWithScene(false);
+	this->SetDefaultUnit(node->GetQuantity(), node->GetID());
+	*/
+
 }
 
 //---------------------------------------------------------------------------
@@ -251,6 +269,7 @@ void vtkSlicerUnitsLogic::AddBuiltInUnits(vtkMRMLScene* scene)
 
   this->AddUnitNodeToScene(scene,
     "Intensity", "intensity", "", "W/m\xB2", 3, -10000., 10000., 1., 0.);
+ 
 }
 
 //-----------------------------------------------------------------------------
