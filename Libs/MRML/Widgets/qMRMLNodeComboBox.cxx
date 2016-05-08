@@ -724,7 +724,7 @@ void qMRMLNodeComboBox::setMRMLScene(vtkMRMLScene* scene)
   d->updateActionItems(false);
 
   //by zoulian 
-  qDebug()<< "setMRMLScene:index" << this->model()->index(0, 0); //by zoulian
+  //qDebug()<< "setMRMLScene:index" << this->model()->index(0, 0); //by zoulian
  
 
   // updating the action items reset the root model index. Set it back

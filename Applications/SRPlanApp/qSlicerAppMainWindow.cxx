@@ -207,7 +207,7 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
                    this->PanelDockWidget, SLOT(show()));
 
 
-  /*
+
   //----------------------------------------------------------------------------
   // MouseMode ToolBar
   //----------------------------------------------------------------------------
@@ -219,6 +219,8 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
                    SIGNAL(mrmlSceneChanged(vtkMRMLScene*)),
                    this->MouseModeToolBar,
                    SLOT(setMRMLScene(vtkMRMLScene*)));
+
+  /*
   //----------------------------------------------------------------------------
   // Capture tool bar
   //----------------------------------------------------------------------------

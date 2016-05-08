@@ -78,12 +78,13 @@ void qMRMLSettingsUnitWidgetPrivate::setupUi(qMRMLSettingsUnitWidget* q)
     this->UnitInfoWidget, SLOT(setCurrentNode(vtkMRMLNode*)));
 
   // Hide unit label and combobox for now
-  //this->UnitLabel->setVisible(false);
-  //this->UnitNodeComboBox->setVisible(false);
+
+  this->UnitLabel->setVisible(false);
+  this->UnitNodeComboBox->setVisible(false);
 
   //by zoulian 
-  this->UnitLabel->setVisible(true);
-  this->UnitNodeComboBox->setVisible(true);
+  //this->UnitLabel->setVisible(true);
+  //this->UnitNodeComboBox->setVisible(true);
 }
 
 //-----------------------------------------------------------------------------

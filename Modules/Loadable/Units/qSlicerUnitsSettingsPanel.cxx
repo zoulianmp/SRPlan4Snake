@@ -196,7 +196,7 @@ void qSlicerUnitsSettingsPanelPrivate::setMRMLScene(vtkMRMLScene* scene)
 
   //quantities << "length" << "time" << "frequency" << "velocity" << "intensity"; by zoulian test
 
-  quantities << "length" ;
+  quantities << "length" << "time" << "frequency" << "velocity" ;
   q->setQuantities(quantities);
 
   foreach (qMRMLSettingsUnitWidget* widget, this->Quantities.values())

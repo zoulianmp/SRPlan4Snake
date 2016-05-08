@@ -167,13 +167,6 @@ void vtkSlicerUnitsLogic::AddDefaultsUnits()
 
 	vtkMRMLUnitNode* node = NULL;
 
-	//Rank 5 has problem
-	node = this->AddUnitNode("ApplicationIntensity", "intensity", "", "W/m\xB2", 3);
-	node->SetSaveWithScene(false);
-	this->SetDefaultUnit(node->GetQuantity(), node->GetID());
-
-
-	/* by zoulian test
 
 
 	// rank 4
@@ -199,6 +192,13 @@ void vtkSlicerUnitsLogic::AddDefaultsUnits()
 
 	//rank 1
 	node = this->AddUnitNode("ApplicationLength", "length", "", "mm", 3);
+	node->SetSaveWithScene(false);
+	this->SetDefaultUnit(node->GetQuantity(), node->GetID());
+
+
+	/* by zoulian test
+	//Rank 5 has problem
+	node = this->AddUnitNode("ApplicationIntensity", "intensity", "", "W/m\xB2", 3);
 	node->SetSaveWithScene(false);
 	this->SetDefaultUnit(node->GetQuantity(), node->GetID());
 	*/
@@ -267,9 +267,10 @@ void vtkSlicerUnitsLogic::AddBuiltInUnits(vtkMRMLScene* scene)
   this->AddUnitNodeToScene(scene,
     "Kilometre per second", "velocity", "", "km/s", 3, -10000., 10000., Self::GetDisplayCoefficient("kilo"), 0.);
 
+  /*
   this->AddUnitNodeToScene(scene,
     "Intensity", "intensity", "", "W/m\xB2", 3, -10000., 10000., 1., 0.);
- 
+  */
 }
 
 //-----------------------------------------------------------------------------

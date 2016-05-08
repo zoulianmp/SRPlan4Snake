@@ -188,7 +188,7 @@ void vtkMRMLColorLogic::AddDefaultColorNodes()
     }
   //***********************
   //Code for Debug by zoulian
-  this->GetDefaultLabelMapColorNodeID();
+ // this->GetDefaultLabelMapColorNodeID();
 
 
   //End of Code for Debug by zoulian

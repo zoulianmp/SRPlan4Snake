@@ -22,14 +22,14 @@ set(qtmodules
   #SceneViews
   #SlicerWelcome
   SlicerWelcomeData
-  #Tables
+  Tables
   Reformat
   #ViewControllers
   Volumes
   #VolumeRendering # Volume Rendering depends of Volumes
-#  Segmentations
+  Segmentations
  # SegmentComparison
-#  SegmentMorphology
+  SegmentMorphology
   
   )
 if(SRPlan_BUILD_CLI_SUPPORT)
