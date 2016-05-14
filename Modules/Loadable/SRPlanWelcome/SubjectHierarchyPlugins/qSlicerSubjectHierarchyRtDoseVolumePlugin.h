@@ -24,14 +24,16 @@
 // SlicerRt includes
 #include "qSlicerSubjectHierarchyAbstractPlugin.h"
 
-#include "qSlicerDicomRtImportExportSubjectHierarchyPluginsExport.h"
+//#include "qSlicerDicomRtImportExportSubjectHierarchyPluginsExport.h"
+
+#include "qSRPlanWelcomeSubjectHierarchyPluginsExport.h"
 
 class qSlicerSubjectHierarchyRtDoseVolumePluginPrivate;
 class vtkMRMLNode;
 class vtkMRMLSubjectHierarchyNode;
 
 /// \ingroup SlicerRt_QtModules_DicomRtImport
-class Q_SLICER_DICOMRTIMPORTEXPORT_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyRtDoseVolumePlugin : public qSlicerSubjectHierarchyAbstractPlugin
+class Q_SRPlan_WELCOME_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyRtDoseVolumePlugin : public qSlicerSubjectHierarchyAbstractPlugin
 {
 public:
   Q_OBJECT

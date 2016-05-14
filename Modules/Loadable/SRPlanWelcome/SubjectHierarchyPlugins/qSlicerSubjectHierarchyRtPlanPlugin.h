@@ -18,28 +18,32 @@
 
 ==============================================================================*/
 
-#ifndef __qSlicerSubjectHierarchyRtImagePlugin_h
-#define __qSlicerSubjectHierarchyRtImagePlugin_h
+#ifndef __qSlicerSubjectHierarchyRtPlanPlugin_h
+#define __qSlicerSubjectHierarchyRtPlanPlugin_h
 
 // SlicerRt includes
 #include "qSlicerSubjectHierarchyAbstractPlugin.h"
 
-#include "qSlicerDicomRtImportExportSubjectHierarchyPluginsExport.h"
+//#include "qSlicerDicomRtImportExportSubjectHierarchyPluginsExport.h"
+#include "qSRPlanWelcomeSubjectHierarchyPluginsExport.h"
 
-class qSlicerSubjectHierarchyRtImagePluginPrivate;
+class qSlicerSubjectHierarchyRtPlanPluginPrivate;
 class vtkMRMLNode;
 class vtkMRMLSubjectHierarchyNode;
 
+// TODO: Move this to External Beam Planning (or other) module when beam
+//   and plan nodes are unified: #425 #553
+
 /// \ingroup SlicerRt_QtModules_DicomRtImport
-class Q_SLICER_DICOMRTIMPORTEXPORT_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyRtImagePlugin : public qSlicerSubjectHierarchyAbstractPlugin
+class Q_SRPlan_WELCOME_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyRtPlanPlugin : public qSlicerSubjectHierarchyAbstractPlugin
 {
 public:
   Q_OBJECT
 
 public:
   typedef qSlicerSubjectHierarchyAbstractPlugin Superclass;
-  qSlicerSubjectHierarchyRtImagePlugin(QObject* parent = NULL);
-  virtual ~qSlicerSubjectHierarchyRtImagePlugin();
+  qSlicerSubjectHierarchyRtPlanPlugin(QObject* parent = NULL);
+  virtual ~qSlicerSubjectHierarchyRtPlanPlugin();
 
 public:
   /// Determines if the actual plugin can handle a subject hierarchy node. The plugin with
@@ -64,19 +68,12 @@ public:
   /// Open module belonging to node and set inputs in opened module
   virtual void editProperties(vtkMRMLSubjectHierarchyNode* node);
 
-  /// Set display visibility of a owned subject hierarchy node
-  virtual void setDisplayVisibility(vtkMRMLSubjectHierarchyNode* node, int visible);
-
-  /// Get display visibility of a owned subject hierarchy node
-  /// \return Display visibility (0: hidden, 1: shown, 2: partially shown)
-  virtual int getDisplayVisibility(vtkMRMLSubjectHierarchyNode* node)const;
-
 protected:
-  QScopedPointer<qSlicerSubjectHierarchyRtImagePluginPrivate> d_ptr;
+  QScopedPointer<qSlicerSubjectHierarchyRtPlanPluginPrivate> d_ptr;
 
 private:
-  Q_DECLARE_PRIVATE(qSlicerSubjectHierarchyRtImagePlugin);
-  Q_DISABLE_COPY(qSlicerSubjectHierarchyRtImagePlugin);
+  Q_DECLARE_PRIVATE(qSlicerSubjectHierarchyRtPlanPlugin);
+  Q_DISABLE_COPY(qSlicerSubjectHierarchyRtPlanPlugin);
 };
 
 #endif

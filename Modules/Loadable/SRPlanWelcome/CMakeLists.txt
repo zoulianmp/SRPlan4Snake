@@ -5,6 +5,15 @@ set(MODULE_TITLE "Welcome to SRPlan")
 
 string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
 
+
+
+add_subdirectory(SubjectHierarchyPlugins)
+
+
+
+
+
+
 #-----------------------------------------------------------------------------
 set(MODULE_EXPORT_DIRECTIVE "Q_SRPlan_QTMODULES_${MODULE_NAME_UPPER}_EXPORT")
 

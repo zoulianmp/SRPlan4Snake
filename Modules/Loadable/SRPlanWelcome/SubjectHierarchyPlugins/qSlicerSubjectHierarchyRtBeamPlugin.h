@@ -24,7 +24,9 @@
 // SlicerRt includes
 #include "qSlicerSubjectHierarchyAbstractPlugin.h"
 
-#include "qSlicerDicomRtImportExportSubjectHierarchyPluginsExport.h"
+//#include "qSlicerDicomRtImportExportSubjectHierarchyPluginsExport.h"
+
+#include "qSRPlanWelcomeSubjectHierarchyPluginsExport.h"
 
 class qSlicerSubjectHierarchyRtBeamPluginPrivate;
 class vtkMRMLNode;
@@ -34,7 +36,7 @@ class vtkMRMLSubjectHierarchyNode;
 //   and plan nodes are unified: #425 #553
 
 /// \ingroup SlicerRt_QtModules_DicomRtImport
-class Q_SLICER_DICOMRTIMPORTEXPORT_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyRtBeamPlugin : public qSlicerSubjectHierarchyAbstractPlugin
+class Q_SRPlan_WELCOME_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyRtBeamPlugin : public qSlicerSubjectHierarchyAbstractPlugin
 {
 public:
   Q_OBJECT
