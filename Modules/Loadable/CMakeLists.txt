@@ -13,7 +13,7 @@ set(qtmodules
   Transforms
 
 
- # Markups
+  Markups
   #Measurements
   Models
   ModelMirror
