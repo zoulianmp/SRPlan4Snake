@@ -15,6 +15,9 @@ set(${KIT}_INCLUDE_DIRECTORIES
   )
 
 set(${KIT}_SRCS
+  qSlicerSubjectHierarchyDICOMPlugin.cxx
+  qSlicerSubjectHierarchyDICOMPlugin.h
+  
   qSlicerSubjectHierarchyRtImagePlugin.cxx
   qSlicerSubjectHierarchyRtImagePlugin.h
   qSlicerSubjectHierarchyRtDoseVolumePlugin.cxx
@@ -26,6 +29,8 @@ set(${KIT}_SRCS
   )
 
 set(${KIT}_MOC_SRCS
+  qSlicerSubjectHierarchyDICOMPlugin.h
+  
   qSlicerSubjectHierarchyRtImagePlugin.h
   qSlicerSubjectHierarchyRtDoseVolumePlugin.h
   qSlicerSubjectHierarchyRtPlanPlugin.h

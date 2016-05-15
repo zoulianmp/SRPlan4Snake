@@ -30,7 +30,7 @@
 #include "qSlicerSubjectHierarchyDefaultPlugin.h"
 
 // DICOMLib includes
-#include "qSlicerDICOMExportDialog.h"
+//#include "qSlicerDICOMExportDialog.h"
 
 // Qt includes
 #include <QDebug>
@@ -375,10 +375,11 @@ void qSlicerSubjectHierarchyDICOMPlugin::openDICOMExportDialog()
     qCritical() << "qSlicerSubjectHierarchyDICOMPlugin::openDICOMExportDialog: Invalid current node!";
     return;
     }
-
+/*
   qSlicerDICOMExportDialog* exportDialog = new qSlicerDICOMExportDialog(NULL);
   exportDialog->setMRMLScene(qSlicerSubjectHierarchyPluginHandler::instance()->scene());
   exportDialog->exec(currentNode);
 
   delete exportDialog;
+  */
 }
