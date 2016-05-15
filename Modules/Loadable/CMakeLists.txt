@@ -21,7 +21,7 @@ set(qtmodules
   #FiberBundles
   #SceneViews
   #SlicerWelcome
-  SlicerWelcomeData
+  SRPlanWelcome
   Tables
   Reformat
   #ViewControllers

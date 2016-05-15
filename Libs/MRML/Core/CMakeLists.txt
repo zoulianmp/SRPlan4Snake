@@ -118,6 +118,9 @@ set(MRMLCore_SRCS
   vtkMRMLCoreTestingMacros.cxx
   vtkMRMLCoreTestingUtilities.cxx
   vtkMRMLCrosshairNode.cxx
+  
+  vtkMRMLPatientInfoNode.cxx
+
   vtkMRMLDiffusionTensorDisplayPropertiesNode.cxx
   vtkMRMLDiffusionWeightedVolumeDisplayNode.cxx
   vtkMRMLDiffusionWeightedVolumeNode.cxx

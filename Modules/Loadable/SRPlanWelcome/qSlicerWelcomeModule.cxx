@@ -124,7 +124,7 @@ QStringList qSlicerWelcomeModule::dependencies() const
   QStringList moduleDependencies;
   // Colors: Required to have a valid color logic for XcedeCatalogUI.
   // Cameras: Required in qSlicerSceneReader
-  moduleDependencies << "Colors" << "Cameras";
+  moduleDependencies << "Colors" << "Cameras"<<"SubjectHierarchy";
   return moduleDependencies;
 }
 
