@@ -48,6 +48,9 @@ public slots:
   bool loadNonDicomData();
   bool loadRemoteSampleData();
   bool loadDicomData();
+
+  bool newPatientDialog();
+
   void editApplicationSettings();
   bool presentTutorials();
 

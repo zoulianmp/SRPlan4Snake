@@ -42,6 +42,8 @@
 // CTK includes
 #include "ctkButtonGroup.h"
 
+#include "qSRPlanNewPatientDialog.h"
+
 class qSlicerAppMainWindow;
 
 //-----------------------------------------------------------------------------
@@ -175,6 +177,17 @@ bool qSlicerWelcomeModuleWidget::loadDicomData()
 {
   Q_D(qSlicerWelcomeModuleWidget);
   return d->selectModule("DICOM");
+}
+
+
+
+//-----------------------------------------------------------------------------
+bool qSlicerWelcomeModuleWidget::newPatientDialog()
+{
+	qSRPlanNewPatientDialog * newdialog = new qSRPlanNewPatientDialog;
+
+	newdialog->exec();
+	 
 }
 
 

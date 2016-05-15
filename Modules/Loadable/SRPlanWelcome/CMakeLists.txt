@@ -33,6 +33,8 @@ set(MODULE_SRCS
   qSlicer${MODULE_NAME}ModuleWidget.cxx
   qSlicer${MODULE_NAME}ModuleWidget.h
   
+  qSRPlanNewPatientDialog.h
+  qSRPlanNewPatientDialog.cxx
   
   qSlicerSceneIOOptionsWidget.cxx
   qSlicerSceneIOOptionsWidget.h
@@ -47,6 +49,7 @@ set(MODULE_MOC_SRCS
   qSlicer${MODULE_NAME}Module.h
   qSlicer${MODULE_NAME}ModuleWidget.h
   
+  qSRPlanNewPatientDialog.h
 
   qSlicerSceneIOOptionsWidget.h
   qSlicerSceneReader.h
@@ -56,6 +59,7 @@ set(MODULE_MOC_SRCS
 set(MODULE_UI_SRCS
   Resources/UI/qSlicer${MODULE_NAME}ModuleWidget.ui
   Resources/UI/qSlicerSceneIOOptionsWidget.ui
+  Resources/UI/qSRPlanNewPatientDialog.ui
   )
 
 set(MODULE_RESOURCES
