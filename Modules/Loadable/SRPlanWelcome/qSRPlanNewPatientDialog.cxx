@@ -1,18 +1,64 @@
 #include "qSRPlanNewPatientDialog.h"
 
 
+#include "ui_qSRPlanNewPatientDialog.h"
 
 
+// Qt includes
+#include <QDesktopServices>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QSettings>
 
+// Slicer includes
+#include "vtkSRPlanConfigure.h" // For Slicer_BUILD_DICOM_SUPPORT
+#include "vtkSRPlanVersionConfigure.h"
 
+// SlicerQt includes
+#include "qSlicerWelcomeModuleWidget.h"
+#include "ui_qSlicerWelcomeModuleWidget.h"
+#include "qSlicerApplication.h"
+#include "qSlicerIO.h"
+#include "qSlicerIOManager.h"
+#include "qSlicerLayoutManager.h"
+#include "qSlicerModuleManager.h"
+#include "qSlicerAbstractCoreModule.h"
+#include "qSlicerModulePanel.h"
 
+// CTK includes
+#include "ctkButtonGroup.h"
 
+#include "qSRPlanNewPatientDialog.h"
 
+class qSlicerAppMainWindow;
 
 //-----------------------------------------------------------------------------
-void qSRPlanNewPatientDialog::setupUi(QDialog* dialog)
+/// \ingroup Slicer_QtModules_SlicerWelcome
+class  qSRPlanNewPatientDialogPrivate : public Ui_qSRPlanNewPatientDialog
 {
-	this->Ui_qSRPlanNewPatientDialog::setupUi(dialog);
+	Q_DECLARE_PUBLIC(qSRPlanNewPatientDialog);
+protected:
+	qSRPlanNewPatientDialog* const q_ptr;
+public:
+	qSRPlanNewPatientDialogPrivate(qSRPlanNewPatientDialog& object);
+	void setupUi(QDialog* dialog);
+
+	 
+};
+
+//-----------------------------------------------------------------------------
+// qSlicerWelcomeModuleWidgetPrivate methods
+
+//-----------------------------------------------------------------------------
+qSlicerWelcomeModuleWidgetPrivate::qSlicerWelcomeModuleWidgetPrivate(qSlicerWelcomeModuleWidget& object)
+	: q_ptr(&object)
+{
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerWelcomeModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
+{
+	this->Ui_qSlicerWelcomeModuleWidget::setupUi(widget);
 
 	/*
 	// Create the button group ensuring that only one collabsibleWidgetButton will be open at a time
@@ -26,4 +72,137 @@ void qSRPlanNewPatientDialog::setupUi(QDialog* dialog)
 	}
 
 	*/
+}
+
+//-----------------------------------------------------------------------------
+bool qSlicerWelcomeModuleWidgetPrivate::selectModule(const QString& moduleName)
+{
+	Q_Q(qSlicerWelcomeModuleWidget);
+	qSlicerModuleManager * moduleManager = qSlicerCoreApplication::application()->moduleManager();
+	if (!moduleManager)
+	{
+		return false;
+	}
+	qSlicerAbstractCoreModule * module = moduleManager->module(moduleName);
+	if (!module)
+	{
+		QMessageBox::warning(
+			q, q->tr("Raising %1 Module:").arg(moduleName),
+			q->tr("Unfortunately, this requested module is not available in this Slicer session."),
+			QMessageBox::Ok);
+		return false;
+	}
+	qSlicerLayoutManager * layoutManager = qSlicerApplication::application()->layoutManager();
+	if (!layoutManager)
+	{
+		return false;
+	}
+	layoutManager->setCurrentModule(moduleName);
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+// qSlicerWelcomeModuleWidget methods
+
+//-----------------------------------------------------------------------------
+qSlicerWelcomeModuleWidget::qSlicerWelcomeModuleWidget(QWidget* _parent)
+	: Superclass(_parent)
+	, d_ptr(new qSlicerWelcomeModuleWidgetPrivate(*this))
+{
+}
+
+//-----------------------------------------------------------------------------
+qSlicerWelcomeModuleWidget::~qSlicerWelcomeModuleWidget()
+{
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerWelcomeModuleWidget::setup()
+{
+	Q_D(qSlicerWelcomeModuleWidget);
+	d->setupUi(this);
+
+
+
+
+	connect(d->OpenPatientButton, SIGNAL(clicked()),
+		this, SLOT(loadNonDicomData()));
+
+	connect(d->NewPatientButton, SIGNAL(clicked()),
+		this, SLOT(loadNonDicomData()));
+
+	/*
+	connect(d->LoadDicomDataButton, SIGNAL(clicked()),
+	this, SLOT(loadDicomData()));
+
+	connect(d->LoadSampleDataButton, SIGNAL(clicked()),
+	this, SLOT (loadRemoteSampleData()));
+	connect(d->EditApplicationSettingsButton, SIGNAL(clicked()),
+	this, SLOT (editApplicationSettings()));
+
+	#ifndef Slicer_BUILD_DICOM_SUPPORT
+	d->LoadDicomDataButton->setDisabled(true);
+	#endif
+
+	*/
+
+	this->Superclass::setup();
+}
+
+
+//-----------------------------------------------------------------------------
+void qSlicerWelcomeModuleWidget::editApplicationSettings()
+{
+	qSlicerApplication::application()->settingsDialog()->exec();
+}
+
+
+
+//-----------------------------------------------------------------------------
+bool qSlicerWelcomeModuleWidget::loadDicomData()
+{
+	Q_D(qSlicerWelcomeModuleWidget);
+	return d->selectModule("DICOM");
+}
+
+
+
+//-----------------------------------------------------------------------------
+bool qSlicerWelcomeModuleWidget::newPatientDialog()
+{
+	qSRPlanNewPatientDialog * newdialog = new qSRPlanNewPatientDialog;
+
+	newdialog->exec();
+
+}
+
+
+//-----------------------------------------------------------------------------
+bool qSlicerWelcomeModuleWidget::loadNonDicomData()
+{
+	qSlicerIOManager *ioManager = qSlicerApplication::application()->ioManager();
+	if (!ioManager)
+	{
+		return false;
+	}
+	return ioManager->openAddDataDialog();
+}
+
+
+//-----------------------------------------------------------------------------
+bool qSlicerWelcomeModuleWidget::loadRemoteSampleData()
+{
+	Q_D(qSlicerWelcomeModuleWidget);
+	return d->selectModule("SampleData");
+}
+
+//-----------------------------------------------------------------------------
+bool qSlicerWelcomeModuleWidget::presentTutorials()
+{
+	QDesktopServices::openUrl(QUrl(QString(
+		"%1/Documentation/%2.%3/Training")
+		.arg(QSettings().value("SlicerWikiURL").toString())
+		.arg(SRPlan_VERSION_MAJOR)
+		.arg(SRPlan_VERSION_MINOR)));
+	return true;
 }

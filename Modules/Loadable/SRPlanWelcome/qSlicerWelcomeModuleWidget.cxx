@@ -186,7 +186,7 @@ bool qSlicerWelcomeModuleWidget::newPatientDialog()
 {
 	qSRPlanNewPatientDialog * newdialog = new qSRPlanNewPatientDialog;
 
-	newdialog->exec();
+	return newdialog->exec();
 	 
 }
 
