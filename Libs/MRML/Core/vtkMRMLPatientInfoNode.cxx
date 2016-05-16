@@ -29,8 +29,8 @@ vtkMRMLNodeNewMacro(vtkMRMLPatientInfoNode);
 vtkMRMLPatientInfoNode::vtkMRMLPatientInfoNode()
 {
 
-  this->PatientID = "";
-  this->PatientName = "";
+  this->PatientID = "0000000000";
+  this->PatientName = "DefaultName";
   this->PatientAge = 0;
   this->PatientGender = Male;
 

@@ -6,29 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>525</width>
-    <height>404</height>
+    <width>504</width>
+    <height>378</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Creat New Patient Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>320</x>
-     <y>320</y>
-     <width>111</width>
-     <height>241</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_gender">
    <property name="geometry">
     <rect>
@@ -165,83 +149,43 @@
     </property>
    </item>
   </widget>
-  <widget class="QLabel" name="label_image">
+  <widget class="QPushButton" name="pushButton_loadimage">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>260</y>
-     <width>121</width>
-     <height>31</height>
+     <y>300</y>
+     <width>311</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>12</pointsize>
-     <weight>50</weight>
-     <bold>false</bold>
+     <pointsize>11</pointsize>
     </font>
    </property>
    <property name="text">
-    <string>Patient  Image</string>
+    <string>Confirm Information And Load Patient Image</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_image">
+  <widget class="QPushButton" name="pushButton_cancel">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>260</y>
-     <width>261</width>
-     <height>31</height>
+     <x>370</x>
+     <y>300</y>
+     <width>101</width>
+     <height>41</height>
     </rect>
    </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>410</x>
-     <y>260</y>
-     <width>81</width>
-     <height>31</height>
-    </rect>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
    </property>
    <property name="text">
-    <string>Browser ...</string>
+    <string>Cancel</string>
    </property>
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>qSRPlanNewPatientDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>qSRPlanNewPatientDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

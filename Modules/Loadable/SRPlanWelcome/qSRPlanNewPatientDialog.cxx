@@ -2,35 +2,17 @@
 
 
 #include "ui_qSRPlanNewPatientDialog.h"
- 
 
-// Qt includes
-#include <QDesktopServices>
-#include <QMainWindow>
-#include <QMessageBox>
-#include <QSettings>
 
-// Slicer includes
-#include "vtkSRPlanConfigure.h" // For Slicer_BUILD_DICOM_SUPPORT
-#include "vtkSRPlanVersionConfigure.h"
+#include "vtkMRMLPatientInfoNode.h"
 
-// SlicerQt includes
-#include "qSlicerWelcomeModuleWidget.h"
-#include "ui_qSlicerWelcomeModuleWidget.h"
+
+
+
 #include "qSlicerApplication.h"
-#include "qSlicerIO.h"
-#include "qSlicerIOManager.h"
-#include "qSlicerLayoutManager.h"
-#include "qSlicerModuleManager.h"
-#include "qSlicerAbstractCoreModule.h"
-#include "qSlicerModulePanel.h"
 
-// CTK includes
-#include "ctkButtonGroup.h"
 
-#include "qSRPlanNewPatientDialog.h"
 
-class qSlicerAppMainWindow;
 
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_SlicerWelcome
@@ -83,6 +65,7 @@ qSRPlanNewPatientDialog::qSRPlanNewPatientDialog(QWidget* _parent)
 	: Superclass(_parent)
 	, d_ptr(new qSRPlanNewPatientDialogPrivate(*this))
 {
+	this->setup();
 }
 
 //-----------------------------------------------------------------------------
@@ -95,6 +78,13 @@ void qSRPlanNewPatientDialog::setup()
 {
 	Q_D(qSRPlanNewPatientDialog);
 	d->setupUi(this);
+
+
+	connect(d->pushButton_loadimage, SIGNAL(clicked()),
+		this, SLOT(onConfirmInfoAndLoadImageClicked()));
+
+	connect(d->pushButton_cancel, SIGNAL(clicked()),
+		this, SLOT(reject()));
 
 
 	/*
@@ -123,29 +113,59 @@ void qSRPlanNewPatientDialog::setup()
 	//this->Superclass::setup();
 }
 
+void qSRPlanNewPatientDialog::onConfirmInfoAndLoadImageClicked()
+{
+	this->CreateBaseSubjectHierarchy();
+	this->accept();
 
-//-----------------------------------------------------------------------------
-bool qSRPlanNewPatientDialog::loadDicomData()
+}
+
+
+
+bool qSRPlanNewPatientDialog::CreateBaseSubjectHierarchy()
 {
 	Q_D(qSRPlanNewPatientDialog);
 
-	//return d->selectModule("DICOM");
+	qSlicerApplication * app = qSlicerApplication::application();
+	vtkMRMLScene * scene = app->mrmlScene();
+
+	vtkMRMLPatientInfoNode * infornode = vtkSmartPointer<vtkMRMLPatientInfoNode>::New();
+
+
+	vtkStdString sf = (d->lineEdit_id->text()).toStdString();
+	infornode->SetPatientID(sf);
+
+	infornode->SetPatientID((d->lineEdit_id->text()).toStdString());
+	infornode->SetPatientName((d->lineEdit_name->text()).toStdString());
+	infornode->SetPatientAge((d->lineEdit_age->text()).toInt());
+
+	vtkStdString genderstr = (d->comboBox_gender->currentText()).toStdString();
+
+
+
+
+	if (!strcmp(genderstr, "Male"))
+	{
+		infornode->SetPatientGender(vtkMRMLPatientInfoNode::Male);
+	}
+	else if (!strcmp(genderstr, "Female"))
+	{
+		infornode->SetPatientGender(vtkMRMLPatientInfoNode::Female);
+	}
+	else if (!strcmp(genderstr, "Other"))
+	{
+		infornode->SetPatientGender(vtkMRMLPatientInfoNode::Other);
+	}
+
+    //scene->AddNode(infornode);
+
+	infornode->SetName("PatientInfoNode");
+	infornode->SetScene(scene);
+
+	
 
 	return true;
+
 }
 
-
-
-
-
-//-----------------------------------------------------------------------------
-bool qSRPlanNewPatientDialog::loadNonDicomData()
-{
-	qSlicerIOManager *ioManager = qSlicerApplication::application()->ioManager();
-	if (!ioManager)
-	{
-		return false;
-	}
-	return ioManager->openAddDataDialog();
-}
 

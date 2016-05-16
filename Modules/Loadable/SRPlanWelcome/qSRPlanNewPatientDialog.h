@@ -25,9 +25,9 @@ public:
 
 public slots:
 
-	bool loadNonDicomData();
+	void onConfirmInfoAndLoadImageClicked();
 
-	bool loadDicomData();
+	bool CreateBaseSubjectHierarchy();
 
 	
 

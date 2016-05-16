@@ -44,6 +44,10 @@
 
 #include "qSRPlanNewPatientDialog.h"
 
+// VTK includes
+#include <vtkStdString.h>
+
+
 class qSlicerAppMainWindow;
 
 //-----------------------------------------------------------------------------
@@ -143,7 +147,7 @@ void qSlicerWelcomeModuleWidget::setup()
           this, SLOT (loadNonDicomData()));
 
   connect(d->NewPatientButton, SIGNAL(clicked()),
-	  this, SLOT(loadNonDicomData()));
+	  this, SLOT(newPatientDialog()));
 
   /*
   connect(d->LoadDicomDataButton, SIGNAL(clicked()),
@@ -184,9 +188,19 @@ bool qSlicerWelcomeModuleWidget::loadDicomData()
 //-----------------------------------------------------------------------------
 bool qSlicerWelcomeModuleWidget::newPatientDialog()
 {
-	qSRPlanNewPatientDialog * newdialog = new qSRPlanNewPatientDialog;
+	qSRPlanNewPatientDialog * newdialog = new qSRPlanNewPatientDialog(this);
+	
+	newdialog->show();
+	if (newdialog->exec())
+	{
+		
+		return this->loadNonDicomData();
 
-	return newdialog->exec();
+	}
+	else
+	{
+		return false;
+	}
 	 
 }
 
