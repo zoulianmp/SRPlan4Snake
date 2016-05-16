@@ -5,7 +5,7 @@
 
 
 #include "vtkMRMLPatientInfoNode.h"
-
+#include "vtkMRMLScene.h"
 
 
 
@@ -129,11 +129,8 @@ bool qSRPlanNewPatientDialog::CreateBaseSubjectHierarchy()
 	qSlicerApplication * app = qSlicerApplication::application();
 	vtkMRMLScene * scene = app->mrmlScene();
 
-	vtkMRMLPatientInfoNode * infornode = vtkSmartPointer<vtkMRMLPatientInfoNode>::New();
+	vtkSmartPointer< vtkMRMLPatientInfoNode > infornode = vtkSmartPointer< vtkMRMLPatientInfoNode >::New();
 
-
-	vtkStdString sf = (d->lineEdit_id->text()).toStdString();
-	infornode->SetPatientID(sf);
 
 	infornode->SetPatientID((d->lineEdit_id->text()).toStdString());
 	infornode->SetPatientName((d->lineEdit_name->text()).toStdString());
@@ -162,6 +159,7 @@ bool qSRPlanNewPatientDialog::CreateBaseSubjectHierarchy()
 	infornode->SetName("PatientInfoNode");
 	infornode->SetScene(scene);
 
+	scene->AddNode(infornode);
 	
 
 	return true;
