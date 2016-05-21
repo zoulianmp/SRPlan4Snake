@@ -52,6 +52,13 @@ public:
   static vtkMRMLSubjectHierarchyNode* InsertDicomSeriesInHierarchy(
     vtkMRMLScene* scene, const char* subjectId, const char* studyInstanceUID, const char* seriesInstanceUID );
 
+  /// Place SRPlan in subject hierarchy. Create SRPatient, Treatment Course,  if needed
+  /// \return SRPlan subject hierarchy node of the inserted SRPlan.
+  static vtkMRMLSubjectHierarchyNode* InsertSRPlanInHierarchy(
+	  vtkMRMLScene* scene, const char* srPatientId, const char* srCourseId, const char* srPlanId);
+
+
+
   /// Determine if two subject hierarchy nodes are in the same branch (share the same parent)
   /// \param node1 First node to check. Can be subject hierarchy node or a node associated with one
   /// \param node2 Second node to check

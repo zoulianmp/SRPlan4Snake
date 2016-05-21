@@ -18,6 +18,9 @@ set(${KIT}_SRCS
   qSlicerSubjectHierarchyDICOMPlugin.cxx
   qSlicerSubjectHierarchyDICOMPlugin.h
   
+  qSlicerSubjectHierarchySRPlanPlugin.cxx
+  qSlicerSubjectHierarchySRPlanPlugin.h
+  
   qSlicerSubjectHierarchyRtImagePlugin.cxx
   qSlicerSubjectHierarchyRtImagePlugin.h
   qSlicerSubjectHierarchyRtDoseVolumePlugin.cxx
@@ -30,7 +33,8 @@ set(${KIT}_SRCS
 
 set(${KIT}_MOC_SRCS
   qSlicerSubjectHierarchyDICOMPlugin.h
-  
+  qSlicerSubjectHierarchySRPlanPlugin.h
+	
   qSlicerSubjectHierarchyRtImagePlugin.h
   qSlicerSubjectHierarchyRtDoseVolumePlugin.h
   qSlicerSubjectHierarchyRtPlanPlugin.h

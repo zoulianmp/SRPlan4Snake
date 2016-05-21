@@ -169,6 +169,101 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertDicomSe
   return seriesNode;
 }
 
+
+
+
+vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanInHierarchy(
+	vtkMRMLScene* scene, const char* srPatientId, const char* srCourseId, const char* srPlanId)
+
+{
+
+	if (!scene || !srPatientId || !srCourseId || !srPlanId)
+	{
+		std::cerr << "vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanInHierarchy: Invalid input arguments!" << std::endl;
+		return NULL;
+	}
+
+	vtkMRMLSubjectHierarchyNode* patientNode = NULL;
+	vtkMRMLSubjectHierarchyNode* courseNode = NULL;
+	vtkMRMLSubjectHierarchyNode* planNode = NULL;
+
+	std::vector<vtkMRMLNode*> subjectHierarchyNodes;
+	unsigned int numberOfNodes = scene->GetNodesByClass("vtkMRMLHierarchyNode", subjectHierarchyNodes);
+
+	// Find referenced nodes
+	for (unsigned int i = 0; i < numberOfNodes; i++)
+	{
+		vtkMRMLSubjectHierarchyNode *node = vtkMRMLSubjectHierarchyNode::SafeDownCast(subjectHierarchyNodes[i]);
+		if (node && node->IsA("vtkMRMLSubjectHierarchyNode"))
+		{
+			std::string nodePatientUIDStr = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanPatientUIDName());
+			std::string nodeCourseUIDStr = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanCourseUIDName());
+			std::string nodePlanUIDStr = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanPlanUIDName());
+
+			const char* patientUID = nodePatientUIDStr.c_str();
+	
+			if (!nodePatientUIDStr.empty() && !strcmp(srPatientId, nodePatientUIDStr.c_str()))
+			{
+				patientNode = node;
+			
+			}
+			else if (!nodeCourseUIDStr.empty() &&!strcmp(srCourseId, nodeCourseUIDStr.c_str()))
+			{
+				courseNode = node;
+			}
+			else if (!nodePlanUIDStr.empty() &&!strcmp(srPlanId, nodePlanUIDStr.c_str()))
+			{
+				planNode = node;
+			}
+		}
+	}
+
+
+	// Create patient and study nodes if they do not exist yet
+	if (!patientNode)
+	{
+		patientNode = vtkMRMLSubjectHierarchyNode::New();
+		patientNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPatient());
+		patientNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanPatientUIDName(), srPatientId);
+		patientNode->SetOwnerPluginName("SRPlan");
+		scene->AddNode(patientNode);
+		patientNode->Delete(); // Return ownership to the scene only
+	}
+
+	if (!courseNode)
+	{
+		courseNode = vtkMRMLSubjectHierarchyNode::New();
+		courseNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetDICOMLevelStudy());
+		courseNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetDICOMUIDName(), srCourseId);
+		courseNode->SetOwnerPluginName("SRPlan");
+		courseNode->SetParentNodeID(patientNode->GetID());
+		scene->AddNode(courseNode);
+		courseNode->Delete(); // Return ownership to the scene only
+	}
+
+	if (!planNode)
+	{
+		planNode = vtkMRMLSubjectHierarchyNode::New();
+
+		planNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan());
+		planNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanPlanUIDName(), srPlanId);
+		planNode->SetOwnerPluginName("SRPlan");
+		scene->AddNode(planNode);
+		planNode->Delete(); // Return ownership to the scene only
+	}
+
+	planNode->SetParentNodeID(courseNode->GetID());
+
+	return planNode;
+
+}
+
+
+
+
+
+
+
 //---------------------------------------------------------------------------
 vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::AreNodesInSameBranch(vtkMRMLNode* node1, vtkMRMLNode* node2,
                                                                 const char* lowestCommonLevel)
