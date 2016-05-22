@@ -20,8 +20,8 @@
 
 ==============================================================================*/
 
-#ifndef __qSlicerSubjectHierarchyDICOMPlugin_h
-#define __qSlicerSubjectHierarchyDICOMPlugin_h
+#ifndef __qSlicerSubjectHierarchySRPlanPlugin_h
+#define __qSlicerSubjectHierarchySRPlanPlugin_h
 
 // SubjectHierarchy Plugins includes
 #include "qSlicerSubjectHierarchyAbstractPlugin.h"
@@ -30,6 +30,7 @@
 
 #include "qSRPlanWelcomeSubjectHierarchyPluginsExport.h"
 
+#include "qSRPlanWelcomeModuleExport.h"
 
 class qSlicerSubjectHierarchyDICOMPluginPrivate;
 class vtkMRMLNode;
