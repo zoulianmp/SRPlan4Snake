@@ -103,7 +103,7 @@ void qSlicerSubjectHierarchySRPlanPluginPrivate::init()
   QObject::connect(this->ConvertFolderToPatientAction, SIGNAL(triggered()), q, SLOT(convertCurrentNodeToPatient()));
 
   this->ConvertFolderToCourseAction = new QAction("Convert folder to course",q);
-  QObject::connect(this->ConvertFolderToCourseAction, SIGNAL(triggered()), q, SLOT(convertCurrentNodeToStudy()));
+  QObject::connect(this->ConvertFolderToCourseAction, SIGNAL(triggered()), q, SLOT(convertCurrentNodeToCourse()));
 
  // this->OpenDICOMExportDialogAction = new QAction("Export to DICOM...",q);
  // QObject::connect(this->OpenDICOMExportDialogAction, SIGNAL(triggered()), q, SLOT(openDICOMExportDialog()));

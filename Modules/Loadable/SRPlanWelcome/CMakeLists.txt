@@ -7,7 +7,7 @@ string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
 
 
 
-add_subdirectory(SubjectHierarchyPlugins)
+#add_subdirectory(SubjectHierarchyPlugins)
 
 
 
