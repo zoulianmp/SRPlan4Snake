@@ -36,6 +36,8 @@
 #include "qSlicerSubjectHierarchySegmentPlugin.h"
 #include "qSlicerSubjectHierarchyFolderPlugin.h"
 
+#include "qSlicerSubjectHierarchySRPlanPlugin.h"
+
 // SlicerQt includes
 #include "qSlicerApplication.h"
 
@@ -146,6 +148,11 @@ void qSlicerSubjectHierarchyPluginLogic::registerCorePlugins()
     new qSlicerSubjectHierarchyRegisterPlugin());
   qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(
     new qSlicerSubjectHierarchySegmentPlugin());
+
+  qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(
+	  new qSlicerSubjectHierarchySRPlanPlugin());
+  
+
 }
 
 //------------------------------------------------------------------------------

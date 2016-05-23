@@ -126,6 +126,7 @@ QStringList qSlicerWelcomeModule::dependencies() const
   // Colors: Required to have a valid color logic for XcedeCatalogUI.
   // Cameras: Required in qSlicerSceneReader
   moduleDependencies << "Colors" << "Cameras"<<"SubjectHierarchy";
+ // moduleDependencies << "Colors" << "Cameras"  ;
   return moduleDependencies;
 }
 
@@ -160,9 +161,9 @@ void qSlicerWelcomeModule::setup()
   // Dialogs
   ioManager->registerDialog(new qSlicerDataDialog(this));
   ioManager->registerDialog(new qSlicerSaveDataDialog(this));
-
+  
   qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(
-	  new qSlicerSubjectHierarchySRPlanPlugin());
+  	  new qSlicerSubjectHierarchySRPlanPlugin());
 }
 
 
