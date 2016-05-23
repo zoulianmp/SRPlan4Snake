@@ -56,6 +56,91 @@ public:
   static const char* GetSubjectHierarchyLevelFolder()
     { return "Folder"; };
 
+  static const char* GetSubjectHierarchyLevelSRPatient()
+  {
+	  return "SRPatient";
+  };
+
+  static const char* GetSubjectHierarchyLevelSRCourse()
+  {
+	  return "SRCourse";
+  };
+
+  static const char* GetSubjectHierarchyLevelSRPlan()
+  {
+	  return "SRPlan";
+  };
+
+  static const char* GetSubjectHierarchyLevelSRSubplan()
+  {
+	  return "SRSubplan";
+  };
+
+  //SRPlan Components uidNames
+
+  static const char* GetSRPlanPatientUIDName ()
+  {
+	  return "SRPlan-PatientUID";
+  };
+
+ 
+  static const char* GetSRPlanCourseUIDName()
+  {
+	  return "SRPlan-CourseUID";
+  };
+
+  static const char* GetSRPlanPlanUIDName()
+  {
+	  return "SRPlan-PlanUID";
+  };
+
+  static const char* GetSRPlanImageVolumeUIDName()
+  {
+	  return "SRPlan-ImageVolumeUID";
+  };
+
+  static const char* GetSRPlanDoseVolumeUIDName()
+  {
+	  return "SRPlan-DoseVolumeUID";
+  };
+
+  static const char* GetSRPlanUserOriginUIDName()
+  {
+	  return "SRPlan-UserOriginUID";
+  };
+
+
+  static const char* GetSRPlanUserDefinedPointUIDName()
+  {
+	  return "SRPlan-UserDefinedPointUID";
+  };
+
+
+  static const char* GetSRPlanStructureSetUIDName()
+  {
+	  return "SRPlan-StructureSetUID";
+  };
+
+  static const char* GetSRPlanStructureUIDName()
+  {
+	  return "SRPlan-StructureUID";
+  };
+
+  static const char* GetSRPlanTreatPathUIDName()
+  {
+	  return "SRPlan-TreatPathUID";
+  };
+
+  static const char* GetSRPlanControlPointUIDName()
+  {
+	  return "SRPlan-ControlPointUID";
+  };
+
+
+
+
+
+
   // DICOM levels
   static const char* GetDICOMLevelPatient()
     { return "Patient"; };

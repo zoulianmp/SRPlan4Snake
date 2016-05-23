@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>504</width>
-    <height>378</height>
+    <width>702</width>
+    <height>508</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -152,8 +152,8 @@
   <widget class="QPushButton" name="pushButton_loadimage">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>300</y>
+     <x>30</x>
+     <y>430</y>
      <width>311</width>
      <height>41</height>
     </rect>
@@ -171,7 +171,7 @@
    <property name="geometry">
     <rect>
      <x>370</x>
-     <y>300</y>
+     <y>430</y>
      <width>101</width>
      <height>41</height>
     </rect>
@@ -183,6 +183,66 @@
    </property>
    <property name="text">
     <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_course_id">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>290</y>
+     <width>161</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Treatment Course ID</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_course_id">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>290</y>
+     <width>261</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_plan_id">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>340</y>
+     <width>261</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_plan_id">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>340</y>
+     <width>161</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Treatment Plan ID</string>
    </property>
   </widget>
  </widget>

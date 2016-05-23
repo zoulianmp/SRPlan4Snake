@@ -11,7 +11,9 @@
 
 #include "qSlicerApplication.h"
 
-
+#include "vtkSlicerSubjectHierarchyModuleLogic.h"
+#include "vtkMRMLSubjectHierarchyConstants.h"
+#include "vtkMRMLSubjectHierarchyNode.h"
 
 
 //-----------------------------------------------------------------------------
@@ -129,15 +131,29 @@ bool qSRPlanNewPatientDialog::CreateBaseSubjectHierarchy()
 	qSlicerApplication * app = qSlicerApplication::application();
 	vtkMRMLScene * scene = app->mrmlScene();
 
+
+
+	vtkStdString srpatientid = (d->lineEdit_id->text()).toStdString();  
+	vtkStdString srcourseid = (d->lineEdit_course_id->text()).toStdString();  
+	vtkStdString srplanid = (d->lineEdit_plan_id->text()).toStdString(); 
+
+
+	vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanInHierarchy(scene, srpatientid.c_str(), srcourseid.c_str(), srplanid.c_str());
+
+
+	vtkMRMLSubjectHierarchyNode* patientnode = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID((vtkMRMLSubjectHierarchyConstants::GetSRPlanPatientUIDName(), srpatientid.c_str());
+
+
+
+
+	/*
+
 	vtkSmartPointer< vtkMRMLPatientInfoNode > infornode = vtkSmartPointer< vtkMRMLPatientInfoNode >::New();
 
 
 	infornode->SetPatientID((d->lineEdit_id->text()).toStdString());
 	infornode->SetPatientName((d->lineEdit_name->text()).toStdString());
-	infornode->SetPatientAge((d->lineEdit_age->text()).toInt());
-
-	vtkStdString genderstr = (d->comboBox_gender->currentText()).toStdString();
-
+	infornode->SetPatientAge((d->lineEdit_age->text()).toInt()); 
 
 
 
@@ -161,7 +177,7 @@ bool qSRPlanNewPatientDialog::CreateBaseSubjectHierarchy()
 
 	scene->AddNode(infornode);
 	
-
+	*/
 	vtkMRMLPatientInfoNode *node = vtkMRMLPatientInfoNode::SafeDownCast( scene->GetNthNodeByClass(0,"vtkMRMLPatientInfoNode"));
 
 	int num = scene->GetNumberOfNodesByClass("vtkMRMLPatientInfoNode");
