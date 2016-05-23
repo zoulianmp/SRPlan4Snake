@@ -414,7 +414,7 @@ void qSlicerSubjectHierarchySRPlanPlugin::createChildPlanUnderCurrentNode()
 
 
 //Create Plan Node under current node (must be Plan)
-void createChildImageVolumeUnderCurrentNode()
+void qSlicerSubjectHierarchySRPlanPlugin::createChildImageVolumeUnderCurrentNode()
 {
 	vtkMRMLScene* scene = qSlicerSubjectHierarchyPluginHandler::instance()->scene();
 	vtkMRMLSubjectHierarchyNode* currentNode = qSlicerSubjectHierarchyPluginHandler::instance()->currentNode();

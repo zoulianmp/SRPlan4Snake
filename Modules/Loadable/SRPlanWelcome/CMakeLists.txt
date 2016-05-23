@@ -24,6 +24,7 @@ set(MODULE_INCLUDE_DIRECTORIES
   ${qSRPlanCameras_INCLUDE_DIRS}
   ${vtkSRPlanCamerasModuleLogic_INCLUDE_DIRS}
   ${vtkSRPlanColorsModuleLogic_INCLUDE_DIRS}
+  ${vtkSRPlanSubjectHierarchyModuleLogic_INCLUDE_DIRS}
   ${qMRMLWidgets_INCLUDE_DIRS}
   )
 
@@ -69,6 +70,7 @@ set(MODULE_RESOURCES
 set(MODULE_TARGET_LIBRARIES
    vtkSRPlanCamerasModuleLogic
    vtkSRPlanColorsModuleLogic
+   vtkSRPlanSubjectHierarchyModuleLogic
   )
 
 #-----------------------------------------------------------------------------
