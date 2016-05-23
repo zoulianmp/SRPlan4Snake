@@ -137,6 +137,65 @@ public:
   };
 
 
+  //SRPlan SubjectHierarchy Node BaseName
+
+  static const char* GetSRPlanPatientNodeBaseName()
+  {
+	  return "SRPlan-PatientNode";
+  };
+
+
+  static const char* GetSRPlanCourseNodeBaseName()
+  {
+	  return "SRPlan-CourseNode";
+  };
+
+  static const char* GetSRPlanPlanNodeBaseName()
+  {
+	  return "SRPlan-PlanNode";
+  };
+
+  static const char* GetSRPlanImageVolumeNodeBaseName()
+  {
+	  return "SRPlan-ImageVolumeNode";
+  };
+
+  static const char* GetSRPlanDoseVolumeNodeBaseName()
+  {
+	  return "SRPlan-DoseVolumeNode";
+  };
+
+  static const char* GetSRPlanUserOriginNodeBaseName()
+  {
+	  return "SRPlan-UserOriginNode";
+  };
+
+
+  static const char* GetSRPlanUserDefinedPointNodeBaseName()
+  {
+	  return "SRPlan-UserDefinedPointNode";
+  };
+
+
+  static const char* GetSRPlanStructureSetNodeBaseName()
+  {
+	  return "SRPlan-StructureSetNode";
+  };
+
+  static const char* GetSRPlanStructureNodeBaseName()
+  {
+	  return "SRPlan-StructureNode";
+  };
+
+  static const char* GetSRPlanTreatPathNodeBaseName()
+  {
+	  return "SRPlan-TreatPathNode";
+  };
+
+  static const char* GetSRPlanControlPointNodeBaseName()
+  {
+	  return "SRPlan-ControlPointNode";
+  };
 
 
 

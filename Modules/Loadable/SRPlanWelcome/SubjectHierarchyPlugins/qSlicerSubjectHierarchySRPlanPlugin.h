@@ -30,9 +30,9 @@
 
 #include "qSRPlanWelcomeSubjectHierarchyPluginsExport.h"
 
-#include "qSRPlanWelcomeModuleExport.h"
 
-class qSlicerSubjectHierarchyDICOMPluginPrivate;
+
+class qSlicerSubjectHierarchySRPlanPluginPrivate;
 class vtkMRMLNode;
 class vtkMRMLSubjectHierarchyNode;
 
@@ -43,15 +43,15 @@ class vtkMRMLSubjectHierarchyNode;
 //BTX
 
 /// \ingroup Slicer_QtModules_SubjectHierarchy_Widgets
-class Q_SRPlan_WELCOME_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyDICOMPlugin : public qSlicerSubjectHierarchyAbstractPlugin
+class Q_SRPlan_WELCOME_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchySRPlanPlugin : public qSlicerSubjectHierarchyAbstractPlugin
 {
 public:
   Q_OBJECT
 
 public:
   typedef qSlicerSubjectHierarchyAbstractPlugin Superclass;
-  qSlicerSubjectHierarchyDICOMPlugin(QObject* parent = NULL);
-  virtual ~qSlicerSubjectHierarchyDICOMPlugin();
+  qSlicerSubjectHierarchySRPlanPlugin(QObject* parent = NULL);
+  virtual ~qSlicerSubjectHierarchySRPlanPlugin();
 
 public:
   /// Determines if the actual plugin can handle a subject hierarchy node. The plugin with
@@ -97,24 +97,36 @@ protected slots:
   /// Create patient node
   void createPatientNode();
 
-  /// Create study node under current node (must be patient)
-  void createChildStudyUnderCurrentNode();
+
 
   /// Convert current node (must be folder) to patient
   void convertCurrentNodeToPatient();
 
   /// Convert current node (must be folder) to study
-  void convertCurrentNodeToStudy();
+  void convertCurrentNodeToCourse();
 
   /// Open DICOM export dialog to export the selected series
-  void openDICOMExportDialog();
+ // void openDICOMExportDialog();
+
+  //Create Course Node under current node (must be patient)
+  void createChildCourseUnderCurrentNode();
+
+  //Create Plan Node under current node (must be Course)
+  void createChildPlanUnderCurrentNode();
+
+
+  //Create Plan Node under current node (must be Plan)
+  void createChildImageVolumeUnderCurrentNode();
+
+  
+
 
 protected:
-  QScopedPointer<qSlicerSubjectHierarchyDICOMPluginPrivate> d_ptr;
+  QScopedPointer<qSlicerSubjectHierarchySRPlanPluginPrivate> d_ptr;
 
 private:
-  Q_DECLARE_PRIVATE(qSlicerSubjectHierarchyDICOMPlugin);
-  Q_DISABLE_COPY(qSlicerSubjectHierarchyDICOMPlugin);
+  Q_DECLARE_PRIVATE(qSlicerSubjectHierarchySRPlanPlugin);
+  Q_DISABLE_COPY(qSlicerSubjectHierarchySRPlanPlugin);
 };
 
 //ETX

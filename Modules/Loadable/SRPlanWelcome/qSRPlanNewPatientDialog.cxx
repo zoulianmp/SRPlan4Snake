@@ -141,7 +141,7 @@ bool qSRPlanNewPatientDialog::CreateBaseSubjectHierarchy()
 	vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanInHierarchy(scene, srpatientid.c_str(), srcourseid.c_str(), srplanid.c_str());
 
 
-	vtkMRMLSubjectHierarchyNode* patientnode = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID((vtkMRMLSubjectHierarchyConstants::GetSRPlanPatientUIDName(), srpatientid.c_str());
+	vtkMRMLSubjectHierarchyNode* patientnode = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID(scene,vtkMRMLSubjectHierarchyConstants::GetSRPlanPatientUIDName(), srpatientid.c_str());
 
 
 
