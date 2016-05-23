@@ -21,10 +21,13 @@ set(MODULE_EXPORT_DIRECTIVE "Q_SRPlan_QTMODULES_${MODULE_NAME_UPPER}_EXPORT")
 set(MODULE_INCLUDE_DIRECTORIES
   ${CMAKE_CURRENT_SOURCE_DIR}/Widgets
   ${CMAKE_CURRENT_BINARY_DIR}/Widgets
+  ${CMAKE_CURRENT_SOURCE_DIR}/SubjectHierarchyPlugins
+  ${CMAKE_CURRENT_BINARY_DIR}/SubjectHierarchyPlugins
   ${qSRPlanCameras_INCLUDE_DIRS}
   ${vtkSRPlanCamerasModuleLogic_INCLUDE_DIRS}
   ${vtkSRPlanColorsModuleLogic_INCLUDE_DIRS}
   ${vtkSRPlanSubjectHierarchyModuleLogic_INCLUDE_DIRS}
+  ${qSRPlanSubjectHierarchyModuleWidgets_INCLUDE_DIRS}
   ${qMRMLWidgets_INCLUDE_DIRS}
   )
 
@@ -71,6 +74,8 @@ set(MODULE_TARGET_LIBRARIES
    vtkSRPlanCamerasModuleLogic
    vtkSRPlanColorsModuleLogic
    vtkSRPlanSubjectHierarchyModuleLogic
+   qSRPlanSubjectHierarchyModuleWidgets
+   qSRPlan${MODULE_NAME}SubjectHierarchyPlugins
   )
 
 #-----------------------------------------------------------------------------

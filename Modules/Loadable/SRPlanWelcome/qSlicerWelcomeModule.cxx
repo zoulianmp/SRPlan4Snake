@@ -30,7 +30,8 @@
 #include "qSlicerIOManager.h"
 #include "qSlicerModuleManager.h"
 
-
+#include "qSlicerSubjectHierarchyPluginHandler.h"
+#include "qSlicerSubjectHierarchySRPlanPlugin.h"
 
 // Data includes
 #include "qSlicerDataDialog.h"
@@ -159,6 +160,9 @@ void qSlicerWelcomeModule::setup()
   // Dialogs
   ioManager->registerDialog(new qSlicerDataDialog(this));
   ioManager->registerDialog(new qSlicerSaveDataDialog(this));
+
+  qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(
+	  new qSlicerSubjectHierarchySRPlanPlugin());
 }
 
 
