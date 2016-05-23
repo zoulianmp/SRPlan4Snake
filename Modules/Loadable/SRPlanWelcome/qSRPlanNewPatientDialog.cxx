@@ -162,6 +162,10 @@ bool qSRPlanNewPatientDialog::CreateBaseSubjectHierarchy()
 	scene->AddNode(infornode);
 	
 
+	vtkMRMLPatientInfoNode *node = vtkMRMLPatientInfoNode::SafeDownCast( scene->GetNthNodeByClass(0,"vtkMRMLPatientInfoNode"));
+
+	int num = scene->GetNumberOfNodesByClass("vtkMRMLPatientInfoNode");
+
 	return true;
 
 }
