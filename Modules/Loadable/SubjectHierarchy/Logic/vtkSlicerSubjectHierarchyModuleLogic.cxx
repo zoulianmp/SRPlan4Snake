@@ -233,8 +233,8 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanI
 	if (!courseNode)
 	{
 		courseNode = vtkMRMLSubjectHierarchyNode::New();
-		courseNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetDICOMLevelStudy());
-		courseNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetDICOMUIDName(), srCourseId);
+		courseNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRCourse());
+		courseNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanCourseUIDName(), srCourseId);
 		courseNode->SetOwnerPluginName("SRPlan");
 		courseNode->SetParentNodeID(patientNode->GetID());
 		scene->AddNode(courseNode);

@@ -30,8 +30,8 @@
 #include "qSlicerIOManager.h"
 #include "qSlicerModuleManager.h"
 
-#include "qSlicerSubjectHierarchyPluginHandler.h"
-#include "qSlicerSubjectHierarchySRPlanPlugin.h"
+//#include "qSlicerSubjectHierarchyPluginHandler.h"
+//#include "qSlicerSubjectHierarchySRPlanPlugin.h"
 
 // Data includes
 #include "qSlicerDataDialog.h"

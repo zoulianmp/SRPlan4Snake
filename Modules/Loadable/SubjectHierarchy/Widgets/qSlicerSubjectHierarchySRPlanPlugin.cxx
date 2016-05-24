@@ -58,6 +58,7 @@ public:
 public:
   QIcon PatientIcon;
   QIcon CourseIcon;
+  QIcon PlanIcon;
 
   QAction* CreatePatientAction;
   QAction* CreateCourseAction;
@@ -80,6 +81,8 @@ qSlicerSubjectHierarchySRPlanPluginPrivate::qSlicerSubjectHierarchySRPlanPluginP
 {
   this->PatientIcon = QIcon(":Icons/Patient.png");
   this->CourseIcon = QIcon(":Icons/Course.png");
+  this->PlanIcon = QIcon(":Icons/Plan.png");
+
 
   this->CreatePatientAction = NULL;
   this->CreateCourseAction = NULL;
@@ -159,8 +162,14 @@ double qSlicerSubjectHierarchySRPlanPlugin::canOwnSubjectHierarchyNode(vtkMRMLSu
   // Course level (so that creation of a generic series is possible)
   if (node->IsLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRCourse()))
     {
-    return 0.3;
+    return 0.5;
     }
+
+  // Plan level (so that creation of a generic series is possible)
+  if (node->IsLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan()))
+  {
+	  return 0.3;
+  }
 
   return 0.0;
 }
@@ -186,6 +195,11 @@ const QString qSlicerSubjectHierarchySRPlanPlugin::roleForPlugin()const
     {
     return "Course";
     }
+
+  if (currentNode->IsLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan()))
+  {
+	  return "Plan";
+  }
 
   return QString("Error!");
 }
@@ -238,6 +252,13 @@ QIcon qSlicerSubjectHierarchySRPlanPlugin::icon(vtkMRMLSubjectHierarchyNode* nod
     {
     return d->CourseIcon;
     }
+
+  // Plan icon
+  if (node->IsLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan()))
+  {
+	  return d->PlanIcon;
+  }
+
 
   // Node unknown by plugin
   return QIcon();

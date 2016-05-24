@@ -765,8 +765,8 @@ vtkMRMLSubjectHierarchyNode* vtkMRMLSubjectHierarchyNode::CreateSubjectHierarchy
     }
   else
     {
-    // Default level is series
-    childSubjectHierarchyNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetDICOMLevelSeries());
+    // Default level is SRSubPlan Modified by ZouLian: 
+    childSubjectHierarchyNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRSubplan());
     }
 
   std::string shNodeName = nodeName + vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyNodeNamePostfix();
