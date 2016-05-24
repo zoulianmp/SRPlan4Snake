@@ -62,13 +62,15 @@ public:
 
   QAction* CreatePatientAction;
   QAction* CreateCourseAction;
+
+  QAction* CreatePlanAction;
+  QAction* CreateImageVolumeAction;
+
   QAction* ConvertFolderToPatientAction;
   QAction* ConvertFolderToCourseAction;
  // QAction* OpenDICOMExportDialogAction;
 
-  QAction* AddCourseAction;
-  QAction* AddPlanAction;
-  QAction* AddImageVolumeAction;
+
 
 };
 
@@ -86,8 +88,15 @@ qSlicerSubjectHierarchySRPlanPluginPrivate::qSlicerSubjectHierarchySRPlanPluginP
 
   this->CreatePatientAction = NULL;
   this->CreateCourseAction = NULL;
+  this->CreatePlanAction = NULL;
+  this->CreateImageVolumeAction = NULL;
+
+
   this->ConvertFolderToPatientAction = NULL;
   this->ConvertFolderToCourseAction = NULL;
+
+ 
+
  // this->OpenDICOMExportDialogAction = NULL;
 }
 
@@ -102,6 +111,14 @@ void qSlicerSubjectHierarchySRPlanPluginPrivate::init()
   this->CreateCourseAction = new QAction("Create treatment course",q);
   QObject::connect(this->CreateCourseAction, SIGNAL(triggered()), q, SLOT(createChildCourseUnderCurrentNode()));
 
+
+  this->CreatePlanAction = new QAction("Add Plan to Course", q);
+  QObject::connect(this->CreatePlanAction, SIGNAL(triggered()), q, SLOT(createChildPlanUnderCurrentNode()));
+
+  this->CreateImageVolumeAction = new QAction("Add Volume Image to Plan ", q);
+  QObject::connect(this->CreateImageVolumeAction, SIGNAL(triggered()), q, SLOT(createChildImageVolumeUnderCurrentNode()));
+
+
   this->ConvertFolderToPatientAction = new QAction("Convert folder to patient",q);
   QObject::connect(this->ConvertFolderToPatientAction, SIGNAL(triggered()), q, SLOT(convertCurrentNodeToPatient()));
 
@@ -110,13 +127,7 @@ void qSlicerSubjectHierarchySRPlanPluginPrivate::init()
 
  // this->OpenDICOMExportDialogAction = new QAction("Export to DICOM...",q);
  // QObject::connect(this->OpenDICOMExportDialogAction, SIGNAL(triggered()), q, SLOT(openDICOMExportDialog()));
-
-
-  this->AddPlanAction = new QAction("Add Plan to Course", q);
-  QObject::connect(this->AddPlanAction, SIGNAL(triggered()), q, SLOT(createChildPlanUnderCurrentNode()));
-
-  this->AddImageVolumeAction = new QAction("Add Volume Image to Plan ", q);
-  QObject::connect(this->AddImageVolumeAction, SIGNAL(triggered()), q, SLOT(createChildImageVolumeUnderCurrentNode()));
+  
 
 
 
@@ -277,9 +288,8 @@ QList<QAction*> qSlicerSubjectHierarchySRPlanPlugin::nodeContextMenuActions()con
   Q_D(const qSlicerSubjectHierarchySRPlanPlugin);
 
   QList<QAction*> actions;
-  actions << d->CreateCourseAction << d->ConvertFolderToPatientAction << d->ConvertFolderToCourseAction
-	  << d->AddCourseAction << d->AddPlanAction << d->AddImageVolumeAction;
-	  
+  actions << d->CreateCourseAction << d->CreatePlanAction << d->CreateImageVolumeAction
+	  << d->ConvertFolderToPatientAction << d->ConvertFolderToCourseAction;	  
   return actions;
 
 }
@@ -323,7 +333,7 @@ void qSlicerSubjectHierarchySRPlanPlugin::showContextMenuActionsForNode(vtkMRMLS
     {
     //if (this->canBeExported(node)) //TODO:
       {
-      d->AddPlanAction->setVisible(true);
+      d->CreatePlanAction->setVisible(true);
 	 
 
       }
@@ -333,7 +343,7 @@ void qSlicerSubjectHierarchySRPlanPlugin::showContextMenuActionsForNode(vtkMRMLS
     {
     //if (this->canBeExported(node)) //TODO:
       {
-      d->AddImageVolumeAction->setVisible(true);
+      d->CreateImageVolumeAction->setVisible(true);
 	 
       }
     }
