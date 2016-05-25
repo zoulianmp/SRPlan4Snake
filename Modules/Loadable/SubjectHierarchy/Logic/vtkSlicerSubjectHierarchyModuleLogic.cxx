@@ -226,6 +226,8 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanI
 		patientNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPatient());
 		patientNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanPatientUIDName(), srPatientId);
 		patientNode->SetOwnerPluginName("SRPlan");
+		patientNode->SetName(srPatientId);
+
 		scene->AddNode(patientNode);
 		patientNode->Delete(); // Return ownership to the scene only
 	}
@@ -236,6 +238,8 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanI
 		courseNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRCourse());
 		courseNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanCourseUIDName(), srCourseId);
 		courseNode->SetOwnerPluginName("SRPlan");
+		courseNode->SetName(srCourseId);
+
 		courseNode->SetParentNodeID(patientNode->GetID());
 		scene->AddNode(courseNode);
 		courseNode->Delete(); // Return ownership to the scene only
@@ -248,6 +252,10 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanI
 		planNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan());
 		planNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanPlanUIDName(), srPlanId);
 		planNode->SetOwnerPluginName("SRPlan");
+
+		planNode->SetName(srPlanId);
+
+
 		scene->AddNode(planNode);
 		planNode->Delete(); // Return ownership to the scene only
 	}

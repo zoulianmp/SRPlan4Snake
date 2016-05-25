@@ -146,20 +146,22 @@ bool qSRPlanNewPatientDialog::CreateBaseSubjectHierarchy()
 
 
 
+	patientnode->SetAttribute("PatientName", (d->lineEdit_name->text()).toStdString().c_str());
+	patientnode->SetAttribute("PatientAge",  (d->lineEdit_age->text()).toStdString().c_str());
+	
+	const char * genderstr = (d->comboBox_gender->currentText()).toStdString().c_str();
+	patientnode->SetAttribute("PatientGender", genderstr);
+
 	/*
 
-	vtkSmartPointer< vtkMRMLPatientInfoNode > infornode = vtkSmartPointer< vtkMRMLPatientInfoNode >::New();
 
-
-	infornode->SetPatientID((d->lineEdit_id->text()).toStdString());
-	infornode->SetPatientName((d->lineEdit_name->text()).toStdString());
-	infornode->SetPatientAge((d->lineEdit_age->text()).toInt()); 
 
 
 
 	if (!strcmp(genderstr, "Male"))
 	{
 		infornode->SetPatientGender(vtkMRMLPatientInfoNode::Male);
+		patientnode->SetAttribute("PatientGender", );
 	}
 	else if (!strcmp(genderstr, "Female"))
 	{
