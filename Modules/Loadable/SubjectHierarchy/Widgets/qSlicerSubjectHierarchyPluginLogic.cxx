@@ -319,8 +319,8 @@ void qSlicerSubjectHierarchyPluginLogic::onNodeAdded(vtkObject* sceneObject, vtk
     // Have the selected plugin add the new node to subject hierarchy
     if (selectedPlugin)
       {
-      bool successfullyAddedByPlugin = selectedPlugin->addNodeToSubjectHierarchy(node, NULL);
-      if (!successfullyAddedByPlugin)
+		bool successfullyAddedByPlugin = selectedPlugin->addNodeToSubjectHierarchy(node, NULL);
+        if (!successfullyAddedByPlugin)
         {
         qWarning() << "qSlicerSubjectHierarchyPluginLogic::onNodeAdded: Failed to add node "
           << node->GetName() << " through plugin '" << selectedPlugin->name().toLatin1().constData() << "'";

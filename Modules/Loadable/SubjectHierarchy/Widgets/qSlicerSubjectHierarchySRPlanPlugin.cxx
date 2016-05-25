@@ -168,18 +168,18 @@ double qSlicerSubjectHierarchySRPlanPlugin::canOwnSubjectHierarchyNode(vtkMRMLSu
   // Patient level
   if (node->IsLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPatient()))
     {
-    return 0.7;
+    return 0.5;
     }
   // Course level (so that creation of a generic series is possible)
   if (node->IsLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRCourse()))
     {
-    return 0.5;
+    return 0.3;
     }
 
   // Plan level (so that creation of a generic series is possible)
   if (node->IsLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan()))
   {
-	  return 0.3;
+	  return 0.2;
   }
 
   return 0.0;

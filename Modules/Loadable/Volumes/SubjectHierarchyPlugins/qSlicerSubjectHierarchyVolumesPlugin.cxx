@@ -141,6 +141,10 @@ double qSlicerSubjectHierarchyVolumesPlugin::canAddNodeToSubjectHierarchy(vtkMRM
   return 0.0;
 }
 
+
+
+
+
 //---------------------------------------------------------------------------
 double qSlicerSubjectHierarchyVolumesPlugin::canOwnSubjectHierarchyNode(vtkMRMLSubjectHierarchyNode* node)const
 {
@@ -150,12 +154,26 @@ double qSlicerSubjectHierarchyVolumesPlugin::canOwnSubjectHierarchyNode(vtkMRMLS
     return 0.0;
     }
 
+  vtkStdString primaryImageUID = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanDoseVolumeUIDName());
+	
+  //Primary Image SubjectHierarchy Node
+  if (!strcmp(primaryImageUID.c_str(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID()))
+  {
+	  return 0.5;
+
+  }
+ 
+
+
   // Volume
   vtkMRMLNode* associatedNode = node->GetAssociatedNode();
+
+
   if (associatedNode && associatedNode->IsA("vtkMRMLScalarVolumeNode"))
     {
     return 0.5; // There are other plugins that can handle special volume nodes better, thus the relatively low value
     }
+ 
 
   return 0.0;
 }
@@ -612,7 +630,9 @@ void qSlicerSubjectHierarchyVolumesPlugin::editProperties(vtkMRMLSubjectHierarch
     // Choose current data node
     if (nodeSelector)
       {
-      nodeSelector->setCurrentNode(node->GetAssociatedNode());
+      nodeSelector->setCurrentNode(node->GetAssociatedNode()); 
       }
     }
 }
+
+

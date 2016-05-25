@@ -186,6 +186,7 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanI
 	vtkMRMLSubjectHierarchyNode* patientNode = NULL;
 	vtkMRMLSubjectHierarchyNode* courseNode = NULL;
 	vtkMRMLSubjectHierarchyNode* planNode = NULL;
+	vtkMRMLSubjectHierarchyNode* primaryImageNode = NULL;
 
 	std::vector<vtkMRMLNode*> subjectHierarchyNodes;
 	unsigned int numberOfNodes = scene->GetNodesByClass("vtkMRMLHierarchyNode", subjectHierarchyNodes);
@@ -199,6 +200,7 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanI
 			std::string nodePatientUIDStr = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanPatientUIDName());
 			std::string nodeCourseUIDStr = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanCourseUIDName());
 			std::string nodePlanUIDStr = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanPlanUIDName());
+			std::string nodePrimaryUIDStr = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeUIDName());
 
 			const char* patientUID = nodePatientUIDStr.c_str();
 	
@@ -214,6 +216,10 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanI
 			else if (!nodePlanUIDStr.empty() &&!strcmp(srPlanId, nodePlanUIDStr.c_str()))
 			{
 				planNode = node;
+			}
+			else if (!nodePrimaryUIDStr.empty() && !strcmp(vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID(), nodePlanUIDStr.c_str()))
+			{
+				primaryImageNode = node;
 			}
 		}
 	}
@@ -255,12 +261,30 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanI
 
 		planNode->SetName(srPlanId);
 
+		planNode->SetParentNodeID(courseNode->GetID());
 
 		scene->AddNode(planNode);
+
 		planNode->Delete(); // Return ownership to the scene only
 	}
 
-	planNode->SetParentNodeID(courseNode->GetID());
+	if (!primaryImageNode)
+	{
+		primaryImageNode = vtkMRMLSubjectHierarchyNode::New();
+
+		primaryImageNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan());
+		primaryImageNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanDoseVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
+		primaryImageNode->SetOwnerPluginName("Volumes");
+
+		primaryImageNode->SetName("PrimaryVolume");
+
+		primaryImageNode->SetParentNodeID(courseNode->GetID());
+
+		scene->AddNode(primaryImageNode);
+
+		primaryImageNode->Delete(); // Return ownership to the scene only
+
+	}
 
 	return planNode;
 

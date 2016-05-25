@@ -198,6 +198,13 @@ public:
   };
 
 
+  // Primary Image Volume UID
+  static const char* GetSRPlanPrimaryImageVolumeUID()
+  {
+	  return "SRPlan-PrimaryImageVolume";
+  };
+
+
 
 
   // DICOM levels

@@ -149,8 +149,10 @@ bool qSRPlanNewPatientDialog::CreateBaseSubjectHierarchy()
 	patientnode->SetAttribute("PatientName", (d->lineEdit_name->text()).toStdString().c_str());
 	patientnode->SetAttribute("PatientAge",  (d->lineEdit_age->text()).toStdString().c_str());
 	
-	const char * genderstr = (d->comboBox_gender->currentText()).toStdString().c_str();
-	patientnode->SetAttribute("PatientGender", genderstr);
+
+	vtkStdString genderstr = (d->comboBox_gender->currentText()).toStdString();
+
+	patientnode->SetAttribute("PatientGender", genderstr.c_str());
 
 	/*
 

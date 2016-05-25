@@ -194,7 +194,19 @@ bool qSlicerWelcomeModuleWidget::newPatientDialog()
 	if (newdialog->exec())
 	{
 		
-		return this->loadNonDicomData();
+		bool loaded = this->loadNonDicomData();
+
+		// Set ImageVolumeNode to SRPlan SubjectHierarchy
+		if (loaded)
+		{
+
+
+
+		}
+		return  true;
+
+
+
 
 	}
 	else
