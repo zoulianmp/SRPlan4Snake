@@ -22,6 +22,8 @@ set(MODULE_INCLUDE_DIRECTORIES
   ${qSRPlanSubjectHierarchyModuleWidgets_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/Widgets
   ${CMAKE_CURRENT_BINARY_DIR}/Widgets
+
+
   )
 
 set(MODULE_SRCS

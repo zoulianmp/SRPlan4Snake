@@ -40,6 +40,9 @@
 #include "vtkMRMLVolumeArchetypeStorageNode.h"
 #include "vtkMRMLTransformNode.h"
 
+#include "vtkMRMLSubjectHierarchyNode.h"
+#include "vtkMRMLSubjectHierarchyConstants.h"
+
 // VTK includes
 #include <vtkCallbackCommand.h>
 #include <vtkGeneralTransform.h>
@@ -735,29 +738,32 @@ vtkMRMLVolumeNode* vtkSlicerVolumesLogic::AddArchetypeVolume (
 
   bool modified = false;
   if (volumeNode != NULL)
-    {
-    // move the nodes from the test scene to the main one, removing from the
-    // test scene first to avoid missing ID/reference errors and to fix a
-    // problem found in testing an extension where the RAS to IJK matrix
-    /// was reset to identity.
-    testScene->RemoveNode(displayNode);
-    testScene->RemoveNode(storageNode);
-    testScene->RemoveNode(volumeNode);
-    this->GetMRMLScene()->AddNode(displayNode);
-    this->GetMRMLScene()->AddNode(storageNode);
-    this->GetMRMLScene()->AddNode(volumeNode);
-    volumeNode->SetAndObserveDisplayNodeID(displayNode->GetID());
-    volumeNode->SetAndObserveStorageNodeID(storageNode->GetID());
+  {
+	  // move the nodes from the test scene to the main one, removing from the
+	  // test scene first to avoid missing ID/reference errors and to fix a
+	  // problem found in testing an extension where the RAS to IJK matrix
+	  /// was reset to identity.
+	  testScene->RemoveNode(displayNode);
+	  testScene->RemoveNode(storageNode);
+	  testScene->RemoveNode(volumeNode);
+	  this->GetMRMLScene()->AddNode(displayNode);
+	  this->GetMRMLScene()->AddNode(storageNode);
+	  this->GetMRMLScene()->AddNode(volumeNode);
+	  volumeNode->SetAndObserveDisplayNodeID(displayNode->GetID());
+	  volumeNode->SetAndObserveStorageNodeID(storageNode->GetID());
 
-    this->SetAndObserveColorToDisplayNode(displayNode, labelMap, filename);
+	  this->SetAndObserveColorToDisplayNode(displayNode, labelMap, filename);
 
-    vtkDebugMacro("Name vol node "<<volumeNode->GetClassName());
-    vtkDebugMacro("Display node "<<displayNode->GetClassName());
+	  vtkDebugMacro("Name vol node " << volumeNode->GetClassName());
+	  vtkDebugMacro("Display node " << displayNode->GetClassName());
 
-    this->SetActiveVolumeNode(volumeNode);
+	  this->SetActiveVolumeNode(volumeNode);
 
-    modified = true;
-    }
+
+
+	  modified = true;
+  }
+
 
   // clean up the test scene
   remoteIOLogic->RemoveDataIOFromScene();

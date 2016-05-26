@@ -60,6 +60,7 @@ public:
   ///   node, and 1 means that the plugin is the only one that can handle the node (by type or identifier attribute)
   virtual double canAddNodeToSubjectHierarchy(vtkMRMLNode* nodeToAdd, vtkMRMLSubjectHierarchyNode* parent=NULL)const;
 
+
   /// Determines if the actual plugin can handle a subject hierarchy node. The plugin with
   /// the highest confidence number will "own" the node in the subject hierarchy (set icon, tooltip,
   /// set context menu etc.)
@@ -67,6 +68,10 @@ public:
   /// \return Floating point confidence number between 0 and 1, where 0 means that the plugin cannot handle the
   ///   node, and 1 means that the plugin is the only one that can handle the node (by node type or identifier attribute)
   virtual double canOwnSubjectHierarchyNode(vtkMRMLSubjectHierarchyNode* node)const;
+
+
+  virtual bool addNodeToSubjectHierarchy(vtkMRMLNode* node, vtkMRMLSubjectHierarchyNode* parent, const char* level = NULL);
+
 
   /// Get role that the plugin assigns to the subject hierarchy node.
   ///   Each plugin should provide only one role.
@@ -81,6 +86,7 @@ public:
 
   /// Open module belonging to node and set inputs in opened module
   virtual void editProperties(vtkMRMLSubjectHierarchyNode* node);
+
 
   /// Generate tooltip for a owned subject hierarchy node
   virtual QString tooltip(vtkMRMLSubjectHierarchyNode* node)const;
@@ -98,6 +104,7 @@ public:
   /// Show context menu actions valid for  given subject hierarchy node.
   /// \param node Subject Hierarchy node to show the context menu items for. If NULL, then shows menu items for the scene
   virtual void showContextMenuActionsForNode(vtkMRMLSubjectHierarchyNode* node);
+
 
 protected:
   /// Show volume in slice viewers. The argument node becomes the background, and the previous

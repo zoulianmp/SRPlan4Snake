@@ -636,3 +636,39 @@ void qSlicerSubjectHierarchyVolumesPlugin::editProperties(vtkMRMLSubjectHierarch
 }
 
 
+
+//-----------------------------------------------------------------------
+// Attach the vtkMRMLScalarVolumeNode tho the primaryImageVolumeSubjectNode if its associatedNode is null
+
+bool qSlicerSubjectHierarchyVolumesPlugin::addNodeToSubjectHierarchy(vtkMRMLNode* node, vtkMRMLSubjectHierarchyNode* parent,const char* level )
+{
+	//associate the volumeNode to the ImageVolumeSubjectNode
+	// Added by zoulian
+
+	vtkMRMLScene* scene = qSlicerSubjectHierarchyPluginHandler::instance()->scene();
+	if (!scene)
+	{
+		qCritical() << "qSlicerSubjectHierarchyVolumesPlugin::addNodeToSubjectHierarchy: Invalid MRML scene!";
+		return false;
+	}
+
+	vtkMRMLSubjectHierarchyNode* primaryImageVolumeSHNode = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID(scene, vtkMRMLSubjectHierarchyConstants::GetSRPlanDoseVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
+
+
+	if (primaryImageVolumeSHNode && !primaryImageVolumeSHNode->GetAssociatedNode())
+	{
+
+		char * volumeNodeID = node->GetID();
+		primaryImageVolumeSHNode->SetAssociatedNodeID(node->GetID());
+
+		return true;
+
+	}
+	else
+	{
+		return  this->Superclass::addNodeToSubjectHierarchy(node, NULL);
+	 
+	}
+}
+
+

@@ -38,6 +38,7 @@
 
 #include "qSlicerSubjectHierarchySRPlanPlugin.h"
 
+
 // SlicerQt includes
 #include "qSlicerApplication.h"
 
@@ -319,6 +320,8 @@ void qSlicerSubjectHierarchyPluginLogic::onNodeAdded(vtkObject* sceneObject, vtk
     // Have the selected plugin add the new node to subject hierarchy
     if (selectedPlugin)
       {
+
+
 		bool successfullyAddedByPlugin = selectedPlugin->addNodeToSubjectHierarchy(node, NULL);
         if (!successfullyAddedByPlugin)
         {
