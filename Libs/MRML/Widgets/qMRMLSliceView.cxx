@@ -31,7 +31,7 @@
 #include <vtkLightBoxRendererManager.h>
 
 // qMRML includes
-#include "qMRMLColors.h"
+#include "qMRMLColors.h" 
 #include "qMRMLSliceView_p.h"
 
 // MRMLDisplayableManager includes
@@ -284,7 +284,7 @@ void qMRMLSliceView::setMRMLScene(vtkMRMLScene* newScene)
   Q_D(qMRMLSliceView);
   d->setMRMLScene(newScene);
 
-  if (d->MRMLSliceNode && newScene != d->MRMLSliceNode->GetScene())
+   if (d->MRMLSliceNode && newScene != d->MRMLSliceNode->GetScene())
     {
     this->setMRMLSliceNode(0);
     }

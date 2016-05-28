@@ -254,7 +254,8 @@ void vtkSliceViewInteractorStyle::OnMiddleButtonUp()
 //----------------------------------------------------------------------------
 void vtkSliceViewInteractorStyle::OnLeftButtonDown()
 {
-  if (this->Interactor->GetShiftKey())
+
+	if (this->Interactor->GetShiftKey())
     {
     this->StartTranslate();
     }
