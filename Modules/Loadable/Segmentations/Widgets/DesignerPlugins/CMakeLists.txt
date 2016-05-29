@@ -30,7 +30,7 @@ set(${KIT}_TARGET_LIBRARIES
   )
 
 #-----------------------------------------------------------------------------
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${Slicer_DIR}/bin)
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${Slicer_DIR}/bin)
 
 ctkMacroBuildQtDesignerPlugin(
   NAME ${KIT}
@@ -39,3 +39,15 @@ ctkMacroBuildQtDesignerPlugin(
   MOC_SRCS ${${KIT}_MOC_SRCS}
   TARGET_LIBRARIES ${${KIT}_TARGET_LIBRARIES}
   )
+
+
+  
+  
+if(SRPlan_OUT_UNIFY)
+   add_custom_command(
+        TARGET ${KIT}
+        POST_BUILD
+        COMMAND  ${CMAKE_COMMAND} -E copy  $<TARGET_FILE:${KIT}> ${SRPlan_OUT_DesignerPlugin})
+
+endif()
+
