@@ -127,15 +127,7 @@ void qSlicerSubjectHierarchyVolumesPluginPrivate::init()
   this->FeedImageSeriesAction = new QAction("Feed Image Series", q);
   QObject::connect(this->FeedImageSeriesAction, SIGNAL(triggered()), q, SLOT(feedImageSeriesIntoSHNode()));
 
-
- 
-  QObject::connect(qSlicerApplication::application()->coreIOManager(), SIGNAL(newFileLoaded(qSlicerIO::IOProperties)),
-	  q, SLOT(onNewFileLoaded(qSlicerIO::IOProperties)));
-
-
-
-
-
+  
 }
 
 //-----------------------------------------------------------------------------
@@ -696,11 +688,20 @@ bool qSlicerSubjectHierarchyVolumesPlugin::addNodeToSubjectHierarchy(vtkMRMLNode
 
 	vtkMRMLSubjectHierarchyNode* primaryImageVolumeSHNode = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID(scene, vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
 
+	//if Create the Volume SH from subject hierarchy Module
+	vtkMRMLSubjectHierarchyNode* currentNode = qSlicerSubjectHierarchyPluginHandler::instance()->currentNode();
 
+	if (currentNode && !currentNode->GetAssociatedNode())
+	{
+		currentNode->SetAssociatedNodeID(node->GetID());
+		return true;
+	}
+
+	//if the primaryImage SHNode is not null and associated Node is Null
 	if (primaryImageVolumeSHNode && !primaryImageVolumeSHNode->GetAssociatedNode())
 	{
 
-		char * volumeNodeID = node->GetID();
+	//	char * volumeNodeID = node->GetID();
 		primaryImageVolumeSHNode->SetAssociatedNodeID(node->GetID());
 
 		return true;
@@ -726,25 +727,6 @@ bool qSlicerSubjectHierarchyVolumesPlugin::feedImageSeriesIntoSHNode()
 
 
 	// Show volumes in study
-	//vtkMRMLSubjectHierarchyNode* currentNode = qSlicerSubjectHierarchyPluginHandler::instance()->currentNode();
-
-}
-
-bool qSlicerSubjectHierarchyVolumesPlugin::onNewFileLoaded(qSlicerIO::IOProperties parameters)
-{
-	QStringList nodes = parameters["nodeIDs"].toStringList();
-
-
-
-	/*
-	foreach(const QString& node, nodes)
-	{
-		loadedNodes->AddItem(
-			d->currentScene()->GetNodeByID(node.toLatin1()));
-	}
-	*/
-
-
-	return true;
+	//
 
 }
