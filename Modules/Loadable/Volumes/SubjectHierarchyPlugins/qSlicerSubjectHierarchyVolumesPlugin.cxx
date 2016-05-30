@@ -33,6 +33,9 @@
 #include "qSlicerCoreApplication.h"
 #include "vtkSlicerApplicationLogic.h"
 
+
+#include "qSlicerIOManager.h"
+
 // MRML includes
 #include <vtkMRMLNode.h>
 #include <vtkMRMLScene.h>
@@ -78,6 +81,8 @@ public:
   QIcon VolumeVisibilityOnIcon;
 
   QAction* ShowVolumesInBranchAction;
+  QAction* FeedImageSeriesAction;
+
 };
 
 //-----------------------------------------------------------------------------
@@ -92,6 +97,7 @@ qSlicerSubjectHierarchyVolumesPluginPrivate::qSlicerSubjectHierarchyVolumesPlugi
   this->VolumeVisibilityOnIcon = QIcon(":Icons/VolumeVisibilityOn.png");
 
   this->ShowVolumesInBranchAction = NULL;
+  this->FeedImageSeriesAction = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -117,6 +123,19 @@ void qSlicerSubjectHierarchyVolumesPluginPrivate::init()
 
   this->ShowVolumesInBranchAction = new QAction("Show volumes in branch",q);
   QObject::connect(this->ShowVolumesInBranchAction, SIGNAL(triggered()), q, SLOT(showVolumesInBranch()));
+
+  this->FeedImageSeriesAction = new QAction("Feed Image Series", q);
+  QObject::connect(this->FeedImageSeriesAction, SIGNAL(triggered()), q, SLOT(feedImageSeriesIntoSHNode()));
+
+
+ 
+  QObject::connect(qSlicerApplication::application()->coreIOManager(), SIGNAL(newFileLoaded(qSlicerIO::IOProperties)),
+	  q, SLOT(onNewFileLoaded(qSlicerIO::IOProperties)));
+
+
+
+
+
 }
 
 //-----------------------------------------------------------------------------
@@ -515,7 +534,7 @@ QList<QAction*> qSlicerSubjectHierarchyVolumesPlugin::nodeContextMenuActions()co
   Q_D(const qSlicerSubjectHierarchyVolumesPlugin);
 
   QList<QAction*> actions;
-  actions << d->ShowVolumesInBranchAction;
+  actions << d->ShowVolumesInBranchAction << d->FeedImageSeriesAction;
   return actions;
 }
 
@@ -544,6 +563,17 @@ void qSlicerSubjectHierarchyVolumesPlugin::showContextMenuActionsForNode(vtkMRML
     {
     d->ShowVolumesInBranchAction->setVisible(true);
     }
+
+  // If the the SH Node Owner Plugin is  Volumes,
+  // Show the FeedImageSeriesAction . by zoulian
+  vtkStdString pluginName = node->GetOwnerPluginName();
+
+  if (!strcmp(pluginName.c_str(), "Volumes"))
+  {
+	  d->FeedImageSeriesAction->setVisible(true);
+  }
+
+  
 }
 
 //---------------------------------------------------------------------------
@@ -683,4 +713,38 @@ bool qSlicerSubjectHierarchyVolumesPlugin::addNodeToSubjectHierarchy(vtkMRMLNode
 	}
 }
 
+//feed Image Series into Subject Hierarchy Node
+bool qSlicerSubjectHierarchyVolumesPlugin::feedImageSeriesIntoSHNode()
+{
 
+	qSlicerIOManager *ioManager = qSlicerApplication::application()->ioManager();
+	if (!ioManager)
+	{
+		return false;
+	}
+	return ioManager->openAddDataDialog();
+
+
+	// Show volumes in study
+	//vtkMRMLSubjectHierarchyNode* currentNode = qSlicerSubjectHierarchyPluginHandler::instance()->currentNode();
+
+}
+
+bool qSlicerSubjectHierarchyVolumesPlugin::onNewFileLoaded(qSlicerIO::IOProperties parameters)
+{
+	QStringList nodes = parameters["nodeIDs"].toStringList();
+
+
+
+	/*
+	foreach(const QString& node, nodes)
+	{
+		loadedNodes->AddItem(
+			d->currentScene()->GetNodeByID(node.toLatin1()));
+	}
+	*/
+
+
+	return true;
+
+}

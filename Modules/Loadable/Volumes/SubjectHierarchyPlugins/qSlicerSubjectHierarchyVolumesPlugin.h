@@ -28,6 +28,8 @@
 
 #include "qSRPlanVolumesSubjectHierarchyPluginsExport.h"
 
+#include "qSlicerIO.h"
+
 class qSlicerSubjectHierarchyVolumesPluginPrivate;
 class vtkMRMLNode;
 class vtkMRMLScalarVolumeNode;
@@ -125,6 +127,9 @@ protected slots:
   /// Show volumes in study. The first two scalar volumes are shown if there are more.
   /// Hides other volumes if there are less in the current study.
   void showVolumesInBranch();
+  bool feedImageSeriesIntoSHNode();
+
+  bool onNewFileLoaded(qSlicerIO::IOProperties parameters);
 
 protected:
   QScopedPointer<qSlicerSubjectHierarchyVolumesPluginPrivate> d_ptr;
