@@ -272,13 +272,13 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSubjectHierarchyModuleLogic::InsertSRPlanI
 	{
 		primaryImageNode = vtkMRMLSubjectHierarchyNode::New();
 
-		primaryImageNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan());
-		primaryImageNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanDoseVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
+		primaryImageNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRSubplan());
+		primaryImageNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
 		primaryImageNode->SetOwnerPluginName("Volumes");
 
 		primaryImageNode->SetName("PrimaryVolume");
 
-		primaryImageNode->SetParentNodeID(courseNode->GetID());
+		primaryImageNode->SetParentNodeID(planNode->GetID());
 
 		scene->AddNode(primaryImageNode);
 

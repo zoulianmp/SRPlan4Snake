@@ -1,6 +1,7 @@
-<!DOCTYPE RCC><RCC version="1.0">
+<RCC>
   <qresource>
     <file>Icons/Help.png</file>
+    <file>Icons/MRMLNodeManagement.png</file>
     <file>Icons/SubjectHierarchy.png</file>
   </qresource>
 </RCC>

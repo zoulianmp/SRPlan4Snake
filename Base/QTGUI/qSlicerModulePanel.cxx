@@ -187,11 +187,16 @@ void qSlicerModulePanel::addModule(qSlicerAbstractCoreModule* module)
     help = qSlicerUtils::replaceWikiUrlVersion(module->helpText(), wikiVersion);
     }
 
-  d->HelpCollapsibleButton->setVisible(this->isHelpAndAcknowledgmentVisible() && !help.isEmpty());
-  d->HelpLabel->setHtml(help);
+  //modified by zoulian 
+ // d->HelpCollapsibleButton->setVisible(this->isHelpAndAcknowledgmentVisible() && !help.isEmpty());
+ // d->HelpLabel->setHtml(help);
   //d->HelpLabel->load(QString("http://www.slicer.org/slicerWiki/index.php?title=Modules:Transforms-Documentation-3.4&useskin=chick"));
-  d->AcknowledgementLabel->clear();
+ // d->AcknowledgementLabel->clear();
+
+
   qSlicerAbstractModule* guiModule = qobject_cast<qSlicerAbstractModule*>(module);
+  // modified by zoulian
+  /*
   if (guiModule && !guiModule->logo().isNull())
     {
     d->AcknowledgementLabel->document()->addResource(QTextDocument::ImageResource,
@@ -208,7 +213,7 @@ void qSlicerModulePanel::addModule(qSlicerAbstractCoreModule* module)
     QString contributorsText = QString("<br/><u>Contributors:</u> <i>") + contributors + "</i><br/>";
     d->AcknowledgementLabel->append(contributorsText);
     }
-
+	*/
   moduleWidget->installEventFilter(this);
   this->updateGeometry();
 
@@ -266,6 +271,7 @@ void qSlicerModulePanel::removeAllModules()
 }
 
 //---------------------------------------------------------------------------
+/*
 void qSlicerModulePanel::setHelpAndAcknowledgmentVisible(bool value)
 {
   Q_D(qSlicerModulePanel);
@@ -289,6 +295,8 @@ bool qSlicerModulePanel::isHelpAndAcknowledgmentVisible()const
   Q_D(const qSlicerModulePanel);
   return d->HelpAndAcknowledgmentVisible;
 }
+
+*/
 
 //---------------------------------------------------------------------------
 bool qSlicerModulePanel::eventFilter(QObject* watchedModule, QEvent* event)
@@ -323,8 +331,8 @@ QSize qSlicerModulePanel::minimumSizeHint()const
 void qSlicerModulePanelPrivate::setupUi(qSlicerWidget * widget)
 {
   this->Ui_qSlicerModulePanel::setupUi(widget);
-  this->HelpLabel->setOpenExternalLinks(true);
-  this->AcknowledgementLabel->setOpenExternalLinks(true);
+//  this->HelpLabel->setOpenExternalLinks(true);
+//  this->AcknowledgementLabel->setOpenExternalLinks(true);
 }
 
 /*

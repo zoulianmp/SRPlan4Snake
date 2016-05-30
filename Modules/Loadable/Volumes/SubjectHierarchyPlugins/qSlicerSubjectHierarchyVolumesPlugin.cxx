@@ -154,7 +154,7 @@ double qSlicerSubjectHierarchyVolumesPlugin::canOwnSubjectHierarchyNode(vtkMRMLS
     return 0.0;
     }
 
-  vtkStdString primaryImageUID = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanDoseVolumeUIDName());
+  vtkStdString primaryImageUID = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeUIDName());
 	
   //Primary Image SubjectHierarchy Node
   if (!strcmp(primaryImageUID.c_str(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID()))
@@ -162,7 +162,19 @@ double qSlicerSubjectHierarchyVolumesPlugin::canOwnSubjectHierarchyNode(vtkMRMLS
 	  return 0.5;
 
   }
+
+
  
+  if (node->GetOwnerPluginName())
+  {
+	  vtkStdString nodeOwnerPluginName = node->GetOwnerPluginName();
+	  if (!strcmp(nodeOwnerPluginName.c_str(), "Volumes"))
+	  {
+	  
+		 return 0.5;
+ 
+	  }
+  }
 
 
   // Volume
@@ -652,7 +664,7 @@ bool qSlicerSubjectHierarchyVolumesPlugin::addNodeToSubjectHierarchy(vtkMRMLNode
 		return false;
 	}
 
-	vtkMRMLSubjectHierarchyNode* primaryImageVolumeSHNode = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID(scene, vtkMRMLSubjectHierarchyConstants::GetSRPlanDoseVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
+	vtkMRMLSubjectHierarchyNode* primaryImageVolumeSHNode = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID(scene, vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
 
 
 	if (primaryImageVolumeSHNode && !primaryImageVolumeSHNode->GetAssociatedNode())

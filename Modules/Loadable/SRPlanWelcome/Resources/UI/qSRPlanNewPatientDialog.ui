@@ -246,6 +246,16 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_id</tabstop>
+  <tabstop>lineEdit_name</tabstop>
+  <tabstop>lineEdit_age</tabstop>
+  <tabstop>comboBox_gender</tabstop>
+  <tabstop>lineEdit_course_id</tabstop>
+  <tabstop>lineEdit_plan_id</tabstop>
+  <tabstop>pushButton_loadimage</tabstop>
+  <tabstop>pushButton_cancel</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

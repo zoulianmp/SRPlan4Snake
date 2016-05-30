@@ -49,7 +49,7 @@ public slots:
   bool loadRemoteSampleData();
   bool loadDicomData();
 
-  bool newPatientDialog();
+  bool newPatientAndSelectSHModule();
 
   void editApplicationSettings();
   bool presentTutorials();

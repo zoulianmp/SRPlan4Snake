@@ -45,7 +45,7 @@ class Q_SRPlan_BASE_QTGUI_EXPORT qSlicerModulePanel
   /// \sa isHelpAndAcknowledgmentVisible()
   /// \sa setHelpAndAcknowledgmentVisible()
   /// \sa qSlicerAbstractCoreModule::helpText(), setModule()
-  Q_PROPERTY(bool helpAndAcknowledgmentVisible READ isHelpAndAcknowledgmentVisible WRITE setHelpAndAcknowledgmentVisible)
+ // Q_PROPERTY(bool helpAndAcknowledgmentVisible READ isHelpAndAcknowledgmentVisible WRITE setHelpAndAcknowledgmentVisible)
 
 public:
   typedef qSlicerAbstractModulePanel Superclass;
@@ -54,11 +54,11 @@ public:
 
   /// Get the helpAndAcknowledgmentVisible property value.
   /// \sa helpAndAcknowledgmentVisible, isHelpAndAcknowledgmentVisible()
-  void setHelpAndAcknowledgmentVisible(bool value);
+ // void setHelpAndAcknowledgmentVisible(bool value);
 
   /// Set the canShowHelpAndAcknowledgment property value.
   /// \sa helpAndAcknowledgmentVisible, setHelpAndAcknowledgmentVisible()
-  bool isHelpAndAcknowledgmentVisible()const;
+ // bool isHelpAndAcknowledgmentVisible()const;
 
   virtual void removeAllModules();
   qSlicerAbstractCoreModule* currentModule()const;

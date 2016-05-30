@@ -455,12 +455,51 @@ void qSlicerSubjectHierarchySRPlanPlugin::createChildImageVolumeUnderCurrentNode
 		return;
 	}
 
-	std::string nodeName = vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeNodeBaseName();
-	nodeName = scene->GenerateUniqueName(nodeName);
-	// Create Image volume subject hierarchy node
-	vtkMRMLSubjectHierarchyNode* childSubjectHierarchyNode = vtkMRMLSubjectHierarchyNode::CreateSubjectHierarchyNode(
-		scene, currentNode, vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRSubplan(), nodeName.c_str());
-	//emit requestExpandNode(childSubjectHierarchyNode);
+	vtkMRMLSubjectHierarchyNode* primaryImageNode;
+	primaryImageNode = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID(scene, vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
+
+	if (!primaryImageNode)
+	{
+
+		primaryImageNode = vtkMRMLSubjectHierarchyNode::New();
+
+		primaryImageNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRSubplan());
+		primaryImageNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
+		primaryImageNode->SetOwnerPluginName("Volumes");
+
+		primaryImageNode->SetName("PrimaryVolume");
+
+		primaryImageNode->SetParentNodeID(currentNode->GetID());
+
+		scene->AddNode(primaryImageNode);
+
+		primaryImageNode->Delete(); // Return ownership to t	
+	}
+	else
+	{
+		vtkMRMLSubjectHierarchyNode* ImageNode;		
+		ImageNode = vtkMRMLSubjectHierarchyNode::New();
+
+		ImageNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRSubplan());
+		//ImageNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanDoseVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
+
+		std::string nodeName = vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeNodeBaseName();
+		nodeName = scene->GenerateUniqueName(nodeName);
+
+		ImageNode->SetOwnerPluginName("Volumes");
+
+
+		ImageNode->SetName(nodeName.c_str());
+
+		ImageNode->SetParentNodeID(currentNode->GetID());
+
+		scene->AddNode(ImageNode);
+
+		ImageNode->Delete(); // Return ownership to t	
+
+		
+	}
+
 
 
 

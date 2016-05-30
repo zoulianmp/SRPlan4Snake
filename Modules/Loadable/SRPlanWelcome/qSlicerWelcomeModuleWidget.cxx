@@ -47,6 +47,7 @@
 // VTK includes
 #include <vtkStdString.h>
 
+#include "vtkMRMLLayoutNode.h"
 
 class qSlicerAppMainWindow;
 
@@ -147,7 +148,7 @@ void qSlicerWelcomeModuleWidget::setup()
           this, SLOT (loadNonDicomData()));
 
   connect(d->NewPatientButton, SIGNAL(clicked()),
-	  this, SLOT(newPatientDialog()));
+	  this, SLOT(newPatientAndSelectSHModule()));
 
   /*
   connect(d->LoadDicomDataButton, SIGNAL(clicked()),
@@ -186,8 +187,10 @@ bool qSlicerWelcomeModuleWidget::loadDicomData()
 
 
 //-----------------------------------------------------------------------------
-bool qSlicerWelcomeModuleWidget::newPatientDialog()
+bool qSlicerWelcomeModuleWidget::newPatientAndSelectSHModule()
 {
+	Q_D(qSlicerWelcomeModuleWidget);
+
 	qSRPlanNewPatientDialog * newdialog = new qSRPlanNewPatientDialog(this);
 	
 	newdialog->show();
@@ -196,14 +199,19 @@ bool qSlicerWelcomeModuleWidget::newPatientDialog()
 		
 		bool loaded = this->loadNonDicomData();
 
-		// Set ImageVolumeNode to SRPlan SubjectHierarchy
+		// When ImageVolume Loaded Successfully, Select Module to SubjectHierarchy,
+		// and set the Layout to vtkMRMLLayoutNode::SlicerLayoutFourUpView
 		if (loaded)
 		{
+			d->selectModule("SubjectHierarchy");
 
+			qSlicerLayoutManager * layoutManager = qSlicerApplication::application()->layoutManager();
+			layoutManager->setLayout(vtkMRMLLayoutNode::SlicerLayoutFourUpView);
 
-
+			return true;
+			
 		}
-		return  true;
+		return  false;
 
 
 

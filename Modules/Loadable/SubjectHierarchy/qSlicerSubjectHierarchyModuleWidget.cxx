@@ -154,9 +154,13 @@ void qSlicerSubjectHierarchyModuleWidget::setup()
   d->setupUi(this);
   this->Superclass::setup();
 
-  // Make connections for the checkboxes and buttons
-  connect( d->DisplayMRMLIDsCheckBox, SIGNAL(toggled(bool)), this, SLOT(setMRMLIDsVisible(bool)) );
-  connect( d->DisplayTransformsCheckBox, SIGNAL(toggled(bool)), this, SLOT(setTransformsVisible(bool)) );
+  // Make connections for the checkboxes and buttons modified by zoulian 
+  //connect( d->DisplayMRMLIDsCheckBox, SIGNAL(toggled(bool)), this, SLOT(setMRMLIDsVisible(bool)) );
+  //connect( d->DisplayTransformsCheckBox, SIGNAL(toggled(bool)), this, SLOT(setTransformsVisible(bool)) );
+
+  this->setMRMLIDsVisible(false);
+  this->setTransformsVisible(false); //Modified by zoulian
+
 
   // Make MRML connections
   // Connect scene node added event so that the new subject hierarchy nodes can be claimed by a plugin
@@ -170,11 +174,12 @@ void qSlicerSubjectHierarchyModuleWidget::setup()
   d->SubjectHierarchyTreeView->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
   d->SubjectHierarchyTreeView->header()->resizeSection(sceneModel->transformColumn(), 60);
 
-  connect( d->SubjectHierarchyTreeView, SIGNAL(currentNodeChanged(vtkMRMLNode*)), d->MRMLNodeAttributeTableWidget, SLOT(setMRMLNode(vtkMRMLNode*)) );
+  // modified by zoulian
+ //  connect( d->SubjectHierarchyTreeView, SIGNAL(currentNodeChanged(vtkMRMLNode*)), d->MRMLNodeAttributeTableWidget, SLOT(setMRMLNode(vtkMRMLNode*)) );
   connect( d->SubjectHierarchyTreeView->sceneModel(), SIGNAL(invalidateFilter()), d->SubjectHierarchyTreeView->model(), SLOT(invalidate()) );
 
-  this->setMRMLIDsVisible(d->DisplayMRMLIDsCheckBox->isChecked());
-  this->setTransformsVisible(d->DisplayTransformsCheckBox->isChecked());
+//  this->setMRMLIDsVisible(d->DisplayMRMLIDsCheckBox->isChecked());
+ // this->setTransformsVisible(d->DisplayTransformsCheckBox->isChecked());
 
   // Assemble help text for question mark tooltip
   QString aggregatedHelpText("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">    <html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">    p, li   { white-space: pre-wrap;   }  </style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">");
@@ -188,7 +193,8 @@ void qSlicerSubjectHierarchyModuleWidget::setup()
       }
     }
   aggregatedHelpText.append(QString("</body></html>"));
-  d->label_Help->setToolTip(aggregatedHelpText);
+
+//  d->label_Help->setToolTip(aggregatedHelpText);
 }
 
 //-----------------------------------------------------------------------------
@@ -207,9 +213,9 @@ void qSlicerSubjectHierarchyModuleWidget::setMRMLIDsVisible(bool visible)
 
   d->SubjectHierarchyTreeView->setColumnHidden(d->SubjectHierarchyTreeView->sceneModel()->idColumn(), !visible);
 
-  d->DisplayMRMLIDsCheckBox->blockSignals(true);
-  d->DisplayMRMLIDsCheckBox->setChecked(visible);
-  d->DisplayMRMLIDsCheckBox->blockSignals(false);
+//  d->DisplayMRMLIDsCheckBox->blockSignals(true);
+//  d->DisplayMRMLIDsCheckBox->setChecked(visible);
+//  d->DisplayMRMLIDsCheckBox->blockSignals(false);
 }
 
 //-----------------------------------------------------------------------------
@@ -221,9 +227,9 @@ void qSlicerSubjectHierarchyModuleWidget::setTransformsVisible(bool visible)
   d->SubjectHierarchyTreeView->setColumnHidden(sceneModel->transformColumn(), !visible);
   d->SubjectHierarchyTreeView->header()->resizeSection(sceneModel->transformColumn(), 60);
 
-  d->DisplayTransformsCheckBox->blockSignals(true);
-  d->DisplayTransformsCheckBox->setChecked(visible);
-  d->DisplayTransformsCheckBox->blockSignals(false);
+//  d->DisplayTransformsCheckBox->blockSignals(true);
+//  d->DisplayTransformsCheckBox->setChecked(visible);
+//  d->DisplayTransformsCheckBox->blockSignals(false);
 }
 
 //-----------------------------------------------------------------------------
