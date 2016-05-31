@@ -52,6 +52,9 @@ public:
   static const std::string GetSubjectHierarchyNewNodeNamePrefix()
     { return "New"; };
 
+  //****************************************************************
+  //************* Levels
+  //****************************************************************
   // Non-DICOM levels
   static const char* GetSubjectHierarchyLevelFolder()
     { return "Folder"; };
@@ -76,6 +79,9 @@ public:
 	  return "SRSubplan";
   };
 
+  //****************************************************************
+  //*************UID Names
+  //****************************************************************
   //SRPlan Components uidNames
 
   static const char* GetSRPlanPatientUIDName ()
@@ -115,6 +121,13 @@ public:
   };
 
 
+  static const char* GetSRPlanPOIsFolderUIDName()
+  {
+	  return "SRPlan-POIsFolderUID";
+  };
+
+
+
   static const char* GetSRPlanUserDefinedPointUIDName()
   {
 	  return "SRPlan-UserDefinedPointUID";
@@ -141,7 +154,9 @@ public:
 	  return "SRPlan-ControlPointUID";
   };
 
-
+  //****************************************************************
+  //*************BaseName
+  //****************************************************************
   //SRPlan SubjectHierarchy Node BaseName
 
   static const char* GetSRPlanPatientNodeBaseName()
@@ -202,7 +217,9 @@ public:
 	  return "SRPlan-ControlPointNode";
   };
 
-
+  //****************************************************************
+  //*************UIDS
+  //****************************************************************
   // Primary Image Volume UID
   static const char* GetSRPlanPrimaryImageVolumeUID()
   {
@@ -210,6 +227,10 @@ public:
   };
 
 
+  static const char* GetSRPlanPOIsFolderUID()
+  {
+	  return "SRPlan-POIs";
+  };
 
 
   // DICOM levels
