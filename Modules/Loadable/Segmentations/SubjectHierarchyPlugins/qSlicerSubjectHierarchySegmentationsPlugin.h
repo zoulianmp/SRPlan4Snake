@@ -106,6 +106,8 @@ public slots:
   /// Renames per-segment subject hierarchy node if necessary
   void onSegmentModified(vtkObject* caller, void* callData);
 
+
+
 protected slots:
   /// Create binary labelmap representation
   void createBinaryLabelmapRepresentation();

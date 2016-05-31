@@ -99,6 +99,11 @@ public:
 	  return "SRPlan-ImageVolumeUID";
   };
 
+  static const char * GetSRPlanAssignedVolumeofStructureSetUIDName()
+  {
+	  return "SRPlan-AssignedVolumeUID"; //Used to record the Assigned Image Volume UID of SH Node 
+  }
+
   static const char* GetSRPlanDoseVolumeUIDName()
   {
 	  return "SRPlan-DoseVolumeUID";

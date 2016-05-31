@@ -66,6 +66,8 @@ public:
   QAction* CreateRepresentationAction;
   QAction* CreateBinaryLabelmapAction;
   QAction* CreateClosedSurfaceAction;
+
+
 };
 
 //-----------------------------------------------------------------------------
@@ -79,6 +81,7 @@ qSlicerSubjectHierarchySegmentationsPluginPrivate::qSlicerSubjectHierarchySegmen
   this->CreateRepresentationAction = NULL;
   this->CreateBinaryLabelmapAction = NULL;
   this->CreateClosedSurfaceAction = NULL;
+
 }
 
 //------------------------------------------------------------------------------
@@ -98,6 +101,9 @@ void qSlicerSubjectHierarchySegmentationsPluginPrivate::init()
   this->CreateClosedSurfaceAction = new QAction("Closed surface",q);
   QObject::connect(this->CreateClosedSurfaceAction, SIGNAL(triggered()), q, SLOT(createClosedSurfaceRepresentation()));
   createRepresentationSubMenu->addAction(this->CreateClosedSurfaceAction);
+
+
+
 }
 
 //-----------------------------------------------------------------------------
@@ -146,6 +152,17 @@ double qSlicerSubjectHierarchySegmentationsPlugin::canOwnSubjectHierarchyNode(vt
     qCritical() << "qSlicerSubjectHierarchySegmentationsPlugin::canOwnSubjectHierarchyNode: Input node is NULL!";
     return 0.0;
     }
+
+  if (node->GetOwnerPluginName())
+  {
+	  vtkStdString nodeOwnerPluginName = node->GetOwnerPluginName();
+	  if (!strcmp(nodeOwnerPluginName.c_str(), "Segmentations"))
+	  {
+
+		  return 0.5;
+
+	  }
+  }
 
   // Volume
   vtkMRMLNode* associatedNode = node->GetAssociatedNode();
@@ -307,7 +324,7 @@ QList<QAction*> qSlicerSubjectHierarchySegmentationsPlugin::nodeContextMenuActio
   Q_D(const qSlicerSubjectHierarchySegmentationsPlugin);
 
   QList<QAction*> actions;
-  actions << d->CreateRepresentationAction;
+  actions << d->CreateRepresentationAction ;
   return actions;
 }
 
@@ -331,6 +348,10 @@ void qSlicerSubjectHierarchySegmentationsPlugin::showContextMenuActionsForNode(v
   {
     d->CreateRepresentationAction->setVisible(true);
   }
+
+
+ 
+
 }
 
 //---------------------------------------------------------------------------
@@ -538,3 +559,4 @@ void qSlicerSubjectHierarchySegmentationsPlugin::createClosedSurfaceRepresentati
     QMessageBox::warning(NULL, tr("Failed to create closed surface"), message);
   }
 }
+
