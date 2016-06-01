@@ -10,6 +10,7 @@ set(${KIT}_INCLUDE_DIRECTORIES
   ${MRMLCore_INCLUDE_DIRS}
   ${MRMLLogic_INCLUDE_DIRS}
   ${qMRMLWidgets_INCLUDE_DIRS}
+  ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
   )
 
 set(${KIT}_SRCS
@@ -38,6 +39,7 @@ set(${KIT}_TARGET_LIBRARIES
   MRMLCore
   MRMLLogic
   qMRMLWidgets
+  vtkSRPlanSegmentationsModuleMRML
   ${QT_LIBRARIES}
   )
 

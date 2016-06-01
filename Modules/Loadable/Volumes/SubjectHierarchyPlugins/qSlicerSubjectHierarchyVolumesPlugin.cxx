@@ -43,7 +43,7 @@
 #include <vtkMRMLSelectionNode.h>
 #include <vtkMRMLSliceCompositeNode.h>
 #include <vtkMRMLSliceNode.h>
-
+#include "vtkMRMLSegmentationNode.h"
 
 
 // VTK includes
@@ -86,8 +86,8 @@ public:
   QAction* FeedImageSeriesAction;
 
 
-  QAction* AddStructureSetAction;
-
+  //QAction* AddStructureSetAction;
+  QAction* StartSegmentationAction;
 };
 
 //-----------------------------------------------------------------------------
@@ -104,7 +104,8 @@ qSlicerSubjectHierarchyVolumesPluginPrivate::qSlicerSubjectHierarchyVolumesPlugi
   this->ShowVolumesInBranchAction = NULL;
   this->FeedImageSeriesAction = NULL;
 
-  this->AddStructureSetAction = NULL;
+ // this->AddStructureSetAction = NULL;
+  this->StartSegmentationAction = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -134,9 +135,12 @@ void qSlicerSubjectHierarchyVolumesPluginPrivate::init()
   this->FeedImageSeriesAction = new QAction("Feed Image Series", q);
   QObject::connect(this->FeedImageSeriesAction, SIGNAL(triggered()), q, SLOT(feedImageSeriesIntoSHNode()));
 
-  this->AddStructureSetAction = new QAction("Add Structure Set", q);
-  QObject::connect(this->AddStructureSetAction, SIGNAL(triggered()), q, SLOT(addStructureSetToSHNode()));
+ // this->AddStructureSetAction = new QAction("Add Structure Set", q);
+ // QObject::connect(this->AddStructureSetAction, SIGNAL(triggered()), q, SLOT(addStructureSetToSHNode()));
 
+  this->StartSegmentationAction = new QAction("Start Segmentation", q);
+  QObject::connect(this->StartSegmentationAction, SIGNAL(triggered()), q, SLOT(startSegmentation()));
+  
   
 }
 
@@ -536,7 +540,7 @@ QList<QAction*> qSlicerSubjectHierarchyVolumesPlugin::nodeContextMenuActions()co
   Q_D(const qSlicerSubjectHierarchyVolumesPlugin);
 
   QList<QAction*> actions;
-  actions << d->ShowVolumesInBranchAction << d->FeedImageSeriesAction << d->AddStructureSetAction;
+  actions << d->ShowVolumesInBranchAction << d->FeedImageSeriesAction << d->StartSegmentationAction;
   return actions;
 }
 
@@ -576,7 +580,7 @@ void qSlicerSubjectHierarchyVolumesPlugin::showContextMenuActionsForNode(vtkMRML
 
 	  if (node->GetAssociatedNode())
 	  {
-		  d->AddStructureSetAction->setVisible(true);
+		  d->StartSegmentationAction->setVisible(true);
 	  }
   }
 
@@ -668,6 +672,12 @@ void qSlicerSubjectHierarchyVolumesPlugin::showVolumesInBranch()
 //---------------------------------------------------------------------------
 void qSlicerSubjectHierarchyVolumesPlugin::editProperties(vtkMRMLSubjectHierarchyNode* node)
 {
+
+	Q_UNUSED(node);
+
+
+  /* Comment out by zoulian
+
   // Switch to volumes module and volume already selected
   qSlicerAbstractModuleWidget* moduleWidget = qSlicerSubjectHierarchyAbstractPlugin::switchToModule("Volumes");
   if (moduleWidget)
@@ -681,6 +691,8 @@ void qSlicerSubjectHierarchyVolumesPlugin::editProperties(vtkMRMLSubjectHierarch
       nodeSelector->setCurrentNode(node->GetAssociatedNode()); 
       }
     }
+
+	*/
 }
 
 
@@ -772,8 +784,7 @@ bool qSlicerSubjectHierarchyVolumesPlugin::addStructureSetToSHNode()
 
 	StructureSetNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRSubplan());
 
-	//Assign the ScalarVolumeNode ID  to StructureSet Subject Hierarchy
-	StructureSetNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanAssignedVolumeofStructureSetUIDName(), currentNode->GetAssociatedNode()->GetID()); 
+
 	StructureSetNode->SetOwnerPluginName("Segmentations");
 
 	StructureSetNode->SetName(scene->GetUniqueNameByString(vtkMRMLSubjectHierarchyConstants::GetSRPlanStructureSetNodeBaseName()));
@@ -784,10 +795,98 @@ bool qSlicerSubjectHierarchyVolumesPlugin::addStructureSetToSHNode()
 	//Assign the ScalarVolumeNode ID  to 
 	StructureSetNode->SetParentNodeID(parent->GetID());
 
+
+	// Relate StructureSetSH  to  ImageVolumeSH
+	StructureSetNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName(), currentNode->GetID());
+
+	//AddNode generates SH Node ID
 	scene->AddNode(StructureSetNode);
 
+	currentNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSHStructureSetUIDName(), StructureSetNode->GetID());
+
+	
 	StructureSetNode->Delete(); // Return ownership to t	
 	return true;
 
 }
 
+
+
+
+void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
+{
+
+	vtkMRMLScene* scene = qSlicerSubjectHierarchyPluginHandler::instance()->scene();
+
+	if (!scene)
+	{
+		qCritical() << "qSlicerSubjectHierarchySegmentationsPlugin::startSegmentation: Invalid MRML scene!";
+
+	}
+
+	vtkMRMLSubjectHierarchyNode* currentNode = qSlicerSubjectHierarchyPluginHandler::instance()->currentNode(); //the ImageSH Node
+
+	vtkMRMLSubjectHierarchyNode* parentNode = vtkMRMLSubjectHierarchyNode::SafeDownCast(currentNode->GetParentNode()); //the plan SH Node
+
+	vtkStdString ssuid = currentNode->GetUID(vtkMRMLSubjectHierarchyConstants::GetSHStructureSetUIDName());
+	if (!ssuid.empty())
+	{
+		vtkMRMLSubjectHierarchyNode* SegmentationSH = vtkMRMLSubjectHierarchyNode::SafeDownCast(scene->GetNodeByID(ssuid)); //Get The Associated Segmetation of Image Volume
+
+		// Switch to segmentations module and select node
+		qSlicerAbstractModuleWidget* moduleWidget = qSlicerSubjectHierarchyAbstractPlugin::switchToModule("Segmentations");
+		if (moduleWidget)
+		{
+			// Get node selector combobox
+			qMRMLNodeComboBox* nodeSelector = moduleWidget->findChild<qMRMLNodeComboBox*>("MRMLNodeComboBox_Segmentation");
+
+			// Choose current data node
+			if (nodeSelector)
+			{
+				nodeSelector->setCurrentNode(SegmentationSH->GetAssociatedNode());
+			}
+		}
+
+
+	}
+	else
+	{
+		vtkMRMLSegmentationNode * segmentation = vtkMRMLSegmentationNode::New();
+
+		segmentation->SetName("SS1");
+
+
+		scene->AddNode(segmentation);
+
+
+		vtkStdString nodename = scene->GetUniqueNameByString(vtkMRMLSubjectHierarchyConstants::GetSRPlanStructureSetNodeBaseName());
+
+		vtkMRMLSubjectHierarchyNode * structureset = vtkMRMLSubjectHierarchyNode::CreateSubjectHierarchyNode(scene, parentNode,
+			vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRSubplan(), nodename, segmentation);
+
+
+		// Start to Related Structure and ImageVolume
+		structureset->AddUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName(), currentNode->GetID());
+		currentNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSHStructureSetUIDName(), structureset->GetID());
+
+
+
+		// Switch to segmentations module and select node
+		qSlicerAbstractModuleWidget* moduleWidget = qSlicerSubjectHierarchyAbstractPlugin::switchToModule("Segmentations");
+		if (moduleWidget)
+		{
+			// Get node selector combobox
+			qMRMLNodeComboBox* nodeSelector = moduleWidget->findChild<qMRMLNodeComboBox*>("MRMLNodeComboBox_Segmentation");
+
+			// Choose current data node
+			if (nodeSelector)
+			{
+				nodeSelector->setCurrentNode(segmentation);
+			}
+		}
+
+
+	}
+
+	
+}

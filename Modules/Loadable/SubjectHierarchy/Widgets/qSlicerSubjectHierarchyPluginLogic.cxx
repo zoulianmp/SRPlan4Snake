@@ -147,8 +147,11 @@ void qSlicerSubjectHierarchyPluginLogic::registerCorePlugins()
     new qSlicerSubjectHierarchyChartsPlugin());
   qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(
     new qSlicerSubjectHierarchyRegisterPlugin());
-  qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(
-    new qSlicerSubjectHierarchySegmentPlugin());
+
+// comment out by zoulian
+ // qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(
+ //   new qSlicerSubjectHierarchySegmentPlugin());
+
 
   qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(
 	  new qSlicerSubjectHierarchySRPlanPlugin());

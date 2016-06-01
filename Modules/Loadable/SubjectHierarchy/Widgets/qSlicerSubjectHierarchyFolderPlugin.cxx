@@ -211,11 +211,33 @@ void qSlicerSubjectHierarchyFolderPlugin::showContextMenuActionsForNode(vtkMRMLS
   Q_D(qSlicerSubjectHierarchyFolderPlugin);
   this->hideAllContextMenuActions();
 
+
   // POIs Folders Under Plan
   if (node && node->IsLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan()) )
   {
-    d->CreatePoisFolderUnderNodeAction->setVisible(true);
-	d->CreateTreatPathFolderUnderNodeAction->setVisible(true);
+
+	  vtkMRMLScene* scene = qSlicerSubjectHierarchyPluginHandler::instance()->scene();
+	  if (!scene)
+	  {
+		  qCritical() << "qSlicerSubjectHierarchyFolderPlugin::showContextMenuActionsForNode: Invalid MRML scene!";
+	  }
+
+     vtkMRMLSubjectHierarchyNode* primaryImageVolumeSHNode = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID(scene, vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
+
+	 if (primaryImageVolumeSHNode && primaryImageVolumeSHNode->GetAssociatedNode())
+	 {
+
+		 d->CreatePoisFolderUnderNodeAction->setVisible(true);
+
+		 vtkStdString structuresetid = primaryImageVolumeSHNode->GetUID(vtkMRMLSubjectHierarchyConstants::GetSHStructureSetUIDName());
+
+		 if (!structuresetid.empty())
+		 {
+			 d->CreateTreatPathFolderUnderNodeAction->setVisible(true);
+		 }
+		
+	 }
+
   }
 }
 

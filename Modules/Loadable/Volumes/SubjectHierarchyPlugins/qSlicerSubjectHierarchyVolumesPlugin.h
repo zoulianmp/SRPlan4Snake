@@ -130,6 +130,7 @@ protected slots:
   bool feedImageSeriesIntoSHNode();
 
   bool addStructureSetToSHNode();
+  void startSegmentation();
 
 protected:
   QScopedPointer<qSlicerSubjectHierarchyVolumesPluginPrivate> d_ptr;

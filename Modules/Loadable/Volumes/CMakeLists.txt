@@ -20,6 +20,7 @@ set(MODULE_INCLUDE_DIRECTORIES
   ${CMAKE_CURRENT_SOURCE_DIR}/SubjectHierarchyPlugins
   ${CMAKE_CURRENT_BINARY_DIR}/SubjectHierarchyPlugins
   ${qSRPlanSubjectHierarchyModuleWidgets_INCLUDE_DIRS}
+  ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/Widgets
   ${CMAKE_CURRENT_BINARY_DIR}/Widgets
 
