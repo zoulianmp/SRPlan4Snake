@@ -56,7 +56,8 @@ public:
   QIcon FolderIcon;
 
  // QAction* CreateFolderUnderSceneAction; //commentout by zoulian
-  QAction* CreateFolderUnderNodeAction;
+  QAction* CreatePoisFolderUnderNodeAction;
+  QAction* CreateTreatPathFolderUnderNodeAction;
 };
 
 //-----------------------------------------------------------------------------
@@ -69,7 +70,9 @@ qSlicerSubjectHierarchyFolderPluginPrivate::qSlicerSubjectHierarchyFolderPluginP
   this->FolderIcon = QIcon(":Icons/Folder.png");
 
   //this->CreateFolderUnderSceneAction = NULL;
-  this->CreateFolderUnderNodeAction = NULL;
+  this->CreatePoisFolderUnderNodeAction = NULL;
+  this->CreateTreatPathFolderUnderNodeAction = NULL;
+
 }
 
 //------------------------------------------------------------------------------
@@ -81,8 +84,12 @@ void qSlicerSubjectHierarchyFolderPluginPrivate::init()
   this->CreateFolderUnderSceneAction = new QAction("Create new folder",q);
   QObject::connect(this->CreateFolderUnderSceneAction, SIGNAL(triggered()), q, SLOT(createFolderUnderScene()));
   */
-  this->CreateFolderUnderNodeAction = new QAction("Create POIs Folder",q);
-  QObject::connect(this->CreateFolderUnderNodeAction, SIGNAL(triggered()), q, SLOT(createFolderUnderCurrentNode()));
+  this->CreatePoisFolderUnderNodeAction = new QAction("Add POIs to Primary Volume",q);
+  QObject::connect(this->CreatePoisFolderUnderNodeAction, SIGNAL(triggered()), q, SLOT(createPOIsToPrimaryImageVolume()));
+
+  this->CreateTreatPathFolderUnderNodeAction = new QAction("Add RTPath to Primary Volume", q);
+  QObject::connect(this->CreateTreatPathFolderUnderNodeAction, SIGNAL(triggered()), q, SLOT(createTreatPathToPrimaryImageVolume()));
+
 }
 
 //-----------------------------------------------------------------------------
@@ -178,8 +185,11 @@ QList<QAction*> qSlicerSubjectHierarchyFolderPlugin::nodeContextMenuActions()con
   Q_D(const qSlicerSubjectHierarchyFolderPlugin);
 
   QList<QAction*> actions;
-  actions << d->CreateFolderUnderNodeAction;
+  actions << d->CreatePoisFolderUnderNodeAction << d->CreateTreatPathFolderUnderNodeAction;
   return actions;
+
+
+
 }
 
 /*
@@ -204,7 +214,8 @@ void qSlicerSubjectHierarchyFolderPlugin::showContextMenuActionsForNode(vtkMRMLS
   // POIs Folders Under Plan
   if (node && node->IsLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan()) )
   {
-    d->CreateFolderUnderNodeAction->setVisible(true);  
+    d->CreatePoisFolderUnderNodeAction->setVisible(true);
+	d->CreateTreatPathFolderUnderNodeAction->setVisible(true);
   }
 }
 
@@ -257,14 +268,129 @@ void qSlicerSubjectHierarchyFolderPlugin::createFolderUnderScene()
 */
 
 //---------------------------------------------------------------------------
-void qSlicerSubjectHierarchyFolderPlugin::createFolderUnderCurrentNode()
+vtkMRMLSubjectHierarchyNode* qSlicerSubjectHierarchyFolderPlugin::createPoisFolderUnderCurrentNode()
 {
   vtkMRMLSubjectHierarchyNode* currentNode = qSlicerSubjectHierarchyPluginHandler::instance()->currentNode();
   if (!currentNode)
     {
-    qCritical() << "qSlicerSubjectHierarchyFolderPlugin::createFolderUnderCurrentNode: Invalid current node!";
-    return;
+    qCritical() << "qSlicerSubjectHierarchyFolderPlugin::createPoisFolderUnderCurrentNode: Invalid current node!";
+    return NULL;
     }
 
-  this->createFolderUnderNode(currentNode);
+  vtkMRMLScene* scene = qSlicerSubjectHierarchyPluginHandler::instance()->scene();
+  if (!scene)
+  {
+	  qCritical() << "qSlicerSubjectHierarchyFolderPlugin::createFolderUnderNode: Invalid MRML scene!";
+	  return NULL;
+  }
+
+  vtkMRMLSubjectHierarchyNode* pois = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID(scene, vtkMRMLSubjectHierarchyConstants::GetSRPlanPOIsFolderUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPOIsFolderUID());
+  if (pois)
+  {
+	  return pois;
+  }
+
+  // Create folder subject hierarchy node
+  std::string nodeName = "POIs";
+  nodeName = scene->GenerateUniqueName(nodeName);
+  vtkMRMLSubjectHierarchyNode* childSubjectHierarchyNode = vtkMRMLSubjectHierarchyNode::CreateSubjectHierarchyNode(
+	  scene, currentNode, vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelFolder(), nodeName.c_str());
+
+  childSubjectHierarchyNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanPOIsFolderUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPOIsFolderUID());
+
+
+
+  emit requestExpandNode(childSubjectHierarchyNode);
+
+  return childSubjectHierarchyNode;
+
+}
+
+void qSlicerSubjectHierarchyFolderPlugin::createTreatPathToPrimaryImageVolume()
+{
+	vtkMRMLSubjectHierarchyNode* path = this->createTreatPathFolderUnderCurrentNode();
+	this->AddSHImageVolumeNodeUIDToSHNode(path);
+
+
+}
+
+void qSlicerSubjectHierarchyFolderPlugin::createPOIsToPrimaryImageVolume()
+{
+	vtkMRMLSubjectHierarchyNode* pois = this->createPoisFolderUnderCurrentNode();
+	this->AddSHImageVolumeNodeUIDToSHNode(pois);
+	
+}
+
+
+
+
+
+
+
+vtkMRMLSubjectHierarchyNode* qSlicerSubjectHierarchyFolderPlugin::createTreatPathFolderUnderCurrentNode()
+{
+	vtkMRMLSubjectHierarchyNode* currentNode = qSlicerSubjectHierarchyPluginHandler::instance()->currentNode();
+	if (!currentNode)
+	{
+		qCritical() << "qSlicerSubjectHierarchyFolderPlugin::createTreatPathFolderUnderCurrentNode: Invalid current node!";
+		return NULL;
+	}
+
+	vtkMRMLScene* scene = qSlicerSubjectHierarchyPluginHandler::instance()->scene();
+	if (!scene)
+	{
+		qCritical() << "qSlicerSubjectHierarchyFolderPlugin::createPoisFolderUnderCurrentNode: Invalid MRML scene!";
+		return NULL;
+	}
+
+
+
+	// Create folder subject hierarchy node
+	std::string nodeName = "SRPath";
+	nodeName = scene->GenerateUniqueName(nodeName);
+
+	vtkMRMLSubjectHierarchyNode* childSubjectHierarchyNode = vtkMRMLSubjectHierarchyNode::CreateSubjectHierarchyNode(
+		scene, currentNode, vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelFolder(), nodeName.c_str());
+
+
+	emit requestExpandNode(childSubjectHierarchyNode);
+
+	return childSubjectHierarchyNode;
+
+
+
+
+
+
+}
+
+bool qSlicerSubjectHierarchyFolderPlugin::AddSHImageVolumeNodeUIDToSHNode(vtkMRMLSubjectHierarchyNode* node, vtkMRMLSubjectHierarchyNode* imagevolume)
+{
+	vtkMRMLScene* scene = qSlicerSubjectHierarchyPluginHandler::instance()->scene();
+	if (!scene)
+	{
+		qCritical() << "qSlicerSubjectHierarchyFolderPlugin::createPoisFolderUnderCurrentNode: Invalid MRML scene!";
+		return NULL;
+	}
+
+	if (!imagevolume)
+	{
+		vtkMRMLSubjectHierarchyNode* primaryImageVolumeSHNode = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID(scene, vtkMRMLSubjectHierarchyConstants::GetSRPlanImageVolumeUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPrimaryImageVolumeUID());
+
+
+		vtkStdString SHID = primaryImageVolumeSHNode->GetID();
+
+	    // Associate the node to the primaryImage Volume
+		node->AddUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName(), SHID.c_str());
+		return true;
+
+	}
+	else
+	{
+		// Associate the node to the Predefinded Image Volume
+		node->AddUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName(), imagevolume->GetID());
+		return true;
+
+	}
+
 }

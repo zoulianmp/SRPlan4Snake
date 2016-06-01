@@ -91,12 +91,20 @@ public:
   /// \param parentNode Parent node for folder to create. NULL if top-level (right under the scene)
   vtkMRMLSubjectHierarchyNode* createFolderUnderNode(vtkMRMLSubjectHierarchyNode* parentNode);
 
+
+
 protected slots:
   /// Create folder node under the scene
  // void createFolderUnderScene();
 
   /// Create folder node under current node
-  void createFolderUnderCurrentNode();
+vtkMRMLSubjectHierarchyNode* createPoisFolderUnderCurrentNode();
+vtkMRMLSubjectHierarchyNode* createTreatPathFolderUnderCurrentNode();
+
+bool AddSHImageVolumeNodeUIDToSHNode(vtkMRMLSubjectHierarchyNode* node, vtkMRMLSubjectHierarchyNode* imagevolume =NULL);
+
+void createTreatPathToPrimaryImageVolume();
+void createPOIsToPrimaryImageVolume();
 
 protected:
   QScopedPointer<qSlicerSubjectHierarchyFolderPluginPrivate> d_ptr;

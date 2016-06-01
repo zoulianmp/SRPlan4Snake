@@ -154,6 +154,46 @@ public:
 	  return "SRPlan-ControlPointUID";
   };
 
+
+  //****************************************************************
+  //************* SHNodeUIDName used for inter-relationship
+  //****************************************************************
+
+
+  static const char* GetSHImageVolumeUIDName()
+  {
+	  return "SHImageVolumeUID";
+  };
+
+
+
+
+  static const char* GetSHDoseVolumeUIDName()
+  {
+	  return "SHDoseVolumeUID";
+  };
+
+
+  static const char* GetSHStructureSetUIDName()
+  {
+	  return "SHStructureSetUID";
+  };
+
+
+
+  static const char* GetSHTreatPathUIDName()
+  {
+	  return "SHTreatPathUID";
+  };
+
+
+
+
+
+
+
+
+
   //****************************************************************
   //*************BaseName
   //****************************************************************
