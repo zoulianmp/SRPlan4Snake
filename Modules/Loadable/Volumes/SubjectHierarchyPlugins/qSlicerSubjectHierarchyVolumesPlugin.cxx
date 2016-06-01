@@ -704,6 +704,11 @@ bool qSlicerSubjectHierarchyVolumesPlugin::addNodeToSubjectHierarchy(vtkMRMLNode
 	//	char * volumeNodeID = node->GetID();
 		primaryImageVolumeSHNode->SetAssociatedNodeID(node->GetID());
 
+	//	this->setDisplayVisibility(primaryImageVolumeSHNode, true);
+	//    primaryImageVolumeSHNode->Modified();
+
+		node->Modified();
+
 		return true;
 
 	}
