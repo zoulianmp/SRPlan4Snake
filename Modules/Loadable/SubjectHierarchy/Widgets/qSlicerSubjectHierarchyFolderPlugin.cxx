@@ -55,7 +55,7 @@ public:
 public:
   QIcon FolderIcon;
 
-  QAction* CreateFolderUnderSceneAction;
+ // QAction* CreateFolderUnderSceneAction; //commentout by zoulian
   QAction* CreateFolderUnderNodeAction;
 };
 
@@ -68,7 +68,7 @@ qSlicerSubjectHierarchyFolderPluginPrivate::qSlicerSubjectHierarchyFolderPluginP
 {
   this->FolderIcon = QIcon(":Icons/Folder.png");
 
-  this->CreateFolderUnderSceneAction = NULL;
+  //this->CreateFolderUnderSceneAction = NULL;
   this->CreateFolderUnderNodeAction = NULL;
 }
 
@@ -77,10 +77,11 @@ void qSlicerSubjectHierarchyFolderPluginPrivate::init()
 {
   Q_Q(qSlicerSubjectHierarchyFolderPlugin);
 
+  /*
   this->CreateFolderUnderSceneAction = new QAction("Create new folder",q);
   QObject::connect(this->CreateFolderUnderSceneAction, SIGNAL(triggered()), q, SLOT(createFolderUnderScene()));
-
-  this->CreateFolderUnderNodeAction = new QAction("Create child folder",q);
+  */
+  this->CreateFolderUnderNodeAction = new QAction("Create POIs Folder",q);
   QObject::connect(this->CreateFolderUnderNodeAction, SIGNAL(triggered()), q, SLOT(createFolderUnderCurrentNode()));
 }
 
@@ -181,6 +182,7 @@ QList<QAction*> qSlicerSubjectHierarchyFolderPlugin::nodeContextMenuActions()con
   return actions;
 }
 
+/*
 //---------------------------------------------------------------------------
 QList<QAction*> qSlicerSubjectHierarchyFolderPlugin::sceneContextMenuActions()const
 {
@@ -191,24 +193,19 @@ QList<QAction*> qSlicerSubjectHierarchyFolderPlugin::sceneContextMenuActions()co
   return actions;
 }
 
+*/
+
 //---------------------------------------------------------------------------
 void qSlicerSubjectHierarchyFolderPlugin::showContextMenuActionsForNode(vtkMRMLSubjectHierarchyNode* node)
 {
   Q_D(qSlicerSubjectHierarchyFolderPlugin);
   this->hideAllContextMenuActions();
 
-  // Scene
-  if (!node)
-    {
-    d->CreateFolderUnderSceneAction->setVisible(true);
-    return;
-    }
-
-  // Folder can be created under any node
-  if (node)
-    {
-    d->CreateFolderUnderNodeAction->setVisible(true);
-    }
+  // POIs Folders Under Plan
+  if (node && node->IsLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan()) )
+  {
+    d->CreateFolderUnderNodeAction->setVisible(true);  
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -227,21 +224,37 @@ vtkMRMLSubjectHierarchyNode* qSlicerSubjectHierarchyFolderPlugin::createFolderUn
     return NULL;
     }
 
+
+
+  
+  vtkMRMLSubjectHierarchyNode* pois = vtkMRMLSubjectHierarchyNode::GetSubjectHierarchyNodeByUID(scene, vtkMRMLSubjectHierarchyConstants::GetSRPlanPOIsFolderUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPOIsFolderUID());
+  if (pois)
+  {
+	  return pois;	
+  }
+
   // Create folder subject hierarchy node
-  std::string nodeName = vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyNewNodeNamePrefix() + vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelFolder();
+  std::string nodeName = "POIs";
   nodeName = scene->GenerateUniqueName(nodeName);
   vtkMRMLSubjectHierarchyNode* childSubjectHierarchyNode = vtkMRMLSubjectHierarchyNode::CreateSubjectHierarchyNode(
     scene, parentNode, vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelFolder(), nodeName.c_str());
+
+  childSubjectHierarchyNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanPOIsFolderUIDName(), vtkMRMLSubjectHierarchyConstants::GetSRPlanPOIsFolderUID());
+
+
+
   emit requestExpandNode(childSubjectHierarchyNode);
 
   return childSubjectHierarchyNode;
 }
 
+/*
 //---------------------------------------------------------------------------
 void qSlicerSubjectHierarchyFolderPlugin::createFolderUnderScene()
 {
   this->createFolderUnderNode(NULL);
 }
+*/
 
 //---------------------------------------------------------------------------
 void qSlicerSubjectHierarchyFolderPlugin::createFolderUnderCurrentNode()

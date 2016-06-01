@@ -80,7 +80,7 @@ public:
   /// Get scene context menu item actions to add to tree view
   /// Separate method is needed for the scene, as its actions are set to the
   /// tree by a different method \sa nodeContextMenuActions
-  virtual QList<QAction*> sceneContextMenuActions()const;
+ // virtual QList<QAction*> sceneContextMenuActions()const; //comment out by zoulian
 
   /// Show context menu actions valid for  given subject hierarchy node.
   /// \param node Subject Hierarchy node to show the context menu items for. If NULL, then shows menu items for the scene
@@ -93,7 +93,7 @@ public:
 
 protected slots:
   /// Create folder node under the scene
-  void createFolderUnderScene();
+ // void createFolderUnderScene();
 
   /// Create folder node under current node
   void createFolderUnderCurrentNode();

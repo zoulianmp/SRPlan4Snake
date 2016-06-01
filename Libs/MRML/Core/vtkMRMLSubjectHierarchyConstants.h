@@ -52,6 +52,9 @@ public:
   static const std::string GetSubjectHierarchyNewNodeNamePrefix()
     { return "New"; };
 
+  //****************************************************************
+  //************* Levels
+  //****************************************************************
   // Non-DICOM levels
   static const char* GetSubjectHierarchyLevelFolder()
     { return "Folder"; };
@@ -76,6 +79,9 @@ public:
 	  return "SRSubplan";
   };
 
+  //****************************************************************
+  //*************UID Names
+  //****************************************************************
   //SRPlan Components uidNames
 
   static const char* GetSRPlanPatientUIDName ()
@@ -99,6 +105,11 @@ public:
 	  return "SRPlan-ImageVolumeUID";
   };
 
+  static const char * GetSRPlanAssignedVolumeofStructureSetUIDName()
+  {
+	  return "SRPlan-AssignedVolumeUID"; //Used to record the Assigned Image Volume UID of SH Node 
+  }
+
   static const char* GetSRPlanDoseVolumeUIDName()
   {
 	  return "SRPlan-DoseVolumeUID";
@@ -108,6 +119,13 @@ public:
   {
 	  return "SRPlan-UserOriginUID";
   };
+
+
+  static const char* GetSRPlanPOIsFolderUIDName()
+  {
+	  return "SRPlan-POIsFolderUID";
+  };
+
 
 
   static const char* GetSRPlanUserDefinedPointUIDName()
@@ -136,7 +154,9 @@ public:
 	  return "SRPlan-ControlPointUID";
   };
 
-
+  //****************************************************************
+  //*************BaseName
+  //****************************************************************
   //SRPlan SubjectHierarchy Node BaseName
 
   static const char* GetSRPlanPatientNodeBaseName()
@@ -197,7 +217,9 @@ public:
 	  return "SRPlan-ControlPointNode";
   };
 
-
+  //****************************************************************
+  //*************UIDS
+  //****************************************************************
   // Primary Image Volume UID
   static const char* GetSRPlanPrimaryImageVolumeUID()
   {
@@ -205,6 +227,10 @@ public:
   };
 
 
+  static const char* GetSRPlanPOIsFolderUID()
+  {
+	  return "SRPlan-POIs";
+  };
 
 
   // DICOM levels

@@ -129,6 +129,7 @@ protected slots:
   void showVolumesInBranch();
   bool feedImageSeriesIntoSHNode();
 
+  bool addStructureSetToSHNode();
 
 protected:
   QScopedPointer<qSlicerSubjectHierarchyVolumesPluginPrivate> d_ptr;

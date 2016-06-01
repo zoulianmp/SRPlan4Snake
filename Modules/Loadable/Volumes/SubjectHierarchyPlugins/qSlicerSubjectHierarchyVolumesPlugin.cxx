@@ -44,6 +44,8 @@
 #include <vtkMRMLSliceCompositeNode.h>
 #include <vtkMRMLSliceNode.h>
 
+
+
 // VTK includes
 #include <vtkObjectFactory.h>
 #include <vtkSmartPointer.h>
@@ -83,6 +85,9 @@ public:
   QAction* ShowVolumesInBranchAction;
   QAction* FeedImageSeriesAction;
 
+
+  QAction* AddStructureSetAction;
+
 };
 
 //-----------------------------------------------------------------------------
@@ -98,6 +103,8 @@ qSlicerSubjectHierarchyVolumesPluginPrivate::qSlicerSubjectHierarchyVolumesPlugi
 
   this->ShowVolumesInBranchAction = NULL;
   this->FeedImageSeriesAction = NULL;
+
+  this->AddStructureSetAction = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -126,6 +133,9 @@ void qSlicerSubjectHierarchyVolumesPluginPrivate::init()
 
   this->FeedImageSeriesAction = new QAction("Feed Image Series", q);
   QObject::connect(this->FeedImageSeriesAction, SIGNAL(triggered()), q, SLOT(feedImageSeriesIntoSHNode()));
+
+  this->AddStructureSetAction = new QAction("Add Structure Set", q);
+  QObject::connect(this->AddStructureSetAction, SIGNAL(triggered()), q, SLOT(addStructureSetToSHNode()));
 
   
 }
@@ -161,7 +171,7 @@ double qSlicerSubjectHierarchyVolumesPlugin::canOwnSubjectHierarchyNode(vtkMRMLS
 {
   if (!node)
     {
-    qCritical() << "qSlicerSubjectHierarchyVolumesPlugin::canOwnSubjectHierarchyNode: Input node is NULL!";
+ //   qCritical() << "qSlicerSubjectHierarchyVolumesPlugin::canOwnSubjectHierarchyNode: Input node is NULL!";
     return 0.0;
     }
 
@@ -526,7 +536,7 @@ QList<QAction*> qSlicerSubjectHierarchyVolumesPlugin::nodeContextMenuActions()co
   Q_D(const qSlicerSubjectHierarchyVolumesPlugin);
 
   QList<QAction*> actions;
-  actions << d->ShowVolumesInBranchAction << d->FeedImageSeriesAction;
+  actions << d->ShowVolumesInBranchAction << d->FeedImageSeriesAction << d->AddStructureSetAction;
   return actions;
 }
 
@@ -563,9 +573,13 @@ void qSlicerSubjectHierarchyVolumesPlugin::showContextMenuActionsForNode(vtkMRML
   if (!strcmp(pluginName.c_str(), "Volumes"))
   {
 	  d->FeedImageSeriesAction->setVisible(true);
+
+	  if (node->GetAssociatedNode())
+	  {
+		  d->AddStructureSetAction->setVisible(true);
+	  }
   }
 
-  
 }
 
 //---------------------------------------------------------------------------
@@ -729,9 +743,51 @@ bool qSlicerSubjectHierarchyVolumesPlugin::feedImageSeriesIntoSHNode()
 		return false;
 	}
 	return ioManager->openAddDataDialog();
+}
 
 
-	// Show volumes in study
-	//
+
+
+
+bool qSlicerSubjectHierarchyVolumesPlugin::addStructureSetToSHNode()
+{
+
+	vtkMRMLScene* scene = qSlicerSubjectHierarchyPluginHandler::instance()->scene();
+	if (!scene)
+	{
+		qCritical() << "qSlicerSubjectHierarchyVolumesPlugin::addNodeToSubjectHierarchy: Invalid MRML scene!";
+		return false;
+	}
+
+	//Get the Assigned Volume
+	vtkMRMLSubjectHierarchyNode* currentNode = qSlicerSubjectHierarchyPluginHandler::instance()->currentNode();
+	if (!currentNode->GetAssociatedNode())
+	{
+		qCritical() << "qSlicerSubjectHierarchyVolumesPlugin::addStructureSetToSHNode: Invalid Image Volume SH Node!";
+		return false;
+	}
+
+
+	vtkMRMLSubjectHierarchyNode* StructureSetNode = vtkMRMLSubjectHierarchyNode::New();
+
+	StructureSetNode->SetLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRSubplan());
+
+	//Assign the ScalarVolumeNode ID  to StructureSet Subject Hierarchy
+	StructureSetNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSRPlanAssignedVolumeofStructureSetUIDName(), currentNode->GetAssociatedNode()->GetID()); 
+	StructureSetNode->SetOwnerPluginName("Segmentations");
+
+	StructureSetNode->SetName(scene->GetUniqueNameByString(vtkMRMLSubjectHierarchyConstants::GetSRPlanStructureSetNodeBaseName()));
+
+
+	vtkMRMLSubjectHierarchyNode * parent = currentNode->GetAncestorAtLevel(vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRPlan());
+
+	//Assign the ScalarVolumeNode ID  to 
+	StructureSetNode->SetParentNodeID(parent->GetID());
+
+	scene->AddNode(StructureSetNode);
+
+	StructureSetNode->Delete(); // Return ownership to t	
+	return true;
 
 }
+
