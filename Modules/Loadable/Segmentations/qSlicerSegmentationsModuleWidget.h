@@ -126,6 +126,9 @@ protected slots:
   void onAddLabelmap();
   void onAddModel();
 
+  void onSetDisplaySettings();
+
+
   void onMoveFromCurrentSegmentation();
   void onCopyFromCurrentSegmentation();
   void onCopyToCurrentSegmentation();

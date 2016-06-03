@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>qSRPlanSegmentationDisplaySettingsDialog</class>
+ <widget class="QDialog" name="qSRPlanSegmentationDisplaySettingsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>459</width>
+    <height>287</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Segmentation Display Settings Dialog</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>240</y>
+     <width>341</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_SliceIntersectionThickness">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>160</y>
+     <width>188</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Slice intersection thickness:</string>
+   </property>
+  </widget>
+  <widget class="qMRMLDisplayNodeViewComboBox" name="DisplayNodeViewComboBox" native="true">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>70</y>
+     <width>271</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_SliceIntersectionVisible">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>114</y>
+     <width>187</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_Visible">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>30</y>
+     <width>187</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Views">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>74</y>
+     <width>188</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Dispalyed in Views:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Representation">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>184</y>
+     <width>188</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Representation that is shown as a model in 3D and as slice intersections in 2D if exists</string>
+   </property>
+   <property name="text">
+    <string>Model representation:</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="spinBox_SliceIntersectionThickness">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>160</y>
+     <width>187</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="suffix">
+    <string> px</string>
+   </property>
+   <property name="maximum">
+    <number>10</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Visible">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>30</y>
+     <width>188</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Segmentation Visible:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox_DisplayedModelRepresentation">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>184</y>
+     <width>187</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Representation that is shown as a model in 3D and as slice intersections in 2D</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_SliceIntersectionVisible">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>114</y>
+     <width>188</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Slice intersection visible:</string>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>qMRMLNodeComboBox</class>
+   <extends>QWidget</extends>
+   <header>qMRMLNodeComboBox.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>qMRMLCheckableNodeComboBox</class>
+   <extends>qMRMLNodeComboBox</extends>
+   <header>qMRMLCheckableNodeComboBox.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>qMRMLDisplayNodeViewComboBox</class>
+   <extends>qMRMLCheckableNodeComboBox</extends>
+   <header>qMRMLDisplayNodeViewComboBox.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>qSRPlanSegmentationDisplaySettingsDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>qSRPlanSegmentationDisplaySettingsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

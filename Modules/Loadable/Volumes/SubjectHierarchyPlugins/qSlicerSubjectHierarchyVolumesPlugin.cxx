@@ -705,6 +705,7 @@ bool qSlicerSubjectHierarchyVolumesPlugin::addNodeToSubjectHierarchy(vtkMRMLNode
 	//associate the volumeNode to the ImageVolumeSubjectNode
 	// Added by zoulian
 
+
 	vtkMRMLScene* scene = qSlicerSubjectHierarchyPluginHandler::instance()->scene();
 	if (!scene)
 	{
@@ -829,10 +830,10 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 	vtkMRMLSubjectHierarchyNode* parentNode = vtkMRMLSubjectHierarchyNode::SafeDownCast(currentNode->GetParentNode()); //the plan SH Node
 
 	vtkStdString ssuid = currentNode->GetUID(vtkMRMLSubjectHierarchyConstants::GetSHStructureSetUIDName());
-	if (!ssuid.empty())
-	{
-		vtkMRMLSubjectHierarchyNode* SegmentationSH = vtkMRMLSubjectHierarchyNode::SafeDownCast(scene->GetNodeByID(ssuid)); //Get The Associated Segmetation of Image Volume
+	vtkMRMLSubjectHierarchyNode* SegmentationSH = vtkMRMLSubjectHierarchyNode::SafeDownCast(scene->GetNodeByID(ssuid)); //Get The Associated Segmetation of Image Volume
 
+	if (SegmentationSH)
+	{
 		// Switch to segmentations module and select node
 		qSlicerAbstractModuleWidget* moduleWidget = qSlicerSubjectHierarchyAbstractPlugin::switchToModule("Segmentations");
 		if (moduleWidget)
@@ -841,19 +842,20 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 			qMRMLNodeComboBox* nodeSelector = moduleWidget->findChild<qMRMLNodeComboBox*>("MRMLNodeComboBox_Segmentation");
 
 			// Choose current data node
-			if (nodeSelector)
+			if (nodeSelector && SegmentationSH)
 			{
 				nodeSelector->setCurrentNode(SegmentationSH->GetAssociatedNode());
 			}
+			
 		}
 
 
 	}
-	else
+	else 
 	{
 		vtkMRMLSegmentationNode * segmentation = vtkMRMLSegmentationNode::New();
 
-		segmentation->SetName("SS1");
+		segmentation->SetName(scene->GetUniqueNameByString("StructureSet"));
 
 
 		scene->AddNode(segmentation);

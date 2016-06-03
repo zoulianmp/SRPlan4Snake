@@ -33,16 +33,24 @@ set(MODULE_INCLUDE_DIRECTORIES
   qSlicer${MODULE_NAME}ModuleWidget.h
   qSlicer${MODULE_NAME}Reader.cxx
   qSlicer${MODULE_NAME}Reader.h
+  
+  qSRPlanSegmentationDisplaySettingsDialog.h
+  qSRPlanSegmentationDisplaySettingsDialog.cxx
+  
   )
 
 set(MODULE_MOC_SRCS
   qSlicer${MODULE_NAME}Module.h
   qSlicer${MODULE_NAME}ModuleWidget.h
   qSlicer${MODULE_NAME}Reader.h
+  
+  qSRPlanSegmentationDisplaySettingsDialog.h
   )
 
 set(MODULE_UI_SRCS
   Resources/UI/qSlicer${MODULE_NAME}Module.ui
+  Resources/UI/qSRPlanSegmentationDisplaySettingsDialog.ui
+  
   )
 
 set(MODULE_TARGET_LIBRARIES

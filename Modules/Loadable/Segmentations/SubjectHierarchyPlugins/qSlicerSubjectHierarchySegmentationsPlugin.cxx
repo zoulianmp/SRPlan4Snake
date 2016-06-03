@@ -67,7 +67,7 @@ public:
   QAction* CreateBinaryLabelmapAction;
   QAction* CreateClosedSurfaceAction;
 
-  QAction* StartSegmentationAction;
+ 
 };
 
 //-----------------------------------------------------------------------------
@@ -81,7 +81,7 @@ qSlicerSubjectHierarchySegmentationsPluginPrivate::qSlicerSubjectHierarchySegmen
   this->CreateRepresentationAction = NULL;
   this->CreateBinaryLabelmapAction = NULL;
   this->CreateClosedSurfaceAction = NULL;
-  this->StartSegmentationAction = NULL;
+ 
 
 }
 
@@ -103,9 +103,7 @@ void qSlicerSubjectHierarchySegmentationsPluginPrivate::init()
   QObject::connect(this->CreateClosedSurfaceAction, SIGNAL(triggered()), q, SLOT(createClosedSurfaceRepresentation()));
   createRepresentationSubMenu->addAction(this->CreateClosedSurfaceAction);
 
-  //Start Segmentation by zoulian
-  this->StartSegmentationAction = new QAction("Start Segmentation", q);
-  QObject::connect(this->StartSegmentationAction, SIGNAL(triggered()), q, SLOT(startSegmentation()));
+  
   
   
 
@@ -330,7 +328,7 @@ QList<QAction*> qSlicerSubjectHierarchySegmentationsPlugin::nodeContextMenuActio
   Q_D(const qSlicerSubjectHierarchySegmentationsPlugin);
 
   QList<QAction*> actions;
-  actions << d->CreateRepresentationAction << d->StartSegmentationAction;
+  actions << d->CreateRepresentationAction ;
   return actions;
 }
 
@@ -353,7 +351,7 @@ void qSlicerSubjectHierarchySegmentationsPlugin::showContextMenuActionsForNode(v
     || (segmentsPlugin->canOwnSubjectHierarchyNode(node) && segmentsPlugin->isThisPluginOwnerOfNode(node)) )
   {
     d->CreateRepresentationAction->setVisible(true);
-	d->StartSegmentationAction->setVisible(true);
+
   }
 
 
@@ -565,50 +563,4 @@ void qSlicerSubjectHierarchySegmentationsPlugin::createClosedSurfaceRepresentati
       arg(segmentationNode->GetName());
     QMessageBox::warning(NULL, tr("Failed to create closed surface"), message);
   }
-}
-
-
-void qSlicerSubjectHierarchySegmentationsPlugin::startSegmentation()
-{
- 
-		
-	vtkMRMLSegmentationNode * segmentation = vtkMRMLSegmentationNode::New();
-
-	segmentation->SetName("SS1");
-
-	vtkMRMLScene* scene = qSlicerSubjectHierarchyPluginHandler::instance()->scene();
-
-	if (!scene)
-	{
-		qCritical() << "qSlicerSubjectHierarchySegmentationsPlugin::startSegmentation: Invalid MRML scene!";
-
-	}
-
-	scene->AddNode(segmentation);
-
-
-	vtkMRMLSubjectHierarchyNode* currentNode = qSlicerSubjectHierarchyPluginHandler::instance()->currentNode();
-
-	if (!currentNode->GetAssociatedNode())
-	{
-		currentNode->SetAssociatedNodeID(segmentation->GetID());
-		
-	}
-
-
-
-	// Switch to segmentations module and select node
-	qSlicerAbstractModuleWidget* moduleWidget = qSlicerSubjectHierarchyAbstractPlugin::switchToModule("Segmentations");
-	if (moduleWidget)
-	{
-		// Get node selector combobox
-		qMRMLNodeComboBox* nodeSelector = moduleWidget->findChild<qMRMLNodeComboBox*>("MRMLNodeComboBox_Segmentation");
-
-		// Choose current data node
-		if (nodeSelector)
-		{
-			nodeSelector->setCurrentNode(segmentation);
-		}
-	}
-
 }

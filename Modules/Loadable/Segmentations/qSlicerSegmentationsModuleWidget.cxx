@@ -28,6 +28,8 @@
 
 #include "qMRMLSegmentsTableView.h"
 #include "qMRMLSegmentationRepresentationsListView.h"
+#include "qSRPlanSegmentationDisplaySettingsDialog.h"
+
 
 // SlicerQt includes
 #include <qSlicerApplication.h>
@@ -170,6 +172,7 @@ void qSlicerSegmentationsModuleWidget::updateWidgetFromDisplayNode()
     return;
   }
 
+  /*
   // Update display property widgets
   d->checkBox_Visible->setChecked( displayNode->GetVisibility() );
   d->SliderWidget_Opacity->setValue( displayNode->GetOpacity() );
@@ -181,13 +184,15 @@ void qSlicerSegmentationsModuleWidget::updateWidgetFromDisplayNode()
 
   // Set display node to display widgets
   d->DisplayNodeViewComboBox->setMRMLDisplayNode(displayNode);
+
+  */
 }
 
 //-----------------------------------------------------------------------------
 void qSlicerSegmentationsModuleWidget::updateCopyMoveButtonStates()
 {
   Q_D(qSlicerSegmentationsModuleWidget);
-
+  /*
   // Disable copy/move buttons then enable later based on selection
   d->toolButton_MoveFromCurrentSegmentation->setEnabled(false);
   d->toolButton_CopyFromCurrentSegmentation->setEnabled(false);
@@ -218,6 +223,7 @@ void qSlicerSegmentationsModuleWidget::updateCopyMoveButtonStates()
     d->toolButton_MoveFromCurrentSegmentation->setEnabled(true);
     d->toolButton_CopyFromCurrentSegmentation->setEnabled(true);
   }
+  */
 }
 
 //-----------------------------------------------------------------------------
@@ -232,6 +238,7 @@ void qSlicerSegmentationsModuleWidget::populateRepresentationsCombobox()
   // regardless its existence, thus the combobox is populated only once at initialization.
 
   // Prevent selecting incrementally added representations thus changing MRML properties
+  /*
   d->comboBox_DisplayedModelRepresentation->blockSignals(true);
   d->comboBox_DisplayedModelRepresentation->clear();
 
@@ -257,6 +264,8 @@ void qSlicerSegmentationsModuleWidget::populateRepresentationsCombobox()
   // Set selection from display node
   d->comboBox_DisplayedModelRepresentation->setCurrentIndex( d->comboBox_DisplayedModelRepresentation->findText(
     displayNode->GetPreferredPolyDataDisplayRepresentationName() ) );
+
+	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -267,21 +276,22 @@ void qSlicerSegmentationsModuleWidget::init()
   this->Superclass::setup();
 
   // Ensure that four representations fit in the table by default
-  d->RepresentationsListView->setMinimumHeight(108);
+  //d->RepresentationsListView->setMinimumHeight(108);
 
   // Set icons to tool buttons
-  d->toolButton_AddLabelmap->setIcon(QIcon(":/Icons/AddLabelmap.png"));
-  d->toolButton_AddModel->setIcon(QIcon(":/Icons/Small/SlicerAddModel.png"));
+ // d->toolButton_AddLabelmap->setIcon(QIcon(":/Icons/AddLabelmap.png"));
+ // d->toolButton_AddModel->setIcon(QIcon(":/Icons/Small/SlicerAddModel.png"));
 
   // Make connections
   connect(d->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
     this, SLOT(onSegmentationNodeChanged(vtkMRMLNode*)) );
   connect(d->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
     d->SegmentsTableView, SLOT(setSegmentationNode(vtkMRMLNode*)) );
-  connect(d->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
-    d->SegmentsTableView_Current, SLOT(setSegmentationNode(vtkMRMLNode*)) );
-  connect(d->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
-    d->RepresentationsListView, SLOT(setSegmentationNode(vtkMRMLNode*)) );
+ 
+ // connect(d->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
+ //   d->SegmentsTableView_Current, SLOT(setSegmentationNode(vtkMRMLNode*)) );
+//  connect(d->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
+ //   d->RepresentationsListView, SLOT(setSegmentationNode(vtkMRMLNode*)) );
 
   connect(d->SegmentsTableView, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
     this, SLOT(onSegmentSelectionChanged(QItemSelection,QItemSelection)));
@@ -292,9 +302,13 @@ void qSlicerSegmentationsModuleWidget::init()
   connect(d->pushButton_DeleteSelected, SIGNAL(clicked()),
     this, SLOT(onDeleteSelectedSegments()) );
 
-  connect(d->MRMLNodeComboBox_OtherSegmentationOrRepresentationNode, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
-    this, SLOT(setOtherSegmentationOrRepresentationNode(vtkMRMLNode*)) );
+  connect(d->pushButton_Settings, SIGNAL(clicked()),
+	  this, SLOT(onSetDisplaySettings()));
 
+
+//  connect(d->MRMLNodeComboBox_OtherSegmentationOrRepresentationNode, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
+//    this, SLOT(setOtherSegmentationOrRepresentationNode(vtkMRMLNode*)) );
+  /*
   connect(d->checkBox_Visible, SIGNAL(stateChanged(int)),
     this, SLOT(onVisibilityChanged(int)) );
   connect(d->SliderWidget_Opacity, SIGNAL(valueChanged(double)),
@@ -319,10 +333,10 @@ void qSlicerSegmentationsModuleWidget::init()
     this, SLOT(onCopyToCurrentSegmentation()) );
   connect(d->toolButton_MoveToCurrentSegmentation, SIGNAL(clicked()),
     this, SLOT(onMoveToCurrentSegmentation()) );
-
+	*/
   // Show only segment names in copy/view segment list and make it non-editable
-  d->SegmentsTableView_Current->setMode(qMRMLSegmentsTableView::SimpleListMode);
-  d->SegmentsTableView_Other->setMode(qMRMLSegmentsTableView::SimpleListMode);
+//  d->SegmentsTableView_Current->setMode(qMRMLSegmentsTableView::SimpleListMode);
+ // d->SegmentsTableView_Other->setMode(qMRMLSegmentsTableView::SimpleListMode);
 }
 
 //-----------------------------------------------------------------------------
@@ -360,7 +374,7 @@ void qSlicerSegmentationsModuleWidget::onSegmentationNodeChanged(vtkMRMLNode* no
   {
     hiddenNodeIDs << QString(segmentationNode->GetID());
   }
-  d->MRMLNodeComboBox_OtherSegmentationOrRepresentationNode->sortFilterProxyModel()->setHiddenNodeIDs(hiddenNodeIDs);
+//  d->MRMLNodeComboBox_OtherSegmentationOrRepresentationNode->sortFilterProxyModel()->setHiddenNodeIDs(hiddenNodeIDs);
 
   // Update UI from selected segmentation node
   this->updateWidgetFromMRML();
@@ -449,18 +463,18 @@ void qSlicerSegmentationsModuleWidget::setOtherSegmentationOrRepresentationNode(
 
   if (segmentationNode)
   {
-    d->SegmentsTableView_Other->setMode(qMRMLSegmentsTableView::SimpleListMode);
-    d->SegmentsTableView_Other->setSegmentationNode(node);
+ //   d->SegmentsTableView_Other->setMode(qMRMLSegmentsTableView::SimpleListMode);
+ //   d->SegmentsTableView_Other->setSegmentationNode(node);
   }
   else if (labelmapNode || modelNode)
   {
-    d->SegmentsTableView_Other->setMode(qMRMLSegmentsTableView::RepresentationMode);
-    d->SegmentsTableView_Other->setRepresentationNode(node);
+ //   d->SegmentsTableView_Other->setMode(qMRMLSegmentsTableView::RepresentationMode);
+ //   d->SegmentsTableView_Other->setRepresentationNode(node);
   }
   else
   {
-    d->SegmentsTableView_Other->setSegmentationNode(NULL);
-    d->SegmentsTableView_Other->setRepresentationNode(NULL);
+//    d->SegmentsTableView_Other->setSegmentationNode(NULL);
+ //   d->SegmentsTableView_Other->setRepresentationNode(NULL);
   }
 
   // Update widgets based on selection
@@ -535,9 +549,9 @@ void qSlicerSegmentationsModuleWidget::onDisplayedModelRepresentationChanged(int
   }
 
   // Get representation name from index
-  QString representationName = d->comboBox_DisplayedModelRepresentation->itemText(index);
+//  QString representationName = d->comboBox_DisplayedModelRepresentation->itemText(index);
 
-  displayNode->SetPreferredPolyDataDisplayRepresentationName(representationName.toLatin1().constData());
+//  displayNode->SetPreferredPolyDataDisplayRepresentationName(representationName.toLatin1().constData());
 }
 
 //-----------------------------------------------------------------------------
@@ -555,7 +569,7 @@ void qSlicerSegmentationsModuleWidget::onAddLabelmap()
   scene->AddNode(labelmapNode);
 
   // Select new labelmap in the other representation combobox
-  d->MRMLNodeComboBox_OtherSegmentationOrRepresentationNode->setCurrentNode(labelmapNode);
+//  d->MRMLNodeComboBox_OtherSegmentationOrRepresentationNode->setCurrentNode(labelmapNode);
 }
 
 //-----------------------------------------------------------------------------
@@ -573,7 +587,7 @@ void qSlicerSegmentationsModuleWidget::onAddModel()
   scene->AddNode(modelNode);
 
   // Select new model in the other representation table
-  d->MRMLNodeComboBox_OtherSegmentationOrRepresentationNode->setCurrentNode(modelNode);
+//  d->MRMLNodeComboBox_OtherSegmentationOrRepresentationNode->setCurrentNode(modelNode);
 }
 
 //-----------------------------------------------------------------------------
@@ -650,7 +664,7 @@ bool qSlicerSegmentationsModuleWidget::copySegmentBetweenSegmentations(
 bool qSlicerSegmentationsModuleWidget::copyFromCurrentSegmentation(bool removeFromSource/*=false*/)
 {
   Q_D(qSlicerSegmentationsModuleWidget);
-
+  /*
   vtkMRMLSegmentationNode* currentSegmentationNode =  vtkMRMLSegmentationNode::SafeDownCast(
     d->MRMLNodeComboBox_Segmentation->currentNode() );
   if (!currentSegmentationNode)
@@ -745,7 +759,7 @@ bool qSlicerSegmentationsModuleWidget::copyFromCurrentSegmentation(bool removeFr
     // Refresh other representation table
     d->SegmentsTableView_Other->setRepresentationNode(otherRepresentationNode);
   }
-
+  */
   return true;
 }
 
@@ -765,7 +779,7 @@ void qSlicerSegmentationsModuleWidget::onCopyFromCurrentSegmentation()
 void qSlicerSegmentationsModuleWidget::onCopyToCurrentSegmentation()
 {
   Q_D(qSlicerSegmentationsModuleWidget);
-
+  /*
   vtkMRMLSegmentationNode* currentSegmentationNode =  vtkMRMLSegmentationNode::SafeDownCast(
     d->MRMLNodeComboBox_Segmentation->currentNode() );
   if (!currentSegmentationNode)
@@ -830,13 +844,14 @@ void qSlicerSegmentationsModuleWidget::onCopyToCurrentSegmentation()
       return;
     }
   }
+  */
 }
 
 //-----------------------------------------------------------------------------
 void qSlicerSegmentationsModuleWidget::onMoveToCurrentSegmentation()
 {
   Q_D(qSlicerSegmentationsModuleWidget);
-
+  /*
   vtkMRMLSegmentationNode* currentSegmentationNode =  vtkMRMLSegmentationNode::SafeDownCast(
     d->MRMLNodeComboBox_Segmentation->currentNode() );
   if (!currentSegmentationNode)
@@ -861,6 +876,7 @@ void qSlicerSegmentationsModuleWidget::onMoveToCurrentSegmentation()
   {
     qCritical() << "qSlicerSegmentationsModuleWidget::onMoveToCurrentSegmentation: Invalid operation!";
   }
+  */
 }
 
 //-----------------------------------------------------------------------------
@@ -929,4 +945,32 @@ bool qSlicerSegmentationsModuleWidget::updateMasterRepresentationInSegmentation(
   // Set master representation to the added one if user agreed
   segmentation->SetMasterRepresentationName(newMasterRepresentation.c_str());
   return true;
+}
+
+
+
+
+void qSlicerSegmentationsModuleWidget::onSetDisplaySettings()
+{
+	Q_D(qSlicerSegmentationsModuleWidget);
+
+	qSRPlanSegmentationDisplaySettingsDialog * settingsdialog = new qSRPlanSegmentationDisplaySettingsDialog(d->pushButton_Settings);
+
+	vtkMRMLSegmentationDisplayNode* displayNode = this->segmentationDisplayNode();
+	if (!displayNode)
+	{
+		return;
+	}
+ 
+	settingsdialog->updateFromDisplayNode(displayNode);
+
+	settingsdialog->show();
+
+
+	if (settingsdialog->exec())
+	{
+		settingsdialog->updateToDisplayNode(displayNode);
+	}
+
+
 }

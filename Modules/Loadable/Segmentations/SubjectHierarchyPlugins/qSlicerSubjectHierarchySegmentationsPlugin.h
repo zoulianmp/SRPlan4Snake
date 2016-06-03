@@ -115,7 +115,7 @@ protected slots:
   /// Create closed surface representation
   void createClosedSurfaceRepresentation();
 
-  void startSegmentation();
+
 
 protected:
   QScopedPointer<qSlicerSubjectHierarchySegmentationsPluginPrivate> d_ptr;
