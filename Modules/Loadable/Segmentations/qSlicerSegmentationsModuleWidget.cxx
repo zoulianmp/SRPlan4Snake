@@ -297,8 +297,8 @@ void qSlicerSegmentationsModuleWidget::init()
     this, SLOT(onSegmentSelectionChanged(QItemSelection,QItemSelection)));
   connect(d->pushButton_AddSegment, SIGNAL(clicked()),
     this, SLOT(onAddSegment()) );
-  connect(d->pushButton_EditSelected, SIGNAL(clicked()),
-    this, SLOT(onEditSelectedSegment()) );
+ // connect(d->pushButton_EditSelected, SIGNAL(clicked()),
+ //   this, SLOT(onEditSelectedSegment()) );
   connect(d->pushButton_DeleteSelected, SIGNAL(clicked()),
     this, SLOT(onDeleteSelectedSegments()) );
 
@@ -396,7 +396,7 @@ void qSlicerSegmentationsModuleWidget::onSegmentSelectionChanged(const QItemSele
   Q_D(qSlicerSegmentationsModuleWidget);
 
   QStringList selectedSegmentIds = d->SegmentsTableView->selectedSegmentIDs();
-  d->pushButton_EditSelected->setEnabled(selectedSegmentIds.count() == 1);
+//  d->pushButton_EditSelected->setEnabled(selectedSegmentIds.count() == 1);
   d->pushButton_DeleteSelected->setEnabled(selectedSegmentIds.count() > 0);
 }
 

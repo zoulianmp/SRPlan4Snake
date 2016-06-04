@@ -48,6 +48,7 @@
        <property name="renameEnabled" stdset="0">
         <bool>true</bool>
        </property>
+       <zorder>label_CurrentSegmentation</zorder>
       </widget>
      </item>
     </layout>
@@ -73,104 +74,68 @@
       <property name="spacing">
        <number>4</number>
       </property>
-      <item row="7" column="0">
+      <item row="4" column="0" rowspan="2">
        <layout class="QGridLayout" name="gridLayout">
-        <item row="7" column="4">
-         <widget class="QPushButton" name="pushButton_Settings">
-          <property name="text">
-           <string>Settings</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="2">
+        <item row="4" column="2">
          <widget class="QPushButton" name="pushButton_AddSegment">
           <property name="text">
            <string>Add segment</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="3">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
+        <item row="4" column="4">
+         <widget class="QPushButton" name="pushButton_Settings">
+          <property name="text">
+           <string>Settings</string>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>30</height>
-           </size>
-          </property>
-         </spacer>
+         </widget>
         </item>
-        <item row="1" column="4" rowspan="3">
+        <item row="2" column="2">
          <widget class="QPushButton" name="pushButton_EditSelected">
           <property name="text">
            <string>Edit selected</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
-         <widget class="QPushButton" name="pushButton_paintbrush">
-          <property name="minimumSize">
-           <size>
-            <width>60</width>
-            <height>60</height>
-           </size>
-          </property>
-          <property name="sizeIncrement">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="baseSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Using Paint Brush to draw Structure</string>
-          </property>
-          <property name="text">
-           <string>PaintBrush</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../qSRPlanSegmentationsModule.qrc">
-            <normaloff>:/Icons/paintbrush.png</normaloff>:/Icons/paintbrush.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>60</width>
-            <height>60</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <widget class="QPushButton" name="pushButton_poly">
-          <property name="toolTip">
-           <string>Use polygon draw pen contouring structure</string>
-          </property>
-          <property name="text">
-           <string>PolyDraw</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../qSRPlanSegmentationsModule.qrc">
-            <normaloff>:/Icons/poly.png</normaloff>:/Icons/poly.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>60</width>
-            <height>60</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="3">
+        <item row="4" column="3">
          <widget class="QPushButton" name="pushButton_DeleteSelected">
           <property name="text">
            <string>Delete selected</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4">
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QPushButton" name="pushButton_4">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QPushButton" name="pushButton_5">
+          <property name="text">
+           <string>PushButton</string>
           </property>
          </widget>
         </item>
@@ -222,9 +187,7 @@
    <header>qMRMLSegmentsTableView.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../qSRPlanSegmentationsModule.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>qSlicerSegmentationsModule</sender>
