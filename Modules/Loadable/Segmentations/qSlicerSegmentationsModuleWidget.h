@@ -134,6 +134,13 @@ protected slots:
   void onCopyToCurrentSegmentation();
   void onMoveToCurrentSegmentation();
 
+  //***********************************************************
+  //********** Edit Tools
+  void onPolydrawSelectedSegments();
+  void onPaintbrushSelectedSegments();
+
+
+
 protected:
   QScopedPointer<qSlicerSegmentationsModuleWidgetPrivate> d_ptr;
 

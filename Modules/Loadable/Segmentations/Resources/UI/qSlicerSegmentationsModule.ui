@@ -113,8 +113,8 @@
          <widget class="QPushButton" name="pushButton_paintbrush">
           <property name="minimumSize">
            <size>
-            <width>60</width>
-            <height>60</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
           <property name="sizeIncrement">
@@ -141,9 +141,12 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>60</width>
-            <height>60</height>
+            <width>50</width>
+            <height>50</height>
            </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -161,9 +164,12 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>60</width>
-            <height>60</height>
+            <width>50</width>
+            <height>50</height>
            </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -187,7 +193,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>60</height>
+          <height>50</height>
          </size>
         </property>
        </widget>
