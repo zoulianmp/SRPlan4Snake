@@ -1,5 +1,7 @@
-<!DOCTYPE RCC><RCC version="1.0">
+<RCC>
   <qresource>
+    <file>Icons/brush_shape_round.png</file>
+    <file>Icons/brush_shape_square.png</file>
     <file>Icons/Master.png</file>
     <file>Icons/Present.png</file>
   </qresource>
