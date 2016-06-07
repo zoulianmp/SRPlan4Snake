@@ -20,9 +20,9 @@
 ==============================================================================*/
 
 // Segmentations includes
-#include "qMRMLSegmentSelectorWidget.h"
+#include "qMRMLSegmentsEditorWidget.h"
 
-#include "ui_qMRMLSegmentSelectorWidget.h"
+#include "ui_qMRMLSegmentsEditorWidget.h"
 
 #include "vtkMRMLSegmentationNode.h"
 #include "vtkMRMLSegmentationDisplayNode.h"
@@ -36,14 +36,14 @@
 #include <QDebug>
 
 //-----------------------------------------------------------------------------
-class qMRMLSegmentSelectorWidgetPrivate: public Ui_qMRMLSegmentSelectorWidget
+class qMRMLSegmentsEditorWidgetPrivate: public Ui_qMRMLSegmentsEditorWidget
 {
-  Q_DECLARE_PUBLIC(qMRMLSegmentSelectorWidget);
+  Q_DECLARE_PUBLIC(qMRMLSegmentsEditorWidget);
 
 protected:
-  qMRMLSegmentSelectorWidget* const q_ptr;
+  qMRMLSegmentsEditorWidget* const q_ptr;
 public:
-  qMRMLSegmentSelectorWidgetPrivate(qMRMLSegmentSelectorWidget& object);
+  qMRMLSegmentsEditorWidgetPrivate(qMRMLSegmentsEditorWidget& object);
   void init();
 
 public:
@@ -55,25 +55,26 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-qMRMLSegmentSelectorWidgetPrivate::qMRMLSegmentSelectorWidgetPrivate(qMRMLSegmentSelectorWidget& object)
+qMRMLSegmentsEditorWidgetPrivate::qMRMLSegmentsEditorWidgetPrivate(qMRMLSegmentsEditorWidget& object)
   : q_ptr(&object)
 {
   this->SegmentationNode = NULL;
 }
 
 //-----------------------------------------------------------------------------
-void qMRMLSegmentSelectorWidgetPrivate::init()
+void qMRMLSegmentsEditorWidgetPrivate::init()
 {
-  Q_Q(qMRMLSegmentSelectorWidget);
+  Q_Q(qMRMLSegmentsEditorWidget);
   this->setupUi(q);
 
   // Make connections
-  QObject::connect( this->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
-    q, SLOT(onCurrentNodeChanged(vtkMRMLNode*)) );
-  QObject::connect( this->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
-    q, SIGNAL(currentNodeChanged(vtkMRMLNode*)) );
-  QObject::connect(this->comboBox_Segment, SIGNAL(currentIndexChanged(int)),
-    q, SLOT(onCurrentSegmentChanged(int)));
+  QObject::connect( this->pushButton_paintbrush, SIGNAL(clicked()),
+    q, SLOT(onPaintBrushClicked( )) );
+
+  QObject::connect(this->pushButton_poly, SIGNAL(clicked()),
+	  q, SLOT(onPolyClicked()));
+
+
 }
 
 
@@ -81,171 +82,51 @@ void qMRMLSegmentSelectorWidgetPrivate::init()
 
 
 //-----------------------------------------------------------------------------
-// qMRMLSegmentSelectorWidget methods
+// qMRMLSegmentsEditorWidget methods
 
 //-----------------------------------------------------------------------------
-qMRMLSegmentSelectorWidget::qMRMLSegmentSelectorWidget(QWidget* _parent)
+qMRMLSegmentsEditorWidget::qMRMLSegmentsEditorWidget(QWidget* _parent)
   : qMRMLWidget(_parent)
-  , d_ptr(new qMRMLSegmentSelectorWidgetPrivate(*this))
+  , d_ptr(new qMRMLSegmentsEditorWidgetPrivate(*this))
 {
-  Q_D(qMRMLSegmentSelectorWidget);
+  Q_D(qMRMLSegmentsEditorWidget);
   d->init();
-  this->populateSegmentCombobox();
+  
 }
 
 //-----------------------------------------------------------------------------
-qMRMLSegmentSelectorWidget::~qMRMLSegmentSelectorWidget()
+qMRMLSegmentsEditorWidget::~qMRMLSegmentsEditorWidget()
 {
 }
 
-//-----------------------------------------------------------------------------
-void qMRMLSegmentSelectorWidget::onCurrentNodeChanged(vtkMRMLNode* node)
-{
-  Q_D(qMRMLSegmentSelectorWidget);
 
-  vtkMRMLSegmentationNode* segmentationNode = vtkMRMLSegmentationNode::SafeDownCast(node);
-  if (d->SegmentationNode != segmentationNode)
-  {
-    // Connect segment added/removed and display modified events to population of the table
-    qvtkReconnect( d->SegmentationNode, segmentationNode, vtkSegmentation::SegmentAdded,
-                   this, SLOT( populateSegmentCombobox() ) );
-    qvtkReconnect( d->SegmentationNode, segmentationNode, vtkSegmentation::SegmentRemoved,
-                   this, SLOT( populateSegmentCombobox() ) );
-
-    d->SegmentationNode = segmentationNode;
-    this->populateSegmentCombobox();
-  }
-}
-
-//------------------------------------------------------------------------------
-void qMRMLSegmentSelectorWidget::setCurrentNode(vtkMRMLNode* node)
-{
-  Q_D(qMRMLSegmentSelectorWidget);
-  d->MRMLNodeComboBox_Segmentation->setCurrentNode(node);
-}
-
-//-----------------------------------------------------------------------------
-vtkMRMLNode* qMRMLSegmentSelectorWidget::currentNode()
-{
-  Q_D(qMRMLSegmentSelectorWidget);
-  return d->MRMLNodeComboBox_Segmentation->currentNode();
-}
-
-//------------------------------------------------------------------------------
-void qMRMLSegmentSelectorWidget::setCurrentNodeID(const QString& nodeID)
-{
-  Q_D(qMRMLSegmentSelectorWidget);
-  d->MRMLNodeComboBox_Segmentation->setCurrentNodeID(nodeID);
-}
-
-//------------------------------------------------------------------------------
-QString qMRMLSegmentSelectorWidget::currentNodeID()
-{
-  Q_D(qMRMLSegmentSelectorWidget);
-  return d->MRMLNodeComboBox_Segmentation->currentNodeID();
-}
-
-//-----------------------------------------------------------------------------
-void qMRMLSegmentSelectorWidget::populateSegmentCombobox()
-{
-  Q_D(qMRMLSegmentSelectorWidget);
-
-  d->comboBox_Segment->clear();
-  d->label_Message->setText(QString());
-
-  // Block signals so that onCurrentSegmentChanged function is not called when populating
-  d->comboBox_Segment->blockSignals(true);
-
-  // If not representation, then segmentation must be selected. Check validity
-  if (!d->SegmentationNode)
-    {
-    d->label_Message->setText(tr("No node is selected"));
-    d->comboBox_Segment->setVisible(false);
-    d->label_Segment->setVisible(false);
-    d->comboBox_Segment->blockSignals(false);
-    return;
-    }
-  else if (d->SegmentationNode->GetSegmentation()->GetNumberOfSegments() == 0)
-    {
-    d->label_Message->setText(tr("No segments in segmentation"));
-    d->comboBox_Segment->setVisible(false);
-    d->label_Segment->setVisible(false);
-    d->comboBox_Segment->blockSignals(false);
-    return;
-    }
-
-  // Show segment selector combobox if there are segments in the segmentation
-  d->comboBox_Segment->setVisible(true);
-  d->label_Segment->setVisible(true);
-
-  vtkSegmentation::SegmentMap segmentMap = d->SegmentationNode->GetSegmentation()->GetSegments();
-  for (vtkSegmentation::SegmentMap::iterator segmentIt = segmentMap.begin(); segmentIt != segmentMap.end(); ++segmentIt)
-  {
-    QString segmentId(segmentIt->first.c_str());
-
-    // Segment name
-    QString name(segmentIt->second->GetName());
-    d->comboBox_Segment->addItem(name, QVariant(segmentId));
-  }
-
-  // Set invalid selection so that callback function is called when first segment is selected later
-  d->comboBox_Segment->setCurrentIndex(-1);
-
-  // Unblock signals
-  d->comboBox_Segment->blockSignals(false);
-
-  // Make sure fist segment is selected (we checked before that there is at least one segment)
-  d->comboBox_Segment->setCurrentIndex(0);
-}
-
-//-----------------------------------------------------------------------------
-void qMRMLSegmentSelectorWidget::onCurrentSegmentChanged(int index)
-{
-  Q_D(qMRMLSegmentSelectorWidget);
-
-  d->label_Message->setText(QString());
-
-  if (!d->SegmentationNode)
-  {
-    return;
-  }
-
-  // All items contain the segment ID, get that
-  d->SelectedSegmentID = d->comboBox_Segment->itemData(index).toString();
-
-  emit currentSegmentChanged(d->SelectedSegmentID);
-}
-
-//-----------------------------------------------------------------------------
-QString qMRMLSegmentSelectorWidget::currentSegmentID()
-{
-  Q_D(qMRMLSegmentSelectorWidget);
-
-  return d->SelectedSegmentID;
-}
-
-//-----------------------------------------------------------------------------
-void qMRMLSegmentSelectorWidget::setCurrentSegmentID(QString segmentID)
-{
-  Q_D(qMRMLSegmentSelectorWidget);
-
-  int index = d->comboBox_Segment->findData(QVariant(segmentID));
-  if (index != -1 && d->comboBox_Segment->currentIndex() != index)
-  {
-    d->comboBox_Segment->setCurrentIndex(index);
-  }
-}
 
 //--------------------------------------------------------------------------
-void qMRMLSegmentSelectorWidget::setNoneEnabled(bool enable)
+void qMRMLSegmentsEditorWidget::onPaintBrushClicked()
 {
-  Q_D(qMRMLSegmentSelectorWidget);
-  d->MRMLNodeComboBox_Segmentation->setNoneEnabled(enable);
+	Q_D(qMRMLSegmentsEditorWidget);
+
+ 
+	d->stackedWidget_options->setCurrentIndex(0);
+
+
+
+	if (d->pushButton_poly->isChecked())
+	{
+		d->pushButton_poly->setChecked(false);
+	}
+
 }
 
-//--------------------------------------------------------------------------
-bool qMRMLSegmentSelectorWidget::noneEnabled()const
+void qMRMLSegmentsEditorWidget::onPolyClicked()
 {
-  Q_D(const qMRMLSegmentSelectorWidget);
-  return d->MRMLNodeComboBox_Segmentation->noneEnabled();
+	Q_D(qMRMLSegmentsEditorWidget);
+	d->stackedWidget_options->setCurrentIndex(1);
+
+
+	if (d->pushButton_paintbrush->isChecked())
+	{
+		d->pushButton_paintbrush->setChecked(false);
+	}
+
 }

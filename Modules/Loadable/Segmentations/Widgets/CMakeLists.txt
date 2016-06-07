@@ -31,6 +31,8 @@ set(${KIT}_MOC_SRCS
   qMRMLSegmentationConversionParametersWidget.h
   qMRMLSegmentSelectorWidget.h
   qMRMLDoubleSpinBoxDelegate.h
+
+   qMRMLSegmentsEditorWidget.h
   )
 
 set(${KIT}_UI_SRCS

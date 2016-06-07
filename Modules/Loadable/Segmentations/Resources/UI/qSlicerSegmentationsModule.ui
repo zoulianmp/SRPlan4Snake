@@ -30,18 +30,12 @@
     <number>4</number>
    </property>
    <item>
-    <widget class="QFrame" name="EditorFrame">
+    <widget class="qMRMLSegmentsEditorWidget" name="EditorBox" native="true">
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>120</height>
+       <height>200</height>
       </size>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
      </property>
     </widget>
    </item>
@@ -69,8 +63,8 @@
     </layout>
    </item>
    <item>
-    <widget class="ctkCollapsibleButton" name="CollapsibleButton_Segments" native="true">
-     <property name="text" stdset="0">
+    <widget class="ctkCollapsibleButton" name="CollapsibleButton_Segments">
+     <property name="text">
       <string>Segments</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
@@ -158,6 +152,11 @@
    <class>qMRMLSegmentsTableView</class>
    <extends>QWidget</extends>
    <header>qMRMLSegmentsTableView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>qMRMLSegmentsEditorWidget</class>
+   <extends>QWidget</extends>
+   <header>qMRMLSegmentsEditorWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

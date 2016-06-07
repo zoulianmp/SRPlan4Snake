@@ -136,8 +136,6 @@ protected slots:
 
   //***********************************************************
   //********** Edit Tools
-  void onPolydrawSelectedSegments();
-  void onPaintbrushSelectedSegments();
 
 
 

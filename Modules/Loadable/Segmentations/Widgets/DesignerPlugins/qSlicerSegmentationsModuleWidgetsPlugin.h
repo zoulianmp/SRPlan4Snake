@@ -29,6 +29,7 @@
 #include "qMRMLSegmentationRepresentationsListViewPlugin.h"
 #include "qMRMLSegmentationConversionParametersWidgetPlugin.h"
 #include "qMRMLSegmentSelectorWidgetPlugin.h"
+#include "qMRMLSegmentsEditorWidgetPlugin.h"
 
 // \class Group the plugins in one library
 class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_PLUGINS_EXPORT qSlicerSegmentationsModuleWidgetsPlugin
@@ -42,7 +43,8 @@ public:
   QList<QDesignerCustomWidgetInterface*> customWidgets() const
     {
     QList<QDesignerCustomWidgetInterface *> plugins;
-    plugins << new qMRMLSegmentsTableViewPlugin << new qMRMLSegmentationRepresentationsListViewPlugin << new qMRMLSegmentationConversionParametersWidgetPlugin << new qMRMLSegmentSelectorWidgetPlugin;
+    plugins << new qMRMLSegmentsTableViewPlugin << new qMRMLSegmentationRepresentationsListViewPlugin << new qMRMLSegmentationConversionParametersWidgetPlugin 
+	       << new qMRMLSegmentSelectorWidgetPlugin << new qMRMLSegmentsEditorWidgetPlugin ;
     return plugins;
     }
 };

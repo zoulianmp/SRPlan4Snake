@@ -306,16 +306,7 @@ void qSlicerSegmentationsModuleWidget::init()
 	  this, SLOT(onSetDisplaySettings()));
 
 
-  //*************************************************************************
-  //*********Edit Tools for 
-  connect(d->pushButton_paintbrush, SIGNAL(clicked()),
-	  this, SLOT(onPaintbrushSelectedSegments()));   //Begin the Paintbrush editor Model for Selected Segmentations
-
-  connect(d->pushButton_poly, SIGNAL(clicked()),
-	  this, SLOT(onPolydrawSelectedSegments()));   //Begin the Polygon Draw editor Model for Selected Segmentations
-
-
-
+ 
 
 //  connect(d->MRMLNodeComboBox_OtherSegmentationOrRepresentationNode, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
 //    this, SLOT(setOtherSegmentationOrRepresentationNode(vtkMRMLNode*)) );
@@ -986,34 +977,3 @@ void qSlicerSegmentationsModuleWidget::onSetDisplaySettings()
 
 }
 
-
-
-void qSlicerSegmentationsModuleWidget::onPaintbrushSelectedSegments()
-{
-	Q_D(qSlicerSegmentationsModuleWidget);
-
-	bool check = d->pushButton_paintbrush->isChecked();
-
- 
-
-	if (d->pushButton_poly->isChecked())
-	{
-		d->pushButton_poly->setChecked(false);
-	}
-}
-
-
-
-
-void qSlicerSegmentationsModuleWidget::onPolydrawSelectedSegments()
-{
-	Q_D(qSlicerSegmentationsModuleWidget);
-
-  
-
-	if (d->pushButton_paintbrush->isChecked())
-	{
-		d->pushButton_paintbrush->setChecked(false);
-	}
-
-}

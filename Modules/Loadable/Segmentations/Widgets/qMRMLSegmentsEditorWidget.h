@@ -20,8 +20,8 @@
 
 ==============================================================================*/
 
-#ifndef __qMRMLSegmentSelectorWidget_h
-#define __qMRMLSegmentSelectorWidget_h
+#ifndef __qMRMLSegmentsEditorWidget_h
+#define __qMRMLSegmentsEditorWidget_h
 
 // MRMLWidgets includes
 #include "qMRMLWidget.h"
@@ -33,70 +33,79 @@
 #include <ctkVTKObject.h>
 
 class vtkMRMLNode;
-class qMRMLSegmentSelectorWidgetPrivate;
+class qMRMLSegmentsEditorWidgetPrivate;
 class QTableWidgetItem;
 class QItemSelection;
 
 /// \brief Qt widget for selecting a single segment from a segmentation.
 ///   If multiple segments are needed, then use \sa qMRMLSegmentsTableView instead in SimpleListMode
 /// \ingroup SlicerRt_QtModules_Segmentations_Widgets
-class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentSelectorWidget : public qMRMLWidget
+class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentsEditorWidget : public qMRMLWidget
 {
   Q_OBJECT
   QVTK_OBJECT
 
 public:
-  Q_PROPERTY(bool noneEnabled READ noneEnabled WRITE setNoneEnabled)
+  //Q_PROPERTY(bool noneEnabled READ noneEnabled WRITE setNoneEnabled)
 
 public:
   /// Constructor
-  explicit qMRMLSegmentSelectorWidget(QWidget* parent = 0);
+  explicit qMRMLSegmentsEditorWidget(QWidget* parent = 0);
   /// Destructor
-  virtual ~qMRMLSegmentSelectorWidget();
+  virtual ~qMRMLSegmentsEditorWidget();
 
   /// Get currently selected segmentation MRML node
-  Q_INVOKABLE vtkMRMLNode* currentNode();
+  //Q_INVOKABLE vtkMRMLNode* currentNode();
   /// Get currently selected segmentation node's ID
-  Q_INVOKABLE QString currentNodeID();
+ // Q_INVOKABLE QString currentNodeID();
 
   /// Get segment ID of selected segment
-  Q_INVOKABLE QString currentSegmentID();
+ // Q_INVOKABLE QString currentSegmentID();
 
   /// Return true if the "none" is in the segmentation node comboBox list, false otherwise.
   /// \sa noneEnabled, setNoneEnabled()
-  bool noneEnabled()const;
+ // bool noneEnabled()const;
   /// Set whether the "none" item should be in the segmentation node comboBox list or not.
   /// \sa noneEnabled, noneEnabled()
-  void setNoneEnabled(bool enable);
+ // void setNoneEnabled(bool enable);
+
+
+
+
+
 
 public slots:
   /// Set segmentation MRML node
-  Q_INVOKABLE void setCurrentNode(vtkMRMLNode* node);
+  //Q_INVOKABLE void setCurrentNode(vtkMRMLNode* node);
   /// Set segmentation MRML node by its ID
-  Q_INVOKABLE void setCurrentNodeID(const QString& nodeID);
+ // Q_INVOKABLE void setCurrentNodeID(const QString& nodeID);
 
   /// Get segment ID of selected segment
-  Q_INVOKABLE void setCurrentSegmentID(QString segmentID);
+//  Q_INVOKABLE void setCurrentSegmentID(QString segmentID);
+
+void onPaintBrushClicked();
+
+void onPolyClicked();
 
 protected slots:
   /// Handles changing of current segmentation MRML node
-  Q_INVOKABLE void onCurrentNodeChanged(vtkMRMLNode* node);
+  //Q_INVOKABLE void onCurrentNodeChanged(vtkMRMLNode* node);
   /// Handles changing of selection in the segment combobox
-  void onCurrentSegmentChanged(int index);
+  //void onCurrentSegmentChanged(int index);
 
   /// Populate segment combobox according to the segmentation node
-  void populateSegmentCombobox();
+//  void populateSegmentCombobox();
 
 signals:
-  void currentNodeChanged(vtkMRMLNode*);
-  void currentSegmentChanged(QString);
+//  void currentNodeChanged(vtkMRMLNode*);
+//  void currentSegmentChanged(QString);
 
 protected:
-  QScopedPointer<qMRMLSegmentSelectorWidgetPrivate> d_ptr;
+  QScopedPointer<qMRMLSegmentsEditorWidgetPrivate> d_ptr;
 
 private:
-  Q_DECLARE_PRIVATE(qMRMLSegmentSelectorWidget);
-  Q_DISABLE_COPY(qMRMLSegmentSelectorWidget);
+  Q_DECLARE_PRIVATE(qMRMLSegmentsEditorWidget);
+  Q_DISABLE_COPY(qMRMLSegmentsEditorWidget);
 };
 
 #endif
