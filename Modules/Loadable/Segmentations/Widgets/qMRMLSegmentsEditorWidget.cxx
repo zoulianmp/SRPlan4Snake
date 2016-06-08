@@ -75,6 +75,12 @@ void qMRMLSegmentsEditorWidgetPrivate::init()
 	  q, SLOT(onPolyClicked()));
 
 
+  QObject::connect(this->pushButton_threshold, SIGNAL(clicked()),
+	  q, SLOT(onThresholdClicked()));
+
+  QObject::connect(this->comboBox_wllist, SIGNAL(currentIndexChanged(int)),
+	  q, SLOT(onPredefinedWLChanged(int index)));
+  
 }
 
 
@@ -116,6 +122,12 @@ void qMRMLSegmentsEditorWidget::onPaintBrushClicked()
 		d->pushButton_poly->setChecked(false);
 	}
 
+	if (d->pushButton_threshold->isChecked())
+	{
+		d->pushButton_threshold->setChecked(false);
+	}
+
+
 }
 
 void qMRMLSegmentsEditorWidget::onPolyClicked()
@@ -128,5 +140,89 @@ void qMRMLSegmentsEditorWidget::onPolyClicked()
 	{
 		d->pushButton_paintbrush->setChecked(false);
 	}
+
+	if (d->pushButton_threshold->isChecked())
+	{
+		d->pushButton_threshold->setChecked(false);
+	}
+
+
+
+
+}
+//***************************************************************************
+//***********    Threshold Effect Panel**********************
+//***************************************************************************
+void qMRMLSegmentsEditorWidget::onThresholdClicked()
+{
+	Q_D(qMRMLSegmentsEditorWidget);
+	d->stackedWidget_options->setCurrentIndex(2);
+
+
+	if (d->pushButton_paintbrush->isChecked())
+	{
+		d->pushButton_paintbrush->setChecked(false);
+	}
+
+	if (d->pushButton_poly->isChecked())
+	{
+		d->pushButton_poly->setChecked(false);
+	}
+	
+
+
+}
+void qMRMLSegmentsEditorWidget::onPredefinedWLChanged(int index)
+{
+	Q_D(qMRMLSegmentsEditorWidget);
+	//The Default Slider Range= -1000,1000 HU
+
+	//AutoBody,Window Level 
+	int min = -350;
+	int max = 1000;
+
+	switch (index) 
+	{
+		case 0:
+			//AutoBody,Window Level 
+			 min = -350;
+			 max = 1000;
+			 break;
+		case 1:
+		 	 min = -350;
+			 max = 1000;
+			 break;
+	    case 2:
+			min = -350;
+			max = 1000;
+			break;   
+	    default:;
+	}
+
+	int level = (min + max) / 2;
+	int window = max - min;
+
+	//update GUI widget
+	d->RangeSlider_wl->setMinimumValue(min);
+	d->RangeSlider_wl->setMaximumValue(max);
+
+	d->spinBox_l->setValue(level);
+	d->spinBox_w->setValue(window);
+
+}
+void qMRMLSegmentsEditorWidget::onWindowChanged()
+{
+
+}
+
+void qMRMLSegmentsEditorWidget::onLevelChanged()
+{
+
+
+}
+
+void qMRMLSegmentsEditorWidget::onWLSliderChanged()
+{
+
 
 }
