@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>421</width>
-    <height>189</height>
+    <height>227</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,13 +20,13 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>80</y>
+     <y>100</y>
      <width>391</width>
-     <height>111</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="page_paintbrush_options">
     <widget class="QLabel" name="label_3">
@@ -380,14 +380,148 @@ p, li { white-space: pre-wrap; }
     </widget>
    </widget>
    <widget class="QWidget" name="page_threshould_options">
-    <widget class="qMRMLWindowLevelPanel" name="wlpanel" native="true">
+    <widget class="ctkRangeSlider" name="RangeSlider_wl">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>381</width>
-       <height>91</height>
+       <x>30</x>
+       <y>70</y>
+       <width>251</width>
+       <height>22</height>
       </rect>
+     </property>
+     <property name="minimum">
+      <number>-1000</number>
+     </property>
+     <property name="maximum">
+      <number>1000</number>
+     </property>
+     <property name="sliderPosition">
+      <number>0</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="invertedAppearance">
+      <bool>false</bool>
+     </property>
+     <property name="invertedControls">
+      <bool>false</bool>
+     </property>
+     <property name="minimumValue">
+      <number>-1000</number>
+     </property>
+     <property name="maximumValue">
+      <number>1000</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_w">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Window</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_w">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>40</y>
+       <width>91</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_l">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>40</y>
+       <width>31</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Level</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_l">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>40</y>
+       <width>81</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="wlApply">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>70</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Apply</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_wllist">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>10</y>
+       <width>161</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>3</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>AutoBody</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>SoftTissue</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Bone</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Lung</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Customized</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_predefined">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Predefined W/L</string>
      </property>
     </widget>
    </widget>
@@ -531,9 +665,9 @@ p, li { white-space: pre-wrap; }
  </widget>
  <customwidgets>
   <customwidget>
-   <class>qMRMLWindowLevelPanel</class>
-   <extends>QWidget</extends>
-   <header>qMRMLWindowLevelPanel.h</header>
+   <class>ctkRangeSlider</class>
+   <extends>QSlider</extends>
+   <header>ctkRangeSlider.h</header>
   </customwidget>
  </customwidgets>
  <resources>

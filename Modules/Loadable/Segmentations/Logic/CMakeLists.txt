@@ -14,6 +14,17 @@ set(${KIT}_SRCS
   qMRMLSegmentsEditorLogic.h
   qMRMLSegmentsEditorLogic.cxx
   
+  
+  vtkImageConnectivity.cxx
+  vtkImageErode.cxx
+  vtkImageFillROI.cxx
+  vtkImageLabelChange.cxx
+  vtkImageSlicePaint.cxx
+  vtkImageStash.cxx
+  vtkPichonFastMarching.cxx
+  vtkPichonFastMarchingPDF.cxx
+  
+    
   )
 
 set(${KIT}_TARGET_LIBRARIES

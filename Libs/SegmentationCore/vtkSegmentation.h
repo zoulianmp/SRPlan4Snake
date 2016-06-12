@@ -271,6 +271,12 @@ protected:
   /// with the given name, then it is postfixed by "_1"
   std::string GenerateUniqueSegmentId(std::string id);
 
+  //Arrange Segments Labels
+  //Arrange the Segments Lable, Eche Segment has a unique int Lable .
+  void ArrangeSegmentsLabels();
+
+
+
 protected:
   /// Callback function invoked when segment is modified.
   /// It calls Modified on the segmentation and rebuilds observations on the master representation of each segment

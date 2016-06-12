@@ -23,6 +23,8 @@ set(${KIT}_SRCS
   qMRMLSegmentsEditorWidget.h
   qMRMLSegmentsEditorWidget.cxx
   
+  qMRMLWindowLevelPanel.h
+  qMRMLWindowLevelPanel.cxx
   )
 
 set(${KIT}_MOC_SRCS
@@ -32,7 +34,8 @@ set(${KIT}_MOC_SRCS
   qMRMLSegmentSelectorWidget.h
   qMRMLDoubleSpinBoxDelegate.h
 
-   qMRMLSegmentsEditorWidget.h
+  qMRMLSegmentsEditorWidget.h
+  qMRMLWindowLevelPanel.h
   )
 
 set(${KIT}_UI_SRCS
@@ -42,6 +45,7 @@ set(${KIT}_UI_SRCS
   Resources/UI/qMRMLSegmentSelectorWidget.ui
   Resources/UI/qMRMLSegmentsEditorWidget.ui
   
+  Resources/UI/qMRMLWindowLevelPanel.ui
   )
 
 set(${KIT}_RESOURCES

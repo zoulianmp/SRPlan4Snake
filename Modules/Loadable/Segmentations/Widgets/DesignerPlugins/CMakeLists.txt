@@ -19,6 +19,9 @@ set(${KIT}_SRCS
   qMRMLSegmentsEditorWidgetPlugin.h
   qMRMLSegmentsEditorWidgetPlugin.cxx
   
+#  qMRMLWindowLevelPanelPlugin.h
+#  qMRMLWindowLevelPanelPlugin.cxx   
+  
   
   )
 
@@ -29,6 +32,9 @@ set(${KIT}_MOC_SRCS
   qMRMLSegmentationConversionParametersWidgetPlugin.h
   qMRMLSegmentSelectorWidgetPlugin.h
   qMRMLSegmentsEditorWidgetPlugin.h
+  
+ # qMRMLWindowLevelPanelPlugin.h 
+  
   )
 
 set(${KIT}_TARGET_LIBRARIES

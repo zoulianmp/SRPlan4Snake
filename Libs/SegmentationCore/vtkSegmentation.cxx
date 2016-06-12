@@ -214,6 +214,22 @@ bool vtkSegmentation::GetModifiedSinceRead()
   return false;
 }
 
+
+// Arrange the Segment Lable value
+void vtkSegmentation::ArrangeSegmentsLabels()
+{
+	int beginLable = 1; // the background is 0 for air
+	
+	// Remove observation of old master representation in all segments
+    for (SegmentMap::iterator segmentIt = this->Segments.begin(); segmentIt != this->Segments.end(); ++segmentIt)
+    {
+		segmentIt->second->SetLabel(beginLable);
+		beginLable ++;
+	  
+    }
+
+}
+  
 //---------------------------------------------------------------------------
 void vtkSegmentation::SetMasterRepresentationName(const char* representationName)
 {
@@ -417,6 +433,9 @@ bool vtkSegmentation::AddSegment(vtkSegment* segment, std::string segmentId/*=""
   const char* segmentIdChars = key.c_str();
   this->InvokeEvent(vtkSegmentation::SegmentAdded, (void*)segmentIdChars);
 
+  //Arrange the new Segments' Label;
+  this->ArrangeSegmentsLabels(); 
+  
   this->Modified();
 
   return true;
@@ -492,6 +511,9 @@ void vtkSegmentation::RemoveSegment(SegmentMap::iterator segmentIt)
   // Fire segment removed event
   this->InvokeEvent(vtkSegmentation::SegmentRemoved, (void*)segmentId.c_str());
 
+  //Arrange the new Segments' Label;
+  this->ArrangeSegmentsLabels(); 
+  
   this->Modified();
 }
 

@@ -98,6 +98,9 @@ public:
   vtkGetStringMacro(Name);
   vtkSetStringMacro(Name);
 
+  vtkGetMacro(Label, int);
+  vtkSetMacro(Label, int);
+
   vtkGetVector3Macro(DefaultColor, double);
   vtkSetVector3Macro(DefaultColor, double);
 
@@ -114,6 +117,8 @@ protected:
   /// This is the default identifier of the segment within segmentation, so needs to be unique within a segmentation
   char* Name;
 
+  int Label; //Used for Creating Segment 
+			 
   /// Default color
   /// Called default because this is only used initially indicating the original color of the segment,
   /// but then copies are made for display and this member variable has no effect on it afterwards.

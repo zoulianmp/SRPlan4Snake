@@ -90,10 +90,7 @@ void onPolyClicked();
 
 void onThresholdClicked();
 
-void onPredefinedWLChanged(int index);
-void onWindowChanged();
-void onLevelChanged();
-void onWLSliderChanged();
+
 
 protected slots:
   /// Handles changing of current segmentation MRML node

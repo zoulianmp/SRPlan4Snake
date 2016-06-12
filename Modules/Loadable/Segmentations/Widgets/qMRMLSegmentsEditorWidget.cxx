@@ -32,6 +32,7 @@
 // MRML includes
 #include <vtkMRMLLabelMapVolumeNode.h>
 
+#include "qMRMLWindowLevelPanel.h"
 // Qt includes
 #include <QDebug>
 
@@ -67,6 +68,13 @@ void qMRMLSegmentsEditorWidgetPrivate::init()
   Q_Q(qMRMLSegmentsEditorWidget);
   this->setupUi(q);
 
+  qMRMLWindowLevelPanel* wlpanel = new qMRMLWindowLevelPanel(this->page_threshould_options);
+
+  wlpanel->setLayout(this->page_threshould_options->layout());
+  
+
+
+  
   // Make connections
   QObject::connect( this->pushButton_paintbrush, SIGNAL(clicked()),
     q, SLOT(onPaintBrushClicked( )) );
@@ -78,8 +86,8 @@ void qMRMLSegmentsEditorWidgetPrivate::init()
   QObject::connect(this->pushButton_threshold, SIGNAL(clicked()),
 	  q, SLOT(onThresholdClicked()));
 
-  QObject::connect(this->comboBox_wllist, SIGNAL(currentIndexChanged(int)),
-	  q, SLOT(onPredefinedWLChanged(int index)));
+ 
+  
   
 }
 
@@ -169,60 +177,7 @@ void qMRMLSegmentsEditorWidget::onThresholdClicked()
 		d->pushButton_poly->setChecked(false);
 	}
 	
-
-
-}
-void qMRMLSegmentsEditorWidget::onPredefinedWLChanged(int index)
-{
-	Q_D(qMRMLSegmentsEditorWidget);
-	//The Default Slider Range= -1000,1000 HU
-
-	//AutoBody,Window Level 
-	int min = -350;
-	int max = 1000;
-
-	switch (index) 
-	{
-		case 0:
-			//AutoBody,Window Level 
-			 min = -350;
-			 max = 1000;
-			 break;
-		case 1:
-		 	 min = -350;
-			 max = 1000;
-			 break;
-	    case 2:
-			min = -350;
-			max = 1000;
-			break;   
-	    default:;
-	}
-
-	int level = (min + max) / 2;
-	int window = max - min;
-
-	//update GUI widget
-	d->RangeSlider_wl->setMinimumValue(min);
-	d->RangeSlider_wl->setMaximumValue(max);
-
-	d->spinBox_l->setValue(level);
-	d->spinBox_w->setValue(window);
-
-}
-void qMRMLSegmentsEditorWidget::onWindowChanged()
-{
-
-}
-
-void qMRMLSegmentsEditorWidget::onLevelChanged()
-{
-
-
-}
-
-void qMRMLSegmentsEditorWidget::onWLSliderChanged()
-{
+	
 
 
 }

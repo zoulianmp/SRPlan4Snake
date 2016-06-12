@@ -1,5 +1,11 @@
 <RCC>
   <qresource>
+    <file>Icons/WindowLevelPreset-User.png</file>
+    <file>Icons/WindowLevelPreset-Abdomen.png</file>
+    <file>Icons/WindowLevelPreset-Brain.png</file>
+    <file>Icons/WindowLevelPreset-CT-air.png</file>
+    <file>Icons/WindowLevelPreset-CT-bone.png</file>
+    <file>Icons/WindowLevelPreset-Lung.png</file>
     <file>Icons/Threshold.png</file>
     <file>Icons/brush_shape_round.png</file>
     <file>Icons/brush_shape_square.png</file>
