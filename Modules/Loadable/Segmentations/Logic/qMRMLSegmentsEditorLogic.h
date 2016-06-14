@@ -82,12 +82,13 @@ public:
 	
 protected:
 
-/*
+
 	qMRMLSegmentsEditorLogic();
 	virtual ~qMRMLSegmentsEditorLogic();
 
 	virtual void SetMRMLSceneInternal(vtkMRMLScene * newScene);
 
+	
 	///
 	/// process logic events
 	virtual void ProcessMRMLLogicsEvents(vtkObject * caller,
@@ -95,6 +96,7 @@ protected:
 		void * callData);
 	void ProcessMRMLLogicsEvents();
 
+	/*
 	
 	bool                        AddingSliceModelNodes;
 	bool                        Initialized;

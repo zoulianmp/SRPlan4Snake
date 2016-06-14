@@ -52,13 +52,6 @@ Version:   $Revision$
 
 //----------------------------------------------------------------------------
 // Convenient macros
-#ifndef max
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
-
-#ifndef min
-#define min(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
 
 
 //----------------------------------------------------------------------------
@@ -78,10 +71,7 @@ qMRMLSegmentsEditorLogic::~qMRMLSegmentsEditorLogic()
 
 //----------------------------------------------------------------------------
 // TODO: Remove from API
-bool qMRMLSegmentsEditorLogic::IsInitialized()
-{
-	return this->Initialized;
-}
+
 
 //----------------------------------------------------------------------------
 // TODO: Remove from API
@@ -282,7 +272,7 @@ void qMRMLSegmentsEditorLogic::SetCurrentEffect(EffectMode effect)
 	this->CurrentEffect = effect;
 }
 
-vtkMRMLSliceCompositeNode * qMRMLSegmentsEditorLogic::GetCompositeNode(char * layoutName = "Red")
+vtkMRMLSliceCompositeNode * qMRMLSegmentsEditorLogic::GetCompositeNode(char * layoutName )
 {
 
 	int count = this->GetMRMLScene()->GetNumberOfNodesByClass("vtkMRMLSliceCompositeNode");
