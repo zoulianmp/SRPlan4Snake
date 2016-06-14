@@ -252,3 +252,48 @@ void qMRMLSegmentsEditorLogic::ProcessMRMLLogicsEvents()
 	*/
 }
 
+
+
+
+void qMRMLSegmentsEditorLogic::SetCurrentSegment(vtkSegment * segment)
+{
+	if (segment != NULL)
+	{
+		this->CurrentSegment = segment;
+	}
+}
+
+void qMRMLSegmentsEditorLogic::SetCurrentSegmentation(vtkSegmentation* segmentation)
+{
+	if (segmentation != NULL)
+	{
+		this->CurrentSegmentation = segmentation;
+	}
+}
+
+qMRMLSegmentsEditorLogic::EffectMode qMRMLSegmentsEditorLogic::GetCurrentEffect()
+{
+	return this->CurrentEffect;
+
+}
+
+void qMRMLSegmentsEditorLogic::SetCurrentEffect(EffectMode effect)
+{
+	this->CurrentEffect = effect;
+}
+
+vtkMRMLSliceCompositeNode * qMRMLSegmentsEditorLogic::GetCompositeNode(char * layoutName = "Red")
+{
+
+	int count = this->GetMRMLScene()->GetNumberOfNodesByClass("vtkMRMLSliceCompositeNode");
+	for (int i = 0; i < count; i++)
+	{
+		vtkMRMLNode * compNode = this->GetMRMLScene()->GetNthNodeByClass(i, "vtkMRMLSliceCompositeNode");
+
+		if (vtkMRMLSliceCompositeNode::SafeDownCast(compNode)->GetLayoutName() == layoutName)
+		{
+			return vtkMRMLSliceCompositeNode::SafeDownCast(compNode);
+		}
+		
+	}
+}

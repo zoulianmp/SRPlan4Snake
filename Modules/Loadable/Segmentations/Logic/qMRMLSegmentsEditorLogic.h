@@ -15,6 +15,18 @@ Version:   $Revision: 18866
 #ifndef __qMRMLSegmentsEditorLogic_h
 #define __qMRMLSegmentsEditorLogic_h
 
+
+//QT include 
+#include "QString.h"
+
+
+
+//Segmentation Include
+#include "vtkSegmentation.h"
+#include "vtkSegment.h"
+
+#include "vtkMRMLSliceCompositeNode.h"
+
 // MRMLLogic includes
 #include "vtkMRMLAbstractLogic.h"
 #include "vtkSRPlanSegmentationsModuleLogicExport.h"
@@ -41,16 +53,8 @@ class vtkTransform;
 
 /// \brief Slicer logic class for slice manipulation.
 ///
-/// This class manages the logic associated with display of slice windows
-/// (but not the GUI).  Features of the class include:
-///  -- a back-to-front list of MrmlVolumes to be displayed
-///  -- a compositing mode for each volume layer (opacity, outline, glyph, checkerboard, etc)
-///  -- each layer is required to provide an RGBA image in the space defined by the vtkMRMLSliceNode
-///
-/// This class manages internal vtk pipelines that create an output vtkImageData
-/// which can be used by the vtkSlicerSliceGUI class to display the resulting
-/// composite image or it can be used as a texture map in a vtkSlicerView.
-/// This class can also be used for resampling volumes for further computation.
+//
+/// Editor Logic for Image Volume Sgementation 
 class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT qMRMLSegmentsEditorLogic : public vtkMRMLAbstractLogic
 {
 public:
@@ -58,19 +62,27 @@ public:
 	static qMRMLSegmentsEditorLogic *New();
 	vtkTypeMacro(qMRMLSegmentsEditorLogic, vtkMRMLAbstractLogic);
 	
+	//The enum type for EffectMode
+	enum EffectMode { PaintBrush, FreeDraw, Threshold };
 
 	/// Convenient methods allowing to initialize SliceLogic given \a newSliceNode
 	/// \note This method should be used when the Logic is "shared" between two widgets
 	void Initialize(vtkMRMLSliceNode* newSliceNode);
 	bool IsInitialized();
 
-	/// Set / Get SliceLogic name
-	vtkSetStringMacro(Name);
-	vtkGetStringMacro(Name);
+	
 
+	void SetCurrentSegment(vtkSegment * segment);
+	void SetCurrentSegmentation(vtkSegmentation* segmentation);
+
+	EffectMode GetCurrentEffect();
+	void SetCurrentEffect(EffectMode effect);
+
+	vtkMRMLSliceCompositeNode * GetCompositeNode(char * layoutName = "Red");
 	
 protected:
 
+/*
 	qMRMLSegmentsEditorLogic();
 	virtual ~qMRMLSegmentsEditorLogic();
 
@@ -108,6 +120,18 @@ protected:
 	vtkMRMLModelDisplayNode *     SliceModelDisplayNode;
 	vtkMRMLLinearTransformNode *  SliceModelTransformNode;
 	double                        SliceSpacing[3];
+*/
+	//Editor Parameters for Edit LabelmapVolume
+	int CurrentLable; //Current Label value for structure
+
+	
+
+	EffectMode CurrentEffect;
+
+	QString PropagationMode;
+
+	vtkSegment * CurrentSegment;
+	vtkSegmentation * CurrentSegmentation;
 
 private:
 
