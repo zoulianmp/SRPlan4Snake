@@ -11,8 +11,8 @@ set(${KIT}_INCLUDE_DIRECTORIES
 set(${KIT}_SRCS
   vtkSlicer${MODULE_NAME}ModuleLogic.cxx
   vtkSlicer${MODULE_NAME}ModuleLogic.h
-  qMRMLSegmentsEditorLogic.h
-  qMRMLSegmentsEditorLogic.cxx
+//  qMRMLSegmentsEditorLogic.h
+//  qMRMLSegmentsEditorLogic.cxx
   
   
   vtkImageConnectivity.cxx

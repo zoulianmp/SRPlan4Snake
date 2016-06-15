@@ -6,6 +6,7 @@ set(${KIT}_EXPORT_DIRECTIVE "Q_SRPlan_MODULE_${MODULE_NAME_UPPER}_WIDGETS_EXPORT
 
 set(${KIT}_INCLUDE_DIRECTORIES
   ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
+  ${MRMLLogic__INCLUDE_DIRS}
   )
 
 set(${KIT}_SRCS
@@ -23,6 +24,9 @@ set(${KIT}_SRCS
   qMRMLSegmentsEditorWidget.h
   qMRMLSegmentsEditorWidget.cxx
   
+  qMRMLSegmentsEditorLogic.h
+  qMRMLSegmentsEditorLogic.cxx
+  
   qMRMLWindowLevelPanel.h
   qMRMLWindowLevelPanel.cxx
   )
@@ -35,6 +39,8 @@ set(${KIT}_MOC_SRCS
   qMRMLDoubleSpinBoxDelegate.h
 
   qMRMLSegmentsEditorWidget.h
+  qMRMLSegmentsEditorLogic.h
+  
   qMRMLWindowLevelPanel.h
   )
 
@@ -54,6 +60,7 @@ set(${KIT}_RESOURCES
 
 set(${KIT}_TARGET_LIBRARIES
   vtkSRPlanSegmentationsModuleMRML
+  ${MRMLLogic}
   )
 
 SET (${KIT}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "" FORCE)

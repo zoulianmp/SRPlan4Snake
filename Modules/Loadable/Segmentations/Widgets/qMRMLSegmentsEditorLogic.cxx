@@ -15,6 +15,10 @@ Version:   $Revision$
 // MRMLLogic includes
 #include "qMRMLSegmentsEditorLogic.h"
 #include "vtkMRMLSliceLayerLogic.h"
+#include "qSlicerApplication.h"
+#include "qSlicerLayoutManager.h"
+#include "vtkMRMLSliceLogic.h"
+#include "vtkMRMLApplicationLogic.h"
 
 // MRML includes
 #include <vtkEventBroker.h>
@@ -60,7 +64,9 @@ vtkStandardNewMacro(qMRMLSegmentsEditorLogic);
 //----------------------------------------------------------------------------
 qMRMLSegmentsEditorLogic::qMRMLSegmentsEditorLogic()
 {
-	
+	vtkMRMLApplicationLogic * appLogic = this->GetMRMLApplicationLogic();
+	this->PropagationMode = vtkMRMLApplicationLogic::BackgroundLayer | vtkMRMLApplicationLogic::LabelLayer;
+
 }
 
 //----------------------------------------------------------------------------
@@ -286,4 +292,105 @@ vtkMRMLSliceCompositeNode * qMRMLSegmentsEditorLogic::GetCompositeNode(char * la
 		}
 		
 	}
+}
+
+
+qMRMLSliceWidget * qMRMLSegmentsEditorLogic::GetSliceWidget(char * layoutName)
+{
+	qSlicerLayoutManager * layoutmanager = qSlicerApplication::application()->layoutManager();
+
+	return layoutmanager->sliceWidget(layoutName);
+
+}
+
+vtkMRMLSliceLogic * qMRMLSegmentsEditorLogic::GetSliceLogic(char * layoutName)
+{
+	qMRMLSliceWidget * sliceWidget = this->GetSliceWidget(layoutName);
+	return sliceWidget->sliceLogic();
+
+}
+
+vtkMRMLVolumeNode * qMRMLSegmentsEditorLogic::GetBackgroundVolume()
+{
+	vtkMRMLSliceCompositeNode* compNode = this->GetCompositeNode();
+	if (compNode)
+	{
+		char* backgroundID = compNode->GetBackgroundVolumeID();
+		if (backgroundID)
+		{
+			return vtkMRMLVolumeNode::SafeDownCast(
+				this->GetMRMLScene()->GetNodeByID(backgroundID));
+		}
+	}
+
+}
+
+vtkImageData * qMRMLSegmentsEditorLogic::GetBackgroundImage()
+{
+	vtkMRMLVolumeNode * volumeNode = this->GetBackgroundVolume();
+	if (volumeNode)
+	{
+		return volumeNode->GetImageData();
+	}
+
+
+}
+
+char * qMRMLSegmentsEditorLogic::GetBackgroundID()
+{
+	vtkMRMLSliceCompositeNode* compNode = this->GetCompositeNode();
+	if (compNode)
+	{
+		return compNode->GetBackgroundVolumeID();
+	}
+
+}
+
+
+vtkMRMLVolumeNode * qMRMLSegmentsEditorLogic::GetLabelVolume()
+{
+	vtkMRMLSliceCompositeNode* compNode = this->GetCompositeNode();
+	if (compNode)
+	{
+		char* labelID = compNode->GetLabelVolumeID();
+		if (labelID)
+		{
+			return vtkMRMLVolumeNode::SafeDownCast(
+				this->GetMRMLScene()->GetNodeByID(labelID));
+		}
+	}
+}
+
+
+vtkImageData * qMRMLSegmentsEditorLogic::GetLabelImage()
+{
+	vtkMRMLVolumeNode * volumeNode = this->GetLabelVolume();
+	if (volumeNode)
+	{
+		return volumeNode->GetImageData();
+	}
+}
+
+
+
+char * qMRMLSegmentsEditorLogic::GetLabelID()
+{
+	vtkMRMLSliceCompositeNode* compNode = this->GetCompositeNode();
+	if (compNode)
+	{
+		return compNode->GetLabelVolumeID();
+	}
+}
+
+
+void qMRMLSegmentsEditorLogic::SetPropagateMode(int Mode)
+{
+	this->PropagationMode = Mode;
+}
+
+
+int qMRMLSegmentsEditorLogic::GetPropagateMode()
+{
+	return this->PropagationMode;
+
 }

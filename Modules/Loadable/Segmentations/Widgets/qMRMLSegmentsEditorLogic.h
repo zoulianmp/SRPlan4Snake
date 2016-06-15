@@ -27,9 +27,14 @@ Version:   $Revision: 18866
 
 #include "vtkMRMLSliceCompositeNode.h"
 
+// qMRML includes
+#include "qMRMLSliceWidget.h"
+
+#include "qSRPlanSegmentationsModuleWidgetsExport.h"
+
 // MRMLLogic includes
 #include "vtkMRMLAbstractLogic.h"
-#include "vtkSRPlanSegmentationsModuleLogicExport.h"
+
 // STD includes
 #include <vector>
 
@@ -55,7 +60,7 @@ class vtkTransform;
 ///
 //
 /// Editor Logic for Image Volume Sgementation 
-class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT qMRMLSegmentsEditorLogic : public vtkMRMLAbstractLogic
+class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentsEditorLogic : public vtkMRMLAbstractLogic
 {
 public:
 	/// The Usual VTK class functions
@@ -80,6 +85,22 @@ public:
 
 	vtkMRMLSliceCompositeNode * GetCompositeNode(char * layoutName = "Red");
 	
+	qMRMLSliceWidget * GetSliceWidget(char * layoutName = "Red");
+	vtkMRMLSliceLogic * GetSliceLogic(char * layoutName = "Red");
+
+	//Background Volume Related
+	vtkMRMLVolumeNode * GetBackgroundVolume();
+	vtkImageData * GetBackgroundImage();
+	char * GetBackgroundID();
+
+	//Label Volume Related
+	vtkMRMLVolumeNode * GetLabelVolume();
+	vtkImageData * GetLabelImage();
+	char * GetLabelID();
+
+	void SetPropagateMode( int Mode);
+	int GetPropagateMode();
+
 protected:
 
 
@@ -130,7 +151,16 @@ protected:
 
 	EffectMode CurrentEffect;
 
-	QString PropagationMode;
+	//  enum Layers
+    //  {
+	//    LabelLayer = 0x1,
+	//	  ForegroundLayer = 0x2,
+	//	  BackgroundLayer = 0x4,
+	//	  AllLayers = LabelLayer | ForegroundLayer | BackgroundLayer
+	//   };
+	// Used to index the PropagationMode
+
+	int PropagationMode;
 
 	vtkSegment * CurrentSegment;
 	vtkSegmentation * CurrentSegmentation;
