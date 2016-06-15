@@ -101,6 +101,24 @@ public:
 	void SetPropagateMode( int Mode);
 	int GetPropagateMode();
 
+	void SetActiveVolumes(const char * masterVolume, const char* mergeVolume = "");
+	void PropagateVolumeSelection();
+
+	int  GetLabel( );
+	void SetLabel(int label);
+	void BackupLabel();
+	void RestoreLabel();
+	void ToggleLabel();
+
+
+	bool IsEraseEffectEnabled();
+	void SetEraseEffectEnabled(bool enabled);
+
+	void ToggleCrosshair();
+	void ToggleForegroundBackground();
+	void markVolumeNodeAsModified(vtkMRMLVolumeNode* volumeNode);
+
+
 protected:
 
 
@@ -146,7 +164,7 @@ protected:
 */
 	//Editor Parameters for Edit LabelmapVolume
 	int CurrentLable; //Current Label value for structure
-
+	int StoredLabel; //Used for Restore Label Value
 	
 
 	EffectMode CurrentEffect;

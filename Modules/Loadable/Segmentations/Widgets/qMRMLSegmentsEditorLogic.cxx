@@ -19,6 +19,8 @@ Version:   $Revision$
 #include "qSlicerLayoutManager.h"
 #include "vtkMRMLSliceLogic.h"
 #include "vtkMRMLApplicationLogic.h"
+#include "vtkMRMLSelectionNode.h"
+#include "vtkSlicerApplicationLogic.h"
 
 // MRML includes
 #include <vtkEventBroker.h>
@@ -52,6 +54,8 @@ Version:   $Revision$
 #include <vtkTransform.h>
 #include <vtkVersion.h>
 
+#include "vtkPointData.h"
+
 // STD includes
 
 //----------------------------------------------------------------------------
@@ -66,7 +70,8 @@ qMRMLSegmentsEditorLogic::qMRMLSegmentsEditorLogic()
 {
 	vtkMRMLApplicationLogic * appLogic = this->GetMRMLApplicationLogic();
 	this->PropagationMode = vtkMRMLApplicationLogic::BackgroundLayer | vtkMRMLApplicationLogic::LabelLayer;
-
+	this->StoredLabel = 0;
+	this->CurrentLable = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -392,5 +397,146 @@ void qMRMLSegmentsEditorLogic::SetPropagateMode(int Mode)
 int qMRMLSegmentsEditorLogic::GetPropagateMode()
 {
 	return this->PropagationMode;
+
+}
+
+void qMRMLSegmentsEditorLogic::SetActiveVolumes(const char * masterVolume, const char * mergeVolume)
+{
+	vtkMRMLVolumeNode * masterNode=NULL, *mergeNode=NULL;
+	if (masterVolume)
+	{
+		masterNode = vtkMRMLVolumeNode::SafeDownCast(this->GetMRMLScene()->GetNodeByID(masterVolume));
+
+	}
+	if (mergeVolume)
+	{
+		mergeNode = vtkMRMLVolumeNode::SafeDownCast(this->GetMRMLScene()->GetNodeByID(mergeVolume));
+
+	}
+
+	vtkMRMLSelectionNode * selectionNode = this->GetMRMLApplicationLogic()->GetSelectionNode();
+
+	selectionNode->SetReferenceActiveVolumeID(masterNode->GetID());
+
+	if (mergeNode)
+	{
+		selectionNode->SetReferenceActiveLabelVolumeID(mergeNode->GetID());
+	}
+
+	this->PropagateVolumeSelection();
+}
+
+void qMRMLSegmentsEditorLogic::PropagateVolumeSelection()
+{
+	vtkSlicerApplicationLogic::SafeDownCast(this->GetMRMLApplicationLogic())->PropagateVolumeSelection(this->GetPropagateMode(),0);
+
+}
+
+int qMRMLSegmentsEditorLogic::GetLabel()
+{
+	return this->CurrentLable;
+}
+
+
+void qMRMLSegmentsEditorLogic::SetLabel(int label)
+{
+	this->CurrentLable = label;
+}
+
+void qMRMLSegmentsEditorLogic::BackupLabel()
+{
+ 
+	this->StoredLabel = this->CurrentLable; 
+
+}
+
+void qMRMLSegmentsEditorLogic::RestoreLabel()
+{
+	if (this->StoredLabel)
+	{
+		this->CurrentLable = this->StoredLabel;
+	}
+	
+
+}
+
+void qMRMLSegmentsEditorLogic::ToggleLabel()
+{
+
+}
+
+
+bool qMRMLSegmentsEditorLogic::IsEraseEffectEnabled()
+{
+	return this->CurrentLable == 0;
+
+
+}
+void qMRMLSegmentsEditorLogic::SetEraseEffectEnabled( bool enabled)
+{
+	if (enabled & !this->IsEraseEffectEnabled())
+	{
+		this->BackupLabel();
+		this->SetLabel(0);
+	}
+	else if (!enabled & this->IsEraseEffectEnabled())
+	{
+		this->RestoreLabel();
+	}
+}
+
+void qMRMLSegmentsEditorLogic::ToggleCrosshair()
+{
+	vtkMRMLCrosshairNode*  crosshairNode = vtkMRMLCrosshairNode::SafeDownCast(
+		                   this->GetMRMLScene()->GetNthNodeByClass(0, "vtkMRMLSliceCompositeNode"));
+
+	if (crosshairNode)
+	{
+		if (crosshairNode->GetCrosshairMode() == 0)
+		{
+			crosshairNode->SetCrosshairMode(1);
+		}
+		else
+		{
+			crosshairNode->SetCrosshairMode(0);
+		}
+
+	}
+}
+
+//"""Swap the foreground and background volumes for all composite nodes in the scene"""
+void qMRMLSegmentsEditorLogic::ToggleForegroundBackground()
+{
+
+	int count = this->GetMRMLScene()->GetNumberOfNodesByClass("vtkMRMLSliceCompositeNode");
+	for (int i = 0; i < count; i++)
+	{
+		vtkMRMLSliceCompositeNode * compNode = vtkMRMLSliceCompositeNode::SafeDownCast(
+			          this->GetMRMLScene()->GetNthNodeByClass(i, "vtkMRMLSliceCompositeNode"));
+
+		char * oldForeground = compNode->GetForegroundVolumeID();
+
+		compNode->SetForegroundVolumeID(compNode->GetBackgroundVolumeID());
+		compNode->SetBackgroundVolumeID(oldForeground);
+
+	}
+
+}
+
+
+void qMRMLSegmentsEditorLogic::markVolumeNodeAsModified(vtkMRMLVolumeNode* volumeNode)
+{
+	if (volumeNode->GetImageDataConnection())
+	{
+		volumeNode->GetImageDataConnection()->GetProducer()->Update();
+	}
+
+	vtkPointData *pointData = volumeNode->GetImageData()->GetPointData();
+	if (pointData->GetScalars())
+	{
+		pointData->GetScalars()->Modified();
+	}
+	volumeNode->GetImageData()->Modified();
+	volumeNode->Modified();
 
 }
