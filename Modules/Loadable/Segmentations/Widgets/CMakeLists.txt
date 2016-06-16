@@ -29,6 +29,9 @@ set(${KIT}_SRCS
   
   qMRMLWindowLevelPanel.h
   qMRMLWindowLevelPanel.cxx
+  
+  qMRMLEffect.h
+  qMRMLEffect.cxx
   )
 
 set(${KIT}_MOC_SRCS
@@ -42,6 +45,7 @@ set(${KIT}_MOC_SRCS
   qMRMLSegmentsEditorLogic.h
   
   qMRMLWindowLevelPanel.h
+  qMRMLEffect.h
   )
 
 set(${KIT}_UI_SRCS
