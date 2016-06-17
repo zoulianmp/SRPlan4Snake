@@ -21,10 +21,29 @@
 #include "vtkIdTypeArray.h"
 #include "vtkIntArray.h"
 
+//Editor 
+#include "qMRMLSegmentsEditorLogic.h"
+
+
+
+#include "qMRMLSliceWidget.h"
+#include "vtkMRMLSliceLogic.h"
+#include "qMRMLSliceView.h"
+
 class vtkMRMLScene;
 
 
 // VTK includes
+
+#include <vtkRenderer.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderWindow.h>
+
+#include <vtkActorCollection.h>
+#include <vtkActor.h>
+#include <vtkUnsignedLongArray.h>
+
+
 #include <vtkObject.h>
 #include <vtkSmartPointer.h>
 #include <vtkWeakPointer.h>
@@ -62,6 +81,10 @@ if a subclass provides a list of scope options then a selection menu will be pro
         Visible
     };
 
+  static void SetSliceWidget(qMRMLSliceWidget* sliceWidget);
+  static void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);
+  static void ProcessEvent(vtkObject *caller, unsigned long event, void *clientData, void *callData);
+  static void AbortEvent(unsigned long event);
 
 public:
 
@@ -78,10 +101,35 @@ protected:
 
   
   qMRMLEffect();
+  qMRMLEffect(qMRMLSliceWidget* sliceWidget);
   /// critical to have a virtual destructor!
   ~qMRMLEffect();
   qMRMLEffect(const qMRMLEffect&);
   void operator=(const qMRMLEffect&);
+
+
+
+  static qMRMLSliceWidget* sliceWidget;
+  static vtkMRMLSliceLogic* sliceLogic;
+  static qMRMLSliceView * sliceView;
+
+  static vtkRenderer * renderer;
+  static vtkRenderWindow * renderWindow;
+  static vtkRenderWindowInteractor * interactor;
+
+  static qMRMLSegmentsEditorLogic* editorLogic;
+
+  vtkActorCollection * actors;
+
+  char * actionState;
+
+  static vtkUnsignedLongArray * interactorObserverTags;
+
+  // the events set , effect needs to processe
+  vtkIntArray *events;
+
+
+
 
 
  };
