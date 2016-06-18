@@ -20,10 +20,11 @@
 #include "vtkObserverManager.h"
 #include "vtkIdTypeArray.h"
 #include "vtkIntArray.h"
+#include "vtkImageSlicePaint.h"
 
 //Editor 
 #include "qMRMLSegmentsEditorLogic.h"
-
+#include "vtkMRMLSliceLayerLogic.h"
 
 
 #include "qMRMLSliceWidget.h"
@@ -81,15 +82,50 @@ if a subclass provides a list of scope options then a selection menu will be pro
         Visible
     };
 
-  static void SetSliceWidget(qMRMLSliceWidget* sliceWidget);
-  static void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);
-  static void ProcessEvent(vtkObject *caller, unsigned long event, void *clientData, void *callData);
-  static void AbortEvent(unsigned long event);
+  void SetSliceWidget(qMRMLSliceWidget* sliceWidget);
+  void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);
+
+  static void EffectEventCallback(vtkObject *caller, unsigned long event, void *clientData, void *callData);
+
+  virtual void ProcessEvent(vtkObject *caller, unsigned long event,void *callData);
+  void AbortEvent(unsigned long event);
+
+  void CursorOff();
+  void CursorOn();
+
+  //clean up actors and observers
+  void CleanUp();
+
+  void RASToXY(float* rasPoint, float * xy);
+  void RASToXYZ(float* rasPoint, float *xyz);
+
+  void XYToRAS(float* xyPoint, float * ras);
+  void LayerXYToIJK(vtkMRMLSliceLayerLogic * layerLogic, float * xyPoint, int * IJK);
+  void BackgroundXYToIJK(float* xyPoint, int * IJK);
+  void LabelXYToIJK(float * xyPoint, int * IJK);
+  int  LabelAtXY(float * xyPoint);
+  void XYZToRAS(float *xyzPoint, float * ras);
+
+  float * GetPaintColor(); //get the rgba
+  vtkImageData* GetScopedLayer(vtkMRMLSliceLayerLogic * layerLogic);
+
+  vtkImageData* GetScopedBackground();
+
+  vtkImageData*  GetScopedLabelInput();
+
+  vtkImageData*  GetScopedLabelOutput();
+
+  void ApplyScopedLabel();
+
+  //Corners' order: TopLeft(ijkCorners[0]),TopRight(ijkCorners[1]),BottomLeft(ijkCorners[2]),BottomRight(ijkCorners[3])
+  void GetVisibleCorners(vtkMRMLSliceLayerLogic * layerLogic, QList<int*> * out_ijkCorners );
+
+
 
 public:
 
 
-	ScopeOption EffectOption;
+	ScopeOption effectScope;
 
 
 
@@ -109,28 +145,33 @@ protected:
 
 
 
-  static qMRMLSliceWidget* sliceWidget;
-  static vtkMRMLSliceLogic* sliceLogic;
-  static qMRMLSliceView * sliceView;
+  qMRMLSliceWidget* sliceWidget;
+  vtkMRMLSliceLogic* sliceLogic;
+  qMRMLSliceView * sliceView;
 
-  static vtkRenderer * renderer;
-  static vtkRenderWindow * renderWindow;
-  static vtkRenderWindowInteractor * interactor;
+  vtkRenderer * renderer;
+  vtkRenderWindow * renderWindow;
+  vtkRenderWindowInteractor * interactor;
 
-  static qMRMLSegmentsEditorLogic* editorLogic;
+  qMRMLSegmentsEditorLogic* editorLogic;
 
   vtkActorCollection * actors;
 
   char * actionState;
 
-  static vtkUnsignedLongArray * interactorObserverTags;
+  
+  vtkUnsignedLongArray * interactorObserverTags;
+
+  vtkUnsignedLongArray * sliceNodeTags;
 
   // the events set , effect needs to processe
   vtkIntArray *events;
 
+  QCursor savedCursor;
 
-
-
+  //instance variables used internally buffer for result of scoped editing
+  vtkImageData* scopedImageBuffer;
+  vtkImageSlicePaint * scopedSlicePaint;
 
  };
 
