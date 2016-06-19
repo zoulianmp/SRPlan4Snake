@@ -94,7 +94,7 @@ if a subclass provides a list of scope options then a selection menu will be pro
   void CursorOn();
 
   //clean up actors and observers
-  void CleanUp();
+  virtual void CleanUp();
 
   void RASToXY(float* rasPoint, float * xy);
   void RASToXYZ(float* rasPoint, float *xyz);
@@ -170,8 +170,8 @@ protected:
   QCursor savedCursor;
 
   //instance variables used internally buffer for result of scoped editing
-  vtkImageData* scopedImageBuffer;
-  vtkImageSlicePaint * scopedSlicePaint;
+  vtkImageData* scopedImageBuffer;   // also as extractImage 
+  vtkImageSlicePaint * scopedSlicePaint; //used for painter
 
  };
 

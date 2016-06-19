@@ -33,6 +33,20 @@ set(${KIT}_SRCS
   
   qMRMLEffect.h
   qMRMLEffect.cxx
+    
+  qMRMLThresholdEffect.h
+  qMRMLThresholdEffect.cxx
+  
+  
+  qMRMLLabelEffect.h
+  qMRMLLabelEffect.cxx
+  
+  qMRMLPaintEffect.h
+  qMRMLPaintEffect.cxx
+  
+  qMRMLDrawEffect.h
+  qMRMLDrawEffect.cxx
+  
   )
 
 set(${KIT}_MOC_SRCS
@@ -47,6 +61,12 @@ set(${KIT}_MOC_SRCS
   
   qMRMLWindowLevelPanel.h
   qMRMLEffect.h
+
+  qMRMLThresholdEffect.h
+    
+  qMRMLLabelEffect.h
+  qMRMLPaintEffect.h
+  qMRMLDrawEffect.h
   )
 
 set(${KIT}_UI_SRCS
