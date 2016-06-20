@@ -27,6 +27,13 @@ Version:   $Revision: 1.11 $
 #include <vtkActor.h>
 #include "vtkIntArray.h"
 #include "vtkStdString.h"
+#include "vtkImageMapper.h"
+#include "vtkActor2D.h"
+#include "vtkImageThreshold.h"
+#include "vtkLookupTable.h"
+#include "vtkImageMapToRGBA.h"
+#include "vtkMRMLSliceLayerLogic.h"
+#include "vtkImageReslice.h"
 
 #include "vtkMRMLSliceNode.h"
 #include "vtkGeneralTransform.h"
@@ -42,6 +49,7 @@ Version:   $Revision: 1.11 $
 
 qMRMLThresholdEffect::qMRMLThresholdEffect()
 {
+	this->InitFeedbackActor();
 	
 }
 
@@ -70,8 +78,110 @@ void qMRMLThresholdEffect::ProcessEvent(vtkObject *caller, unsigned long event, 
 //clean up actors and observers
 void qMRMLThresholdEffect::CleanUp()
 {
+	Superclass::CleanUp();
 
 }
 
 
+
+int qMRMLThresholdEffect::GetThresholdMin()
+{
+	return this->min;
+}
+int qMRMLThresholdEffect::GetThresholdMax()
+{
+	return this->max;
+}
+
+void qMRMLThresholdEffect::SetThresholdMin(int min)
+{
+	this->min = min;
+}
+
+void qMRMLThresholdEffect::SetThresholdMax(int max)
+{
+	this->max = max;
+}
+
+// feedback actor
+void qMRMLThresholdEffect::InitFeedbackActor()
+{
+	
+	this->cursorMapper = vtkImageMapper::New();
+	vtkImageData* cursorDummyImage = vtkImageData::New();
+	cursorDummyImage->AllocateScalars(VTK_UNSIGNED_INT, 1);
+	this->cursorMapper->SetInputData(cursorDummyImage);
+
+	this->cursorActor = vtkActor2D::New();
+	this->cursorActor->VisibilityOff();
+	this->cursorActor->SetMapper(cursorMapper);
+	this->cursorMapper->SetColorWindow(255);
+	this->cursorMapper->SetColorLevel(128);
+
+	this->actors->AddItem(cursorActor);
+	this->renderer->AddActor2D(cursorActor);
+
+
+}
+
+void qMRMLThresholdEffect::ApplyThreshold()
+{
+	if (!this->editorLogic->GetBackgroundImage() || !this->editorLogic->GetLabelImage())
+	{
+		return;
+	}
+
+	vtkImageThreshold* thresh = vtkImageThreshold::New();
+	thresh->SetInputData(this->editorLogic->GetBackgroundImage());
+	thresh->ThresholdBetween(this->min, this->max);
+	thresh->SetInValue(this->editorLogic->GetLabel());
+	thresh->SetOutValue(0);
+	thresh->SetOutputScalarType(this->editorLogic->GetLabelImage()->GetScalarType());
+	thresh->Update();
+
+	this->editorLogic->GetLabelImage()->DeepCopy(thresh->GetOutput());
+	this->editorLogic->markVolumeNodeAsModified(this->editorLogic->GetLabelVolume());
+
+}
+
+
+void qMRMLThresholdEffect::PreviewThreshold()
+{
+	if (!this->editorLogic->GetBackgroundImage() || !this->editorLogic->GetLabelImage())
+	{
+		return;
+	}
+
+	float* color = this->GetPaintColor();
+
+	vtkLookupTable * lut = vtkLookupTable::New();
+	lut->SetRampToLinear();
+	lut->SetNumberOfTableValues(2);
+	lut->SetTableRange(0, 1);
+	lut->SetTableValue(0, 0, 0, 0, 0);
+	lut->SetTableValue(1, color[0], color[1], color[2], color[3]);
+
+	vtkImageMapToRGBA * map = vtkImageMapToRGBA::New();
+
+	map->SetOutputFormatToRGBA();
+	map->SetLookupTable(lut);
+
+	vtkImageThreshold* thresh = vtkImageThreshold::New();
+
+	
+	vtkMRMLSliceLayerLogic * backgroundLogic = this->sliceLogic->GetBackgroundLayer();
+
+	thresh->SetInputConnection(backgroundLogic->GetReslice()->GetOutputPort());
+	thresh->ThresholdBetween(this->min, this->max);
+	thresh->SetInValue(1);
+	thresh->SetOutValue(0);
+	thresh->SetOutputScalarTypeToUnsignedChar();
+	map->SetInputConnection(thresh->GetOutputPort());
+	this->cursorMapper->SetInputConnection(map->GetOutputPort());
+
+	this->cursorActor->VisibilityOn();
+
+	this->sliceView->scheduleRender();
+
+}
 

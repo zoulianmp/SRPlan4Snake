@@ -31,9 +31,6 @@
 #include "vtkMRMLSliceLogic.h"
 #include "qMRMLSliceView.h"
 
-class vtkMRMLScene;
-
-
 // VTK includes
 
 #include <vtkRenderer.h>
@@ -48,7 +45,13 @@ class vtkMRMLScene;
 #include <vtkObject.h>
 #include <vtkSmartPointer.h>
 #include <vtkWeakPointer.h>
+
+// VTK Class
 class vtkCallbackCommand;
+
+class vtkMRMLScene;
+class vtkImageMapper;
+
 
 // Slicer VTK add-on includes
 #include <vtkLoggingMacros.h>
@@ -76,27 +79,35 @@ public:
   //clean up actors and observers
   virtual void CleanUp();
 
-  
+  int GetThresholdMin();
+  int GetThresholdMax();
 
-
-public:
+  void SetThresholdMin( int min);
+  void SetThresholdMax( int max);
+  void ApplyThreshold();
+  void PreviewThreshold();
 
 
 
 
 
 protected:
-
-
+	// the values for threshold operation
+	int min;
+	int max;
   
-  qMRMLThresholdEffect();
-  qMRMLThresholdEffect(qMRMLSliceWidget* sliceWidget);
-  /// critical to have a virtual destructor!
-  ~qMRMLThresholdEffect();
-  qMRMLThresholdEffect(const qMRMLThresholdEffect&);
-  void operator=(const qMRMLThresholdEffect&);
+	vtkImageMapper* cursorMapper; 
+	vtkActor2D* cursorActor;
 
+	qMRMLThresholdEffect();
+  
+	qMRMLThresholdEffect(qMRMLSliceWidget* sliceWidget);
+    /// critical to have a virtual destructor!
+    ~qMRMLThresholdEffect();
+    qMRMLThresholdEffect(const qMRMLThresholdEffect&);
+    void operator=(const qMRMLThresholdEffect&);
 
+	void InitFeedbackActor();
 
  };
 

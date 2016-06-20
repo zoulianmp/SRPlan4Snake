@@ -40,7 +40,7 @@ class vtkMRMLScene;
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderWindow.h>
 
-#include <vtkActorCollection.h>
+#include <vtkActor2DCollection.h>
 #include <vtkActor.h>
 #include <vtkUnsignedLongArray.h>
 
@@ -155,7 +155,7 @@ protected:
 
   qMRMLSegmentsEditorLogic* editorLogic;
 
-  vtkActorCollection * actors;
+  vtkActor2DCollection * actors;
 
   char * actionState;
 

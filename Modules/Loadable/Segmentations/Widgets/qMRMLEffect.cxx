@@ -23,7 +23,7 @@ Version:   $Revision: 1.11 $
 
 #include "vtkInteractorObserver.h"
 #include "vtkRendererCollection.h"
-#include <vtkActorCollection.h>
+#include <vtkActor2DCollection.h>
 #include <vtkActor.h>
 #include "vtkIntArray.h"
 #include "vtkStdString.h"
@@ -45,7 +45,7 @@ qMRMLEffect::qMRMLEffect()
 	this->actionState = "";
 	this->effectScope = qMRMLEffect::All;
 
-	this->actors = vtkActorCollection::New();
+	this->actors = vtkActor2DCollection::New();
 	this->interactorObserverTags = vtkUnsignedLongArray::New();
 
 	this->savedCursor = QCursor(Qt::ArrowCursor); //the default cursor
@@ -210,7 +210,7 @@ void qMRMLEffect::CleanUp()
 	this->actors->InitTraversal();
 	for (int i = 0; i < number; i++)
 	{
-		this->renderer->RemoveActor2D(this->actors->GetNextActor());
+		this->renderer->RemoveActor2D(this->actors->GetNextActor2D());
 	}
 	this->sliceView->scheduleRender();
 
