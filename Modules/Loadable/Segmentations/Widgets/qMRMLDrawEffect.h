@@ -10,6 +10,14 @@
   Date:      $Date: 2006/03/19 17:12:29 $
   Version:   $Revision: 1.18 $
 
+
+  """
+  One instance of this will be created per-view when the effect
+  is selected.  It is responsible for implementing feedback and
+  label map changes in response to user input.
+  This class observes the editor parameter node to configure itself
+  and queries the current view for background and label volume
+  nodes to operate on.
 =========================================================================auto=*/
 
 #ifndef __qMRMLDrawEffect_h
@@ -82,20 +90,38 @@ public:
 
 public:
 
-
-
-
+	vtkPolyData* CreatePolyData();
+	void SetLineMode(char* mode);
+	void AddPoint(float * ras);
+	void DeleteLastPoint();
+	void Apply();
+	void PositionActors();
+	void ResetPolyData();
 
 protected:
 
-
+	//# keep a flag since events such as sliceNode modified
+	//# may come during superclass construction, which will
+	//# invoke our processEvents method
+	bool initialized; 
   
-  qMRMLDrawEffect();
-  qMRMLDrawEffect(qMRMLSliceWidget* sliceWidget);
-  /// critical to have a virtual destructor!
-  ~qMRMLDrawEffect();
-  qMRMLDrawEffect(const qMRMLDrawEffect&);
-  void operator=(const qMRMLDrawEffect&);
+	double activeSlice ;
+	unsigned long lastInsertSliceNodeMTime = NULL;
+	char* actionState = "";  //"drawing","",
+
+
+	vtkPoints * xyPoints;
+	vtkPoints * rasPoints;
+	vtkPolyData * polyData;
+
+	vtkActor2D * actor;
+
+    qMRMLDrawEffect();
+    qMRMLDrawEffect(qMRMLSliceWidget* sliceWidget);
+    /// critical to have a virtual destructor!
+    ~qMRMLDrawEffect();
+    qMRMLDrawEffect(const qMRMLDrawEffect&);
+    void operator=(const qMRMLDrawEffect&);
 
 
 
