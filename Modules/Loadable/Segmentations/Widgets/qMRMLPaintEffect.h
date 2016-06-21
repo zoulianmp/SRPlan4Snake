@@ -86,6 +86,9 @@ public:
   void ScaleBrushSize(double scaleFactor);
 
   void PaintAddPoint(int x, int y);
+
+
+  void PaintFeedback();
   void PaintApply();
   void PositionActors();
 public:
@@ -98,6 +101,8 @@ protected:
 	//the size of brush, for square and circle. diameter.
 	int brushSize;
 	BrushType shape;
+
+	bool delayedPaint;
 	bool pixelMode;
 
 	double * position;

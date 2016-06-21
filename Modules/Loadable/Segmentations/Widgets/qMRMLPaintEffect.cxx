@@ -33,6 +33,7 @@ Version:   $Revision: 1.11 $
 
 #include "vtkPolyDataMapper2D.h"
 
+#include "vtkMatrix4x4.h"
 
 
 
@@ -184,7 +185,65 @@ void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void
 //is enforced by the view interactors
 void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
 {
+	vtkMRMLSliceNode * sliceNode = this->sliceLogic->GetSliceNode();
 
+	vtkMatrix4x4* inner_rasToXY = vtkMatrix4x4::New();
+	inner_rasToXY->DeepCopy(sliceNode->GetXYToRAS());
+	inner_rasToXY->Invert();
+	double maximum = 0;
+	int maxindex = 0;
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (abs(inner_rasToXY->GetElement(0, i))>maximum)
+		{
+			maximum = abs(inner_rasToXY->GetElement(0, i));
+			maxindex = i;
+		}
+	}
+
+	float point[4] = { 0,0,0,0 };
+	point[maxindex] = this->brushSize;
+
+	float* xyBrushSize = inner_rasToXY->MultiplyPoint(point);
+
+	float Radius3d = sqrt(xyBrushSize[0] * xyBrushSize[0] + xyBrushSize[1] * xyBrushSize[1] + xyBrushSize[2] * xyBrushSize[2]);
+
+
+	//# make a circle paint brush
+	vtkPoints* points = vtkPoints::New();
+	vtkCellArray* lines = vtkCellArray::New();
+	brush->SetPoints(points);
+	brush->SetLines(lines);
+	double PI = 3.1415926;
+	double	TWOPI = PI * 2;
+	double	PIoverSIXTEEN = PI / 16;
+	vtkIdType	prevPoint = -1;
+	vtkIdType	firstPoint = -1;
+	double	angle = 0;
+	while (angle <=TWOPI)
+	{
+		double x = Radius3d *  cos(angle);
+		double y = Radius3d *  sin(angle);
+		vtkIdType p = points->InsertNextPoint(x, y, 0);
+		if (prevPoint != -1)
+		{
+			vtkIdList * idList = vtkIdList::New();
+			idList->InsertNextId(prevPoint);
+			idList->InsertNextId(p);
+			brush->InsertNextCell(VTK_LINE, idList);
+		}
+		prevPoint = p;
+		if (firstPoint == -1)
+			firstPoint = p;
+		angle = angle + PIoverSIXTEEN;	
+	}
+
+	//# make the last line in the circle
+	vtkIdList* idList = vtkIdList::New();
+	idList->InsertNextId(p);
+	idList->InsertNextId(firstPoint);
+	brush->InsertNextCell(VTK_LINE, idList);
 }
 
 //update paint feedback glyph to follow mouse
@@ -193,7 +252,7 @@ void qMRMLPaintEffect::PositionActors()
 	if (this->brushActor)
 	{
 		int* xy = this->interactor->GetEventPosition();
-		double d_xy[2] = { double(xy[0]),doubel(xy[1])};
+		double d_xy[2] = { double(xy[0]),double(xy[1])};
 		this->brushActor->SetPosition(d_xy);
 		this->sliceView->scheduleRender();
 	}
@@ -206,12 +265,42 @@ void qMRMLPaintEffect::ScaleBrushSize(double scaleFactor)
 	this->brushSize = this->brushSize * scaleFactor;
 }
 
-
+// depending on the delayedPaint mode, either paint the given point or queue it up with a marker
+//   for later painting
 void qMRMLPaintEffect::PaintAddPoint(int x, int y)
 {
 
+	this->paintCoordinates->InsertNextPoint(double(x), double(y));
+	if (this->delayedPaint && !this->pixelMode)
+	{
+		this->PaintFeedback();
+	}
+	else
+	{
+		this->PaintApply();
+	}
+	
+
 }
 
+//add a feedback actor(copy of the paint radius Actor) for any points that don't have one yet.
+//	If the list is empty, clear out the old actors
+void qMRMLPaintEffect::PaintFeedback()
+{
+	if (this->paintCoordinates->GetNumberOfPoints() == 0)
+	{
+		int number = this->feedbackActors->GetNumberOfItems();
+		this->feedbackActors->InitTraversal();
+		for (int i = 0; i < number; i++)
+		{
+			this->renderer->RemoveActor2D(this->feedbackActors->GetNextActor2D());
+		}
+
+		return;
+	}
+	//for()
+	
+}
 
 void qMRMLPaintEffect::PaintApply()
 {
