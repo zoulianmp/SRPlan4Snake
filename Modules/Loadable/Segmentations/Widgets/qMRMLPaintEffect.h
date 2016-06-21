@@ -5,10 +5,10 @@
   See COPYRIGHT.txt
   or http://www.slicer.org/copyright/copyright.txt for details.
 
-  Program:   3D Slicer
-  Module:    $RCSfile: vtkMRMLNode.h,v $
-  Date:      $Date: 2006/03/19 17:12:29 $
-  Version:   $Revision: 1.18 $
+  PaintEffect is a subclass of LabelEffect
+  that implements the interactive paintbrush tool
+  in the slicer editor
+
 
 =========================================================================auto=*/
 
@@ -45,6 +45,9 @@ class vtkMRMLScene;
 #include <vtkActor.h>
 #include <vtkUnsignedLongArray.h>
 
+#include <vtkPoints2D.h>
+#include "vtkActor2D.h"
+
 
 #include <vtkObject.h>
 #include <vtkSmartPointer.h>
@@ -76,10 +79,15 @@ public:
 
   //clean up actors and observers
   virtual void CleanUp();
-
+  enum BrushType { Square, Circle, Sphere, Box };
   
 
+  void CreateGlyph(vtkPolyData * brush);
+  void ScaleBrushSize(double scaleFactor);
 
+  void PaintAddPoint(int x, int y);
+  void PaintApply();
+  void PositionActors();
 public:
 
 
@@ -87,7 +95,19 @@ public:
 
 
 protected:
+	//the size of brush, for square and circle. diameter.
+	int brushSize;
+	BrushType shape;
+	bool pixelMode;
 
+	double * position;
+	vtkActor2DCollection * feedbackActors;
+	vtkPoints2D * paintCoordinates;
+
+	vtkPolyData* brush;
+	vtkActor2D * brushActor;
+
+	//rasToXY;
 
   
   qMRMLPaintEffect();
