@@ -114,7 +114,7 @@
     <widget class="QToolButton" name="btnRound">
      <property name="geometry">
       <rect>
-       <x>130</x>
+       <x>100</x>
        <y>10</y>
        <width>23</width>
        <height>22</height>
@@ -146,7 +146,7 @@
     <widget class="QToolButton" name="btnSquare">
      <property name="geometry">
       <rect>
-       <x>90</x>
+       <x>130</x>
        <y>10</y>
        <width>23</width>
        <height>22</height>

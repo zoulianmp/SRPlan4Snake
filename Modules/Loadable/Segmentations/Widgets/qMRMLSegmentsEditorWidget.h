@@ -25,6 +25,8 @@
 
 // MRMLWidgets includes
 #include "qMRMLWidget.h"
+#include "qMRMLSegmentsEditorLogic.h"
+
 
 #include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
@@ -54,23 +56,10 @@ public:
   /// Destructor
   virtual ~qMRMLSegmentsEditorWidget();
 
-  /// Get currently selected segmentation MRML node
-  //Q_INVOKABLE vtkMRMLNode* currentNode();
-  /// Get currently selected segmentation node's ID
- // Q_INVOKABLE QString currentNodeID();
 
-  /// Get segment ID of selected segment
- // Q_INVOKABLE QString currentSegmentID();
-
-  /// Return true if the "none" is in the segmentation node comboBox list, false otherwise.
-  /// \sa noneEnabled, setNoneEnabled()
- // bool noneEnabled()const;
-  /// Set whether the "none" item should be in the segmentation node comboBox list or not.
-  /// \sa noneEnabled, noneEnabled()
- // void setNoneEnabled(bool enable);
-
-
-
+   //set the segments editor logic to widget
+  bool SetSegmentsEditorLogic(qMRMLSegmentsEditorLogic * editorLogic) ;
+  qMRMLSegmentsEditorLogic * GetSegmentsEditorLogic();
 
 
 
@@ -107,6 +96,8 @@ signals:
 
 protected:
   QScopedPointer<qMRMLSegmentsEditorWidgetPrivate> d_ptr;
+
+  qMRMLSegmentsEditorLogic * editorLogic;
 
 private:
   Q_DECLARE_PRIVATE(qMRMLSegmentsEditorWidget);

@@ -65,8 +65,9 @@ class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLEffect : public vtkObjec
   
 
 public:
-  vtkTypeMacro(qMRMLEffect,vtkObject);
-  //void PrintSelf(ostream& os, vtkIndent indent);
+	static qMRMLEffect *New();
+    vtkTypeMacro(qMRMLEffect,vtkObject);
+   //void PrintSelf(ostream& os, vtkIndent indent);
 
 
 

@@ -55,6 +55,7 @@ class vtkImageData;
 class vtkImageReslice;
 class vtkPolyDataCollection;
 class vtkTransform;
+class qMRMLEffect;
 
 /// \brief Slicer logic class for slice manipulation.
 ///
@@ -80,8 +81,8 @@ public:
 	void SetCurrentSegment(vtkSegment * segment);
 	void SetCurrentSegmentation(vtkSegmentation* segmentation);
 
-	EffectMode GetCurrentEffect();
-	void SetCurrentEffect(EffectMode effect);
+	EffectMode GetCurrentEffectMode();
+	void SetCurrentEffectMode(EffectMode effect);
 
 	vtkMRMLSliceCompositeNode * GetCompositeNode(char * layoutName = "Red");
 	
@@ -104,6 +105,8 @@ public:
 	void SetActiveVolumes(const char * masterVolume, const char* mergeVolume = "");
 	void PropagateVolumeSelection();
 
+
+	//Editor related segment's Label
 	int  GetLabel( );
 	void SetLabel(int label);
 	void BackupLabel();
@@ -135,39 +138,20 @@ protected:
 		void * callData);
 	void ProcessMRMLLogicsEvents();
 
-	/*
-	
-	bool                        AddingSliceModelNodes;
-	bool                        Initialized;
 
-	char *                      Name;
-	vtkMRMLSliceNode *          SliceNode;
-	vtkMRMLSliceCompositeNode * SliceCompositeNode;
-	vtkMRMLSliceLayerLogic *    BackgroundLayer;
-	vtkMRMLSliceLayerLogic *    ForegroundLayer;
-	vtkMRMLSliceLayerLogic *    LabelLayer;
-
-
-	vtkImageBlend *   Blend;
-	vtkImageBlend *   BlendUVW;
-	vtkImageReslice * ExtractModelTexture;
-	vtkAlgorithmOutput *    ImageDataConnection;
-	vtkTransform *    ActiveSliceTransform;
-
-	vtkPolyDataCollection * PolyDataCollection;
-	vtkCollection *         LookupTableCollection;
-
-	vtkMRMLModelNode *            SliceModelNode;
-	vtkMRMLModelDisplayNode *     SliceModelDisplayNode;
-	vtkMRMLLinearTransformNode *  SliceModelTransformNode;
-	double                        SliceSpacing[3];
-*/
 	//Editor Parameters for Edit LabelmapVolume
 	int CurrentLable; //Current Label value for structure
 	int StoredLabel; //Used for Restore Label Value
 	
 
-	EffectMode CurrentEffect;
+
+
+
+
+
+	EffectMode CurrentEffectMode;
+
+	QMap<EffectMode, qMRMLEffect *>  editorEffectMap;
 
 	//  enum Layers
     //  {

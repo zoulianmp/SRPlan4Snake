@@ -49,6 +49,8 @@ Version:   $Revision: 1.11 $
 #include <algorithm> // for std::sort
 
 
+vtkStandardNewMacro(qMRMLPaintEffect);
+
 qMRMLPaintEffect::qMRMLPaintEffect()
 {
 	this->brushSize = 10 ; //defalt size is 10 mm

@@ -68,7 +68,8 @@ class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLThresholdEffect : public
   
 
 public:
-  vtkTypeMacro(qMRMLThresholdEffect,qMRMLEffect);
+	static qMRMLThresholdEffect *New();
+    vtkTypeMacro(qMRMLThresholdEffect,qMRMLEffect);
   //void PrintSelf(ostream& os, vtkIndent indent);
 
 

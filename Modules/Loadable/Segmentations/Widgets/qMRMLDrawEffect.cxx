@@ -44,6 +44,8 @@ Version:   $Revision: 1.11 $
 #include <algorithm> // for std::sort
 
 
+vtkStandardNewMacro(qMRMLDrawEffect);
+
 qMRMLDrawEffect::qMRMLDrawEffect()
 {
 	this->initialized = false;

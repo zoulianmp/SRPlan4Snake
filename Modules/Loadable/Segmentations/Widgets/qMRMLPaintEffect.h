@@ -69,6 +69,8 @@ class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT  qMRMLPaintEffect: public qMR
   
 
 public:
+
+  static qMRMLPaintEffect *New();
   vtkTypeMacro(qMRMLPaintEffect,qMRMLLabelEffect);
   //void PrintSelf(ostream& os, vtkIndent indent);
 

@@ -39,6 +39,7 @@ Version:   $Revision: 1.11 $
 #include <sstream>
 #include <algorithm> // for std::sort
 
+vtkStandardNewMacro(qMRMLEffect);
 
 qMRMLEffect::qMRMLEffect()
 {

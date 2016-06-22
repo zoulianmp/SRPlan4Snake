@@ -72,9 +72,7 @@ void qMRMLSegmentsEditorWidgetPrivate::init()
 
   wlpanel->setLayout(this->page_threshould_options->layout());
   
-
-
-  
+    
   // Make connections
   QObject::connect( this->pushButton_paintbrush, SIGNAL(clicked()),
     q, SLOT(onPaintBrushClicked( )) );
@@ -105,7 +103,8 @@ qMRMLSegmentsEditorWidget::qMRMLSegmentsEditorWidget(QWidget* _parent)
 {
   Q_D(qMRMLSegmentsEditorWidget);
   d->init();
-  
+  this->editorLogic = NULL;
+
 }
 
 //-----------------------------------------------------------------------------
@@ -122,8 +121,6 @@ void qMRMLSegmentsEditorWidget::onPaintBrushClicked()
 
  
 	d->stackedWidget_options->setCurrentIndex(0);
-
-
 
 	if (d->pushButton_poly->isChecked())
 	{
@@ -180,4 +177,20 @@ void qMRMLSegmentsEditorWidget::onThresholdClicked()
 	
 
 
+}
+
+
+bool qMRMLSegmentsEditorWidget::SetSegmentsEditorLogic(qMRMLSegmentsEditorLogic * editorLogic)
+{
+	if (editorLogic != NULL)
+	{
+		this->editorLogic = editorLogic;
+		return true;
+	}
+	return false;
+}
+
+qMRMLSegmentsEditorLogic * qMRMLSegmentsEditorWidget::GetSegmentsEditorLogic()
+{
+	return this->editorLogic;
 }

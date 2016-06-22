@@ -47,6 +47,9 @@ Version:   $Revision: 1.11 $
 #include <algorithm> // for std::sort
 
 
+
+vtkStandardNewMacro(qMRMLThresholdEffect);
+
 qMRMLThresholdEffect::qMRMLThresholdEffect()
 {
 	this->InitFeedbackActor();

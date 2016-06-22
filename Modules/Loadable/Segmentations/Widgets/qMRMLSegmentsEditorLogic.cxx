@@ -55,6 +55,10 @@ Version:   $Revision$
 #include <vtkVersion.h>
 
 #include "vtkPointData.h"
+#include "qMRMLEffect.h"
+#include "qMRMLPaintEffect.h"
+#include "qMRMLDrawEffect.h"
+#include "qMRMLThresholdEffect.h"
 
 // STD includes
 
@@ -72,6 +76,16 @@ qMRMLSegmentsEditorLogic::qMRMLSegmentsEditorLogic()
 	this->PropagationMode = vtkMRMLApplicationLogic::BackgroundLayer | vtkMRMLApplicationLogic::LabelLayer;
 	this->StoredLabel = 0;
 	this->CurrentLable = 0;
+
+	qMRMLPaintEffect * paintEffect = qMRMLPaintEffect::New();
+	qMRMLDrawEffect * drawEffect = qMRMLDrawEffect::New();
+	qMRMLThresholdEffect* thresholdEffect = qMRMLThresholdEffect::New();
+
+	this->editorEffectMap.insert(qMRMLSegmentsEditorLogic::PaintBrush, paintEffect);
+	this->editorEffectMap.insert(qMRMLSegmentsEditorLogic::FreeDraw, drawEffect);
+	this->editorEffectMap.insert(qMRMLSegmentsEditorLogic::Threshold, thresholdEffect);
+
+
 }
 
 //----------------------------------------------------------------------------
@@ -272,15 +286,15 @@ void qMRMLSegmentsEditorLogic::SetCurrentSegmentation(vtkSegmentation* segmentat
 	}
 }
 
-qMRMLSegmentsEditorLogic::EffectMode qMRMLSegmentsEditorLogic::GetCurrentEffect()
+qMRMLSegmentsEditorLogic::EffectMode qMRMLSegmentsEditorLogic::GetCurrentEffectMode()
 {
-	return this->CurrentEffect;
+	return this->CurrentEffectMode;
 
 }
 
-void qMRMLSegmentsEditorLogic::SetCurrentEffect(EffectMode effect)
+void qMRMLSegmentsEditorLogic::SetCurrentEffectMode(EffectMode effect)
 {
-	this->CurrentEffect = effect;
+	this->CurrentEffectMode = effect;
 }
 
 vtkMRMLSliceCompositeNode * qMRMLSegmentsEditorLogic::GetCompositeNode(char * layoutName )
