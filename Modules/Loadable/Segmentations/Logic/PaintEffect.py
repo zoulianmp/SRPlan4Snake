@@ -21,10 +21,7 @@ __all__ = [
 #
 comment = """
 
-  PaintEffect is a subclass of LabelEffect
-  that implements the interactive paintbrush tool
-  in the slicer editor
-
+ 
 # TODO :
 """
 #

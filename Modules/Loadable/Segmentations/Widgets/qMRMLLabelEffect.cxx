@@ -72,6 +72,22 @@ void qMRMLLabelEffect::SetPaintLabel(int label)
 
 }
 
+bool qMRMLLabelEffect::GetPaintOver()
+{
+	return this->paintOver;
+
+}
+
+void qMRMLLabelEffect::SetPaintOver()
+{
+	this->paintOver = true;
+}
+void qMRMLLabelEffect::UnsetPaintOver()
+{
+	this->paintOver = false;
+}
+
+
 
 qMRMLLabelEffect::qMRMLLabelEffect(qMRMLSliceWidget* sliceWidget) : Superclass(sliceWidget)
 {

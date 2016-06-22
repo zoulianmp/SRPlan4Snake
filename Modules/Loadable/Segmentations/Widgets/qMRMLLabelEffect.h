@@ -91,6 +91,11 @@ public:
   int GetPaintLabel();
   void SetPaintLabel( int label);
 
+  bool qMRMLLabelEffect::GetPaintOver();
+  void SetPaintOver();
+  void UnsetPaintOver();
+
+
   char* SliceIJKPlane();
 
 protected:

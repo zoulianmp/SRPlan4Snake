@@ -90,6 +90,9 @@ public:
 
   void PaintFeedback();
   void PaintApply();
+  void PaintBrush(double x, double y);
+  void PaintPixel(double x, double y);
+
   void PositionActors();
 public:
 
