@@ -34,6 +34,7 @@ Version:   $Revision: 18866
 
 // MRMLLogic includes
 #include "vtkMRMLAbstractLogic.h"
+#include "QMap.h"
 
 // STD includes
 #include <vector>
@@ -83,6 +84,8 @@ public:
 
 	EffectMode GetCurrentEffectMode();
 	void SetCurrentEffectMode(EffectMode effect);
+
+	qMRMLEffect * GetEditorEffect(EffectMode effect= qMRMLSegmentsEditorLogic::PaintBrush);
 
 	vtkMRMLSliceCompositeNode * GetCompositeNode(char * layoutName = "Red");
 	
