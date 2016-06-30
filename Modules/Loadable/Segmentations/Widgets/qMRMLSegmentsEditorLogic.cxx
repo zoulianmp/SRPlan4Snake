@@ -77,6 +77,8 @@ qMRMLSegmentsEditorLogic::qMRMLSegmentsEditorLogic()
 	this->StoredLabel = 0;
 	this->CurrentLable = 0;
 
+	this->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
+
 	qMRMLPaintEffect * paintEffect = qMRMLPaintEffect::New();
 	qMRMLDrawEffect * drawEffect = qMRMLDrawEffect::New();
 	qMRMLThresholdEffect* thresholdEffect = qMRMLThresholdEffect::New();
@@ -314,6 +316,15 @@ qMRMLEffect * qMRMLSegmentsEditorLogic::GetCurrentEffect()
 
 
 
+<<<<<<< HEAD
+=======
+qMRMLEffect * qMRMLSegmentsEditorLogic::GetEditorEffect(EffectMode effect)
+{
+	return this->editorEffectMap.value(effect);
+}
+
+
+>>>>>>> c0efad872aeb195434c0581a13f4526e1dfda2c2
 vtkMRMLSliceCompositeNode * qMRMLSegmentsEditorLogic::GetCompositeNode(char * layoutName )
 {
 
