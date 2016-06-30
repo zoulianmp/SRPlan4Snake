@@ -84,6 +84,11 @@ public:
 	EffectMode GetCurrentEffectMode();
 	void SetCurrentEffectMode(EffectMode effect);
 
+	qMRMLEffect * GetCurrentEffect();
+
+
+
+
 	vtkMRMLSliceCompositeNode * GetCompositeNode(char * layoutName = "Red");
 	
 	qMRMLSliceWidget * GetSliceWidget(char * layoutName = "Red");
@@ -122,6 +127,14 @@ public:
 	void markVolumeNodeAsModified(vtkMRMLVolumeNode* volumeNode);
 
 
+
+
+public slots:
+	void setSalary(int newSalary);
+
+signals:
+	void EffectModeChanged(int newmode);
+
 protected:
 
 
@@ -146,10 +159,9 @@ protected:
 
 
 
-
-
-
 	EffectMode CurrentEffectMode;
+
+	qMRMLEffect * CurrentEffect;
 
 	QMap<EffectMode, qMRMLEffect *>  editorEffectMap;
 

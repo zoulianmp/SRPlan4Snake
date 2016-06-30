@@ -85,6 +85,7 @@ qMRMLSegmentsEditorLogic::qMRMLSegmentsEditorLogic()
 	this->editorEffectMap.insert(qMRMLSegmentsEditorLogic::FreeDraw, drawEffect);
 	this->editorEffectMap.insert(qMRMLSegmentsEditorLogic::Threshold, thresholdEffect);
 
+	this->CurrentEffect = paintEffect;
 
 }
 
@@ -295,7 +296,23 @@ qMRMLSegmentsEditorLogic::EffectMode qMRMLSegmentsEditorLogic::GetCurrentEffectM
 void qMRMLSegmentsEditorLogic::SetCurrentEffectMode(EffectMode effect)
 {
 	this->CurrentEffectMode = effect;
+
+	if (this->editorEffectMap.contains(effect))
+	{
+		this->CurrentEffect = this->editorEffectMap.value(effect);
+	}
+
 }
+
+
+
+qMRMLEffect * qMRMLSegmentsEditorLogic::GetCurrentEffect()
+{
+
+	return	this->CurrentEffect;
+}
+
+
 
 vtkMRMLSliceCompositeNode * qMRMLSegmentsEditorLogic::GetCompositeNode(char * layoutName )
 {

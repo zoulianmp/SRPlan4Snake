@@ -79,6 +79,14 @@ void onPolyClicked();
 
 void onThresholdClicked();
 
+// PaintBrush Effect Slots
+void onBrushStyleRoundClicked();
+void onBrushStyleSquareClicked();
+void onBrushSizeChanged();
+
+
+
+
 
 
 protected slots:

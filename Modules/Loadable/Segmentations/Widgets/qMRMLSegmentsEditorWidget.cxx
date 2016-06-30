@@ -84,7 +84,18 @@ void qMRMLSegmentsEditorWidgetPrivate::init()
   QObject::connect(this->pushButton_threshold, SIGNAL(clicked()),
 	  q, SLOT(onThresholdClicked()));
 
- 
+  //PaintBrush Effect
+  QObject::connect(this->btnRound, SIGNAL(clicked()),
+	  q, SLOT(onBrushStyleRoundClicked()));
+
+  QObject::connect(this->btnSquare, SIGNAL(clicked()),
+	  q, SLOT(onBrushStyleSquareClicked()));
+
+  QObject::connect(this->inBrushSizeSlider, SIGNAL(valueChanged(int)),
+	  q, SLOT(onBrushSizeChanged()));
+
+
+
   
   
 }
@@ -132,6 +143,8 @@ void qMRMLSegmentsEditorWidget::onPaintBrushClicked()
 		d->pushButton_threshold->setChecked(false);
 	}
 
+	this->editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
+
 
 }
 
@@ -152,6 +165,7 @@ void qMRMLSegmentsEditorWidget::onPolyClicked()
 	}
 
 
+	this->editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::FreeDraw);
 
 
 }
@@ -175,6 +189,7 @@ void qMRMLSegmentsEditorWidget::onThresholdClicked()
 	}
 	
 	
+	this->editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::Threshold);
 
 
 }
@@ -193,4 +208,23 @@ bool qMRMLSegmentsEditorWidget::SetSegmentsEditorLogic(qMRMLSegmentsEditorLogic 
 qMRMLSegmentsEditorLogic * qMRMLSegmentsEditorWidget::GetSegmentsEditorLogic()
 {
 	return this->editorLogic;
+}
+
+
+void qMRMLSegmentsEditorWidget::onBrushStyleRoundClicked()
+{
+
+}
+
+void qMRMLSegmentsEditorWidget::onBrushStyleSquareClicked()
+{
+
+
+}
+
+void qMRMLSegmentsEditorWidget::onBrushSizeChanged()
+{
+
+
+
 }

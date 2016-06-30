@@ -30,6 +30,7 @@
 #include "qMRMLSegmentationRepresentationsListView.h"
 #include "qSRPlanSegmentationDisplaySettingsDialog.h"
 
+#include "qMRMLSegmentsEditorLogic.h"
 
 // SlicerQt includes
 #include <qSlicerApplication.h>
@@ -275,12 +276,12 @@ void qSlicerSegmentationsModuleWidget::init()
   d->setupUi(this);
   this->Superclass::setup();
 
-  // Ensure that four representations fit in the table by default
-  //d->RepresentationsListView->setMinimumHeight(108);
 
-  // Set icons to tool buttons
- // d->toolButton_AddLabelmap->setIcon(QIcon(":/Icons/AddLabelmap.png"));
- // d->toolButton_AddModel->setIcon(QIcon(":/Icons/Small/SlicerAddModel.png"));
+  //Setup the qMRMLSegmentsEditorWidget and qMRMLSegmentsEditorLogic by zoulian
+
+  qMRMLSegmentsEditorLogic* editorlogic = qMRMLSegmentsEditorLogic::New();
+  d->EditorBox->SetSegmentsEditorLogic(editorlogic);
+   
 
   // Make connections
   connect(d->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
@@ -288,17 +289,13 @@ void qSlicerSegmentationsModuleWidget::init()
   connect(d->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
     d->SegmentsTableView, SLOT(setSegmentationNode(vtkMRMLNode*)) );
  
- // connect(d->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
- //   d->SegmentsTableView_Current, SLOT(setSegmentationNode(vtkMRMLNode*)) );
-//  connect(d->MRMLNodeComboBox_Segmentation, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
- //   d->RepresentationsListView, SLOT(setSegmentationNode(vtkMRMLNode*)) );
+ 
 
   connect(d->SegmentsTableView, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
     this, SLOT(onSegmentSelectionChanged(QItemSelection,QItemSelection)));
   connect(d->pushButton_AddSegment, SIGNAL(clicked()),
     this, SLOT(onAddSegment()) );
- // connect(d->pushButton_EditSelected, SIGNAL(clicked()),
- //   this, SLOT(onEditSelectedSegment()) );
+
   connect(d->pushButton_DeleteSelected, SIGNAL(clicked()),
     this, SLOT(onDeleteSelectedSegments()) );
 
