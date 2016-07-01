@@ -114,7 +114,7 @@ protected:
 
   
   qMRMLLabelEffect();
-  qMRMLLabelEffect(qMRMLSliceWidget* sliceWidget);
+
   /// critical to have a virtual destructor!
   ~qMRMLLabelEffect();
   qMRMLLabelEffect(const qMRMLLabelEffect&);

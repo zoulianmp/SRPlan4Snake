@@ -65,6 +65,7 @@ class qMRMLEffect;
 class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentsEditorLogic : public vtkMRMLAbstractLogic
 {
 public:
+
 	/// The Usual VTK class functions
 	static qMRMLSegmentsEditorLogic *New();
 	vtkTypeMacro(qMRMLSegmentsEditorLogic, vtkMRMLAbstractLogic);
@@ -85,14 +86,13 @@ public:
 	EffectMode GetCurrentEffectMode();
 	void SetCurrentEffectMode(EffectMode effect);
 
-<<<<<<< HEAD
 	qMRMLEffect * GetCurrentEffect();
 
 
 
-=======
+
 	qMRMLEffect * GetEditorEffect(EffectMode effect= qMRMLSegmentsEditorLogic::PaintBrush);
->>>>>>> c0efad872aeb195434c0581a13f4526e1dfda2c2
+
 
 	vtkMRMLSliceCompositeNode * GetCompositeNode(char * layoutName = "Red");
 	
@@ -133,12 +133,6 @@ public:
 
 
 
-
-public slots:
-	void setSalary(int newSalary);
-
-signals:
-	void EffectModeChanged(int newmode);
 
 protected:
 

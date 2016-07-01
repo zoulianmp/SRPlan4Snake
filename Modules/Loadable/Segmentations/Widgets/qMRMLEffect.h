@@ -60,6 +60,15 @@ class vtkCallbackCommand;
 
 #include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
+
+//Usage of current Class
+//
+//The Effect to be success, you need have Presetup order
+//Setup 01  void SetSliceWidget(qMRMLSliceWidget* sliceWidget);  
+//Setup 02  void SetupEventsObservation(); 
+//Setup 03  void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);  
+
+
 class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLEffect : public vtkObject
 {
   
@@ -83,8 +92,11 @@ if a subclass provides a list of scope options then a selection menu will be pro
         Visible
     };
 
-  void SetSliceWidget(qMRMLSliceWidget* sliceWidget);
-  void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);
+  //The Effect to be success, you need have Presetup order
+
+  void SetSliceWidget(qMRMLSliceWidget* sliceWidget);  //#Setup 01
+  void SetupEventsObservation();  //#Setup 02 
+  void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);  //#Setup 03
 
   static void EffectEventCallback(vtkObject *caller, unsigned long event, void *clientData, void *callData);
 
@@ -138,7 +150,7 @@ protected:
 
   
   qMRMLEffect();
-  qMRMLEffect(qMRMLSliceWidget* sliceWidget);
+
   /// critical to have a virtual destructor!
   ~qMRMLEffect();
   qMRMLEffect(const qMRMLEffect&);

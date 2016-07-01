@@ -82,7 +82,7 @@ void onThresholdClicked();
 // PaintBrush Effect Slots
 void onBrushStyleRoundClicked();
 void onBrushStyleSquareClicked();
-void onBrushSizeChanged();
+void onBrushSizeChanged(int size);
 
 
 

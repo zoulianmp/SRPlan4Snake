@@ -29,6 +29,12 @@
 #include "vtkSegmentation.h"
 #include "vtkSegment.h"
 
+//Editor Effect include
+#include "qMRMLPaintEffect.h"
+#include "qMRMLDrawEffect.h"
+#include "qMRMLThresholdEffect.h"
+
+
 // MRML includes
 #include <vtkMRMLLabelMapVolumeNode.h>
 
@@ -213,18 +219,26 @@ qMRMLSegmentsEditorLogic * qMRMLSegmentsEditorWidget::GetSegmentsEditorLogic()
 
 void qMRMLSegmentsEditorWidget::onBrushStyleRoundClicked()
 {
+	qMRMLPaintEffect* paintEffect = qMRMLPaintEffect::SafeDownCast(this->editorLogic->GetCurrentEffect());
+	paintEffect->SetBrushShape(qMRMLPaintEffect::Circle);
+
+
+
+
 
 }
 
 void qMRMLSegmentsEditorWidget::onBrushStyleSquareClicked()
 {
-
+	qMRMLPaintEffect* paintEffect = qMRMLPaintEffect::SafeDownCast(this->editorLogic->GetCurrentEffect());
+	paintEffect->SetBrushShape(qMRMLPaintEffect::Square);
 
 }
 
-void qMRMLSegmentsEditorWidget::onBrushSizeChanged()
+void qMRMLSegmentsEditorWidget::onBrushSizeChanged(int size)
 {
-
+	qMRMLPaintEffect* paintEffect = qMRMLPaintEffect::SafeDownCast(this->editorLogic->GetCurrentEffect());
+	paintEffect->SetBrushSize(size);
 
 
 }

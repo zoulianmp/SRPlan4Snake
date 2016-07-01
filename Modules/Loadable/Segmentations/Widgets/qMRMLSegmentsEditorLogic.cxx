@@ -316,15 +316,13 @@ qMRMLEffect * qMRMLSegmentsEditorLogic::GetCurrentEffect()
 
 
 
-<<<<<<< HEAD
-=======
 qMRMLEffect * qMRMLSegmentsEditorLogic::GetEditorEffect(EffectMode effect)
 {
 	return this->editorEffectMap.value(effect);
 }
 
 
->>>>>>> c0efad872aeb195434c0581a13f4526e1dfda2c2
+
 vtkMRMLSliceCompositeNode * qMRMLSegmentsEditorLogic::GetCompositeNode(char * layoutName )
 {
 

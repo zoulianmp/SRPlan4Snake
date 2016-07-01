@@ -91,12 +91,6 @@ void qMRMLLabelEffect::UnsetPaintOver()
 
 
 
-qMRMLLabelEffect::qMRMLLabelEffect(qMRMLSliceWidget* sliceWidget) : Superclass(sliceWidget)
-{
-	this->RotateSliceToImage();
-
-}
-
 void qMRMLLabelEffect::ProcessEvent(vtkObject *caller, unsigned long event, void *callData)
 {
 	Superclass::ProcessEvent(caller, event, callData);

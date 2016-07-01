@@ -84,11 +84,7 @@ qMRMLPaintEffect::~qMRMLPaintEffect()
 
 } 
 
-qMRMLPaintEffect::qMRMLPaintEffect(qMRMLSliceWidget* sliceWidget):Superclass(sliceWidget)
-{
-	qMRMLPaintEffect::qMRMLPaintEffect();
 
-}
 
 
 //clean up actors and observers
@@ -497,4 +493,14 @@ void qMRMLPaintEffect::PaintBrush(double x, double y)
 void qMRMLPaintEffect::PaintPixel(double x, double y)
 {
 
+}
+
+void qMRMLPaintEffect::SetBrushShape(BrushType shape)
+{
+	this->shape = shape;
+}
+
+void qMRMLPaintEffect::SetBrushSize(int size)
+{
+	this->brushSize = size;
 }

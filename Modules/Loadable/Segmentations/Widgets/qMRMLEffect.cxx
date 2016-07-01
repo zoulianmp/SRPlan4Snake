@@ -47,9 +47,18 @@ qMRMLEffect::qMRMLEffect()
 	this->effectScope = qMRMLEffect::All;
 
 	this->actors = vtkActor2DCollection::New();
-	this->interactorObserverTags = vtkUnsignedLongArray::New();
-
+	
 	this->savedCursor = QCursor(Qt::ArrowCursor); //the default cursor
+	 
+	this->scopedImageBuffer = vtkImageData::New();
+	this->scopedSlicePaint = vtkImageSlicePaint::New();
+}
+
+
+void qMRMLEffect::SetupEventsObservation()
+{
+
+	this->interactorObserverTags = vtkUnsignedLongArray::New();
 
 	this->events = vtkIntArray::New();
 
@@ -65,8 +74,11 @@ qMRMLEffect::qMRMLEffect()
 	this->events->InsertNextValue(vtkCommand::LeaveEvent);
 
 
-	vtkSmartPointer<vtkCallbackCommand> callback =
-		vtkSmartPointer<vtkCallbackCommand>::New();
+	//vtkSmartPointer<vtkCallbackCommand> callback =
+	//	vtkSmartPointer<vtkCallbackCommand>::New();
+
+	vtkCallbackCommand* callback = vtkCallbackCommand::New();
+
 	callback->SetCallback(qMRMLEffect::EffectEventCallback);
 
 
@@ -79,17 +91,17 @@ qMRMLEffect::qMRMLEffect()
 		this->interactorObserverTags->InsertNextValue(tag);
 	}
 
+
+
 	this->sliceNodeTags = vtkUnsignedLongArray::New();
 
 	vtkMRMLSliceNode * sliceNode = this->sliceLogic->GetSliceNode();
 
 	unsigned long tag = sliceNode->AddObserver(vtkCommand::ModifiedEvent, callback, 1.0);
 	this->sliceNodeTags->InsertNextValue(tag);
-	 
-	this->scopedImageBuffer = vtkImageData::New();
-	this->scopedSlicePaint = vtkImageSlicePaint::New();
-}
 
+
+}
 
 
 qMRMLEffect::~qMRMLEffect()
@@ -98,13 +110,7 @@ qMRMLEffect::~qMRMLEffect()
 
 } 
 
-qMRMLEffect::qMRMLEffect(qMRMLSliceWidget* sliceWidget)
-{
-	qMRMLEffect::qMRMLEffect();
 
-	this->SetSliceWidget(sliceWidget);
-
-}
 
 void qMRMLEffect::SetSliceWidget(qMRMLSliceWidget* sliceWidget)
 {

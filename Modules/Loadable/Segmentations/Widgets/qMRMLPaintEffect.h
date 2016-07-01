@@ -89,6 +89,8 @@ public:
 
   void PaintAddPoint(int x, int y);
 
+  void SetBrushSize(int size);
+  void SetBrushShape(BrushType shape);
 
   void PaintFeedback();
   void PaintApply();
@@ -121,7 +123,6 @@ protected:
 
   
   qMRMLPaintEffect();
-  qMRMLPaintEffect(qMRMLSliceWidget* sliceWidget);
   /// critical to have a virtual destructor!
   ~qMRMLPaintEffect();
   qMRMLPaintEffect(const qMRMLPaintEffect&);

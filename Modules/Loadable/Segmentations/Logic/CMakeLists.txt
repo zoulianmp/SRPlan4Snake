@@ -20,8 +20,6 @@ set(${KIT}_SRCS
   vtkImageStash.cxx
   vtkPichonFastMarching.cxx
   vtkPichonFastMarchingPDF.cxx
-  
-    
   )
 
 set(${KIT}_TARGET_LIBRARIES
