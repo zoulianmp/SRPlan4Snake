@@ -62,6 +62,9 @@ public:
   qMRMLSegmentsEditorLogic * GetSegmentsEditorLogic();
 
 
+  int GetBrushSize();
+   
+
 
 public slots:
   /// Set segmentation MRML node

@@ -52,10 +52,13 @@ vtkStandardNewMacro(qMRMLThresholdEffect);
 
 qMRMLThresholdEffect::qMRMLThresholdEffect()
 {
-	this->InitFeedbackActor();
+	
 	
 }
-
+void qMRMLThresholdEffect::SetupThreshold()
+{
+	this->InitFeedbackActor();
+}
 
 
 qMRMLThresholdEffect::~qMRMLThresholdEffect()

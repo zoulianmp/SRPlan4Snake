@@ -57,6 +57,7 @@ class vtkImageReslice;
 class vtkPolyDataCollection;
 class vtkTransform;
 class qMRMLEffect;
+class qMRMLSegmentsEditorWidget;
 
 /// \brief Slicer logic class for slice manipulation.
 ///
@@ -84,12 +85,15 @@ public:
 	void SetCurrentSegmentation(vtkSegmentation* segmentation);
 
 	EffectMode GetCurrentEffectMode();
+
+	//Setup the Observation of current effect,and Remove other effects' Observation
 	void SetCurrentEffectMode(EffectMode effect);
+
 
 	qMRMLEffect * GetCurrentEffect();
 
-
-
+	void SetSegmentsEditorWidget(qMRMLSegmentsEditorWidget * widget);
+	qMRMLSegmentsEditorWidget * GetSegmentsEditorWidget();
 
 	qMRMLEffect * GetEditorEffect(EffectMode effect= qMRMLSegmentsEditorLogic::PaintBrush);
 
@@ -177,6 +181,8 @@ protected:
 
 	vtkSegment * CurrentSegment;
 	vtkSegmentation * CurrentSegmentation;
+
+	qMRMLSegmentsEditorWidget * EditorWidget;
 
 private:
 

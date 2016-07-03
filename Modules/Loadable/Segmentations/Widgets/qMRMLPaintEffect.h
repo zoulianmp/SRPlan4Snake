@@ -64,6 +64,16 @@ class vtkCallbackCommand;
 
 #include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
+
+//Usage of qMRMLPaintEffect Class
+//
+//The Effect to be success, you need have Presetup order
+//Setup 01  void SetSliceWidget(qMRMLSliceWidget* sliceWidget);  
+//Setup 02  void SetupEventsObservation(); 
+//Setup 03  void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);  
+//Setup 04  void SetupBrush();
+
+
 class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT  qMRMLPaintEffect: public qMRMLLabelEffect
 {
   
@@ -74,15 +84,18 @@ public:
   vtkTypeMacro(qMRMLPaintEffect,qMRMLLabelEffect);
   //void PrintSelf(ostream& os, vtkIndent indent);
 
+  //static void PaintEffectEventCallback(vtkObject *caller, unsigned long event, void *clientData, void *callData);
 
-
-  virtual void ProcessEvent(vtkObject *caller, unsigned long event,void *callData);
+  //virtual  void  SetupEventsObservation();
+  virtual  void ProcessEvent(vtkObject *caller, unsigned long event,void *callData);
  
 
   //clean up actors and observers
   virtual void CleanUp();
   enum BrushType { Square, Circle, Sphere, Box };
   
+
+  void SetupBrush();
 
   void CreateGlyph(vtkPolyData * brush);
   void ScaleBrushSize(double scaleFactor);

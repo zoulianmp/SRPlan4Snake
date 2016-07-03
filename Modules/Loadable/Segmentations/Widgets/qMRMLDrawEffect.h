@@ -69,6 +69,16 @@ class vtkCallbackCommand;
 
 #include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
+
+
+//Usage of qMRMLDrawEffect Class
+//
+//The Effect to be success, you need have Presetup order
+//Setup 01  void SetSliceWidget(qMRMLSliceWidget* sliceWidget);  
+//Setup 02  void SetupEventsObservation(); 
+//Setup 03  void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);  
+//Setup 04  void SetupDraw();
+
 class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT  qMRMLDrawEffect: public qMRMLLabelEffect
 {
   
@@ -90,6 +100,9 @@ public:
 
 
 public:
+
+    void SetupDraw();
+
 
 	vtkPolyData* CreatePolyData();
 	void SetLineMode(char* mode);

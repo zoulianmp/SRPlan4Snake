@@ -45,6 +45,7 @@ qMRMLEffect::qMRMLEffect()
 {
 	this->actionState = "";
 	this->effectScope = qMRMLEffect::All;
+	this->observing = false;
 
 	this->actors = vtkActor2DCollection::New();
 	
@@ -80,7 +81,7 @@ void qMRMLEffect::SetupEventsObservation()
 	vtkCallbackCommand* callback = vtkCallbackCommand::New();
 
 	callback->SetCallback(qMRMLEffect::EffectEventCallback);
-
+	callback->SetClientData(this);
 
 
 	for (int i = 0; i < events->GetSize(); i++)
@@ -100,8 +101,33 @@ void qMRMLEffect::SetupEventsObservation()
 	unsigned long tag = sliceNode->AddObserver(vtkCommand::ModifiedEvent, callback, 1.0);
 	this->sliceNodeTags->InsertNextValue(tag);
 
+	this->observing = true;
 
 }
+
+
+
+bool qMRMLEffect::IsObserving()
+{
+	return this->observing;
+}
+
+void qMRMLEffect::RemoveEventsObservation()
+{
+	//vtkCommand* callback = this->GetCommand(this->interactorObserverTags->GetValue(0));
+
+	this->RemoveAllObservers();
+
+
+	this->interactorObserverTags->Delete();
+	this->sliceNodeTags->Delete();
+
+
+	this->observing = false;
+}
+
+
+
 
 
 qMRMLEffect::~qMRMLEffect()
@@ -141,6 +167,7 @@ void qMRMLEffect::ProcessEvent(vtkObject *caller, unsigned long event, void *cal
 	// should be responded to by all events.
 	// Currently:
 	// pick up paint color from current location(eyedropper)
+
 	if (event == vtkCommand::KeyPressEvent)
 	{
 		QString key = QString(qMRMLEffect::interactor->GetKeySym()).toLower();
@@ -174,7 +201,8 @@ void qMRMLEffect::EffectEventCallback (vtkObject *caller,
 {
 	qMRMLEffect* self =
 		reinterpret_cast<qMRMLEffect *>(clientData);
-	self->ProcessEvent(caller, eid, callData);
+
+	if (self) 	self->ProcessEvent(caller, eid, callData);
 }
 
 

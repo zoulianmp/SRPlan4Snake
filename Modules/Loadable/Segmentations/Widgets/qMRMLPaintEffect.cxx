@@ -57,11 +57,18 @@ qMRMLPaintEffect::qMRMLPaintEffect()
 	this->shape = qMRMLPaintEffect::Circle;
 	this->pixelMode = true;
 	
+	this->paintCoordinates = vtkPoints2D::New();
+	
+}
+
+//Call after Base Class Setup Steps
+void qMRMLPaintEffect::SetupBrush()
+{
 	//initialize the brush data
 	this->brush = vtkPolyData::New();
 	this->CreateGlyph(this->brush);
 
-	
+
 	vtkPolyDataMapper2D * mapper = vtkPolyDataMapper2D::New();
 	this->brushActor = vtkActor2D::New();
 	mapper->SetInputData(this->brush);
@@ -73,8 +80,9 @@ qMRMLPaintEffect::qMRMLPaintEffect()
 
 	//python code call default parameters
 	//this->ProcessEvent();
-	
+
 }
+
 
 
 
@@ -101,6 +109,69 @@ void qMRMLPaintEffect::CleanUp()
 	Superclass::CleanUp();
 }
 
+
+/*
+void qMRMLPaintEffect::PaintEffectEventCallback(vtkObject *caller,
+	unsigned long eid,
+	void *clientData,
+	void *callData)
+{
+	qMRMLPaintEffect* self =
+		reinterpret_cast<qMRMLPaintEffect *>(clientData);
+
+	if (self) 	self->ProcessEvent(caller, eid, callData);
+}
+
+
+void qMRMLPaintEffect::SetupEventsObservation()
+{
+
+
+	this->interactorObserverTags = vtkUnsignedLongArray::New();
+
+	this->events = vtkIntArray::New();
+
+	this->events->InsertNextValue(vtkCommand::LeftButtonPressEvent);
+	this->events->InsertNextValue(vtkCommand::LeftButtonReleaseEvent);
+	this->events->InsertNextValue(vtkCommand::MiddleButtonPressEvent);
+	this->events->InsertNextValue(vtkCommand::MiddleButtonReleaseEvent);
+	this->events->InsertNextValue(vtkCommand::RightButtonPressEvent);
+	this->events->InsertNextValue(vtkCommand::RightButtonReleaseEvent);
+	this->events->InsertNextValue(vtkCommand::MouseMoveEvent);
+	this->events->InsertNextValue(vtkCommand::KeyPressEvent);
+	this->events->InsertNextValue(vtkCommand::EnterEvent);
+	this->events->InsertNextValue(vtkCommand::LeaveEvent);
+
+
+	//vtkSmartPointer<vtkCallbackCommand> callback =
+	//	vtkSmartPointer<vtkCallbackCommand>::New();
+
+	vtkCallbackCommand* callback = vtkCallbackCommand::New();
+
+	callback->SetCallback(qMRMLPaintEffect::PaintEffectEventCallback);
+	callback->SetClientData(this);
+
+
+	for (int i = 0; i < events->GetSize(); i++)
+	{
+		int e = this->events->GetValue(i);
+
+		unsigned long tag = this->interactor->AddObserver(e, callback, 1.0);
+		this->interactorObserverTags->InsertNextValue(tag);
+	}
+
+
+
+	this->sliceNodeTags = vtkUnsignedLongArray::New();
+
+	vtkMRMLSliceNode * sliceNode = this->sliceLogic->GetSliceNode();
+
+	unsigned long tag = sliceNode->AddObserver(vtkCommand::ModifiedEvent, callback, 1.0);
+	this->sliceNodeTags->InsertNextValue(tag);
+
+
+}
+*/
 
 void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void *callData)
 {

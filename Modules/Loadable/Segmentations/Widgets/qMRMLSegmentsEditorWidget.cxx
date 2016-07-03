@@ -206,6 +206,8 @@ bool qMRMLSegmentsEditorWidget::SetSegmentsEditorLogic(qMRMLSegmentsEditorLogic 
 	if (editorLogic != NULL)
 	{
 		this->editorLogic = editorLogic;
+		if (editorLogic->GetSegmentsEditorWidget() != this)
+			editorLogic->SetSegmentsEditorWidget(this);
 		return true;
 	}
 	return false;
@@ -215,6 +217,22 @@ qMRMLSegmentsEditorLogic * qMRMLSegmentsEditorWidget::GetSegmentsEditorLogic()
 {
 	return this->editorLogic;
 }
+
+
+int qMRMLSegmentsEditorWidget::GetBrushSize()
+{
+	Q_D(qMRMLSegmentsEditorWidget);
+	return d->inBrushSizeSlider->value();
+};
+
+
+
+
+
+
+
+
+
 
 
 void qMRMLSegmentsEditorWidget::onBrushStyleRoundClicked()

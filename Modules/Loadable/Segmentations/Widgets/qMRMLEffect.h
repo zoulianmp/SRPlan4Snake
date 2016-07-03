@@ -95,12 +95,16 @@ if a subclass provides a list of scope options then a selection menu will be pro
   //The Effect to be success, you need have Presetup order
 
   void SetSliceWidget(qMRMLSliceWidget* sliceWidget);  //#Setup 01
-  void SetupEventsObservation();  //#Setup 02 
+  virtual void SetupEventsObservation();  //#Setup 02 
+  virtual void RemoveEventsObservation();
+
   void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);  //#Setup 03
 
   static void EffectEventCallback(vtkObject *caller, unsigned long event, void *clientData, void *callData);
 
   virtual void ProcessEvent(vtkObject *caller, unsigned long event,void *callData);
+
+
   void AbortEvent(unsigned long event);
 
   void CursorOff();
@@ -133,6 +137,7 @@ if a subclass provides a list of scope options then a selection menu will be pro
   //Corners' order: TopLeft(ijkCorners[0]),TopRight(ijkCorners[1]),BottomLeft(ijkCorners[2]),BottomRight(ijkCorners[3])
   void GetVisibleCorners(vtkMRMLSliceLayerLogic * layerLogic, QList<int*> * out_ijkCorners );
 
+  bool IsObserving();
 
 
 public:
@@ -172,6 +177,8 @@ protected:
 
   char * actionState;
 
+  // indication of events observation satuts
+  bool observing;
   
   vtkUnsignedLongArray * interactorObserverTags;
 

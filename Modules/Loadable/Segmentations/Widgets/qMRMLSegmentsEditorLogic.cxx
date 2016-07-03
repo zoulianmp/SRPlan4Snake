@@ -60,6 +60,8 @@ Version:   $Revision$
 #include "qMRMLDrawEffect.h"
 #include "qMRMLThresholdEffect.h"
 
+#include "qMRMLSegmentsEditorWidget.h"
+
 // STD includes
 
 //----------------------------------------------------------------------------
@@ -77,15 +79,43 @@ qMRMLSegmentsEditorLogic::qMRMLSegmentsEditorLogic()
 	this->StoredLabel = 0;
 	this->CurrentLable = 0;
 
-	this->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
+	this->EditorWidget = NULL;
 
+	
+	//Make PaintEffect and setup PaintEffect
 	qMRMLPaintEffect * paintEffect = qMRMLPaintEffect::New();
+
+	paintEffect->SetSliceWidget(this->GetSliceWidget());
+	paintEffect->SetupEventsObservation();
+	paintEffect->SetEditorLogic(this);
+	paintEffect->SetupBrush();
+
+	
+
+	//Make DrawEffect and setup DrawEffect
 	qMRMLDrawEffect * drawEffect = qMRMLDrawEffect::New();
+
+	//drawEffect->SetSliceWidget(this->GetSliceWidget());
+	//drawEffect->SetupEventsObservation();
+	//drawEffect->SetEditorLogic(this);
+	//drawEffect->SetupDraw();
+
+
+	//Make ThresholdEffect  and setup ThresholdEffect
 	qMRMLThresholdEffect* thresholdEffect = qMRMLThresholdEffect::New();
+
+	//thresholdEffect->SetSliceWidget(this->GetSliceWidget());
+	//thresholdEffect->SetupEventsObservation();
+    //thresholdEffect->SetEditorLogic(this);
+	//thresholdEffect->SetupThreshold();
+
 
 	this->editorEffectMap.insert(qMRMLSegmentsEditorLogic::PaintBrush, paintEffect);
 	this->editorEffectMap.insert(qMRMLSegmentsEditorLogic::FreeDraw, drawEffect);
 	this->editorEffectMap.insert(qMRMLSegmentsEditorLogic::Threshold, thresholdEffect);
+
+
+	this->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
 
 	this->CurrentEffect = paintEffect;
 
@@ -297,13 +327,90 @@ qMRMLSegmentsEditorLogic::EffectMode qMRMLSegmentsEditorLogic::GetCurrentEffectM
 
 void qMRMLSegmentsEditorLogic::SetCurrentEffectMode(EffectMode effect)
 {
-	this->CurrentEffectMode = effect;
-
-	if (this->editorEffectMap.contains(effect))
+	if (this->CurrentEffectMode != effect) 
 	{
-		this->CurrentEffect = this->editorEffectMap.value(effect);
+		this->CurrentEffectMode = effect;
+
+		if (this->editorEffectMap.contains(effect))
+		{
+			this->CurrentEffect = this->editorEffectMap.value(effect);
+		}
+
+	
+		switch(this->CurrentEffectMode)
+		{
+		case PaintBrush:
+			qMRMLPaintEffect * paintEffect;
+			paintEffect = qMRMLPaintEffect::SafeDownCast(this->CurrentEffect);
+
+			paintEffect->SetSliceWidget(this->GetSliceWidget());
+			paintEffect->SetupEventsObservation();
+			paintEffect->SetEditorLogic(this);
+			paintEffect->SetupBrush();
+
+			if (this->editorEffectMap[FreeDraw]->IsObserving())
+			{
+				this->editorEffectMap[FreeDraw]->RemoveEventsObservation();
+			}
+
+			if (this->editorEffectMap[Threshold]->IsObserving())
+			{
+				this->editorEffectMap[Threshold]->RemoveEventsObservation();
+			}
+
+			break;
+
+		case FreeDraw:
+
+			qMRMLDrawEffect * drawEffect;
+			drawEffect  = qMRMLDrawEffect::SafeDownCast(this->CurrentEffect);
+
+			drawEffect->SetSliceWidget(this->GetSliceWidget());
+			drawEffect->SetupEventsObservation();
+			drawEffect->SetEditorLogic(this);
+			drawEffect->SetupDraw();
+
+			if (this->editorEffectMap[PaintBrush]->IsObserving())
+			{
+				this->editorEffectMap[PaintBrush]->RemoveEventsObservation();
+			}
+
+			if (this->editorEffectMap[Threshold]->IsObserving())
+			{
+				this->editorEffectMap[Threshold]->RemoveEventsObservation();
+			}
+
+			break;
+
+		case Threshold:
+			qMRMLThresholdEffect* thresholdEffect;
+			thresholdEffect  = qMRMLThresholdEffect::SafeDownCast(this->CurrentEffect);
+
+			thresholdEffect->SetSliceWidget(this->GetSliceWidget());
+			thresholdEffect->SetupEventsObservation();
+			thresholdEffect->SetEditorLogic(this);
+			thresholdEffect->SetupThreshold();
+
+			if (this->editorEffectMap[PaintBrush]->IsObserving())
+			{
+				this->editorEffectMap[PaintBrush]->RemoveEventsObservation();
+			}
+
+			if (this->editorEffectMap[FreeDraw]->IsObserving())
+			{
+				this->editorEffectMap[FreeDraw]->RemoveEventsObservation();
+			}
+
+			break;
+
+		
+		}
+
+
+
 	}
 
+	
 }
 
 
@@ -578,5 +685,25 @@ void qMRMLSegmentsEditorLogic::markVolumeNodeAsModified(vtkMRMLVolumeNode* volum
 	}
 	volumeNode->GetImageData()->Modified();
 	volumeNode->Modified();
+
+}
+
+
+void qMRMLSegmentsEditorLogic::SetSegmentsEditorWidget(qMRMLSegmentsEditorWidget * widget)
+{
+	this->EditorWidget = widget;
+
+	if (widget->GetSegmentsEditorLogic()!= this)
+	{
+		widget->SetSegmentsEditorLogic(this);
+	}
+
+
+}
+
+qMRMLSegmentsEditorWidget * qMRMLSegmentsEditorLogic::GetSegmentsEditorWidget()
+{
+	return this->EditorWidget;
+
 
 }

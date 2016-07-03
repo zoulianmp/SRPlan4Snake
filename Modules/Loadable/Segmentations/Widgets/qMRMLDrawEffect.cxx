@@ -54,13 +54,18 @@ qMRMLDrawEffect::qMRMLDrawEffect()
 	this->activeSlice = NULL;
 	this->lastInsertSliceNodeMTime = NULL;
 	this->actionState = NULL;
+	this->actionState = "";
 
+}
+
+void qMRMLDrawEffect::SetupDraw()
+{
 	//	# initialization
 	this->xyPoints = vtkPoints::New();
 	this->rasPoints = vtkPoints::New();
 	this->polyData = this->CreatePolyData();
 
-	vtkPolyDataMapper2D *  mapper =  vtkPolyDataMapper2D::New();
+	vtkPolyDataMapper2D *  mapper = vtkPolyDataMapper2D::New();
 
 	this->actor = vtkActor2D::New();
 	mapper->SetInputData(this->polyData);
@@ -73,9 +78,8 @@ qMRMLDrawEffect::qMRMLDrawEffect()
 	this->actors->AddItem(this->actor);
 
 	this->initialized = true;
+
 }
-
-
 
 qMRMLDrawEffect::~qMRMLDrawEffect()
 {

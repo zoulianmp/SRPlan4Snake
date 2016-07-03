@@ -63,6 +63,16 @@ class vtkImageMapper;
 
 #include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
+
+//Usage of qMRMLThresholdEffect Class
+//
+//The Effect to be success, you need have Presetup order
+//Setup 01  void SetSliceWidget(qMRMLSliceWidget* sliceWidget);  
+//Setup 02  void SetupEventsObservation(); 
+//Setup 03  void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);  
+//Setup 04  void SetupThreshold();
+
+
 class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLThresholdEffect : public qMRMLEffect
 {
   
@@ -72,6 +82,7 @@ public:
     vtkTypeMacro(qMRMLThresholdEffect,qMRMLEffect);
   //void PrintSelf(ostream& os, vtkIndent indent);
 
+	void SetupThreshold();
 
 
   virtual void ProcessEvent(vtkObject *caller, unsigned long event,void *callData);
