@@ -44,6 +44,11 @@ class vtkMRMLSegmentationStorageNode;
 class vtkMRMLLabelMapVolumeNode;
 class vtkMRMLModelNode;
 
+class qMRMLSegmentsEditorLogic ;
+class vtkSlicerVolumesLogic ;
+
+
+
 /// \ingroup SlicerRt_QtModules_Segmentations
 class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT vtkSlicerSegmentationsModuleLogic :
   public vtkSlicerModuleLogic
@@ -189,6 +194,13 @@ protected:
 protected:
   vtkSlicerSegmentationsModuleLogic();
   virtual ~vtkSlicerSegmentationsModuleLogic();
+
+
+  //The Contained Little Logic
+  qMRMLSegmentsEditorLogic * EditorLogic;
+
+  vtkSlicerVolumesLogic * VolumesLogic;
+
 
   /// Command handling subject hierarchy UID added events
   vtkCallbackCommand* SubjectHierarchyUIDCallbackCommand;

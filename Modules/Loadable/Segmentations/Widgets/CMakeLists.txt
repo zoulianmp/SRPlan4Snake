@@ -25,8 +25,8 @@ set(${KIT}_SRCS
   qMRMLSegmentsEditorWidget.h
   qMRMLSegmentsEditorWidget.cxx
   
-  qMRMLSegmentsEditorLogic.h
-  qMRMLSegmentsEditorLogic.cxx
+#  qMRMLSegmentsEditorLogic.h
+#  qMRMLSegmentsEditorLogic.cxx
   
   qMRMLWindowLevelPanel.h
   qMRMLWindowLevelPanel.cxx
@@ -57,7 +57,7 @@ set(${KIT}_MOC_SRCS
   qMRMLDoubleSpinBoxDelegate.h
 
   qMRMLSegmentsEditorWidget.h
-  qMRMLSegmentsEditorLogic.h
+#  qMRMLSegmentsEditorLogic.h
   
   qMRMLWindowLevelPanel.h
   qMRMLEffect.h

@@ -64,6 +64,15 @@
 // STD includes
 #include <sstream>
 
+
+//Logics includes
+
+#include "qMRMLSegmentsEditorLogic.h"
+#include "vtkSlicerVolumesLogic.h"
+
+
+
+
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(vtkSlicerSegmentationsModuleLogic);
 

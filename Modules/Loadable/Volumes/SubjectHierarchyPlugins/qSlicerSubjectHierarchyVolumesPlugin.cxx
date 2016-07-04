@@ -881,21 +881,7 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 		vtkMRMLVolumeNode * mastervolume = vtkMRMLVolumeNode::SafeDownCast(currentNode->GetAssociatedNode());
 		vtkStdString basename = mastervolume->GetName();
 
-		/*
-		qSlicerVolumesModule* volumemodule = qSlicerVolumesModule::SafeDownCast(qSlicerApplication::application()->moduleManager()->module("Volumes"));
-
-
-
-		vtkSlicerVolumesLogic * volumelogic = vtkSlicerVolumesLogic::SafeDownCast(volumemodule->logic());
-		*/
-		vtkStdString lablevolumename = basename + "LableMap";
-
-
-		lablevolumename = scene->GetUniqueNameByString(lablevolumename);
-
-		//Frome Volume Subject HierarchyNode get the VolumeImage Node
-		vtkMRMLLabelMapVolumeNode * labelvolume =  volumelogic->CreateAndAddLabelVolume(scene, mastervolume, lablevolumename.c_str());
-
+		
 
 		// Switch to segmentations module and select node
 		qSlicerAbstractModuleWidget* moduleWidget = qSlicerSubjectHierarchyAbstractPlugin::switchToModule("Segmentations");
