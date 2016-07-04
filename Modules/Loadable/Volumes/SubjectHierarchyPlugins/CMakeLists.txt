@@ -11,18 +11,20 @@ set(${KIT}_INCLUDE_DIRECTORIES
   ${MRMLLogic_INCLUDE_DIRS}
   ${qMRMLWidgets_INCLUDE_DIRS}
   ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
+  ${vtkSRPlanVolumesModuleLogic_INCLUDE_DIRS}
+
   )
 
 set(${KIT}_SRCS
   qSlicerSubjectHierarchyVolumesPlugin.cxx
   qSlicerSubjectHierarchyVolumesPlugin.h
-  qSlicerSubjectHierarchyLabelMapsPlugin.cxx
-  qSlicerSubjectHierarchyLabelMapsPlugin.h
+ # qSlicerSubjectHierarchyLabelMapsPlugin.cxx
+ # qSlicerSubjectHierarchyLabelMapsPlugin.h
   )
 
 set(${KIT}_MOC_SRCS
   qSlicerSubjectHierarchyVolumesPlugin.h
-  qSlicerSubjectHierarchyLabelMapsPlugin.h
+ # qSlicerSubjectHierarchyLabelMapsPlugin.h
   )
 
 set(${KIT}_UI_SRCS
@@ -41,6 +43,8 @@ set(${KIT}_TARGET_LIBRARIES
   qMRMLWidgets
   vtkSRPlanSegmentationsModuleMRML
   ${QT_LIBRARIES}
+  vtkSRPlanVolumesModuleLogic
+
   )
 
 #-----------------------------------------------------------------------------
