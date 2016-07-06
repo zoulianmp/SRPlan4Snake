@@ -31,21 +31,7 @@ set(${KIT}_SRCS
   qMRMLWindowLevelPanel.h
   qMRMLWindowLevelPanel.cxx
   
-  qMRMLEffect.h
-  qMRMLEffect.cxx
-    
-  qMRMLThresholdEffect.h
-  qMRMLThresholdEffect.cxx
-  
-  
-  qMRMLLabelEffect.h
-  qMRMLLabelEffect.cxx
-  
-  qMRMLPaintEffect.h
-  qMRMLPaintEffect.cxx
-  
-  qMRMLDrawEffect.h
-  qMRMLDrawEffect.cxx
+ 
   
   )
 
@@ -60,13 +46,7 @@ set(${KIT}_MOC_SRCS
 #  qMRMLSegmentsEditorLogic.h
   
   qMRMLWindowLevelPanel.h
-  qMRMLEffect.h
 
-  qMRMLThresholdEffect.h
-    
-  qMRMLLabelEffect.h
-  qMRMLPaintEffect.h
-  qMRMLDrawEffect.h
   )
 
 set(${KIT}_UI_SRCS

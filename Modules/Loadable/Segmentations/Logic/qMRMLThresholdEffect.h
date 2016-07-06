@@ -61,7 +61,7 @@ class vtkImageMapper;
 #include <string>
 #include <vector>
 
-#include "qSRPlanSegmentationsModuleWidgetsExport.h"
+#include "vtkSRPlanSegmentationsModuleLogicExport.h"
 
 
 //Usage of qMRMLThresholdEffect Class
@@ -73,7 +73,7 @@ class vtkImageMapper;
 //Setup 04  void SetupThreshold();
 
 
-class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLThresholdEffect : public qMRMLEffect
+class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT qMRMLThresholdEffect : public qMRMLEffect
 {
   
 

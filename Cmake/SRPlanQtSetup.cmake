@@ -21,6 +21,7 @@ set(SRPlan_REQUIRED_QT_MODULES
 	WebEngine Svg Sql 
 	WebEngineCore  WebEngineWidgets 
 	UiPlugin PrintSupport Designer
+	Concurrent
 
    )
    

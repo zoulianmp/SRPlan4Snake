@@ -58,7 +58,7 @@ class vtkCallbackCommand;
 #include <string>
 #include <vector>
 
-#include "qSRPlanSegmentationsModuleWidgetsExport.h"
+#include "vtkSRPlanSegmentationsModuleLogicExport.h"
 
 
 //Usage of current Class
@@ -69,7 +69,7 @@ class vtkCallbackCommand;
 //Setup 03  void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);  
 
 
-class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLEffect : public vtkObject
+class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT qMRMLEffect : public vtkObject
 {
   
 

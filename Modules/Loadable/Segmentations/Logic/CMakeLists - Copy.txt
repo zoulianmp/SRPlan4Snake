@@ -3,27 +3,26 @@ project(vtkSRPlan${MODULE_NAME}ModuleLogic)
 set(KIT ${PROJECT_NAME})
 
  
+#Deal with the Qt5 Depended files  
+set(QT_MODULES
+    Core Gui
+#	Network OpenGL
+#	UiTools Xml XmlPatterns 
+#	WebEngine Svg Sql 
+#	WebEngineCore  WebEngineWidgets 
+#	UiPlugin PrintSupport Designer
+   )
+find_package(Qt5 COMPONENTS ${QT_MODULES} REQUIRED) 
+
+
+
 
 set(${KIT}_EXPORT_DIRECTIVE "VTK_SRPlan_${MODULE_NAME_UPPER}_LOGIC_EXPORT")
 
 set(${KIT}_INCLUDE_DIRECTORIES
-    ${CMAKE_CURRENT_SOURCE_DIR} 
-	${CMAKE_CURRENT_BINARY_DIR} 
-	${vtkSegmentationCore_INCLUDE_DIRS}
-	${SRPlan_Base_INCLUDE_DIRS} 
-    ${Qt5Core_INCLUDE_DIRS}
-	${Qt5Widgets_INCLUDE_DIRS}
-	${Qt5Xml_INCLUDE_DIRS}
-	${Qt5Concurrent_INCLUDE_DIRS}
+  ${vtkSlicerSegmentationsModuleMRML_INCLUDE_DIRS}
 
-	${CTK_INCLUDE_DIRS}
-
-    ${vtkSlicerSegmentationsModuleMRML_INCLUDE_DIRS}
-
-    ${vtkSRPlanVolumesModuleLogic_INCLUDE_DIRS}
-    ${qSRPlanBaseQTGUI_INCLUDE_DIRS}
-	${qMRMLWidgets_INCLUDE_DIRS}
-	
+   ${vtkSRPlanVolumesModuleLogic_INCLUDE_DIRS}
   )
 
 set(${KIT}_SRCS
@@ -41,44 +40,28 @@ set(${KIT}_SRCS
   vtkImageStash.cxx
   vtkPichonFastMarching.cxx
   vtkPichonFastMarchingPDF.cxx
-  
-  
-  qMRMLEffect.h
-  qMRMLEffect.cxx
-    
-  qMRMLThresholdEffect.h
-  qMRMLThresholdEffect.cxx
-  
-  
-  qMRMLLabelEffect.h
-  qMRMLLabelEffect.cxx
-  
-  qMRMLPaintEffect.h
-  qMRMLPaintEffect.cxx
-  
-  qMRMLDrawEffect.h
-  qMRMLDrawEffect.cxx
-  
-  
-  
   )
 
+  
+set(${KIT}_MOC_SRCS
+    qMRMLSegmentsEditorLogic.h
+   )
   
   
 set(${KIT}_TARGET_LIBRARIES
   vtkSRPlan${MODULE_NAME}ModuleMRML
-  ${CTK_LIBRARIES}
-  vtkSRPlanVolumesModuleLogic
-  qSRPlanBaseQTGUI
-  qMRMLWidgets
 
+  vtkSRPlanVolumesModuleLogic
   Qt5::Core
   Qt5::Widgets
-  Qt5::Xml
-  Qt5::Concurrent
   )
 
+SET (${KIT}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${vtkSegmentationCore_INCLUDE_DIRS} ${SRPlan_Base_INCLUDE_DIRS} CACHE INTERNAL "" FORCE)
 
+
+
+
+QT5_WRAP_CPP(${KIT}_MOC_OUTPUT ${KIT}_MOC_SRCS)
 
 
 set(${KIT}_MOC_OUTPUT)
@@ -86,9 +69,14 @@ source_group("Generated" FILES
    ${KIT}_MOC_OUTPUT
     )
 
+#Add generated files to Source files 
+set(${KIT}_SRCS 
 
+    ${KIT}_SRCS 
+    ${KIT}_MOC_OUTPUT
+	)
 
-#message("The kit SRS: in the SegmentationsModule Logic ",${KIT}_SRCS )
+message("The kit SRS: in the SegmentationsModule Logic ",${KIT}_SRCS )
 
 #-----------------------------------------------------------------------------
 SRPlanMacroBuildModuleLogic(

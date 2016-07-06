@@ -59,9 +59,9 @@ class vtkCallbackCommand;
 #include <string>
 #include <vector>
 
-#include "qSRPlanSegmentationsModuleWidgetsExport.h"
+#include "vtkSRPlanSegmentationsModuleLogicExport.h"
 
-class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLLabelEffect : public qMRMLEffect
+class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT qMRMLLabelEffect : public qMRMLEffect
 {
   
 

@@ -60,7 +60,8 @@ Version:   $Revision$
 #include "qMRMLDrawEffect.h"
 #include "qMRMLThresholdEffect.h"
 
-#include "qMRMLSegmentsEditorWidget.h"
+
+class qMRMLSegmentsEditorWidget;
 
 // STD includes
 
@@ -79,7 +80,7 @@ qMRMLSegmentsEditorLogic::qMRMLSegmentsEditorLogic()
 	this->StoredLabel = 0;
 	this->CurrentLable = 0;
 
-	this->EditorWidget = NULL;
+//	this->EditorWidget = NULL;
 
 	
 	//Make PaintEffect and setup PaintEffect
@@ -688,6 +689,7 @@ void qMRMLSegmentsEditorLogic::markVolumeNodeAsModified(vtkMRMLVolumeNode* volum
 
 }
 
+/*
 
 void qMRMLSegmentsEditorLogic::SetSegmentsEditorWidget(qMRMLSegmentsEditorWidget * widget)
 {
@@ -707,3 +709,4 @@ qMRMLSegmentsEditorWidget * qMRMLSegmentsEditorLogic::GetSegmentsEditorWidget()
 
 
 }
+*/

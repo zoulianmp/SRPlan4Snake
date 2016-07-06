@@ -30,7 +30,7 @@ Version:   $Revision: 18866
 // qMRML includes
 #include "qMRMLSliceWidget.h"
 
-#include "qSRPlanSegmentationsModuleWidgetsExport.h"
+#include "vtkSRPlanSegmentationsModuleLogicExport.h"
 
 // MRMLLogic includes
 #include "vtkMRMLAbstractLogic.h"
@@ -63,7 +63,7 @@ class qMRMLSegmentsEditorWidget;
 ///
 //
 /// Editor Logic for Image Volume Sgementation 
-class Q_SRPlan_MODULE_SEGMENTATIONS_WIDGETS_EXPORT qMRMLSegmentsEditorLogic : public vtkMRMLAbstractLogic
+class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT qMRMLSegmentsEditorLogic : public vtkMRMLAbstractLogic
 {
 public:
 
@@ -182,7 +182,7 @@ protected:
 	vtkSegment * CurrentSegment;
 	vtkSegmentation * CurrentSegmentation;
 
-	qMRMLSegmentsEditorWidget * EditorWidget;
+//	qMRMLSegmentsEditorWidget * EditorWidget;
 
 private:
 

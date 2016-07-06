@@ -206,8 +206,8 @@ bool qMRMLSegmentsEditorWidget::SetSegmentsEditorLogic(qMRMLSegmentsEditorLogic 
 	if (editorLogic != NULL)
 	{
 		this->editorLogic = editorLogic;
-		if (editorLogic->GetSegmentsEditorWidget() != this)
-			editorLogic->SetSegmentsEditorWidget(this);
+//		if (editorLogic->GetSegmentsEditorWidget() != this)
+//			editorLogic->SetSegmentsEditorWidget(this);
 		return true;
 	}
 	return false;
