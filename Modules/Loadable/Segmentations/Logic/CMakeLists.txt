@@ -20,9 +20,12 @@ set(${KIT}_INCLUDE_DIRECTORIES
 
     ${vtkSlicerSegmentationsModuleMRML_INCLUDE_DIRS}
 
+	${qSRPlanVolumesModule_INCLUDE_DIRS}
     ${vtkSRPlanVolumesModuleLogic_INCLUDE_DIRS}
     ${qSRPlanBaseQTGUI_INCLUDE_DIRS}
 	${qMRMLWidgets_INCLUDE_DIRS}
+	${qSRPlanBaseQTCore_INCLUDE_DIRS}
+	${qSRPlanBaseQTGUI_INCLUDE_DIRS}
 	
   )
 
@@ -69,7 +72,9 @@ set(${KIT}_TARGET_LIBRARIES
   vtkSRPlan${MODULE_NAME}ModuleMRML
   ${CTK_LIBRARIES}
   vtkSRPlanVolumesModuleLogic
+  qSRPlanVolumesModule
   qSRPlanBaseQTGUI
+  qSRPlanBaseQTCore
   qMRMLWidgets
 
   Qt5::Core

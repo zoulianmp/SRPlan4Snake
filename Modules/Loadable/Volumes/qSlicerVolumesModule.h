@@ -50,8 +50,8 @@ public:
   virtual QIcon icon()const;
   virtual QStringList categories()const;
   virtual QStringList dependencies()const;
-  qSlicerGetTitleMacro(QTMODULE_TITLE);
-
+ // qSlicerGetTitleMacro(QTMODULE_TITLE);
+  qSlicerGetTitleMacro("Volumes");
 protected:
   /// Initialize the module. Register the volumes reader/writer
   virtual void setup();

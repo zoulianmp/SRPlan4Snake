@@ -68,10 +68,12 @@
 //Logics includes
 
 #include "qMRMLSegmentsEditorLogic.h"
-#include "vtkSlicerVolumesLogic.h"
+//#include "vtkSlicerVolumesLogic.h"
 
-
-
+//#include "qSlicerVolumesModule.h"
+#include "qSlicerApplication.h"
+#include "qSlicerModuleManager.h"
+#include "qSlicerAbstractCoreModule.h"
 
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(vtkSlicerSegmentationsModuleLogic);
@@ -82,6 +84,21 @@ vtkSlicerSegmentationsModuleLogic::vtkSlicerSegmentationsModuleLogic()
   this->SubjectHierarchyUIDCallbackCommand = vtkCallbackCommand::New();
   this->SubjectHierarchyUIDCallbackCommand->SetClientData( reinterpret_cast<void *>(this) );
   this->SubjectHierarchyUIDCallbackCommand->SetCallback( vtkSlicerSegmentationsModuleLogic::OnSubjectHierarchyUIDAdded );
+
+
+  
+ // qSlicerAbstractCoreModule* volumemodule =  qSlicerApplication::application()->moduleManager()->module("Volumes");
+ // vtkSlicerVolumesLogic * volumelogic = vtkSlicerVolumesLogic::SafeDownCast( volumemodule->logic());
+
+ // this->SetVolumesLogic(volumelogic);
+
+  qMRMLSegmentsEditorLogic * editorlogic = qMRMLSegmentsEditorLogic::New();
+
+  this->SetEditorLogic(editorlogic);
+
+
+
+
 }
 
 //----------------------------------------------------------------------------
@@ -93,6 +110,9 @@ vtkSlicerSegmentationsModuleLogic::~vtkSlicerSegmentationsModuleLogic()
     this->SubjectHierarchyUIDCallbackCommand->Delete();
     this->SubjectHierarchyUIDCallbackCommand = NULL;
   }
+
+
+  this->EditorLogic->Delete();
 }
 
 //----------------------------------------------------------------------------
@@ -994,3 +1014,15 @@ bool vtkSlicerSegmentationsModuleLogic::GetTransformBetweenRepresentationAndSegm
 
   return true;
 }
+
+
+qMRMLSegmentsEditorLogic * vtkSlicerSegmentationsModuleLogic::GetEditorLogic()
+{
+	return this->EditorLogic;
+}
+
+void  vtkSlicerSegmentationsModuleLogic::SetEditorLogic(qMRMLSegmentsEditorLogic* editorlogic)
+{
+	this->EditorLogic = editorlogic;
+}
+

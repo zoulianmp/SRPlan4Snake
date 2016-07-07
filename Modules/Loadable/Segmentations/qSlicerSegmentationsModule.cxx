@@ -134,22 +134,7 @@ void qSlicerSegmentationsModule::setup()
 
   vtkSlicerSegmentationsModuleLogic* segmentationsLogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic());
 
-  /*
-  qSlicerVolumesModule* volumemodule = qSlicerVolumesModule::SafeDownCast(qSlicerApplication::application()->moduleManager()->module("Volumes"));
-
-
-
-  vtkSlicerVolumesLogic * volumelogic = vtkSlicerVolumesLogic::SafeDownCast(volumemodule->logic());
-
-  vtkStdString lablevolumename = basename + "LableMap";
-
-
-  lablevolumename = scene->GetUniqueNameByString(lablevolumename);
-
-  //Frome Volume Subject HierarchyNode get the VolumeImage Node
-  vtkMRMLLabelMapVolumeNode * labelvolume =  volumelogic->CreateAndAddLabelVolume(scene, mastervolume, lablevolumename.c_str());
-  */
- 
+  
   
   // Register IOs
   qSlicerIOManager* ioManager = qSlicerApplication::application()->ioManager();
@@ -180,6 +165,18 @@ vtkMRMLAbstractLogic* qSlicerSegmentationsModule::createLogic()
 {
   return vtkSlicerSegmentationsModuleLogic::New();
 }
+
+
+//-----------------------------------------------------------------------------
+QStringList qSlicerSegmentationsModule::dependencies() const
+{
+	QStringList moduleDependencies;
+	moduleDependencies << "Volumes" ;
+	return moduleDependencies;
+}
+
+
+
 
 //-----------------------------------------------------------------------------
 void qSlicerSegmentationsModule::onNodeAdded(vtkObject* sceneObject, vtkObject* nodeObject)

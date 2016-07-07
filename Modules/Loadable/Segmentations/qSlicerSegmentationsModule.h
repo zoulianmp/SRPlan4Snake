@@ -63,6 +63,8 @@ public:
   /// Return the categories for the module
   virtual QStringList categories()const;
 
+  virtual QStringList dependencies()const;
+
 public slots:
   /// Set up MRML scene events
   virtual void setMRMLScene(vtkMRMLScene* scene);

@@ -45,7 +45,7 @@ class vtkMRMLLabelMapVolumeNode;
 class vtkMRMLModelNode;
 
 class qMRMLSegmentsEditorLogic ;
-class vtkSlicerVolumesLogic ;
+//class vtkSlicerVolumesLogic ;
 
 
 
@@ -169,6 +169,13 @@ public:
   /// \return Success flag
   static bool GetTransformBetweenRepresentationAndSegmentation(vtkMRMLTransformableNode* representationNode, vtkMRMLSegmentationNode* segmentationNode, vtkGeneralTransform* representationToSegmentationTransform);
 
+  qMRMLSegmentsEditorLogic * GetEditorLogic();
+  void  SetEditorLogic(qMRMLSegmentsEditorLogic* editorlogic);
+
+  //vtkSlicerVolumesLogic * GetVolumesLogic();
+ // void SetVolumesLogic(vtkSlicerVolumesLogic * volumeslogic);
+
+
 protected:
   virtual void SetMRMLSceneInternal(vtkMRMLScene * newScene);
 
@@ -199,7 +206,7 @@ protected:
   //The Contained Little Logic
   qMRMLSegmentsEditorLogic * EditorLogic;
 
-  vtkSlicerVolumesLogic * VolumesLogic;
+  //vtkSlicerVolumesLogic * VolumesLogic;
 
 
   /// Command handling subject hierarchy UID added events
