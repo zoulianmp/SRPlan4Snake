@@ -75,6 +75,9 @@
 #include "qSlicerModuleManager.h"
 #include "qSlicerAbstractCoreModule.h"
 
+#include "vtkMRMLSubjectHierarchyConstants.h"
+
+
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(vtkSlicerSegmentationsModuleLogic);
 
@@ -607,6 +610,31 @@ vtkSegment* vtkSlicerSegmentationsModuleLogic::GetSegmentForSegmentSubjectHierar
   }
 
   return segment;
+}
+
+
+vtkMRMLVolumeNode * vtkSlicerSegmentationsModuleLogic::GetRelatedVolumeNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode)
+{
+
+	if (!scene || !segnode)
+	{
+		return NULL;
+	}
+
+	std::vector<vtkMRMLNode*> SHNodes;
+	unsigned int numberOfNodes = scene->GetNodesByClass("vtkMRMLSubjectHierarchyNode", SHNodes);
+	for (unsigned int nodeIndex = 0; nodeIndex<numberOfNodes; nodeIndex++)
+	{
+		vtkMRMLSubjectHierarchyNode* node = vtkMRMLSubjectHierarchyNode::SafeDownCast(SHNodes[nodeIndex]);
+
+		if (node && node->GetAssociatedNode() == segnode)
+		{
+			std::string volumenodeid =  node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName());
+			return vtkMRMLVolumeNode::SafeDownCast(scene->GetNodeByID(volumenodeid));
+		}
+	}
+
+	return NULL;
 }
 
 //-----------------------------------------------------------------------------

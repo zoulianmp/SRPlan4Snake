@@ -370,6 +370,10 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 {
   Q_D(qSlicerSegmentationsModuleWidget);
 
+  vtkSlicerSegmentationsModuleLogic * modulelogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast( this->logic());
+  vtkMRMLScene * scene = this->mrmlScene();
+  vtkMRMLNode * labelnode = scene->GetNthNodeByClass(0, "vtkMRMLLabelMapVolumeNode");
+  
   vtkMRMLSegmentationNode* currentSegmentationNode =  vtkMRMLSegmentationNode::SafeDownCast(
     d->MRMLNodeComboBox_Segmentation->currentNode() );
   if (!currentSegmentationNode)
@@ -379,6 +383,16 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 
   // Create empty segment in current segmentation
   currentSegmentationNode->GetSegmentation()->AddEmptySegment();
+
+  // LableMapVolumeNode is not exist ,Creat the LabelMapVolumeNode
+  if (!labelnode)
+  {
+	  modulelogic->GetRelatedVolumeNodeFromSegmentationNode(scene, currentSegmentationNode);
+  }
+
+
+
+
 }
 
 //-----------------------------------------------------------------------------

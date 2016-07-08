@@ -124,6 +124,20 @@ public:
   /// Utility function for getting the segment object for a segment subject hierarchy node
   static vtkSegment* GetSegmentForSegmentSubjectHierarchyNode(vtkMRMLSubjectHierarchyNode* segmentShNode);
 
+
+  //Utility function for getting the related volumenode from a segmentationNode
+  //1. from vtkMRMLSegmentationNode to StructureSet SHNode
+  //2. from StructureSet SHNode GetUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName(), to the related VolumeNode
+  //3. return the VolumeNode
+
+  static vtkMRMLVolumeNode * GetRelatedVolumeNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode);
+
+
+
+
+
+
+
   /// Export segment to representation MRML node.
   /// 1. If representation node is a labelmap node, then the binary labelmap representation of the
   ///    segment is copied
