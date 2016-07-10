@@ -115,6 +115,12 @@ public:
 	  return "SRPlan-DoseVolumeUID";
   };
 
+  //Get the UID for SH Segmentation AddUID(), relate a LabelMapVolume to SH SegmentationNode
+  static const char* GetTempLabelMapUIDName()
+  {
+	  return "SRPlan-TempLabelMapUID";
+  };
+
   static const char* GetSRPlanUserOriginUIDName()
   {
 	  return "SRPlan-UserOriginUID";

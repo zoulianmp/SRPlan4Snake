@@ -64,7 +64,7 @@
 
 // MRML widgets includes
 #include "qMRMLNodeComboBox.h"
-
+#include "vtkSlicerVolumesLogic.h"
 #include "qSlicerApplication.h"
 
 // STD includes
@@ -838,8 +838,15 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 	vtkStdString ssuid = currentNode->GetUID(vtkMRMLSubjectHierarchyConstants::GetSHStructureSetUIDName());
 	vtkMRMLSubjectHierarchyNode* SegmentationSH = vtkMRMLSubjectHierarchyNode::SafeDownCast(scene->GetNodeByID(ssuid)); //Get The Associated Segmetation of Image Volume
 
+	//New a tempLabelMap add to scene and
+	vtkMRMLLabelMapVolumeNode * templabelmapnode = vtkMRMLLabelMapVolumeNode::New();
+	scene->AddNode(templabelmapnode);
+
+
 	if (SegmentationSH)
 	{
+		
+
 		// Switch to segmentations module and select node
 		qSlicerAbstractModuleWidget* moduleWidget = qSlicerSubjectHierarchyAbstractPlugin::switchToModule("Segmentations");
 		if (moduleWidget)
@@ -869,13 +876,13 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 
 		vtkStdString nodename = scene->GetUniqueNameByString(vtkMRMLSubjectHierarchyConstants::GetSRPlanStructureSetNodeBaseName());
 
-		vtkMRMLSubjectHierarchyNode * structureset = vtkMRMLSubjectHierarchyNode::CreateSubjectHierarchyNode(scene, parentNode,
+		SegmentationSH = vtkMRMLSubjectHierarchyNode::CreateSubjectHierarchyNode(scene, parentNode,
 			vtkMRMLSubjectHierarchyConstants::GetSubjectHierarchyLevelSRSubplan(), nodename, segmentation);
 
 
 		// Start to Related Structure and ImageVolume
-		structureset->AddUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName(), currentNode->GetID());
-		currentNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSHStructureSetUIDName(), structureset->GetID());
+		SegmentationSH->AddUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName(), currentNode->GetID());
+		currentNode->AddUID(vtkMRMLSubjectHierarchyConstants::GetSHStructureSetUIDName(), SegmentationSH->GetID());
 
 		//Creat and add LabelVolume to Scene and used for Lable Segmentation
 		vtkMRMLVolumeNode * mastervolume = vtkMRMLVolumeNode::SafeDownCast(currentNode->GetAssociatedNode());
@@ -883,6 +890,15 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 
 		
 
+		// related templabelmapnode to SegmentationSH
+		SegmentationSH->AddUID(vtkMRMLSubjectHierarchyConstants::GetTempLabelMapUIDName(), templabelmapnode->GetID());
+
+
+		//Initial the Temp LabelMap Node by  VolumesLogic
+	    vtkSlicerVolumesLogic::CreateTempLabelVolumeFromVolume(scene, templabelmapnode, mastervolume);
+
+
+ 
 		// Switch to segmentations module and select node
 		qSlicerAbstractModuleWidget* moduleWidget = qSlicerSubjectHierarchyAbstractPlugin::switchToModule("Segmentations");
 		if (moduleWidget)

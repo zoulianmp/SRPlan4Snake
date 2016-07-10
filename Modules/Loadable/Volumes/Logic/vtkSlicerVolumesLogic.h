@@ -188,6 +188,12 @@ public:
                                                        vtkMRMLLabelMapVolumeNode *labelNode,
                                                        vtkMRMLVolumeNode *inputVolume);
 
+
+  static vtkMRMLLabelMapVolumeNode *CreateTempLabelVolumeFromVolume(vtkMRMLScene *scene,
+	  vtkMRMLLabelMapVolumeNode *labelNode,
+	  vtkMRMLVolumeNode *inputVolume);
+
+
   /// Clear the image data of a volume node to contain all zeros
   static void ClearVolumeImageData(vtkMRMLVolumeNode *volumeNode);
 

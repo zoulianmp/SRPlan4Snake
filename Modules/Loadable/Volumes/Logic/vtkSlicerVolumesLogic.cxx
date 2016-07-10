@@ -982,6 +982,52 @@ vtkSlicerVolumesLogic::CreateLabelVolumeFromVolume(vtkMRMLScene *scene,
   return labelNode;
 }
 
+
+
+ 
+
+vtkMRMLLabelMapVolumeNode *CreateTempLabelVolumeFromVolume(vtkMRMLScene *scene,
+	vtkMRMLLabelMapVolumeNode *labelNode,
+	vtkMRMLVolumeNode *inputVolume)
+{
+
+	if (scene == NULL || labelNode == NULL || inputVolume == NULL)
+	{
+		return NULL;
+	}
+
+	 
+
+	// We need to copy from the volume node to get required attributes, but
+	// the copy copies inputVolume's name as well.  So save the original name
+	// and re-set the name after the copy.
+	std::string origName(labelNode->GetName());
+	labelNode->Copy(inputVolume);
+	labelNode->SetAndObserveStorageNodeID(NULL);
+	labelNode->SetName(origName.c_str());
+	
+
+	// Associate labelmap with the source volume
+	//TODO: Obsolete, replace mechanism with node references
+	if (inputVolume->GetID())
+	{
+		labelNode->SetAttribute("AssociatedNodeID", inputVolume->GetID());
+	}
+
+	   
+	// Copy and set image data of the input volume to the label volume
+	vtkNew<vtkImageData> imageData;
+	imageData->DeepCopy(inputVolume->GetImageData());
+	labelNode->SetAndObserveImageData(imageData.GetPointer());
+
+	return labelNode;
+ 
+}
+
+
+
+
+
 //----------------------------------------------------------------------------
 void
 vtkSlicerVolumesLogic::ClearVolumeImageData(vtkMRMLVolumeNode *volumeNode)

@@ -132,8 +132,13 @@ public:
 
   static vtkMRMLVolumeNode * GetRelatedVolumeNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode);
 
+  //Get the SegmentationNode related TempLabelMapNode for a given vtkMRMLSegmentationNode* segnode
+  static vtkMRMLLabelMapVolumeNode * GetRelatedTempLabelMapNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode);
 
 
+
+  //Get the SegmentationSubjectHierarchyNode for a given segmentationNode.
+  static vtkMRMLSubjectHierarchyNode* GetSegmentationSHNodeForSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode);
 
 
 

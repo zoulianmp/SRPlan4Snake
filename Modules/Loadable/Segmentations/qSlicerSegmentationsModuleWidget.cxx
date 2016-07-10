@@ -38,6 +38,7 @@
 // MRML includes
 #include "vtkMRMLScene.h"
 #include "vtkMRMLLabelMapVolumeNode.h"
+#include "vtkMRMLScalarVolumeNode.h"
 #include "vtkMRMLModelNode.h"
 #include "vtkMRMLSubjectHierarchyNode.h"
 
@@ -372,7 +373,7 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 
   vtkSlicerSegmentationsModuleLogic * modulelogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast( this->logic());
   vtkMRMLScene * scene = this->mrmlScene();
-  vtkMRMLNode * labelnode = scene->GetNthNodeByClass(0, "vtkMRMLLabelMapVolumeNode");
+  vtkMRMLLabelMapVolumeNode * labelnode = vtkMRMLLabelMapVolumeNode::SafeDownCast(scene->GetNthNodeByClass(0, "vtkMRMLLabelMapVolumeNode"));
   
   vtkMRMLSegmentationNode* currentSegmentationNode =  vtkMRMLSegmentationNode::SafeDownCast(
     d->MRMLNodeComboBox_Segmentation->currentNode() );
@@ -387,12 +388,22 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
   // LableMapVolumeNode is not exist ,Creat the LabelMapVolumeNode
   if (!labelnode)
   {
-	  modulelogic->GetRelatedVolumeNodeFromSegmentationNode(scene, currentSegmentationNode);
+	  labelnode = vtkMRMLLabelMapVolumeNode::New();
+	  scene->AddNode(labelnode);
+
+
+	  //Get the Segmentation related VolumeNode;
+	  vtkMRMLScalarVolumeNode * relatedVolume = vtkMRMLScalarVolumeNode::SafeDownCast(
+		                               modulelogic->GetRelatedVolumeNodeFromSegmentationNode(scene, currentSegmentationNode) );
+
+	  // Create oriented image data from a volume node
+	  vtkOrientedImageData * orientedvolume = modulelogic->CreateOrientedImageDataFromVolumeNode(relatedVolume);
+
+	  // Create labelmap volume MRML node from oriented image data
+	  modulelogic->CreateLabelmapVolumeFromOrientedImageData(orientedvolume, labelnode);
+	  	  
   }
-
-
-
-
+  
 }
 
 //-----------------------------------------------------------------------------

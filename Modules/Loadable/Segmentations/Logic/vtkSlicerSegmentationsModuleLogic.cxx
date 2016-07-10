@@ -613,7 +613,8 @@ vtkSegment* vtkSlicerSegmentationsModuleLogic::GetSegmentForSegmentSubjectHierar
 }
 
 
-vtkMRMLVolumeNode * vtkSlicerSegmentationsModuleLogic::GetRelatedVolumeNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode)
+//Get the SegmentationSubjectHierarchyNode for a given segmentationNode.
+vtkMRMLSubjectHierarchyNode* vtkSlicerSegmentationsModuleLogic::GetSegmentationSHNodeForSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode)
 {
 
 	if (!scene || !segnode)
@@ -628,14 +629,40 @@ vtkMRMLVolumeNode * vtkSlicerSegmentationsModuleLogic::GetRelatedVolumeNodeFromS
 		vtkMRMLSubjectHierarchyNode* node = vtkMRMLSubjectHierarchyNode::SafeDownCast(SHNodes[nodeIndex]);
 
 		if (node && node->GetAssociatedNode() == segnode)
-		{
-			std::string volumenodeid =  node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName());
-			return vtkMRMLVolumeNode::SafeDownCast(scene->GetNodeByID(volumenodeid));
+		{		
+			return node;
 		}
 	}
 
 	return NULL;
+
+
 }
+
+vtkMRMLVolumeNode * vtkSlicerSegmentationsModuleLogic::GetRelatedVolumeNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode)
+{
+	vtkMRMLSubjectHierarchyNode* node = vtkSlicerSegmentationsModuleLogic::GetSegmentationSHNodeForSegmentationNode(scene, segnode);
+  	std::string volumenodeid =  node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName());
+	return vtkMRMLVolumeNode::SafeDownCast(scene->GetNodeByID(volumenodeid));
+ 
+}
+
+//Get the SegmentationNode related TempLabelMapNode for a given vtkMRMLSegmentationNode* segnode
+//TempLabelMapNode used for mannual segmentation, store the temp label map.
+vtkMRMLLabelMapVolumeNode * vtkSlicerSegmentationsModuleLogic::GetRelatedTempLabelMapNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode)
+{
+	vtkMRMLSubjectHierarchyNode* node = vtkSlicerSegmentationsModuleLogic::GetSegmentationSHNodeForSegmentationNode(scene, segnode);
+	std::string templabelmapid = node->GetUID(vtkMRMLSubjectHierarchyConstants::GetTempLabelMapUIDName());
+	return vtkMRMLLabelMapVolumeNode::SafeDownCast(scene->GetNodeByID(templabelmapid));
+
+}
+
+
+
+
+
+
+
 
 //-----------------------------------------------------------------------------
 bool vtkSlicerSegmentationsModuleLogic::ExportSegmentToRepresentationNode(vtkSegment* segment, vtkMRMLNode* representationNode)
