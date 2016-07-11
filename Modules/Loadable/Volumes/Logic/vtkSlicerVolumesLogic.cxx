@@ -986,7 +986,7 @@ vtkSlicerVolumesLogic::CreateLabelVolumeFromVolume(vtkMRMLScene *scene,
 
  
 
-vtkMRMLLabelMapVolumeNode *CreateTempLabelVolumeFromVolume(vtkMRMLScene *scene,
+vtkMRMLLabelMapVolumeNode *vtkSlicerVolumesLogic::CreateTempLabelVolumeFromVolume(vtkMRMLScene *scene,
 	vtkMRMLLabelMapVolumeNode *labelNode,
 	vtkMRMLVolumeNode *inputVolume)
 {

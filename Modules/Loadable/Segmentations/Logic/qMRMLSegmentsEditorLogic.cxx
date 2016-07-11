@@ -448,6 +448,20 @@ vtkMRMLSliceCompositeNode * qMRMLSegmentsEditorLogic::GetCompositeNode(char * la
 }
 
 
+
+
+void qMRMLSegmentsEditorLogic::SetLabelMapNodetoLayoutCompositeNode(char * layoutName, vtkMRMLLabelMapVolumeNode* labeMap)
+{
+	vtkMRMLSliceCompositeNode* compNode = this->GetCompositeNode(layoutName);
+	if (compNode)
+	{
+		compNode->SetLabelVolumeID(labeMap->GetID());
+	
+	}
+
+}
+
+
 qMRMLSliceWidget * qMRMLSegmentsEditorLogic::GetSliceWidget(char * layoutName)
 {
 	qSlicerLayoutManager * layoutmanager = qSlicerApplication::application()->layoutManager();
@@ -688,25 +702,3 @@ void qMRMLSegmentsEditorLogic::markVolumeNodeAsModified(vtkMRMLVolumeNode* volum
 	volumeNode->Modified();
 
 }
-
-/*
-
-void qMRMLSegmentsEditorLogic::SetSegmentsEditorWidget(qMRMLSegmentsEditorWidget * widget)
-{
-	this->EditorWidget = widget;
-
-	if (widget->GetSegmentsEditorLogic()!= this)
-	{
-		widget->SetSegmentsEditorLogic(this);
-	}
-
-
-}
-
-qMRMLSegmentsEditorWidget * qMRMLSegmentsEditorLogic::GetSegmentsEditorWidget()
-{
-	return this->EditorWidget;
-
-
-}
-*/

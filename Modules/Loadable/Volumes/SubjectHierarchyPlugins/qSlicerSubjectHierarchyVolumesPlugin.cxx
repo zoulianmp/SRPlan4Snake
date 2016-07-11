@@ -45,6 +45,7 @@
 #include <vtkMRMLSliceNode.h>
 #include "vtkMRMLSegmentationNode.h"
 
+#include "vtkMRMLLabelMapVolumeNode.h"
 
 // VTK includes
 #include <vtkObjectFactory.h>

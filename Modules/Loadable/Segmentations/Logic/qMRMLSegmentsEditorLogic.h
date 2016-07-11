@@ -36,6 +36,11 @@ Version:   $Revision: 18866
 #include "vtkMRMLAbstractLogic.h"
 #include "QMap.h"
 
+
+#include "vtkMRMLLabelMapVolumeNode.h"
+
+
+
 // STD includes
 #include <vector>
 
@@ -92,8 +97,8 @@ public:
 
 	qMRMLEffect * GetCurrentEffect();
 
-	void SetSegmentsEditorWidget(qMRMLSegmentsEditorWidget * widget);
-	qMRMLSegmentsEditorWidget * GetSegmentsEditorWidget();
+	//void SetSegmentsEditorWidget(qMRMLSegmentsEditorWidget * widget);
+	//qMRMLSegmentsEditorWidget * GetSegmentsEditorWidget();
 
 	qMRMLEffect * GetEditorEffect(EffectMode effect= qMRMLSegmentsEditorLogic::PaintBrush);
 
@@ -112,6 +117,11 @@ public:
 	vtkMRMLVolumeNode * GetLabelVolume();
 	vtkImageData * GetLabelImage();
 	char * GetLabelID();
+
+	//Set LabelMap Volume Node into SliceWidget CompositNode
+	/////layoutName = "Red","Green","Blue"
+
+	void SetLabelMapNodetoLayoutCompositeNode(char * layoutName, vtkMRMLLabelMapVolumeNode* labeMap);
 
 	void SetPropagateMode( int Mode);
 	int GetPropagateMode();
