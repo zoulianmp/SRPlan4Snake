@@ -133,6 +133,12 @@ void vtkSlicerSegmentationsModuleLogic::SetMRMLSceneInternal(vtkMRMLScene* newSc
   // events->InsertNextValue(vtkMRMLScene::EndCloseEvent);
   events->InsertNextValue(vtkMRMLScene::EndImportEvent);
   this->SetAndObserveMRMLSceneEvents(newScene, events.GetPointer());
+
+  //Setup the Scene of EditorLogic
+  this->GetEditorLogic()->SetMRMLScene(newScene);
+
+  //used for debug by zoulian
+  vtkMRMLScene * editscene = this->GetEditorLogic()->GetMRMLScene();
 }
 
 //-----------------------------------------------------------------------------

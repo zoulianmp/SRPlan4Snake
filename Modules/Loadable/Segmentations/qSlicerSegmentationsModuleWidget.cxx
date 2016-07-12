@@ -378,6 +378,14 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 
   vtkMRMLScene * scene = this->mrmlScene();
 
+  vtkMRMLScene * editscene = editorlogic->GetMRMLScene();
+
+  if (!editorlogic->GetMRMLScene() || scene)
+  {
+	  editorlogic->SetMRMLScene(scene);
+  }
+
+
 
   vtkMRMLLabelMapVolumeNode *  labelnode = vtkMRMLLabelMapVolumeNode::SafeDownCast(editorlogic ->GetLabelVolume());
   

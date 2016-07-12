@@ -159,6 +159,9 @@ void qMRMLSegmentsEditorLogic::Initialize(vtkMRMLSliceNode* newSliceNode)
 //----------------------------------------------------------------------------
 void qMRMLSegmentsEditorLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene)
 {
+	
+	Superclass::SetMRMLSceneInternal(newScene);
+	
 	/*
 	// Sanity checks
 	if (!this->GetName() || strlen(this->GetName()) == 0)
