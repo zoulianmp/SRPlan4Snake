@@ -378,13 +378,12 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 
   vtkMRMLScene * scene = this->mrmlScene();
 
-  vtkMRMLScene * editscene = editorlogic->GetMRMLScene();
+ // vtkMRMLScene * editscene = editorlogic->GetMRMLScene();
 
-  if (!editorlogic->GetMRMLScene() || scene)
+  if (!editorlogic->GetMRMLScene() && scene)
   {
 	  editorlogic->SetMRMLScene(scene);
   }
-
 
 
   vtkMRMLLabelMapVolumeNode *  labelnode = vtkMRMLLabelMapVolumeNode::SafeDownCast(editorlogic ->GetLabelVolume());
@@ -405,9 +404,8 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 
 	  labelnode= modulelogic->GetRelatedTempLabelMapNodeFromSegmentationNode(scene, currentSegmentationNode);
 
-	 // editorlogic->SetLabelMapNodetoLayoutCompositeNode
+	  editorlogic->SetLabelMapNodetoLayoutCompositeNode("Red", labelnode);
 	 
-
   }
   
 }

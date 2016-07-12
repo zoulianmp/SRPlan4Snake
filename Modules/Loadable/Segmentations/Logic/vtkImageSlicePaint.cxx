@@ -400,6 +400,7 @@ void vtkImageSlicePaint::Paint()
 
   switch (this->GetWorkingImage()->GetScalarType())
     {
+
     vtkTemplateMacro(
       vtkImageSlicePaintPaint (this, (VTK_TT *)ptr ) );
     default:

@@ -442,7 +442,12 @@ vtkMRMLSliceCompositeNode * qMRMLSegmentsEditorLogic::GetCompositeNode(char * la
 	{
 		vtkMRMLNode * compNode = this->GetMRMLScene()->GetNthNodeByClass(i, "vtkMRMLSliceCompositeNode");
 
-		if (vtkMRMLSliceCompositeNode::SafeDownCast(compNode)->GetLayoutName() == layoutName)
+
+	//	char* lname = vtkMRMLSliceCompositeNode::SafeDownCast(compNode)->GetLayoutName();
+
+	//	bool re = strcmp(lname, layoutName);
+
+		if (!strcmp(vtkMRMLSliceCompositeNode::SafeDownCast(compNode)->GetLayoutName(),layoutName))
 		{
 			return vtkMRMLSliceCompositeNode::SafeDownCast(compNode);
 		}
@@ -528,6 +533,7 @@ vtkMRMLVolumeNode * qMRMLSegmentsEditorLogic::GetLabelVolume()
 			return vtkMRMLVolumeNode::SafeDownCast(
 				this->GetMRMLScene()->GetNodeByID(labelID));
 		}
+		return NULL;
 	}
 }
 
