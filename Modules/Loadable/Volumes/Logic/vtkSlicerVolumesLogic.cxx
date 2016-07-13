@@ -1028,6 +1028,9 @@ vtkMRMLLabelMapVolumeNode *vtkSlicerVolumesLogic::CreateTempLabelVolumeFromVolum
 	imageData->DeepCopy(inputVolume->GetImageData());
 	labelNode->SetAndObserveImageData(imageData.GetPointer());
 
+	// Make an image data of the same size and shape as the input volume, but filled with zeros
+	vtkSlicerVolumesLogic::ClearVolumeImageData(labelNode );
+
 	return labelNode;
  
 }

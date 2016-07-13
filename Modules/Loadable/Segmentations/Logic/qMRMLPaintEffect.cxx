@@ -56,6 +56,7 @@ qMRMLPaintEffect::qMRMLPaintEffect()
 	this->brushSize = 10 ; //defalt size is 10 mm
 	this->shape = qMRMLPaintEffect::Circle;
 	this->pixelMode = true;
+	this->paintLabel = 9; //number 9 used for temp label paint
 	
 	this->paintCoordinates = vtkPoints2D::New();
 	this->feedbackActors = vtkActor2DCollection::New();
