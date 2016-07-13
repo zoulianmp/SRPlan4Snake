@@ -58,7 +58,7 @@ qMRMLPaintEffect::qMRMLPaintEffect()
 	this->pixelMode = true;
 	
 	this->paintCoordinates = vtkPoints2D::New();
-	
+	this->feedbackActors = vtkActor2DCollection::New();
 }
 
 //Call after Base Class Setup Steps

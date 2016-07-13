@@ -996,7 +996,14 @@ vtkMRMLLabelMapVolumeNode *vtkSlicerVolumesLogic::CreateTempLabelVolumeFromVolum
 		return NULL;
 	}
 
-	 
+	// Create a display node if the label node does not have one
+	vtkSmartPointer<vtkMRMLLabelMapVolumeDisplayNode> labelDisplayNode =
+		vtkMRMLLabelMapVolumeDisplayNode::SafeDownCast(labelNode->GetDisplayNode());
+	if (labelDisplayNode.GetPointer() == NULL)
+	{
+		labelDisplayNode = vtkSmartPointer<vtkMRMLLabelMapVolumeDisplayNode>::New();
+		scene->AddNode(labelDisplayNode);
+	}
 
 	// We need to copy from the volume node to get required attributes, but
 	// the copy copies inputVolume's name as well.  So save the original name
@@ -1006,6 +1013,7 @@ vtkMRMLLabelMapVolumeNode *vtkSlicerVolumesLogic::CreateTempLabelVolumeFromVolum
 	labelNode->SetAndObserveStorageNodeID(NULL);
 	labelNode->SetName(origName.c_str());
 	
+	labelNode->SetAndObserveDisplayNodeID(labelDisplayNode->GetID());
 
 	// Associate labelmap with the source volume
 	//TODO: Obsolete, replace mechanism with node references
