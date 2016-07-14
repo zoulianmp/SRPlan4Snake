@@ -152,14 +152,7 @@ void qMRMLSegmentsEditorWidget::onPaintBrushClicked()
 	qMRMLSegmentsEditorLogic * editorLogic = this->GetSegmentsEditorLogic();
     editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
 
-	//Initial the PaintBrush
-	//qMRMLPaintEffect* paintEffect = qMRMLPaintEffect::SafeDownCast(editorLogic->GetCurrentEffect());
-
-	//paintEffect->SetSliceWidget(editorLogic->GetSliceWidget());
-	//paintEffect->SetupEventsObservation();
-	//paintEffect->SetEditorLogic(this->editorLogic);
-	//paintEffect->SetupBrush();
-
+	
 }
 
 void qMRMLSegmentsEditorWidget::onPolyClicked()

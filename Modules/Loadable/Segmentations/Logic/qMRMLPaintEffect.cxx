@@ -112,6 +112,7 @@ void qMRMLPaintEffect::CleanUp()
 	Superclass::CleanUp();
 }
 
+/*
 void  qMRMLPaintEffect::RemoveEventsObservation()
 {
 	Superclass::RemoveEventsObservation();
@@ -128,6 +129,7 @@ void qMRMLPaintEffect::SetupEventsObservation()
 	
 }
 
+*/
 
 
 /*
@@ -232,10 +234,8 @@ void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void
 	}
 	else if (event == vtkCommand::EnterEvent)
 	{
-		if (this->observing)
-		{
-			this->brushActor->VisibilityOn();
-		}
+		this->brushActor->VisibilityOn();
+	 
 	}
 	else if (event == vtkCommand::LeaveEvent)
 	{

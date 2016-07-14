@@ -77,7 +77,7 @@ public:
 	vtkTypeMacro(qMRMLSegmentsEditorLogic, vtkMRMLAbstractLogic);
 	
 	//The enum type for EffectMode
-	enum EffectMode { PaintBrush, FreeDraw, Threshold };
+	enum EffectMode {None,PaintBrush, FreeDraw, Threshold };
 
 	/// Convenient methods allowing to initialize SliceLogic given \a newSliceNode
 	/// \note This method should be used when the Logic is "shared" between two widgets

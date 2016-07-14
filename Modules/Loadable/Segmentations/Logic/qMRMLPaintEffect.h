@@ -94,8 +94,12 @@ public:
   virtual void CleanUp();
   enum BrushType { Square, Circle, Sphere, Box };
   
+  /*
   virtual void  RemoveEventsObservation();
+
   virtual void  SetupEventsObservation();
+  */
+
   void SetupBrush();
 
   void CreateGlyph(vtkPolyData * brush);

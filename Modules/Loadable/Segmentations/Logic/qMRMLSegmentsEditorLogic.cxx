@@ -119,6 +119,8 @@ qMRMLSegmentsEditorLogic::qMRMLSegmentsEditorLogic()
 	//this->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
 
 	this->CurrentEffect = NULL;
+	this->CurrentEffectMode = None;
+
 
 }
 
@@ -410,17 +412,10 @@ void qMRMLSegmentsEditorLogic::SetCurrentEffectMode(EffectMode effect)
 		}
 	}
 	else
-	{
-		if (this->GetCurrentEffect()->IsObserving())
-		{
-			this->GetCurrentEffect()->CleanUp();
-		}
-		else
-		{
-			this->GetCurrentEffect()->SetupEventsObservation();
-			this->GetCurrentEffect()->CursorOn();
-		}
-		
+	{ 
+		this->GetCurrentEffect()->CleanUp();
+		this->CurrentEffect = NULL;
+		this->CurrentEffectMode = None;
 
 	}
 	
@@ -516,7 +511,7 @@ vtkImageData * qMRMLSegmentsEditorLogic::GetBackgroundImage()
 	{
 		return volumeNode->GetImageData();
 	}
-
+	return NULL;
 
 }
 
@@ -527,6 +522,7 @@ char * qMRMLSegmentsEditorLogic::GetBackgroundID()
 	{
 		return compNode->GetBackgroundVolumeID();
 	}
+	return NULL;
 
 }
 
