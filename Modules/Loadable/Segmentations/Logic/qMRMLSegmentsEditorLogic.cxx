@@ -86,10 +86,10 @@ qMRMLSegmentsEditorLogic::qMRMLSegmentsEditorLogic()
 	//Make PaintEffect and setup PaintEffect
 	qMRMLPaintEffect * paintEffect = qMRMLPaintEffect::New();
 
-	paintEffect->SetSliceWidget(this->GetSliceWidget());
-	paintEffect->SetupEventsObservation();
-	paintEffect->SetEditorLogic(this);
-	paintEffect->SetupBrush();
+	//paintEffect->SetSliceWidget(this->GetSliceWidget());
+	//paintEffect->SetupEventsObservation();
+	//paintEffect->SetEditorLogic(this);
+	//paintEffect->SetupBrush();
 
 	
 
@@ -115,10 +115,10 @@ qMRMLSegmentsEditorLogic::qMRMLSegmentsEditorLogic()
 	this->editorEffectMap.insert(qMRMLSegmentsEditorLogic::FreeDraw, drawEffect);
 	this->editorEffectMap.insert(qMRMLSegmentsEditorLogic::Threshold, thresholdEffect);
 
+	//Don't Setup the Current Effect 
+	//this->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
 
-	this->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
-
-	this->CurrentEffect = paintEffect;
+	this->CurrentEffect = NULL;
 
 }
 
@@ -339,8 +339,6 @@ void qMRMLSegmentsEditorLogic::SetCurrentEffectMode(EffectMode effect)
 		{
 			this->CurrentEffect = this->editorEffectMap.value(effect);
 		}
-
-	
 		switch(this->CurrentEffectMode)
 		{
 		case PaintBrush:
@@ -376,12 +374,13 @@ void qMRMLSegmentsEditorLogic::SetCurrentEffectMode(EffectMode effect)
 
 			if (this->editorEffectMap[PaintBrush]->IsObserving())
 			{
-				this->editorEffectMap[PaintBrush]->RemoveEventsObservation();
+				this->editorEffectMap[PaintBrush]->CleanUp();
+
 			}
 
 			if (this->editorEffectMap[Threshold]->IsObserving())
 			{
-				this->editorEffectMap[Threshold]->RemoveEventsObservation();
+				this->editorEffectMap[Threshold]->CleanUp();
 			}
 
 			break;
@@ -397,23 +396,33 @@ void qMRMLSegmentsEditorLogic::SetCurrentEffectMode(EffectMode effect)
 
 			if (this->editorEffectMap[PaintBrush]->IsObserving())
 			{
-				this->editorEffectMap[PaintBrush]->RemoveEventsObservation();
+				this->editorEffectMap[PaintBrush]->CleanUp();
 			}
 
 			if (this->editorEffectMap[FreeDraw]->IsObserving())
 			{
-				this->editorEffectMap[FreeDraw]->RemoveEventsObservation();
+				this->editorEffectMap[FreeDraw]->CleanUp();
 			}
 
 			break;
 
 		
 		}
-
-
+	}
+	else
+	{
+		if (this->GetCurrentEffect()->IsObserving())
+		{
+			this->GetCurrentEffect()->CleanUp();
+		}
+		else
+		{
+			this->GetCurrentEffect()->SetupEventsObservation();
+			this->GetCurrentEffect()->CursorOn();
+		}
+		
 
 	}
-
 	
 }
 

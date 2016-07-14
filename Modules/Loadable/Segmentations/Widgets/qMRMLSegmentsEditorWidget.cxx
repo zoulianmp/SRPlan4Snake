@@ -149,8 +149,16 @@ void qMRMLSegmentsEditorWidget::onPaintBrushClicked()
 		d->pushButton_threshold->setChecked(false);
 	}
 
-	this->editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
+	qMRMLSegmentsEditorLogic * editorLogic = this->GetSegmentsEditorLogic();
+    editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
 
+	//Initial the PaintBrush
+	//qMRMLPaintEffect* paintEffect = qMRMLPaintEffect::SafeDownCast(editorLogic->GetCurrentEffect());
+
+	//paintEffect->SetSliceWidget(editorLogic->GetSliceWidget());
+	//paintEffect->SetupEventsObservation();
+	//paintEffect->SetEditorLogic(this->editorLogic);
+	//paintEffect->SetupBrush();
 
 }
 
@@ -218,6 +226,15 @@ qMRMLSegmentsEditorLogic * qMRMLSegmentsEditorWidget::GetSegmentsEditorLogic()
 	return this->editorLogic;
 }
 
+
+void qMRMLSegmentsEditorWidget::EnableEffectButtons()
+{
+	Q_D(qMRMLSegmentsEditorWidget);
+	d->pushButton_paintbrush->setEnabled(true);
+	d->pushButton_poly->setEnabled(true);
+	d->pushButton_threshold->setEnabled(true);
+
+}
 
 int qMRMLSegmentsEditorWidget::GetBrushSize()
 {

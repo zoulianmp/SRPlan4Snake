@@ -303,6 +303,7 @@ void qSlicerSegmentationsModuleWidget::init()
 	  this, SLOT(onSetDisplaySettings()));
 
 
+
 }
 
 //-----------------------------------------------------------------------------
@@ -407,6 +408,10 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 	  editorlogic->SetLabelMapNodetoLayoutCompositeNode("Red", labelnode);
 	 
   }
+
+  //Enable the Segmentation Effect Buttons
+
+  d->EditorBox->EnableEffectButtons();
   
 }
 

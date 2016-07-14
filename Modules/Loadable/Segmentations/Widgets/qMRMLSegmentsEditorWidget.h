@@ -61,6 +61,7 @@ public:
   bool SetSegmentsEditorLogic(qMRMLSegmentsEditorLogic * editorLogic) ;
   qMRMLSegmentsEditorLogic * GetSegmentsEditorLogic();
 
+  void EnableEffectButtons();
 
   int GetBrushSize();
    

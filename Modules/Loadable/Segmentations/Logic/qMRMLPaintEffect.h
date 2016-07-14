@@ -87,14 +87,15 @@ public:
   //static void PaintEffectEventCallback(vtkObject *caller, unsigned long event, void *clientData, void *callData);
 
   //virtual  void  SetupEventsObservation();
-  virtual  void ProcessEvent(vtkObject *caller, unsigned long event,void *callData);
+  virtual  void ProcessEvent(vtkObject *caller, unsigned long event,void *callData = NULL);
  
 
   //clean up actors and observers
   virtual void CleanUp();
   enum BrushType { Square, Circle, Sphere, Box };
   
-
+  virtual void  RemoveEventsObservation();
+  virtual void  SetupEventsObservation();
   void SetupBrush();
 
   void CreateGlyph(vtkPolyData * brush);

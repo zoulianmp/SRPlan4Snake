@@ -60,6 +60,8 @@ qMRMLPaintEffect::qMRMLPaintEffect()
 	
 	this->paintCoordinates = vtkPoints2D::New();
 	this->feedbackActors = vtkActor2DCollection::New();
+
+	this->brushActor = NULL;
 }
 
 //Call after Base Class Setup Steps
@@ -80,7 +82,7 @@ void qMRMLPaintEffect::SetupBrush()
 	this->actors->AddItem(this->brushActor);
 
 	//python code call default parameters
-	//this->ProcessEvent();
+	//this->ProcessEvent(Null,);
 
 }
 
@@ -109,6 +111,23 @@ void qMRMLPaintEffect::CleanUp()
 	
 	Superclass::CleanUp();
 }
+
+void  qMRMLPaintEffect::RemoveEventsObservation()
+{
+	Superclass::RemoveEventsObservation();
+	this->brushActor->VisibilityOff();
+}
+
+void qMRMLPaintEffect::SetupEventsObservation()
+{
+	Superclass::SetupEventsObservation();
+	if (this->brushActor)
+	{
+		this->brushActor->VisibilityOn();
+	}
+	
+}
+
 
 
 /*
@@ -213,7 +232,10 @@ void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void
 	}
 	else if (event == vtkCommand::EnterEvent)
 	{
-		this->brushActor->VisibilityOn();
+		if (this->observing)
+		{
+			this->brushActor->VisibilityOn();
+		}
 	}
 	else if (event == vtkCommand::LeaveEvent)
 	{
