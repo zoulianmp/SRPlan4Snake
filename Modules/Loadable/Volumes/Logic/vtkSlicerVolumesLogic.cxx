@@ -1022,7 +1022,10 @@ vtkMRMLLabelMapVolumeNode *vtkSlicerVolumesLogic::CreateTempLabelVolumeFromVolum
 		labelNode->SetAttribute("AssociatedNodeID", inputVolume->GetID());
 	}
 
-	   
+	//Setup the Default ColorMap
+	labelDisplayNode->SetDefaultColorMap();
+
+		   
 	// Copy and set image data of the input volume to the label volume
 	vtkNew<vtkImageData> imageData;
 	imageData->DeepCopy(inputVolume->GetImageData());

@@ -97,8 +97,8 @@ void qMRMLSegmentsEditorWidgetPrivate::init()
   QObject::connect(this->btnSquare, SIGNAL(clicked()),
 	  q, SLOT(onBrushStyleSquareClicked()));
 
-  QObject::connect(this->inBrushSizeSlider, SIGNAL(valueChanged(int)),
-	  q, SLOT(onBrushSizeChanged()));
+//  QObject::connect(this->inBrushSizeSlider, SIGNAL(valueChanged(int)),
+//	  q, SLOT(onBrushSizeChanged()));
 
 
 
