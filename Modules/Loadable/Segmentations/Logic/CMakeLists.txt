@@ -66,6 +66,14 @@ set(${KIT}_SRCS
   
   )
 
+    
+set(${KIT}_MOC_SRCS
+    qMRMLEffect.h
+	qMRMLThresholdEffect.h
+	qMRMLLabelEffect.h
+	qMRMLPaintEffect.h
+    qMRMLDrawEffect.h
+   )
   
   
 set(${KIT}_TARGET_LIBRARIES
@@ -85,6 +93,9 @@ set(${KIT}_TARGET_LIBRARIES
 
 
 
+QT5_WRAP_CPP(${KIT}_MOC_OUTPUT ${${KIT}_MOC_SRCS})
+
+
 
 set(${KIT}_MOC_OUTPUT)
 source_group("Generated" FILES
@@ -92,7 +103,11 @@ source_group("Generated" FILES
     )
 
 
-
+#Add generated files to Source files 
+set(${KIT}_SRCS 
+    ${${KIT}_SRCS} 
+    ${${KIT}_MOC_OUTPUT}
+	)
 #message("The kit SRS: in the SegmentationsModule Logic ",${KIT}_SRCS )
 
 #-----------------------------------------------------------------------------

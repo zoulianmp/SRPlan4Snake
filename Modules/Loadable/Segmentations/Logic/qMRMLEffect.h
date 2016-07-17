@@ -60,6 +60,9 @@ class vtkCallbackCommand;
 
 #include "vtkSRPlanSegmentationsModuleLogicExport.h"
 
+//QT include
+#include "QObject.h"
+
 
 //Usage of current Class
 //
@@ -69,9 +72,9 @@ class vtkCallbackCommand;
 //Setup 03  void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);  
 
 
-class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT qMRMLEffect : public vtkObject
+class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT qMRMLEffect : public vtkObject, public QObject
 {
-  
+	Q_OBJECT
 
 public:
 	static qMRMLEffect *New();

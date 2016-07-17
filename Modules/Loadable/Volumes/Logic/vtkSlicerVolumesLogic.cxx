@@ -1055,7 +1055,8 @@ vtkSlicerVolumesLogic::ClearVolumeImageData(vtkMRMLVolumeNode *volumeNode)
   vtkNew<vtkImageThreshold> thresh;
   thresh->ReplaceInOn();
   thresh->ReplaceOutOn();
-  thresh->SetInValue(0);
+  // thresh->SetInValue(0); Raw
+  thresh->SetInValue(100);
   thresh->SetOutValue(0);
   thresh->SetOutputScalarType(VTK_SHORT);
 
