@@ -123,12 +123,12 @@ public:
 
 
   public slots:
-		void OnBrushSizeChanged(int newsize);
+		void OnBrushSizeChanged();
 
 	
 
   signals:
-		void BrushSizeChanged(int newsize);
+		void BrushSizeChanged();
 
 
 

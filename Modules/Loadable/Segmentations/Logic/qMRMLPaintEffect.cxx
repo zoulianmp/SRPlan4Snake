@@ -64,9 +64,9 @@ qMRMLPaintEffect::qMRMLPaintEffect()
 	this->brushActor = NULL;
 
 	//Paint Effect Inner Signals and Slots:
-	QObject::connect(this, SIGNAL (this->BrushSizeChanged(int newsize)), this, SLOT(this->OnBrushSizeChanged(int newsize)));
+	//QObject::connect(this, SIGNAL (BrushSizeChanged(int newsize)), this, SLOT(OnBrushSizeChanged(int newsize)));
 
-
+	//connect(this, SIGNAL(BrushSizeChanged(int newsize)), SLOT(OnBrushSizeChanged(int newsize)));
 }
 
 //Call after Base Class Setup Steps
@@ -129,6 +129,7 @@ void qMRMLPaintEffect::SetUpEffect()
 	
 	//Setup Events Observe
 	Superclass::SetUpEffect();
+	
 }
 
 
@@ -385,7 +386,12 @@ void qMRMLPaintEffect::ScaleBrushSize(double scaleFactor)
 {
 	this->brushSize = this->brushSize * scaleFactor;
 
-	emit BrushSizeChanged(this->brushSize);
+	if (this->brushSize < 3.0)
+	{
+		this->brushSize = 3.0;
+	}
+
+	this->OnBrushSizeChanged();
 }
 
 // depending on the delayedPaint mode, either paint the given point or queue it up with a marker
@@ -624,17 +630,35 @@ void qMRMLPaintEffect::SetBrushSize(int size)
 	if (this->brushSize != size)
 	{
 		this->brushSize = size;
-		emit BrushSizeChanged(this->brushSize);
+		this->OnBrushSizeChanged();
 	}
 
 }
 
 
-void qMRMLPaintEffect::OnBrushSizeChanged(int newsize)
+void qMRMLPaintEffect::OnBrushSizeChanged()
 {
+	double* preposition ;
+	double * p2;
+
+	//Get the PreBrushActor Position
+	if (this->brushActor)
+	{
+		preposition = this->brushActor->GetPosition();
+		p2 = this->brushActor->GetPosition2();
+
+
+	}
+
 	this->CleanUp();
 	this->SetUpEffect();
 
+	//The the new BrushActor to the preposition
+	if (this->brushActor)
+	{
+		this->brushActor->SetPosition(preposition);
+		this->sliceView->scheduleRender();
+	}
 }
 
 
