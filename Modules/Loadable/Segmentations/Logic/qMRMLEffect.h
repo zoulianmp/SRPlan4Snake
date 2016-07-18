@@ -72,7 +72,7 @@ class vtkCallbackCommand;
 //Setup 03  void SetEditorLogic(qMRMLSegmentsEditorLogic* editorLogic);  
 
 
-class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT qMRMLEffect : public vtkObject, public QObject
+class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT qMRMLEffect : public QObject, public vtkObject
 {
 	Q_OBJECT
 
@@ -113,8 +113,13 @@ if a subclass provides a list of scope options then a selection menu will be pro
   void CursorOff();
   void CursorOn();
 
+  //clean up the effect
   //clean up actors and observers
   virtual void CleanUp();
+
+  //Setup the effect
+  //Setup the Events Observe and effect actors
+  virtual void SetUpEffect();
 
   void RASToXY(float* rasPoint, float * xy);
   void RASToXYZ(float* rasPoint, float *xyz);

@@ -62,6 +62,11 @@ qMRMLPaintEffect::qMRMLPaintEffect()
 	this->feedbackActors = vtkActor2DCollection::New();
 
 	this->brushActor = NULL;
+
+	//Paint Effect Inner Signals and Slots:
+	QObject::connect(this, SIGNAL (this->BrushSizeChanged(int newsize)), this, SLOT(this->OnBrushSizeChanged(int newsize)));
+
+
 }
 
 //Call after Base Class Setup Steps
@@ -110,7 +115,25 @@ void qMRMLPaintEffect::CleanUp()
 	this->sliceView->scheduleRender();
 	
 	Superclass::CleanUp();
+
+	this->observing = false;
 }
+
+
+
+
+void qMRMLPaintEffect::SetUpEffect()
+{ 
+	//Set up the circle shape
+	this->SetupBrush();
+	
+	//Setup Events Observe
+	Superclass::SetUpEffect();
+}
+
+
+
+
 
 /*
 void  qMRMLPaintEffect::RemoveEventsObservation()
@@ -361,6 +384,8 @@ void qMRMLPaintEffect::PositionActors()
 void qMRMLPaintEffect::ScaleBrushSize(double scaleFactor)
 {
 	this->brushSize = this->brushSize * scaleFactor;
+
+	emit BrushSizeChanged(this->brushSize);
 }
 
 // depending on the delayedPaint mode, either paint the given point or queue it up with a marker
@@ -596,5 +621,23 @@ void qMRMLPaintEffect::SetBrushShape(BrushType shape)
 
 void qMRMLPaintEffect::SetBrushSize(int size)
 {
-	this->brushSize = size;
+	if (this->brushSize != size)
+	{
+		this->brushSize = size;
+		emit BrushSizeChanged(this->brushSize);
+	}
+
 }
+
+
+void qMRMLPaintEffect::OnBrushSizeChanged(int newsize)
+{
+	this->CleanUp();
+	this->SetUpEffect();
+
+}
+
+
+
+
+

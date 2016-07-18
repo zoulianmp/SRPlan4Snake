@@ -76,7 +76,7 @@ class vtkCallbackCommand;
 
 class VTK_SRPlan_SEGMENTATIONS_LOGIC_EXPORT  qMRMLPaintEffect: public qMRMLLabelEffect
 {
-  
+  Q_OBJECT
 
 public:
 
@@ -92,6 +92,10 @@ public:
 
   //clean up actors and observers
   virtual void CleanUp();
+
+  //Setup the PaintBrush effect and observers
+  virtual void SetUpEffect();
+
   enum BrushType { Square, Circle, Sphere, Box };
   
   /*
@@ -116,8 +120,15 @@ public:
   void PaintPixel(double x, double y);
 
   void PositionActors();
-public:
 
+
+  public slots:
+		void OnBrushSizeChanged(int newsize);
+
+	
+
+  signals:
+		void BrushSizeChanged(int newsize);
 
 
 

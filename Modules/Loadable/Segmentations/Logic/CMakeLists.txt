@@ -69,10 +69,10 @@ set(${KIT}_SRCS
     
 set(${KIT}_MOC_SRCS
     qMRMLEffect.h
-	qMRMLThresholdEffect.h
-	qMRMLLabelEffect.h
+#	qMRMLThresholdEffect.h
+#	qMRMLLabelEffect.h
 	qMRMLPaintEffect.h
-    qMRMLDrawEffect.h
+#    qMRMLDrawEffect.h
    )
   
   
@@ -93,11 +93,11 @@ set(${KIT}_TARGET_LIBRARIES
 
 
 
-QT5_WRAP_CPP(${KIT}_MOC_OUTPUT ${${KIT}_MOC_SRCS})
-
-
 
 set(${KIT}_MOC_OUTPUT)
+
+QT5_WRAP_CPP(${KIT}_MOC_OUTPUT ${${KIT}_MOC_SRCS})
+
 source_group("Generated" FILES
    ${KIT}_MOC_OUTPUT
     )
@@ -108,7 +108,7 @@ set(${KIT}_SRCS
     ${${KIT}_SRCS} 
     ${${KIT}_MOC_OUTPUT}
 	)
-#message("The kit SRS: in the SegmentationsModule Logic ",${KIT}_SRCS )
+#message("The kit SRS: in the SegmentationsModule Logic ", ${${KIT}_SRCS} )
 
 #-----------------------------------------------------------------------------
 SRPlanMacroBuildModuleLogic(

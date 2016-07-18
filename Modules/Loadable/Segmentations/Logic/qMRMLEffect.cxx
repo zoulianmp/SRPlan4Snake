@@ -265,6 +265,15 @@ void qMRMLEffect::CleanUp()
 }
 
 
+//setup actors and observers
+void qMRMLEffect::SetUpEffect()
+{
+	this->SetupEventsObservation();
+};
+
+
+
+
 void qMRMLEffect::RASToXY(float* rasPoint, float * xy)
 {
 	float xyz[3] = { 0,0,0 };
