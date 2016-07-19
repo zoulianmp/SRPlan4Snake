@@ -250,7 +250,7 @@ void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void
 	else if (event == vtkCommand::MouseMoveEvent)
 	{
 		this->brushActor->VisibilityOn();
-		if (this->actionState == "painting")
+		if (!strcmp(this->actionState, "painting") )
 		{
 			int *xy = this->interactor->GetEventPosition();
 			this->PaintAddPoint(xy[0], xy[1]);
@@ -304,6 +304,7 @@ void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void
 //create a brush circle of the right radius in XY space
 //- assume uniform scaling between XY and RAS which
 //is enforced by the view interactors
+/*   Transfered by zoulian from python
 void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
 {
 	vtkMRMLSliceNode * sliceNode = this->sliceLogic->GetSliceNode();
@@ -370,6 +371,60 @@ void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
 	brush->InsertNextCell(VTK_LINE, idList);
 }
 
+
+*/
+
+void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
+{
+
+	float Radius3d = float( this->brushSize);
+
+	//# make a circle paint brush
+	vtkPoints* points = vtkPoints::New();
+	vtkCellArray* lines = vtkCellArray::New();
+	brush->SetPoints(points);
+	brush->SetLines(lines);
+	double PI = 3.1415926;
+	double	TWOPI = PI * 2;
+	double	PIoverSIXTEEN = PI / 16;
+	vtkIdType	prevPoint = -1;
+	vtkIdType	firstPoint = -1;
+
+	vtkIdType p;
+
+	double	angle = 0;
+	while (angle <= TWOPI)
+	{
+		double x = Radius3d *  cos(angle);
+		double y = Radius3d *  sin(angle);
+		p = points->InsertNextPoint(x, y, 0);
+		if (prevPoint != -1)
+		{
+			vtkIdList * idList = vtkIdList::New();
+			idList->InsertNextId(prevPoint);
+			idList->InsertNextId(p);
+			brush->InsertNextCell(VTK_LINE, idList);
+		}
+		prevPoint = p;
+		if (firstPoint == -1)
+			firstPoint = p;
+		angle = angle + PIoverSIXTEEN;
+	}
+
+	//# make the last line in the circle
+	vtkIdList* idList = vtkIdList::New();
+	idList->InsertNextId(p);
+	idList->InsertNextId(firstPoint);
+	brush->InsertNextCell(VTK_LINE, idList);
+}
+
+
+
+
+
+
+
+
 //update paint feedback glyph to follow mouse
 void qMRMLPaintEffect::PositionActors()
 {
@@ -386,7 +441,7 @@ void qMRMLPaintEffect::PositionActors()
 
 void qMRMLPaintEffect::ScaleBrushSize(double scaleFactor)
 {
-	this->brushSize = this->brushSize * scaleFactor;
+	this->brushSize = std::ceill(this->brushSize * scaleFactor);
 
 	if (this->brushSize < 3.0)
 	{
@@ -510,11 +565,32 @@ void qMRMLPaintEffect::PaintBrush(double x, double y)
 	double trpoint[3] = { right, top, 0 };
 	double blpoint[3] = { left, bottom, 0 };
 	double brpoint[3] = { right, bottom, 0 };
+ 
 
 	double * tlIJK = xyToIJK->TransformDoublePoint(tlpoint);
+
+	double tlIJKV[3] = {tlIJK[0],tlIJK[1],tlIJK[2]};
+
+
+
+
 	double * trIJK = xyToIJK->TransformDoublePoint(trpoint);
+
+	double trIJKV[3] = { trIJK[0],trIJK[1],trIJK[2] };
+
+
+
+
+
 	double * blIJK = xyToIJK->TransformDoublePoint(blpoint);
+	double blIJKV[3] = { blIJK[0],blIJK[1],blIJK[2] };
+
+
+
+
 	double * brIJK = xyToIJK->TransformDoublePoint(brpoint);
+	double brIJKV[3] = { brIJK[0],brIJK[1],brIJK[2] };
+
 
 	int * dims = labelImage->GetDimensions();
 
@@ -527,20 +603,20 @@ void qMRMLPaintEffect::PaintBrush(double x, double y)
 
 	for (int i = 0;i < 3;i++)
 	{
-		tl[i] = int(round(tlIJK[i]));
+		tl[i] = int(round(tlIJKV[i]));
 		if (tl[i] < 0)  tl[i] = 0;
 		if (tl[i] >= dims[i])  tl[i] = dims[i] - 1;
 
-		tr[i] = int(round(trIJK[i]));
+		tr[i] = int(round(trIJKV[i]));
 		if (tr[i] < 0) tr[i] = 0;
 		if (tr[i] > dims[i]) tr[i] = dims[i] - 1;
       
-		bl[i] = int(round(blIJK[i]));
+		bl[i] = int(round(blIJKV[i]));
 		if (bl[i] < 0) bl[i] = 0;
 		if (bl[i] > dims[i]) bl[i] = dims[i] - 1;
 
 
-		br[i] = int(round(brIJK[i]));
+		br[i] = int(round(brIJKV[i]));
 		if (br[i] < 0) br[i] = 0;
 		if (br[i] > dims[i]) br[i] = dims[i] - 1;
 	}
@@ -668,6 +744,8 @@ void qMRMLPaintEffect::OnBrushSizeChanged()
 		this->brushActor->SetPosition(d_xy);
 		this->sliceView->scheduleRender();
 	}
+
+	
 }
 
 
