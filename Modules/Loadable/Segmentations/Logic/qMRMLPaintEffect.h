@@ -139,7 +139,7 @@ protected:
 	BrushType shape;
 
 	bool delayedPaint;
-	bool pixelMode;
+	//bool pixelMode;
 
 	double * position;
 	vtkActor2DCollection * feedbackActors;

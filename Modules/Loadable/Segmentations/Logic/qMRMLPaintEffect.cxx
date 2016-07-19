@@ -55,7 +55,8 @@ qMRMLPaintEffect::qMRMLPaintEffect()
 {
 	this->brushSize = 10 ; //defalt size is 10 mm
 	this->shape = qMRMLPaintEffect::Circle;
-	this->pixelMode = true;
+	//this->pixelMode = true;
+	this->delayedPaint = true;
 	this->paintLabel = 9; //number 9 used for temp label paint
 	
 	this->paintCoordinates = vtkPoints2D::New();
@@ -129,7 +130,8 @@ void qMRMLPaintEffect::SetUpEffect()
 	
 	//Setup Events Observe
 	Superclass::SetUpEffect();
-	
+
+	this->observing = true;
 }
 
 
@@ -400,7 +402,9 @@ void qMRMLPaintEffect::PaintAddPoint(int x, int y)
 {
 
 	this->paintCoordinates->InsertNextPoint(double(x), double(y));
-	if (this->delayedPaint && !this->pixelMode)
+
+
+	if (this->delayedPaint )
 	{
 		this->PaintFeedback();
 	}
@@ -638,15 +642,20 @@ void qMRMLPaintEffect::SetBrushSize(int size)
 
 void qMRMLPaintEffect::OnBrushSizeChanged()
 {
+	double d_xy[2] = { 0.0,0.0 }; //record the Position of brush
 	double* preposition ;
-	double * p2;
+
 
 	//Get the PreBrushActor Position
 	if (this->brushActor)
 	{
 		preposition = this->brushActor->GetPosition();
-		p2 = this->brushActor->GetPosition2();
+	
+		double d_xy[2] = { preposition[0],preposition[1] };
+		
+//		this->brushActor->SetPosition(d_xy);
 
+//		p2 = this->brushActor->GetPosition();
 
 	}
 
@@ -656,7 +665,7 @@ void qMRMLPaintEffect::OnBrushSizeChanged()
 	//The the new BrushActor to the preposition
 	if (this->brushActor)
 	{
-		this->brushActor->SetPosition(preposition);
+		this->brushActor->SetPosition(d_xy);
 		this->sliceView->scheduleRender();
 	}
 }
