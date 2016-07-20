@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>326</width>
+    <width>478</width>
     <height>74</height>
    </rect>
   </property>
@@ -26,7 +26,16 @@
    <string>qMRMLSegmentsTableView</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -77,6 +86,9 @@
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
+     <property name="columnCount">
+      <number>5</number>
+     </property>
      <attribute name="horizontalHeaderDefaultSectionSize">
       <number>60</number>
      </attribute>
@@ -104,6 +116,11 @@
      <column>
       <property name="text">
        <string>Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Label</string>
       </property>
      </column>
     </widget>

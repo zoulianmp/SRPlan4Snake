@@ -134,8 +134,8 @@ public:
 
 
 protected:
-	//the size of brush, for square and circle. diameter.
-	int brushSize;
+	//the Radius size of brush, circle.
+	int brushRadius;
 	BrushType shape;
 
 	bool delayedPaint;

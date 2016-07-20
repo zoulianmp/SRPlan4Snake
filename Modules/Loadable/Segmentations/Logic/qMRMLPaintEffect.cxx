@@ -53,7 +53,7 @@ vtkStandardNewMacro(qMRMLPaintEffect);
 
 qMRMLPaintEffect::qMRMLPaintEffect()
 {
-	this->brushSize = 10 ; //defalt size is 10 mm
+	this->brushRadius = 10 ; //defalt size is 10 mm
 	this->shape = qMRMLPaintEffect::Circle;
 	//this->pixelMode = true;
 	this->delayedPaint = true;
@@ -242,6 +242,17 @@ void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void
 	{
 		
 	}
+	else if (event == vtkCommand::MiddleButtonPressEvent)
+	{
+
+	}
+	else if (event == vtkCommand::MiddleButtonReleaseEvent)
+	{
+		//Generate the segment from labelmapimage
+		//this->sliceLogic();
+		//this->editorLogic();
+
+	}
 	else if (event == vtkCommand::RightButtonReleaseEvent)
 	{
 		
@@ -304,7 +315,7 @@ void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void
 //create a brush circle of the right radius in XY space
 //- assume uniform scaling between XY and RAS which
 //is enforced by the view interactors
-/*   Transfered by zoulian from python
+//  Transfered by zoulian from python
 void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
 {
 	vtkMRMLSliceNode * sliceNode = this->sliceLogic->GetSliceNode();
@@ -325,7 +336,7 @@ void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
 	}
 
 	float point[4] = { 0,0,0,0 };
-	point[maxindex] = this->brushSize;
+	point[maxindex] = this->brushRadius;
 
 	float* xyBrushSize = inner_rasToXY->MultiplyPoint(point);
 
@@ -372,12 +383,14 @@ void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
 }
 
 
-*/
+
+
+/*
 
 void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
 {
 
-	float Radius3d = float( this->brushSize);
+	float Radius3d = float( this->brushRadius);
 
 	//# make a circle paint brush
 	vtkPoints* points = vtkPoints::New();
@@ -419,8 +432,7 @@ void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
 }
 
 
-
-
+*/
 
 
 
@@ -441,11 +453,11 @@ void qMRMLPaintEffect::PositionActors()
 
 void qMRMLPaintEffect::ScaleBrushSize(double scaleFactor)
 {
-	this->brushSize = std::ceill(this->brushSize * scaleFactor);
+	this->brushRadius = std::ceill(this->brushRadius * scaleFactor);
 
-	if (this->brushSize < 3.0)
+	if (this->brushRadius < 3.0)
 	{
-		this->brushSize = 3.0;
+		this->brushRadius = 3.0;
 	}
 
 	this->OnBrushSizeChanged();
@@ -685,7 +697,7 @@ void qMRMLPaintEffect::PaintBrush(double x, double y)
 	this->painter->SetBottomLeft(bl[0], bl[1], bl[2]);
 	this->painter->SetBottomRight(br[0], br[1], br[2]);
 	this->painter->SetBrushCenter(brushCenter[0], brushCenter[1], brushCenter[2]);
-	this->painter->SetBrushRadius(this->brushSize/2.0);
+	this->painter->SetBrushRadius(this->brushRadius);
 	this->painter->SetPaintLabel(paintLabel);
 	this->painter->SetPaintOver(paintOver);
 	//this->painter->SetThresholdPaint(paintThreshold);
@@ -707,9 +719,9 @@ void qMRMLPaintEffect::SetBrushShape(BrushType shape)
 
 void qMRMLPaintEffect::SetBrushSize(int size)
 {
-	if (this->brushSize != size)
+	if (this->brushRadius != size)
 	{
-		this->brushSize = size;
+		this->brushRadius = size;
 		this->OnBrushSizeChanged();
 	}
 
