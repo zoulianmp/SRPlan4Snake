@@ -92,9 +92,9 @@ void qMRMLSegmentsTableViewPrivate::init()
   this->setMessage(QString());
 
   // Set table header properties
-  this->ColumnLabels << "Visible" << "Color" << "Opacity" << "Name";
+  this->ColumnLabels << "Visible" << "Color" << "Opacity" << "Name" <<"Label";
   this->SegmentsTable->setHorizontalHeaderLabels(
-    QStringList() << "" << "Color" << "Opacity" << "Name" );
+    QStringList() << "" << "Color" << "Opacity" << "Name" <<"Label" );
   this->SegmentsTable->setColumnCount(this->ColumnLabels.size());
 
   this->SegmentsTable->horizontalHeaderItem(
@@ -256,6 +256,7 @@ void qMRMLSegmentsTableView::setMode(SegmentTableMode mode)
     d->SegmentsTable->setColumnHidden(d->columnIndex("Visible"), false);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Color"), false);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Opacity"), false);
+	d->SegmentsTable->setColumnHidden(d->columnIndex("Label"), false);
     }
   else if (mode == SimpleListMode)
     {
@@ -265,6 +266,7 @@ void qMRMLSegmentsTableView::setMode(SegmentTableMode mode)
     d->SegmentsTable->setColumnHidden(d->columnIndex("Visible"), true);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Color"), true);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Opacity"), true);
+	d->SegmentsTable->setColumnHidden(d->columnIndex("Label"), true);
     }
   else if (mode == RepresentationMode)
     {
@@ -274,6 +276,7 @@ void qMRMLSegmentsTableView::setMode(SegmentTableMode mode)
     d->SegmentsTable->setColumnHidden(d->columnIndex("Visible"), true);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Color"), true);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Opacity"), true);
+	d->SegmentsTable->setColumnHidden(d->columnIndex("Label"), true);
     }
   else
     {
