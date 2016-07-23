@@ -113,6 +113,9 @@ protected slots:
   /// Handles clicks on a table cell (visibility)
   void onSegmentTableItemClicked(QTableWidgetItem* item);
 
+  void onSegmentTableItemDoubleClicked(QTableWidgetItem* item);
+
+
   /// Populate segment table according to the segmentation node
   void populateSegmentTable();
 

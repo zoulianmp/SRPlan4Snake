@@ -34,6 +34,11 @@
 #include <vtkMRMLLabelMapVolumeNode.h>
 #include <vtkMRMLModelNode.h>
 
+//Segmentation Module
+#include "vtkSlicerSegmentationsModuleLogic.h"
+#include "qSlicerCoreApplication.h"
+#include "vtkMRMLGeneralParametersNode.h"
+
 // Qt includes
 #include <QStringList>
 #include <QDebug>
@@ -92,16 +97,17 @@ void qMRMLSegmentsTableViewPrivate::init()
   this->setMessage(QString());
 
   // Set table header properties
-  this->ColumnLabels << "Visible" << "Color" << "Opacity" << "Name" <<"Label";
+  this->ColumnLabels << "2DVisible" << "3DVisible" << "Color" << "Opacity" << "Name" <<"Label";
   this->SegmentsTable->setHorizontalHeaderLabels(
-    QStringList() << "" << "Color" << "Opacity" << "Name" <<"Label" );
+    QStringList() << "2DVisible" << "3DVisible" << "Color" << "Opacity" << "Name" <<"Label" );
   this->SegmentsTable->setColumnCount(this->ColumnLabels.size());
 
-  this->SegmentsTable->horizontalHeaderItem(
-    this->columnIndex("Visible"))->setIcon(QIcon(":/Icons/Small/SlicerVisibleInvisible.png") );
+ // this->SegmentsTable->horizontalHeaderItem(
+  //  this->columnIndex("Visible"))->setIcon(QIcon(":/Icons/Small/SlicerVisibleInvisible.png") );
 
   this->SegmentsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   this->SegmentsTable->horizontalHeader()->setStretchLastSection(1);
+  
 
   // Select rows
   this->SegmentsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -109,8 +115,15 @@ void qMRMLSegmentsTableViewPrivate::init()
   // Make connections
   QObject::connect(this->SegmentsTable, SIGNAL(itemChanged(QTableWidgetItem*)),
                    q, SLOT(onSegmentTableItemChanged(QTableWidgetItem*)));
-  QObject::connect(this->SegmentsTable, SIGNAL(itemClicked(QTableWidgetItem*)),
-                   q, SLOT(onSegmentTableItemClicked(QTableWidgetItem*)));
+
+  // The row commetted by zoulian 
+  //QObject::connect(this->SegmentsTable, SIGNAL(itemClicked(QTableWidgetItem*)),
+  //                 q, SLOT(onSegmentTableItemClicked(QTableWidgetItem*)));
+
+
+  QObject::connect(this->SegmentsTable, SIGNAL(itemDoubleClicked(QTableWidgetItem*)),
+		  q, SLOT(onSegmentTableItemDoubleClicked(QTableWidgetItem*)));
+
   QObject::connect(this->SegmentsTable->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
                    q, SIGNAL(selectionChanged(QItemSelection,QItemSelection)));
 
@@ -253,7 +266,8 @@ void qMRMLSegmentsTableView::setMode(SegmentTableMode mode)
     {
     d->SegmentsTable->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    d->SegmentsTable->setColumnHidden(d->columnIndex("Visible"), false);
+	d->SegmentsTable->setColumnHidden(d->columnIndex("2DVisible"), false);
+    d->SegmentsTable->setColumnHidden(d->columnIndex("3DVisible"), false);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Color"), false);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Opacity"), false);
 	d->SegmentsTable->setColumnHidden(d->columnIndex("Label"), false);
@@ -263,7 +277,9 @@ void qMRMLSegmentsTableView::setMode(SegmentTableMode mode)
     d->SegmentsTable->horizontalHeader()->setVisible(false);
     d->SegmentsTable->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    d->SegmentsTable->setColumnHidden(d->columnIndex("Visible"), true);
+	d->SegmentsTable->setColumnHidden(d->columnIndex("2DVisible"), true);
+	d->SegmentsTable->setColumnHidden(d->columnIndex("3DVisible"), true);
+ 
     d->SegmentsTable->setColumnHidden(d->columnIndex("Color"), true);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Opacity"), true);
 	d->SegmentsTable->setColumnHidden(d->columnIndex("Label"), true);
@@ -273,7 +289,8 @@ void qMRMLSegmentsTableView::setMode(SegmentTableMode mode)
     d->SegmentsTable->horizontalHeader()->setVisible(false);
     d->SegmentsTable->setSelectionMode(QAbstractItemView::NoSelection);
 
-    d->SegmentsTable->setColumnHidden(d->columnIndex("Visible"), true);
+	d->SegmentsTable->setColumnHidden(d->columnIndex("2DVisible"), true);
+	d->SegmentsTable->setColumnHidden(d->columnIndex("3DVisible"), true);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Color"), true);
     d->SegmentsTable->setColumnHidden(d->columnIndex("Opacity"), true);
 	d->SegmentsTable->setColumnHidden(d->columnIndex("Label"), true);
@@ -378,24 +395,44 @@ void qMRMLSegmentsTableView::populateSegmentTable()
       continue;
       }
 
-    // Visibility
-    QTableWidgetItem* visibilityItem = new QTableWidgetItem();
-    visibilityItem->setData(VisibilityRole, QVariant(properties.Visible));
-    visibilityItem->setData(IDRole, segmentId);
-    visibilityItem->setData(Qt::CheckStateRole, QVariant());
-    visibilityItem->setFlags(visibilityItem->flags() & ~Qt::ItemIsUserCheckable);
+    // 2DVisibility
+    QTableWidgetItem* visibilityItem2D = new QTableWidgetItem();
+    visibilityItem2D->setData(VisibilityRole, QVariant(properties.Visible2D));
+    visibilityItem2D->setData(IDRole, segmentId);
+    visibilityItem2D->setData(Qt::CheckStateRole, QVariant());
+    visibilityItem2D->setFlags(visibilityItem2D->flags() & ~Qt::ItemIsUserCheckable);
     // Disable editing so that a double click won't bring up an entry box
-    visibilityItem->setFlags(visibilityItem->flags() & ~Qt::ItemIsEditable);
-    if (properties.Visible)
+    visibilityItem2D->setFlags(visibilityItem2D->flags() & ~Qt::ItemIsEditable);
+    if (properties.Visible2D)
       {
-      visibilityItem->setData(Qt::DecorationRole, QPixmap(":/Icons/Small/SlicerVisible.png"));
+      visibilityItem2D->setData(Qt::DecorationRole, QPixmap(":/Icons/Small/SlicerVisible.png"));
       }
     else
       {
-      visibilityItem->setData(Qt::DecorationRole, QPixmap(":/Icons/Small/SlicerInvisible.png"));
+      visibilityItem2D->setData(Qt::DecorationRole, QPixmap(":/Icons/Small/SlicerInvisible.png"));
       }
-    d->SegmentsTable->setItem(row, d->columnIndex("Visible"), visibilityItem);
+    d->SegmentsTable->setItem(row, d->columnIndex("2DVisible"), visibilityItem2D);
 
+
+	// 3DVisibility
+	QTableWidgetItem* visibilityItem3D = new QTableWidgetItem();
+	visibilityItem3D->setData(VisibilityRole, QVariant(properties.Visible3D));
+	visibilityItem3D->setData(IDRole, segmentId);
+	visibilityItem3D->setData(Qt::CheckStateRole, QVariant());
+	visibilityItem3D->setFlags(visibilityItem3D->flags() & ~Qt::ItemIsUserCheckable);
+	// Disable editing so that a double click won't bring up an entry box
+	visibilityItem3D->setFlags(visibilityItem3D->flags() & ~Qt::ItemIsEditable);
+	if (properties.Visible3D)
+	{
+		visibilityItem3D->setData(Qt::DecorationRole, QPixmap(":/Icons/Small/SlicerVisible.png"));
+	}
+	else
+	{
+		visibilityItem3D->setData(Qt::DecorationRole, QPixmap(":/Icons/Small/SlicerInvisible.png"));
+	}
+	d->SegmentsTable->setItem(row, d->columnIndex("3DVisible"), visibilityItem3D);
+
+	
     // Color
     QTableWidgetItem* colorItem = new QTableWidgetItem();
     QColor color = QColor::fromRgbF(properties.Color[0], properties.Color[1], properties.Color[2]);
@@ -441,12 +478,13 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
 
   // All items contain the segment ID, get that
   QString segmentId = changedItem->data(IDRole).toString();
+  vtkSegment* segment = d->SegmentationNode->GetSegmentation()->GetSegment(segmentId.toLatin1().constData());
 
   // If segment name has been changed
   if (changedItem->column() == d->columnIndex("Name"))
     {
     QString nameText(changedItem->text());
-    vtkSegment* segment = d->SegmentationNode->GetSegmentation()->GetSegment(segmentId.toLatin1().constData());
+   
     if (!segment)
       {
       qCritical() << "qMRMLSegmentsTableView::onSegmentTableItemChanged: Segment with ID '" << segmentId << "' not found in segmentation node " << d->SegmentationNode->GetName();
@@ -474,13 +512,22 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
 
     bool valueChanged = false;
 
-    // Visibility changed
-    if (changedItem->column() == d->columnIndex("Visible"))
+    // 2DVisibility changed
+    if (changedItem->column() == d->columnIndex("2DVisible"))
       {
       int visible = changedItem->data(VisibilityRole).toInt();
-      properties.Visible = (bool)visible;
+      properties.Visible2D = (bool)visible;
       valueChanged = true;
       }
+
+	// 3DVisibility changed
+	if (changedItem->column() == d->columnIndex("3DVisible"))
+	{
+		int visible = changedItem->data(VisibilityRole).toInt();
+		properties.Visible3D = (bool)visible;
+		valueChanged = true;
+	}
+
     // Color changed
     else if (changedItem->column() == d->columnIndex("Color"))
       {
@@ -530,6 +577,16 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
       displayNode->SetSegmentDisplayProperties(segmentId.toLatin1().constData(), properties);
       }
     }
+
+  //Update the ParametersNode
+  vtkMRMLScene * scene =  qSlicerCoreApplication::application()->mrmlScene();
+  vtkMRMLGeneralParametersNode* parametersNode= vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+
+  parametersNode->SetParameter("segment", segmentId.toStdString());
+
+  QString lable=QString::number(segment->GetLabel());
+  parametersNode->SetParameter("label", lable.toStdString()); //current label value	
+
 }
 
 //-----------------------------------------------------------------------------
@@ -543,7 +600,7 @@ void qMRMLSegmentsTableView::onSegmentTableItemClicked(QTableWidgetItem* item)
     }
 
   int column = item->column();
-  if (column == d->columnIndex(QString("Visible")))
+  if (column == d->columnIndex(QString("2DVisible")))
     {
     // Toggle the visibility role, the icon update is triggered by this change
     if (item->data(VisibilityRole) == QVariant(false))
@@ -555,7 +612,63 @@ void qMRMLSegmentsTableView::onSegmentTableItemClicked(QTableWidgetItem* item)
       item->setData(VisibilityRole, QVariant(false));
       }
     }
+  else if (column == d->columnIndex(QString("3DVisible")))
+  {
+	  // Toggle the visibility role, the icon update is triggered by this change
+	  if (item->data(VisibilityRole) == QVariant(false))
+	  {
+		  item->setData(VisibilityRole, QVariant(true));
+	  }
+	  else
+	  {
+		  item->setData(VisibilityRole, QVariant(false));
+	  }
+
+  }
+
 }
+
+
+
+void qMRMLSegmentsTableView::onSegmentTableItemDoubleClicked(QTableWidgetItem* item)
+{
+	Q_D(qMRMLSegmentsTableView);
+
+	if (!item)
+	{
+		return;
+	}
+
+	int column = item->column();
+	if (column == d->columnIndex(QString("2DVisible")))
+	{
+		// Toggle the visibility role, the icon update is triggered by this change
+		if (item->data(VisibilityRole) == QVariant(false))
+		{
+			item->setData(VisibilityRole, QVariant(true));
+		}
+		else
+		{
+			item->setData(VisibilityRole, QVariant(false));
+		}
+	}
+	else if (column == d->columnIndex(QString("3DVisible")))
+	{
+		// Toggle the visibility role, the icon update is triggered by this change
+		if (item->data(VisibilityRole) == QVariant(false))
+		{
+			item->setData(VisibilityRole, QVariant(true));
+		}
+		else
+		{
+			item->setData(VisibilityRole, QVariant(false));
+		}
+
+	}
+ 
+}
+
+
 
 //-----------------------------------------------------------------------------
 int qMRMLSegmentsTableView::segmentCount() const

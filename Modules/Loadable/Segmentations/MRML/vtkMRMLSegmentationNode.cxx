@@ -591,7 +591,9 @@ bool vtkMRMLSegmentationNode::AddSegmentDisplayProperties(std::string segmentId)
 
   // Add entry in segment display properties
   vtkMRMLSegmentationDisplayNode::SegmentDisplayProperties properties;
-  properties.Visible = true;
+  properties.Visible2D = true;
+  properties.Visible3D = true;
+
   properties.Color[0] = defaultColor[0];
   properties.Color[1] = defaultColor[1];
   properties.Color[2] = defaultColor[2];
@@ -941,7 +943,7 @@ bool vtkMRMLSegmentationNode::GenerateMergedLabelmap(vtkImageData* mergedImageDa
     {
       continue;
     }
-    if (properties.Visible == false)
+    if (properties.Visible2D == false)
     {
       continue;
     }

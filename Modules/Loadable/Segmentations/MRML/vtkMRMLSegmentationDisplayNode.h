@@ -42,8 +42,13 @@ public:
   /// Display properties per segment
   struct SegmentDisplayProperties
   {
-    /// Visibility
-    bool Visible;
+    /// Visibility, Show in the 2D View
+    bool Visible2D;
+
+	/// Visibility,Show in the 3D View
+	bool Visible3D;
+ 
+
     /// Displayed segment color (may be different than default color stored in segment)
     double Color[3];
     /// Segment opacity when displayed as poly data (labelmap will be opaque)
@@ -135,15 +140,30 @@ public:
 public:
   /// Get segment visibility by segment ID. Convenience function for python compatibility.
   /// \return Segment visibility if segment found, otherwise false
-  bool GetSegmentVisibility(std::string segmentID);
+  bool GetSegment2DVisibility(std::string segmentID);   //for 2D
+  bool GetSegment3DVisibility(std::string segmentID);   //for 3D
+
+
+
+
   /// Set segment visibility by segment ID. Convenience function for python compatibility.
-  void SetSegmentVisibility(std::string segmentID, bool visible);
+  void SetSegment2DVisibility(std::string segmentID, bool visible); //for 2D
+  void SetSegment3DVisibility(std::string segmentID, bool visible); //for 3D
+
+
+
+
+
+
+
 
   /// Get segment color by segment ID. Convenience function for python compatibility.
   /// \return Segment color if segment found, otherwise the pre-defined invalid color
   vtkVector3d GetSegmentColor(std::string segmentID);
   /// Set segment color by segment ID. Convenience function for python compatibility.
   void SetSegmentColor(std::string segmentID, vtkVector3d color);
+
+
 
   /// Get segment poly data opacity by segment ID. Convenience function for python compatibility.
   /// \return Segment poly data opacity if segment found, otherwise 0

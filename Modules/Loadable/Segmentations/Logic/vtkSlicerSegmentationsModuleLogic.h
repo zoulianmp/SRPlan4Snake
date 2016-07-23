@@ -43,6 +43,8 @@ class vtkMRMLScalarVolumeNode;
 class vtkMRMLSegmentationStorageNode;
 class vtkMRMLLabelMapVolumeNode;
 class vtkMRMLModelNode;
+class vtkMRMLGeneralParametersNode;
+
 
 class qMRMLSegmentsEditorLogic ;
 //class vtkSlicerVolumesLogic ;
@@ -57,6 +59,12 @@ public:
   static vtkSlicerSegmentationsModuleLogic *New();
   vtkTypeMacro(vtkSlicerSegmentationsModuleLogic,vtkSlicerModuleLogic);
   void PrintSelf(ostream& os, vtkIndent indent);
+
+  //Creat a parameters node for segmentation module
+  static void CreateParametersNode(vtkMRMLScene* scene);
+
+  //Get the ParametersNode for Segmentation Module
+  static vtkMRMLGeneralParametersNode *  GetParametersNode(vtkMRMLScene* scene);
 
   //TODO:
   /// Create a segmentation node for the given segmentation node

@@ -125,6 +125,11 @@ void qSlicerSegmentationsModule::setMRMLScene(vtkMRMLScene* scene)
   qvtkReconnect( this->mrmlScene(), scene, vtkMRMLScene::NodeAboutToBeRemovedEvent, this, SLOT( onNodeAboutToBeRemoved(vtkObject*,vtkObject*) ) );
 
   Superclass::setMRMLScene(scene);
+
+
+  //Add the Segmentation Module's ParametersNode to Scene
+  vtkSlicerSegmentationsModuleLogic::CreateParametersNode( scene);
+ 
 }
 
 //-----------------------------------------------------------------------------

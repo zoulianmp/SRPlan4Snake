@@ -355,7 +355,8 @@ void qSlicerSubjectHierarchySegmentsPlugin::setDisplayVisibility(vtkMRMLSubjectH
   const char* segmentId = node->GetAttribute(vtkMRMLSegmentationNode::GetSegmentIDAttributeName());
 
   // Set visibility
-  displayNode->SetSegmentVisibility(segmentId, (bool)visible);
+  displayNode->SetSegment2DVisibility(segmentId, (bool)visible);
+  displayNode->SetSegment3DVisibility(segmentId, (bool)visible);
 
   // Trigger update of visibility icon
   node->Modified();
@@ -390,7 +391,9 @@ int qSlicerSubjectHierarchySegmentsPlugin::getDisplayVisibility(vtkMRMLSubjectHi
   const char* segmentId = node->GetAttribute(vtkMRMLSegmentationNode::GetSegmentIDAttributeName());
 
   // Get visibility
-  return (displayNode->GetSegmentVisibility(segmentId) ? 1 : 0);
+  //return (displayNode->GetSegmentVisibility(segmentId) ? 1 : 0);
+
+  return (displayNode->GetSegment2DVisibility(segmentId) ? 1 : 0);
 }
 
 //---------------------------------------------------------------------------
@@ -490,7 +493,8 @@ void qSlicerSubjectHierarchySegmentsPlugin::showOnlyCurrentSegment()
     const char* segmentIdChars = segmentShNode->GetAttribute(vtkMRMLSegmentationNode::GetSegmentIDAttributeName());
     std::string segmentId(segmentIdChars ? segmentIdChars : "");
     // Set visibility
-    displayNode->SetSegmentVisibility(segmentId, visible);
+    displayNode->SetSegment2DVisibility(segmentId, visible);
+	displayNode->SetSegment3DVisibility(segmentId, visible);
     // Trigger update of visibility icon
     segmentShNode->Modified();
   }
@@ -531,7 +535,8 @@ void qSlicerSubjectHierarchySegmentsPlugin::showAllSegments()
     const char* segmentIdChars = segmentShNode->GetAttribute(vtkMRMLSegmentationNode::GetSegmentIDAttributeName());
     std::string segmentId(segmentIdChars ? segmentIdChars : "");
     // Set visibility
-    displayNode->SetSegmentVisibility(segmentId, true);
+    displayNode->SetSegment2DVisibility(segmentId, true);
+	displayNode->SetSegment3DVisibility(segmentId, true);
     // Trigger update of visibility icon
     segmentShNode->Modified();
   }

@@ -25,6 +25,8 @@
 #include "vtkMRMLSegmentationDisplayNode.h"
 #include "vtkMRMLSegmentationStorageNode.h"
 
+#include "vtkMRMLGeneralParametersNode.h"
+
 // SegmentationCore includes
 #include "vtkOrientedImageData.h"
 #include "vtkOrientedImageDataResample.h"
@@ -81,6 +83,7 @@
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(vtkSlicerSegmentationsModuleLogic);
 
+
 //----------------------------------------------------------------------------
 vtkSlicerSegmentationsModuleLogic::vtkSlicerSegmentationsModuleLogic()
 {
@@ -103,6 +106,56 @@ vtkSlicerSegmentationsModuleLogic::vtkSlicerSegmentationsModuleLogic()
 
 
 }
+
+
+void vtkSlicerSegmentationsModuleLogic::CreateParametersNode(vtkMRMLScene* scene)
+{
+	vtkMRMLGeneralParametersNode* parametersNode = vtkMRMLGeneralParametersNode::New();
+	parametersNode->SetSingletonTag("Segmentation");
+	parametersNode->SetModuleName("Segmentation");
+
+	parametersNode->SetParameter("label", "0"); //current label value	
+	parametersNode->SetParameter("effect", "None"); //current enum EffectMode { None, PaintBrush, FreeDraw, Threshold };
+	parametersNode->SetParameter("segmentation", " "); //the current vtkMRMLSegmentationNode uid, Used to get segmentation from scence.
+	parametersNode->SetParameter("segment", " "); //segment current id for get segment from current segmentation Node
+
+	parametersNode->SetParameter("mergedLabelmap", " "); //the current mergedLabelmapNode for vtkMRMLSegmentationNode uid, Used to get segmentation from scence.
+	parametersNode->SetParameter("segmentLabelmap", " "); //the current segmentLabelmap uid for a segment, Used to for effect do
+
+	//	parametersNode->SetParameter("propagationMode", str(slicer.vtkMRMLApplicationLogic.BackgroundLayer | slicer.vtkMRMLApplicationLogic.LabelLayer))
+	scene->AddNode(parametersNode);
+
+	
+
+}
+
+vtkMRMLGeneralParametersNode* vtkSlicerSegmentationsModuleLogic::GetParametersNode(vtkMRMLScene* scene)
+{
+	int size = scene->GetNumberOfNodesByClass("vtkMRMLGeneralParametersNode");
+	for (int i; i < size; i++)
+	{
+		vtkMRMLGeneralParametersNode* Node;
+		Node = vtkMRMLGeneralParametersNode::SafeDownCast(scene->GetNthNodeByClass(i, "vtkMRMLGeneralParametersNode"));
+		if (!strcmp(Node->GetModuleName(), "Segmentation") && !strcmp(Node->GetSingletonTag(), "Segmentation"))
+		{
+			return Node;
+		}
+	
+		return NULL;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 //----------------------------------------------------------------------------
 vtkSlicerSegmentationsModuleLogic::~vtkSlicerSegmentationsModuleLogic()
