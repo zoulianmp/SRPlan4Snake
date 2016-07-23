@@ -412,6 +412,15 @@ void qMRMLSegmentsTableView::populateSegmentTable()
     opacityItem->setData(IDRole, segmentId);
     opacityItem->setToolTip("Opacity");
     d->SegmentsTable->setItem(row, d->columnIndex("Opacity"), opacityItem);
+
+	//Label 
+	QTableWidgetItem* labelItem = new QTableWidgetItem();
+
+
+	labelItem->setData(Qt::DisplayRole, segmentIt->second->GetLabel()); // 
+	labelItem->setData(IDRole, segmentId);
+	labelItem->setToolTip("Label");
+	d->SegmentsTable->setItem(row, d->columnIndex("Label"), labelItem);
   }
 
   // Unblock signals
@@ -496,8 +505,27 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
         valueChanged = true;
         }
       }
+	/*
+	else if (changedItem->column() == d->columnIndex("Label"))
+	{
+		int label = changedItem->data(Qt::EditRole).toInt();
+
+		vtkSegment* segment = d->SegmentationNode->GetSegmentation()->GetSegment(segmentId.toLatin1().constData());
+
+		int oldLabel = segment->GetLabel();
+
+		if (label != oldLabel)
+		{
+			segment->SetLabel(label);
+			valueChanged = true;
+		}
+
+	}
+	*/
     // Set changed properties to segmentation display node if a value has actually changed
-    if (valueChanged)
+    
+	
+	if (valueChanged)
       {
       displayNode->SetSegmentDisplayProperties(segmentId.toLatin1().constData(), properties);
       }

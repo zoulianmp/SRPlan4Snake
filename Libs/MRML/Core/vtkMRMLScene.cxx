@@ -66,7 +66,10 @@ Version:   $Revision: 1.18 $
 #include "vtkMRMLDoubleArrayStorageNode.h"
 #include "vtkMRMLCrosshairNode.h"
 #include "vtkMRMLInteractionNode.h"
+
+// added by zoulian
 #include "vtkMRMLPatientInfoNode.h"
+#include "vtkMRMLGeneralParametersNode.h"
 
 #ifdef MRML_USE_vtkTeem
 #include "vtkMRMLNRRDStorageNode.h"
@@ -220,6 +223,7 @@ vtkMRMLScene::vtkMRMLScene()
   //added by zoulian 
 
   this->RegisterNodeClass(vtkSmartPointer< vtkMRMLPatientInfoNode >::New());
+  this->RegisterNodeClass(vtkSmartPointer<vtkMRMLGeneralParametersNode>::New());
 }
 
 //------------------------------------------------------------------------------

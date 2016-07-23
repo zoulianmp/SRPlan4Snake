@@ -157,6 +157,10 @@ set(MRMLCore_SRCS
   vtkMRMLSceneViewStorageNode.cxx
   vtkMRMLScriptedModuleNode.cxx
   vtkMRMLScriptedModuleNode.h
+  
+  vtkMRMLGeneralParametersNode.h
+  vtkMRMLGeneralParametersNode.cxx
+  
   vtkMRMLSelectionNode.cxx
   vtkMRMLSliceCompositeNode.cxx
   vtkMRMLSliceNode.cxx
