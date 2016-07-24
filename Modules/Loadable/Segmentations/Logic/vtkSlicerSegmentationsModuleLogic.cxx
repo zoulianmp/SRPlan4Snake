@@ -132,7 +132,7 @@ void vtkSlicerSegmentationsModuleLogic::CreateParametersNode(vtkMRMLScene* scene
 vtkMRMLGeneralParametersNode* vtkSlicerSegmentationsModuleLogic::GetParametersNode(vtkMRMLScene* scene)
 {
 	int size = scene->GetNumberOfNodesByClass("vtkMRMLGeneralParametersNode");
-	for (int i; i < size; i++)
+	for (int i=0; i < size; i++)
 	{
 		vtkMRMLGeneralParametersNode* Node;
 		Node = vtkMRMLGeneralParametersNode::SafeDownCast(scene->GetNthNodeByClass(i, "vtkMRMLGeneralParametersNode"));
@@ -140,9 +140,9 @@ vtkMRMLGeneralParametersNode* vtkSlicerSegmentationsModuleLogic::GetParametersNo
 		{
 			return Node;
 		}
-	
-		return NULL;
+
 	}
+	return NULL;
 
 }
 

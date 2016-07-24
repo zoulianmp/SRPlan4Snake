@@ -104,6 +104,10 @@ public:
   virtual void  SetupEventsObservation();
   */
 
+  //update the paintlabel and return the updated label value 
+  // used for paint brush effect
+  int  UpdateLabelFromParametersNode();
+
   void SetupBrush();
 
   void CreateGlyph(vtkPolyData * brush);

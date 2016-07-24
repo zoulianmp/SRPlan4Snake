@@ -37,7 +37,7 @@
 //Segmentation Module
 #include "vtkSlicerSegmentationsModuleLogic.h"
 #include "qSlicerCoreApplication.h"
-#include "vtkMRMLGeneralParametersNode.h"
+
 
 // Qt includes
 #include <QStringList>
@@ -578,15 +578,7 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
       }
     }
 
-  //Update the ParametersNode
-  vtkMRMLScene * scene =  qSlicerCoreApplication::application()->mrmlScene();
-  vtkMRMLGeneralParametersNode* parametersNode= vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
-
-  parametersNode->SetParameter("segment", segmentId.toStdString());
-
-  QString lable=QString::number(segment->GetLabel());
-  parametersNode->SetParameter("label", lable.toStdString()); //current label value	
-
+  
 }
 
 //-----------------------------------------------------------------------------

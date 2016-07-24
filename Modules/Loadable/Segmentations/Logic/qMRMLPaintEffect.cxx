@@ -34,6 +34,9 @@ Version:   $Revision: 1.11 $
 #include "vtkPolyDataMapper2D.h"
 #include "vtkProperty2D.h"
 
+#include "vtkMRMLGeneralParametersNode.h"
+#include "vtkSlicerSegmentationsModuleLogic.h"
+#include "qSlicerCoreApplication.h"
 
 
 #include "vtkMatrix4x4.h"
@@ -135,7 +138,19 @@ void qMRMLPaintEffect::SetUpEffect()
 }
 
 
+int  qMRMLPaintEffect::UpdateLabelFromParametersNode()
+{
+	//Update the ParametersNode
+	vtkMRMLScene * scene = qSlicerCoreApplication::application()->mrmlScene();
+	vtkMRMLGeneralParametersNode* parametersNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
 
+	std::string label = parametersNode->GetParameter("label");
+	QString qlabel = QString::fromStdString(label);
+
+	this->paintLabel = qlabel.toInt();
+
+	return this->paintLabel;
+}
 
 
 /*
@@ -385,54 +400,6 @@ void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
 
 
 
-/*
-
-void qMRMLPaintEffect::CreateGlyph(vtkPolyData * brush)
-{
-
-	float Radius3d = float( this->brushRadius);
-
-	//# make a circle paint brush
-	vtkPoints* points = vtkPoints::New();
-	vtkCellArray* lines = vtkCellArray::New();
-	brush->SetPoints(points);
-	brush->SetLines(lines);
-	double PI = 3.1415926;
-	double	TWOPI = PI * 2;
-	double	PIoverSIXTEEN = PI / 16;
-	vtkIdType	prevPoint = -1;
-	vtkIdType	firstPoint = -1;
-
-	vtkIdType p;
-
-	double	angle = 0;
-	while (angle <= TWOPI)
-	{
-		double x = Radius3d *  cos(angle);
-		double y = Radius3d *  sin(angle);
-		p = points->InsertNextPoint(x, y, 0);
-		if (prevPoint != -1)
-		{
-			vtkIdList * idList = vtkIdList::New();
-			idList->InsertNextId(prevPoint);
-			idList->InsertNextId(p);
-			brush->InsertNextCell(VTK_LINE, idList);
-		}
-		prevPoint = p;
-		if (firstPoint == -1)
-			firstPoint = p;
-		angle = angle + PIoverSIXTEEN;
-	}
-
-	//# make the last line in the circle
-	vtkIdList* idList = vtkIdList::New();
-	idList->InsertNextId(p);
-	idList->InsertNextId(firstPoint);
-	brush->InsertNextCell(VTK_LINE, idList);
-}
-
-
-*/
 
 
 
@@ -698,7 +665,7 @@ void qMRMLPaintEffect::PaintBrush(double x, double y)
 	this->painter->SetBottomRight(br[0], br[1], br[2]);
 	this->painter->SetBrushCenter(brushCenter[0], brushCenter[1], brushCenter[2]);
 	this->painter->SetBrushRadius(this->brushRadius);
-	this->painter->SetPaintLabel(paintLabel);
+	this->painter->SetPaintLabel(this->UpdateLabelFromParametersNode());
 	this->painter->SetPaintOver(paintOver);
 	//this->painter->SetThresholdPaint(paintThreshold);
 	//this->painter->SetThresholdPaintRange(paintThresholdMin, paintThresholdMax);

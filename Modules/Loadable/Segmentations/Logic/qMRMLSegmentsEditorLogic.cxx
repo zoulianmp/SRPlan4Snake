@@ -347,6 +347,10 @@ void qMRMLSegmentsEditorLogic::SetCurrentEffectMode(EffectMode effect)
 			qMRMLPaintEffect * paintEffect;
 			paintEffect = qMRMLPaintEffect::SafeDownCast(this->CurrentEffect);
 
+			//Set the paint effect label 
+
+			paintEffect->SetPaintLabel(this->GetLabel());
+
 			paintEffect->SetSliceWidget(this->GetSliceWidget());
 			paintEffect->SetupEventsObservation();
 			paintEffect->SetEditorLogic(this);

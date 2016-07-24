@@ -31,6 +31,8 @@
 #include "qSRPlanSegmentationDisplaySettingsDialog.h"
 
 #include "qMRMLSegmentsEditorLogic.h"
+#include "vtkMRMLGeneralParametersNode.h"
+#include "qMRMLSegmentsTableView.h"
 
 // SlicerQt includes
 #include <qSlicerApplication.h>
@@ -364,7 +366,37 @@ void qSlicerSegmentationsModuleWidget::onSegmentSelectionChanged(const QItemSele
 
   QStringList selectedSegmentIds = d->SegmentsTableView->selectedSegmentIDs();
 //  d->pushButton_EditSelected->setEnabled(selectedSegmentIds.count() == 1);
-  d->pushButton_DeleteSelected->setEnabled(selectedSegmentIds.count() > 0);
+
+  if (selectedSegmentIds.count() > 0) 
+  {
+	  d->pushButton_DeleteSelected->setEnabled(true);
+
+
+	  // All items contain the segment ID, get that
+	  QString segmentId = selectedSegmentIds[0];
+	  vtkMRMLSegmentationNode * segmentationNode = vtkMRMLSegmentationNode::SafeDownCast(d->MRMLNodeComboBox_Segmentation->currentNode());
+
+	  vtkSegment* segment = segmentationNode->GetSegmentation()->GetSegment(segmentId.toLatin1().constData());
+
+	  //Update the ParametersNode
+	  vtkMRMLScene * scene = qSlicerCoreApplication::application()->mrmlScene();
+	  vtkMRMLGeneralParametersNode* parametersNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+
+	  parametersNode->SetParameter("segment", segmentId.toStdString());
+
+	  QString lable = QString::number(segment->GetLabel());
+	  parametersNode->SetParameter("label", lable.toStdString()); //current label value	
+
+
+	  // Set the Editor Logic Label,used for paintbrush effect;
+	  qMRMLSegmentsEditorLogic* editorlogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic())->GetEditorLogic();
+	  editorlogic->SetLabel(segment->GetLabel());
+
+	  // Set the LabelMap to Current Segment LabelMap
+
+  }
+ 
+
 }
 
 //-----------------------------------------------------------------------------
