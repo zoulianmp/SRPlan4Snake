@@ -221,6 +221,8 @@ public:
   /// \return Success flag
   bool AddEmptySegment(std::string segmentId="");
 
+  vtkSegment * AddEmptySegmentAndReturn(std::string segmentId = "");
+
   /// Get all possible conversions between the master representation and a specified target representation
   void GetPossibleConversions(const std::string& targetRepresentationName,
     vtkSegmentationConverter::ConversionPathAndCostListType &pathsCosts) { this->Converter->GetPossibleConversions(this->MasterRepresentationName, targetRepresentationName, pathsCosts); };

@@ -26,6 +26,8 @@
 #include "vtkMRMLSegmentationDisplayNode.h"
 #include "vtkSlicerSegmentationsModuleLogic.h"
 
+#include "vtkSlicerVolumesLogic.h"
+
 #include "qMRMLSegmentsTableView.h"
 #include "qMRMLSegmentationRepresentationsListView.h"
 #include "qSRPlanSegmentationDisplaySettingsDialog.h"
@@ -46,6 +48,9 @@
 
 // VTK includes
 #include <vtkSmartPointer.h>
+#include "vtkImageData.h"
+#include "vtkDataObject.h"
+
 
 // Qt includes
 #include <QDebug>
@@ -388,8 +393,21 @@ void qSlicerSegmentationsModuleWidget::onSegmentSelectionChanged(const QItemSele
 	  parametersNode->SetParameter("label", lable.toStdString()); //current label value	
 
 
-	  // Set the Editor Logic Label,used for paintbrush effect;
+     //Get the SegmentationModuleLogic and  get the selected segment master representation related LabelMapVolumeNode
+
+	  vtkSlicerSegmentationsModuleLogic * modulelogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic());
+
+	  vtkImageData * imagedata = vtkImageData::SafeDownCast( segment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
+	  vtkMRMLLabelMapVolumeNode *  currentlabelnode = modulelogic->GetLabelMapVolumeNodebyImageData(scene, imagedata);
+
+
+	 // Set the Editor Logic Label,used for paintbrush effect;
+	 // Update the LabelMapNode the current segment's Representation Node
+
 	  qMRMLSegmentsEditorLogic* editorlogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic())->GetEditorLogic();
+
+	  editorlogic->SetLabelMapNodetoLayoutCompositeNode("Red", currentlabelnode);
+
 	  editorlogic->SetLabel(segment->GetLabel());
 
 	  // Set the LabelMap to Current Segment LabelMap
@@ -404,42 +422,73 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 {
   Q_D(qSlicerSegmentationsModuleWidget);
 
-  vtkSlicerSegmentationsModuleLogic * modulelogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast( this->logic());
 
+  //Get the SegmentationModuleLogic and SegmentsEditorLogic
+
+  vtkSlicerSegmentationsModuleLogic * modulelogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast( this->logic());
   qMRMLSegmentsEditorLogic *editorlogic = modulelogic->GetEditorLogic();
 
 
+  //Get the Active Scene and Set the Scene to editorlogic, if editorlogic scene is Null
   vtkMRMLScene * scene = this->mrmlScene();
-
- // vtkMRMLScene * editscene = editorlogic->GetMRMLScene();
-
   if (!editorlogic->GetMRMLScene() && scene)
   {
 	  editorlogic->SetMRMLScene(scene);
   }
 
 
-  vtkMRMLLabelMapVolumeNode *  labelnode = vtkMRMLLabelMapVolumeNode::SafeDownCast(editorlogic ->GetLabelVolume());
-  
-  vtkMRMLSegmentationNode* currentSegmentationNode =  vtkMRMLSegmentationNode::SafeDownCast(
-    d->MRMLNodeComboBox_Segmentation->currentNode() );
+  //Get the CurrentSegmentation Node
+  vtkMRMLSegmentationNode* currentSegmentationNode = vtkMRMLSegmentationNode::SafeDownCast(
+	  d->MRMLNodeComboBox_Segmentation->currentNode());
   if (!currentSegmentationNode)
   {
-    return;
+	  return;
   }
 
-  // Create empty segment in current segmentation
-  currentSegmentationNode->GetSegmentation()->AddEmptySegment();
 
-  // LableMapVolumeNode is not in CompositeNode(),Set the LabelMap id to the  vtkMRMLSegmentationNode related tempLabelMap
-  if (!labelnode)
-  {
+  // Create empty segment,and an  empty vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName() type 
+  // Presentation,  Add empty segment to current segmentation
+  vtkSegment * emptySegment = currentSegmentationNode->GetSegmentation()->AddEmptySegmentAndReturn();
 
-	  labelnode= modulelogic->GetRelatedTempLabelMapNodeFromSegmentationNode(scene, currentSegmentationNode);
 
-	  editorlogic->SetLabelMapNodetoLayoutCompositeNode("Red", labelnode);
+  //Get the vtkOrientedImageData pointer,  the main presentation of emptySegment
+  vtkDataObject*  presentation = emptySegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName());
+
+  //Get the Segmentation related Primary Volume Image
+  vtkMRMLScalarVolumeNode * primaryvolume = vtkMRMLScalarVolumeNode::SafeDownCast(modulelogic->GetRelatedVolumeNodeFromSegmentationNode(scene, currentSegmentationNode));
+
+  vtkOrientedImageData* orientedimage = modulelogic->CreateOrientedImageDataFromVolumeNode(primaryvolume);
+
+
+  //Creat the LabelMapVolume,Set the segement related name
+  //set the labelMapVolume ImageData as the segment representation
+  //Set the DisplayNode ColorTable as Segmentation ColorTable
+  vtkMRMLLabelMapVolumeNode *  labelnode = vtkMRMLLabelMapVolumeNode::New();
+  QString labname = emptySegment->GetName();
+  labname = QString(primaryvolume->GetName()) + QString("-") +labname + QString(modulelogic->GetSegmentLabelMapVolumeNameSuffix());
+
+  labelnode->SetName(labname.toStdString().c_str());
+
+  scene->AddNode(labelnode);
+
+
+  modulelogic->CreateLabelmapVolumeFromOrientedImageData(orientedimage, labelnode);
+
+  vtkSlicerVolumesLogic::ClearVolumeImageData(labelnode); //initial to zero
+
+ 
+  emptySegment->AddRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName(), labelnode->GetImageData());
+
+ //LabelMapVolume DisplayNode 
+  char* colorid = currentSegmentationNode->GetDisplayNode()->GetColorNodeID();
+
+
+  labelnode->GetDisplayNode()->SetAndObserveColorNodeID(colorid);
+
+
+
+  editorlogic->SetLabelMapNodetoLayoutCompositeNode("Red", labelnode);
 	 
-  }
 
   //Enable the Segmentation Effect Buttons
 

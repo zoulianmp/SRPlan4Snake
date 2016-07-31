@@ -1054,6 +1054,80 @@ bool vtkSegmentation::AddEmptySegment(std::string segmentId/*=""*/)
   return this->AddSegment(segment);
 }
 
+
+
+
+
+
+
+
+
+vtkSegment * vtkSegmentation::AddEmptySegmentAndReturn(std::string segmentId /* = ""*/)
+{
+	vtkSmartPointer<vtkSegment> segment = vtkSmartPointer<vtkSegment>::New();
+	segment->SetDefaultColor(vtkSegment::SEGMENT_COLOR_VALUE_INVALID[0], vtkSegment::SEGMENT_COLOR_VALUE_INVALID[1],
+		vtkSegment::SEGMENT_COLOR_VALUE_INVALID[2]);
+
+	// Segment ID will be segment name by default
+	segmentId = this->GenerateUniqueSegmentId(segmentId);
+	segment->SetName(segmentId.c_str());
+
+	// If there are no segments in segmentation then just create a master representation.
+	if (this->GetNumberOfSegments() == 0)
+	{
+		// If there is no master representation then set it to binary labelmap
+		if (this->MasterRepresentationName == NULL)
+		{
+			this->SetMasterRepresentationName(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName());
+		}
+
+		vtkSmartPointer<vtkDataObject> emptyMasterRepresentation = vtkSmartPointer<vtkDataObject>::Take(
+			vtkSegmentationConverterFactory::GetInstance()->ConstructRepresentationObjectByRepresentation(this->MasterRepresentationName));
+		if (!emptyMasterRepresentation)
+		{
+			vtkErrorMacro("AddEmptySegment: Unable to construct empty master representation type '" << this->MasterRepresentationName << "'");
+			return false;
+		}
+		segment->AddRepresentation(this->MasterRepresentationName, emptyMasterRepresentation);
+	}
+	// Create empty representations for all types that are present in this segmentation
+	// (the representation configuration in all segments needs to match in a segmentation)
+	else
+	{
+		vtkSegment* firstSegment = this->Segments.begin()->second;
+		std::vector<std::string> containedRepresentationNamesInFirstSegment;
+		firstSegment->GetContainedRepresentationNames(containedRepresentationNamesInFirstSegment);
+
+		for (std::vector<std::string>::iterator reprIt = containedRepresentationNamesInFirstSegment.begin();
+		reprIt != containedRepresentationNamesInFirstSegment.end(); ++reprIt)
+		{
+			vtkSmartPointer<vtkDataObject> emptyRepresentation = vtkSmartPointer<vtkDataObject>::Take(
+				vtkSegmentationConverterFactory::GetInstance()->ConstructRepresentationObjectByRepresentation(*reprIt));
+			if (!emptyRepresentation)
+			{
+				vtkErrorMacro("AddEmptySegment: Unable to construct empty representation type '" << (*reprIt) << "'");
+				return false;
+			}
+			segment->AddRepresentation((*reprIt), emptyRepresentation);
+		}
+	}
+
+	this->AddSegment(segment);
+	return segment;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 //-----------------------------------------------------------------------------
 bool vtkSegmentation::CopySegmentFromSegmentation(vtkSegmentation* fromSegmentation, std::string segmentId, bool removeFromSource/*=false*/)
 {

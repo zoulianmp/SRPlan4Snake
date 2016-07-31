@@ -89,6 +89,10 @@ public:
   /// Load segmentation from file
   vtkMRMLSegmentationNode* LoadSegmentationFromFile(const char* filename);
 
+
+  const char * GetSegmentLabelMapVolumeNameSuffix();
+
+
   /// Create labelmap volume MRML node from oriented image data
   /// \param orientedImageData Oriented image data to create labelmap from
   /// \param labelmapVolumeNode Labelmap volume to be populated with the oriented image data. The volume node needs to exist
@@ -139,6 +143,10 @@ public:
   //3. return the VolumeNode
 
   static vtkMRMLVolumeNode * GetRelatedVolumeNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode);
+
+  //The the vtkMRMLLabelMapVolumeNode by provided vtkImageData.
+  static vtkMRMLLabelMapVolumeNode * GetLabelMapVolumeNodebyImageData(vtkMRMLScene* scene, vtkImageData* imageData);
+
 
   //Get the SegmentationNode related TempLabelMapNode for a given vtkMRMLSegmentationNode* segnode
   static vtkMRMLLabelMapVolumeNode * GetRelatedTempLabelMapNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode);

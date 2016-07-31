@@ -177,6 +177,18 @@ void vtkSlicerSegmentationsModuleLogic::PrintSelf(ostream& os, vtkIndent indent)
   this->Superclass::PrintSelf(os, indent);
 }
 
+
+
+
+const char * vtkSlicerSegmentationsModuleLogic::GetSegmentLabelMapVolumeNameSuffix()
+{
+	return "-labelmap";
+};
+
+
+
+
+
 //---------------------------------------------------------------------------
 void vtkSlicerSegmentationsModuleLogic::SetMRMLSceneInternal(vtkMRMLScene* newScene)
 {
@@ -701,10 +713,47 @@ vtkMRMLSubjectHierarchyNode* vtkSlicerSegmentationsModuleLogic::GetSegmentationS
 vtkMRMLVolumeNode * vtkSlicerSegmentationsModuleLogic::GetRelatedVolumeNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode)
 {
 	vtkMRMLSubjectHierarchyNode* node = vtkSlicerSegmentationsModuleLogic::GetSegmentationSHNodeForSegmentationNode(scene, segnode);
-  	std::string volumenodeid =  node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName());
-	return vtkMRMLVolumeNode::SafeDownCast(scene->GetNodeByID(volumenodeid));
+  	std::string volumenodeidSH =  node->GetUID(vtkMRMLSubjectHierarchyConstants::GetSHImageVolumeUIDName());
+	
+	//get the segmentation SHNode related primary volume SHNode
+	vtkMRMLSubjectHierarchyNode* volumeSHnode = vtkMRMLSubjectHierarchyNode::SafeDownCast(scene->GetNodeByID(volumenodeidSH));
+	
+	//Return the real volume Node
+	return vtkMRMLVolumeNode::SafeDownCast(volumeSHnode->GetAssociatedNode());
  
 }
+
+vtkMRMLLabelMapVolumeNode * vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyImageData(vtkMRMLScene* scene, vtkImageData* imageData)
+{
+	if (!scene || !imageData)
+	{
+		return NULL;
+	}
+
+	std::vector<vtkMRMLNode*> labelMapNodes;
+	unsigned int numberOfNodes = scene->GetNodesByClass("vtkMRMLLabelMapVolumeNode", labelMapNodes);
+	for (unsigned int nodeIndex = 0; nodeIndex<numberOfNodes; nodeIndex++)
+	{
+		vtkMRMLLabelMapVolumeNode* node = vtkMRMLLabelMapVolumeNode::SafeDownCast(labelMapNodes[nodeIndex]);
+
+		if (node->IsA("vtkMRMLSegmentationNode"))
+		{
+			continue;
+
+		}
+
+		if (node && node->GetImageData() == imageData)
+		{
+			return node;
+		}
+	}
+
+	return NULL;
+
+}
+
+
+
 
 //Get the SegmentationNode related TempLabelMapNode for a given vtkMRMLSegmentationNode* segnode
 //TempLabelMapNode used for mannual segmentation, store the temp label map.
