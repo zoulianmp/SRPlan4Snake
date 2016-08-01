@@ -46,6 +46,8 @@
 #include "vtkMRMLModelNode.h"
 #include "vtkMRMLSubjectHierarchyNode.h"
 
+#include "vtkMRMLColorTableNode.h"
+
 // VTK includes
 #include <vtkSmartPointer.h>
 #include "vtkImageData.h"
@@ -445,12 +447,28 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 	  return;
   }
 
+  //Ensure There is a LabelMapColorTable in the paramters
+  if (!vtkSlicerSegmentationsModuleLogic::HasLabelMapColorTableNode(scene))
+  {
+	  vtkSlicerSegmentationsModuleLogic::AddColorTabelNodeToParametersNode(scene);
+  }
+
+
+  vtkMRMLColorTableNode * ctNode = vtkSlicerSegmentationsModuleLogic::GetColorTabelNodeFromParametersNode(scene);
+
+  
 
   // Create empty segment,and an  empty vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName() type 
   // Presentation,  Add empty segment to current segmentation
   vtkSegment * emptySegment = currentSegmentationNode->GetSegmentation()->AddEmptySegmentAndReturn();
 
 
+  //Add current added vtkSegment default Display properties to ParametersNode' ColorTableNode
+  char * name=  emptySegment->GetName();
+  double* defaultColor =   emptySegment->GetDefaultColor();
+  ctNode->AddColor(name, defaultColor[0], defaultColor[1], defaultColor[2], defaultColor[3]);
+
+    
   //Get the vtkOrientedImageData pointer,  the main presentation of emptySegment
   vtkDataObject*  presentation = emptySegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName());
 
@@ -479,13 +497,13 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
  
   emptySegment->AddRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName(), labelnode->GetImageData());
 
- //LabelMapVolume DisplayNode 
-  char* colorid = currentSegmentationNode->GetDisplayNode()->GetColorNodeID();
+ //LabelMapVolume DisplayNode use the SegmentationNode CTNode
+ // char* colorid = currentSegmentationNode->GetDisplayNode()->GetColorNodeID();
+ // labelnode->GetDisplayNode()->SetAndObserveColorNodeID(colorid);
 
 
-  labelnode->GetDisplayNode()->SetAndObserveColorNodeID(colorid);
-
-
+  //Use the ColorTableNode of Parameters
+  labelnode->GetDisplayNode()->SetAndObserveColorNodeID(ctNode->GetID());
 
   editorlogic->SetLabelMapNodetoLayoutCompositeNode("Red", labelnode);
 	 

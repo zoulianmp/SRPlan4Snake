@@ -48,7 +48,7 @@ class vtkMRMLGeneralParametersNode;
 
 class qMRMLSegmentsEditorLogic ;
 //class vtkSlicerVolumesLogic ;
-
+class vtkMRMLColorTableNode;
 
 
 /// \ingroup SlicerRt_QtModules_Segmentations
@@ -65,6 +65,16 @@ public:
 
   //Get the ParametersNode for Segmentation Module
   static vtkMRMLGeneralParametersNode *  GetParametersNode(vtkMRMLScene* scene);
+
+  // Test ParametersNode, If has LabelMapColorTabelNode,return True,Other return False
+  static bool HasLabelMapColorTableNode(vtkMRMLScene* scene);
+
+  //If ParametersNode Exist, add a ColorTableNode to the Parameters;
+  static void AddColorTabelNodeToParametersNode(vtkMRMLScene* scene);
+
+  //If ParametersNode Exist, and ColorTableNode Exist, Return ColorTableNode  ;
+  static vtkMRMLColorTableNode* GetColorTabelNodeFromParametersNode(vtkMRMLScene* scene);
+
 
   //TODO:
   /// Create a segmentation node for the given segmentation node

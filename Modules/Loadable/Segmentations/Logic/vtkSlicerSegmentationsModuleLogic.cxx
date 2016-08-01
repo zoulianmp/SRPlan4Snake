@@ -53,6 +53,8 @@
 #include <vtkGeneralTransform.h>
 #include <vtkTransformPolyDataFilter.h>
 
+#include <vtkLookupTable.h>
+
 // MRML includes
 #include <vtkMRMLScene.h>
 #include <vtkEventBroker.h>
@@ -62,6 +64,8 @@
 #include <vtkMRMLModelNode.h>
 #include <vtkMRMLModelDisplayNode.h>
 #include <vtkMRMLTransformNode.h>
+
+
 
 // STD includes
 #include <sstream>
@@ -122,6 +126,9 @@ void vtkSlicerSegmentationsModuleLogic::CreateParametersNode(vtkMRMLScene* scene
 	parametersNode->SetParameter("mergedLabelmap", " "); //the current mergedLabelmapNode for vtkMRMLSegmentationNode uid, Used to get segmentation from scence.
 	parametersNode->SetParameter("segmentLabelmap", " "); //the current segmentLabelmap uid for a segment, Used to for effect do
 
+	parametersNode->SetParameter("LabelmapColorTableNode", " "); //the current CorlorTableNode uid in scene, us it to get the ColorTableNode.
+
+
 	//	parametersNode->SetParameter("propagationMode", str(slicer.vtkMRMLApplicationLogic.BackgroundLayer | slicer.vtkMRMLApplicationLogic.LabelLayer))
 	scene->AddNode(parametersNode);
 
@@ -147,10 +154,60 @@ vtkMRMLGeneralParametersNode* vtkSlicerSegmentationsModuleLogic::GetParametersNo
 }
 
 
+// Test ParametersNode, If has LabelMapColorTabelNode,return True,Other return False
+bool vtkSlicerSegmentationsModuleLogic::HasLabelMapColorTableNode(vtkMRMLScene* scene)
+{
+	vtkMRMLGeneralParametersNode * parameterNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+
+	std::string ctNodeID = parameterNode->GetParameter("LabelmapColorTableNode");
+
+	if (ctNodeID.size() > 0)
+		return true;
+	else
+		return false;
+
+}
 
 
 
+//If ParametersNode Exist, add a ColorTableNode to the Parameters;
+void vtkSlicerSegmentationsModuleLogic::AddColorTabelNodeToParametersNode(vtkMRMLScene* scene)
+{
+	vtkMRMLGeneralParametersNode * parameterNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
 
+
+	vtkSmartPointer<vtkMRMLColorTableNode> ctNode = vtkSmartPointer<vtkMRMLColorTableNode>::New();
+	scene->AddNode(ctNode);
+
+	std::string segmentationColorTableNodeName = std::string("LabelMapShowCTB") ;
+
+	segmentationColorTableNodeName = scene->GenerateUniqueName(segmentationColorTableNodeName);
+	ctNode->SetName(segmentationColorTableNodeName.c_str());
+	ctNode->HideFromEditorsOff();
+	ctNode->SetTypeToUser();
+	ctNode->NamesInitialisedOn();
+	
+
+	// Initialize color table
+	ctNode->SetNumberOfColors(128);  //Predefined Color Table size
+	ctNode->GetLookupTable()->SetTableRange(0, 1);
+	ctNode->AddColor(0, 0.0, 0.0, 0.0, 0.0); // Black background
+		
+    parameterNode->SetParameter("LabelmapColorTableNode", ctNode->GetID());
+}
+
+
+
+//If ParametersNode Exist, and ColorTableNode Exist, Return ColorTableNode  ;
+vtkMRMLColorTableNode* vtkSlicerSegmentationsModuleLogic::GetColorTabelNodeFromParametersNode(vtkMRMLScene* scene)
+{
+	vtkMRMLGeneralParametersNode * parameterNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+
+	std::string ctNodeid =  parameterNode->GetParameter("LabelmapColorTableNode");
+
+	return vtkMRMLColorTableNode::SafeDownCast(scene->GetNodeByID(ctNodeid));
+
+}
 
 
 
