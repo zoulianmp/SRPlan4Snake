@@ -120,13 +120,13 @@ void vtkSlicerSegmentationsModuleLogic::CreateParametersNode(vtkMRMLScene* scene
 
 	parametersNode->SetParameter("label", "0"); //current label value	
 	parametersNode->SetParameter("effect", "None"); //current enum EffectMode { None, PaintBrush, FreeDraw, Threshold };
-	parametersNode->SetParameter("segmentation", " "); //the current vtkMRMLSegmentationNode uid, Used to get segmentation from scence.
-	parametersNode->SetParameter("segment", " "); //segment current id for get segment from current segmentation Node
+	parametersNode->SetParameter("segmentation", ""); //the current vtkMRMLSegmentationNode uid, Used to get segmentation from scence.
+	parametersNode->SetParameter("segment", ""); //segment current id for get segment from current segmentation Node
 
-	parametersNode->SetParameter("mergedLabelmap", " "); //the current mergedLabelmapNode for vtkMRMLSegmentationNode uid, Used to get segmentation from scence.
-	parametersNode->SetParameter("segmentLabelmap", " "); //the current segmentLabelmap uid for a segment, Used to for effect do
+	parametersNode->SetParameter("mergedLabelmap", ""); //the current mergedLabelmapNode for vtkMRMLSegmentationNode uid, Used to get segmentation from scence.
+	parametersNode->SetParameter("segmentLabelmap", ""); //the current segmentLabelmap uid for a segment, Used to for effect do
 
-	parametersNode->SetParameter("LabelmapColorTableNode", " "); //the current CorlorTableNode uid in scene, us it to get the ColorTableNode.
+	parametersNode->SetParameter("LabelmapColorTableNode", ""); //the current CorlorTableNode uid in scene, us it to get the ColorTableNode.
 
 
 	//	parametersNode->SetParameter("propagationMode", str(slicer.vtkMRMLApplicationLogic.BackgroundLayer | slicer.vtkMRMLApplicationLogic.LabelLayer))
@@ -161,6 +161,8 @@ bool vtkSlicerSegmentationsModuleLogic::HasLabelMapColorTableNode(vtkMRMLScene* 
 
 	std::string ctNodeID = parameterNode->GetParameter("LabelmapColorTableNode");
 
+	//bool emp = ctNodeID.empty();
+
 	if (ctNodeID.size() > 0)
 		return true;
 	else
@@ -187,11 +189,18 @@ void vtkSlicerSegmentationsModuleLogic::AddColorTabelNodeToParametersNode(vtkMRM
 	ctNode->SetTypeToUser();
 	ctNode->NamesInitialisedOn();
 	
+	ctNode->SetAttribute("Category", "Discrete");
+
 
 	// Initialize color table
+
+	vtkLookupTable *table = vtkLookupTable::New();
+	ctNode->SetLookupTable(table);
+	table->Delete();
+
 	ctNode->SetNumberOfColors(128);  //Predefined Color Table size
 	ctNode->GetLookupTable()->SetTableRange(0, 1);
-	ctNode->AddColor(0, 0.0, 0.0, 0.0, 0.0); // Black background
+	ctNode->AddColor("Background", 0.0, 0.0, 0.0, 0.0); // Black background
 		
     parameterNode->SetParameter("LabelmapColorTableNode", ctNode->GetID());
 }
