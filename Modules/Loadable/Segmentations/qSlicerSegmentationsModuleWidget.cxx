@@ -374,7 +374,7 @@ void qSlicerSegmentationsModuleWidget::onSegmentSelectionChanged(const QItemSele
   QStringList selectedSegmentIds = d->SegmentsTableView->selectedSegmentIDs();
 //  d->pushButton_EditSelected->setEnabled(selectedSegmentIds.count() == 1);
 
-  if (selectedSegmentIds.count() > 0) 
+  if (selectedSegmentIds.count() > 0)
   {
 	  d->pushButton_DeleteSelected->setEnabled(true);
 
@@ -385,35 +385,39 @@ void qSlicerSegmentationsModuleWidget::onSegmentSelectionChanged(const QItemSele
 
 	  vtkSegment* segment = segmentationNode->GetSegmentation()->GetSegment(segmentId.toLatin1().constData());
 
-	  //Update the ParametersNode
-	  vtkMRMLScene * scene = qSlicerCoreApplication::application()->mrmlScene();
-	  vtkMRMLGeneralParametersNode* parametersNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+	  if (segment)
+	  {
+		  //Update the ParametersNode
+		  vtkMRMLScene * scene = qSlicerCoreApplication::application()->mrmlScene();
+		  vtkMRMLGeneralParametersNode* parametersNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
 
-	  parametersNode->SetParameter("segment", segmentId.toStdString());
+		  parametersNode->SetParameter("segment", segmentId.toStdString());
 
-	  QString lable = QString::number(segment->GetLabel());
-	  parametersNode->SetParameter("label", lable.toStdString()); //current label value	
-
-
-     //Get the SegmentationModuleLogic and  get the selected segment master representation related LabelMapVolumeNode
-
-	  vtkSlicerSegmentationsModuleLogic * modulelogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic());
-
-	  vtkImageData * imagedata = vtkImageData::SafeDownCast( segment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
-	  vtkMRMLLabelMapVolumeNode *  currentlabelnode = modulelogic->GetLabelMapVolumeNodebyImageData(scene, imagedata);
+		  QString lable = QString::number(segment->GetLabel());
+		  parametersNode->SetParameter("label", lable.toStdString()); //current label value	
 
 
-	 // Set the Editor Logic Label,used for paintbrush effect;
-	 // Update the LabelMapNode the current segment's Representation Node
+																	  //Get the SegmentationModuleLogic and  get the selected segment master representation related LabelMapVolumeNode
 
-	  qMRMLSegmentsEditorLogic* editorlogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic())->GetEditorLogic();
+		  vtkSlicerSegmentationsModuleLogic * modulelogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic());
 
-	  editorlogic->SetLabelMapNodetoLayoutCompositeNode("Red", currentlabelnode);
+		  vtkImageData * imagedata = vtkImageData::SafeDownCast(segment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
+		  vtkMRMLLabelMapVolumeNode *  currentlabelnode = modulelogic->GetLabelMapVolumeNodebyImageData(scene, imagedata);
 
-	  editorlogic->SetLabel(segment->GetLabel());
 
-	  // Set the LabelMap to Current Segment LabelMap
+		  // Set the Editor Logic Label,used for paintbrush effect;
+		  // Update the LabelMapNode the current segment's Representation Node
 
+		  qMRMLSegmentsEditorLogic* editorlogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic())->GetEditorLogic();
+
+		  editorlogic->SetLabelMapNodetoLayoutCompositeNode("Red", currentlabelnode);
+
+		  editorlogic->SetLabel(segment->GetLabel());
+
+		  // Set the LabelMap to Current Segment LabelMap
+
+	  }
+	
   }
  
 
@@ -465,8 +469,11 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 
   //Add current added vtkSegment default Display properties to ParametersNode' ColorTableNode
   char * name=  emptySegment->GetName();
+
+  // const double vtkSegment::SEGMENT_COLOR_VALUE_INVALID[4] = {0.5, 0.5, 0.5, 1.0};
+
   double* defaultColor =   emptySegment->GetDefaultColor();
-  ctNode->AddColor(name, defaultColor[0], defaultColor[1], defaultColor[2], defaultColor[3]);
+  ctNode->AddColor(name, defaultColor[0], defaultColor[1], defaultColor[2], 1.0);
 
     
   //Get the vtkOrientedImageData pointer,  the main presentation of emptySegment

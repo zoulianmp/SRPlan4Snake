@@ -316,8 +316,8 @@ void vtkMRMLSegmentationDisplayNode::SetSegmentDisplayProperties(std::string seg
   {
     // If not found then add
     SegmentDisplayProperties newPropertiesEntry;
-    newPropertiesEntry.Visible2D = properties.Visible3D;
-	newPropertiesEntry.Visible2D = properties.Visible3D;
+    newPropertiesEntry.Visible2D = properties.Visible2D;
+	newPropertiesEntry.Visible3D = properties.Visible3D;
 
     newPropertiesEntry.Color[0] = properties.Color[0];
     newPropertiesEntry.Color[1] = properties.Color[1];
@@ -339,7 +339,7 @@ void vtkMRMLSegmentationDisplayNode::SetSegmentDisplayProperties(std::string seg
 
   // Set color in color table too
   this->SetSegmentColorTableEntry(segmentId, properties.Color[0], properties.Color[1], properties.Color[2],
-    ((properties.Visible2D|| properties.Visible3D) ? properties.PolyDataOpacity : 0.0) );
+    ((properties.Visible2D) ? properties.PolyDataOpacity : 0.0) );
 
   this->Modified();
 }

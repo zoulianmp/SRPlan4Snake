@@ -592,7 +592,7 @@ bool vtkMRMLSegmentationNode::AddSegmentDisplayProperties(std::string segmentId)
   // Add entry in segment display properties
   vtkMRMLSegmentationDisplayNode::SegmentDisplayProperties properties;
   properties.Visible2D = true;
-  properties.Visible3D = true;
+  properties.Visible3D = false; 
 
   properties.Color[0] = defaultColor[0];
   properties.Color[1] = defaultColor[1];

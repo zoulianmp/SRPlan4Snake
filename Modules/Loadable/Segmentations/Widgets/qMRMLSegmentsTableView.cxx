@@ -33,6 +33,8 @@
 // MRML includes
 #include <vtkMRMLLabelMapVolumeNode.h>
 #include <vtkMRMLModelNode.h>
+#include <vtkMRMLColorTableNode.h>
+
 
 //Segmentation Module
 #include "vtkSlicerSegmentationsModuleLogic.h"
@@ -491,6 +493,26 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
       return;
       }
     segment->SetName(nameText.toLatin1().constData());
+
+	 //update parametersNode ColorTabelNode data for Name
+	/*
+	vtkMRMLSegmentationDisplayNode* displayNode = vtkMRMLSegmentationDisplayNode::SafeDownCast(
+		d->SegmentationNode->GetDisplayNode());
+
+	vtkMRMLColorTableNode *ctNode = vtkMRMLColorTableNode::SafeDownCast(displayNode->GetColorNode());
+
+	//ColorTableNod in ParameterNode using segment name as color name
+	const char * colorname = nameText.toStdString().c_str();
+	int index = ctNode->GetColorIndexByName(segmentId.toLatin1().constData());
+
+	//Get the parametersNode and update the color name
+	vtkMRMLScene* scene = qSlicerCoreApplication::application()->mrmlScene();
+	vtkMRMLColorTableNode* ParameterCTNode = vtkSlicerSegmentationsModuleLogic::GetColorTabelNodeFromParametersNode(scene);
+
+	ParameterCTNode->SetColorName(index-1, colorname);
+	*/
+
+
     }
   // If visualization has been changed
   else
@@ -518,6 +540,30 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
       int visible = changedItem->data(VisibilityRole).toInt();
       properties.Visible2D = (bool)visible;
       valueChanged = true;
+
+	  vtkMRMLSegmentationDisplayNode* displayNode = vtkMRMLSegmentationDisplayNode::SafeDownCast(
+		  d->SegmentationNode->GetDisplayNode());
+	  vtkMRMLColorTableNode *ctNode = vtkMRMLColorTableNode::SafeDownCast(displayNode->GetColorNode());
+
+	  int index = ctNode->GetColorIndexByName(segmentId.toLatin1().constData());
+
+
+	  //Get the parametersNode and update the color name
+	  vtkMRMLScene* scene = qSlicerCoreApplication::application()->mrmlScene();
+	  vtkMRMLColorTableNode* ParameterCTNode = vtkSlicerSegmentationsModuleLogic::GetColorTabelNodeFromParametersNode(scene);
+
+
+	  if (!visible)
+	  {
+		  //Set the LabelMap opacity to 0,not see the label
+		  ParameterCTNode->SetOpacity(index-1, 0.0);
+	  }
+	  else
+	  {
+		  //Restore the segment opacity
+		  ParameterCTNode->SetOpacity(index-1, properties.PolyDataOpacity);   
+	  }
+
       }
 
 	// 3DVisibility changed
@@ -540,6 +586,28 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
         properties.Color[2] = color.blueF();
         valueChanged = true;
         }
+	  //update parametersNode ColorTabelNode data
+
+	  vtkMRMLColorTableNode *ctNode = vtkMRMLColorTableNode::SafeDownCast(displayNode->GetColorNode());
+	  int index =  ctNode->GetColorIndexByName(segmentId.toLatin1().constData());
+
+
+
+	  //Get the parametersNode and update the color name
+	  vtkMRMLScene* scene = qSlicerCoreApplication::application()->mrmlScene();
+	  vtkMRMLColorTableNode* ParameterCTNode = vtkSlicerSegmentationsModuleLogic::GetColorTabelNodeFromParametersNode(scene);
+
+
+
+	  ParameterCTNode->SetColor(index-1, properties.Color[0], properties.Color[1], properties.Color[2]);
+
+	  /*
+	  ctNode->SetColorName(index, colorname);
+	  ctNode->SetColor(index, Color[0], Color[1], Color[2]);
+
+	  ctNode->SetOpacity(index, opacity);
+	  */
+
       }
     // Opacity changed
     else if (changedItem->column() == d->columnIndex("Opacity"))
@@ -551,6 +619,27 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
         properties.PolyDataOpacity = opacity.toDouble();
         valueChanged = true;
         }
+
+	  //update parametersNode ColorTabelNode data
+
+	  vtkMRMLSegmentationDisplayNode* displayNode = vtkMRMLSegmentationDisplayNode::SafeDownCast(
+		  d->SegmentationNode->GetDisplayNode());
+
+	  vtkMRMLColorTableNode *ctNode = vtkMRMLColorTableNode::SafeDownCast(displayNode->GetColorNode());
+
+
+	  int index = ctNode->GetColorIndexByName(segmentId.toLatin1().constData());
+
+
+	  //Get the parametersNode and update the color name
+	  vtkMRMLScene* scene = qSlicerCoreApplication::application()->mrmlScene();
+	  vtkMRMLColorTableNode* ParameterCTNode = vtkSlicerSegmentationsModuleLogic::GetColorTabelNodeFromParametersNode(scene);
+
+
+	  ParameterCTNode->SetOpacity(index-1, opacity.toDouble());
+
+
+
       }
 	/*
 	else if (changedItem->column() == d->columnIndex("Label"))
