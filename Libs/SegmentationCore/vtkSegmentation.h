@@ -296,6 +296,9 @@ protected:
   /// Container of segments that belong to this segmentation
   SegmentMap Segments;
 
+  //Used for Label assignment tracking
+  int LastAssignedLable;
+
   /// Master representation type name.
   /// 1. This representation is saved on disk
   /// 2. If this representation is modified, the others are invalidated

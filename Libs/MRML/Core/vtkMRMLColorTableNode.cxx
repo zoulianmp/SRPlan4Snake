@@ -1417,6 +1417,30 @@ void vtkMRMLColorTableNode::Reset()
   this->EndModify(disabledModify);
 }
 
+void vtkMRMLColorTableNode::ResetColorLookupTable()
+{
+	int disabledModify = this->StartModify();
+
+	// only call reset if this is a user node
+	if (this->GetType() == vtkMRMLColorTableNode::User)
+	{
+		this->LastAddedColor = -1;
+		this->ClearNames();
+	}
+
+	this->AddColor("Background", 0.0, 0.0, 0.0, 0.0); // Black background
+
+	this->EndModify(disabledModify);
+
+}
+
+
+
+
+
+
+
+
 //---------------------------------------------------------------------------
 int vtkMRMLColorTableNode::GetColorIndexByName(const char *name)
 {

@@ -344,6 +344,15 @@ void vtkMRMLSegmentationDisplayNode::SetSegmentDisplayProperties(std::string seg
   this->Modified();
 }
 
+
+
+vtkMRMLSegmentationDisplayNode::SegmentDisplayPropertiesMap vtkMRMLSegmentationDisplayNode::GetSegmentationDisplayProperties()
+{
+	return this->SegmentationDisplayProperties;
+}
+
+
+
 //---------------------------------------------------------------------------
 bool vtkMRMLSegmentationDisplayNode::GetSegment2DVisibility(std::string segmentID)
 {

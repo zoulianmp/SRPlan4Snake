@@ -121,6 +121,9 @@ public:
   /// Clear segment display properties
   void ClearSegmentDisplayProperties();
 
+  //Get  SegmentDisplayPropertiesMap for Segment LabelMap Show 
+  SegmentDisplayPropertiesMap GetSegmentationDisplayProperties();
+
   /// Determine and set automatic opacities for segments using topological hierarchies.
   /// Stores value in opacity component of \sa SegmentDisplayProperties.
   /// \return Success flag

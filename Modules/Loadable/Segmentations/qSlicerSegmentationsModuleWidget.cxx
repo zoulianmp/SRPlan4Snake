@@ -411,6 +411,8 @@ void qSlicerSegmentationsModuleWidget::onSegmentSelectionChanged(const QItemSele
 		  qMRMLSegmentsEditorLogic* editorlogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic())->GetEditorLogic();
 
 		  editorlogic->SetLabelMapNodetoLayoutCompositeNode("Red", currentlabelnode);
+		  editorlogic->SetLabelMapNodetoLayoutCompositeNode("Yellow", currentlabelnode);
+		  editorlogic->SetLabelMapNodetoLayoutCompositeNode("Green", currentlabelnode);
 
 		  editorlogic->SetLabel(segment->GetLabel());
 
@@ -540,10 +542,32 @@ void qSlicerSegmentationsModuleWidget::onDeleteSelectedSegments()
   }
 
   QStringList selectedSegmentIds = d->SegmentsTableView->selectedSegmentIDs();
+
+ 
   foreach (QString segmentId, selectedSegmentIds)
   {
-    currentSegmentationNode->GetSegmentation()->RemoveSegment(segmentId.toLatin1().constData());
+
+     //Remove the segment corresponded labMapNode from the scene
+	 vtkSegment * currentSegment = currentSegmentationNode->GetSegmentation()->GetSegment(segmentId.toLatin1().constData());
+
+	 vtkImageData* lableMapImage = vtkImageData::SafeDownCast(currentSegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
+	
+	 vtkMRMLScene* scene = qSlicerCoreApplication::application()->mrmlScene();
+	 vtkMRMLLabelMapVolumeNode * labMapNode = vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyImageData(scene, lableMapImage);
+	 scene->RemoveNode(labMapNode);
+
+     currentSegmentationNode->GetSegmentation()->RemoveSegment(segmentId.toLatin1().constData());
   }
+
+ // vtkSlicerSegmentationsModuleLogic::ResetCTNodeOfParametersNode(this->mrmlScene());
+
+  //The the Newly reseted CTNode of ParametersNode
+//  vtkMRMLColorTableNode* ParameterCTNode = vtkSlicerSegmentationsModuleLogic::GetColorTabelNodeFromParametersNode(this->mrmlScene());
+
+//  vtkSlicerSegmentationsModuleLogic::UpdateParametersCTNodeFromSegmentationNode(ParameterCTNode, currentSegmentationNode);
+
+   
+
 }
 
 //-----------------------------------------------------------------------------

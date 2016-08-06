@@ -206,6 +206,24 @@ void vtkSlicerSegmentationsModuleLogic::AddColorTabelNodeToParametersNode(vtkMRM
 }
 
 
+//If ParametersNode Exist, remove pre CTNode,add a new CTNode to ParamtersNode
+void vtkSlicerSegmentationsModuleLogic::ResetCTNodeOfParametersNode(vtkMRMLScene* scene)
+{
+	vtkMRMLGeneralParametersNode * parameterNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+	std::string ctNodeid = parameterNode->GetParameter("LabelmapColorTableNode");
+
+	if (!ctNodeid.empty())
+	{
+		vtkMRMLColorTableNode * ctNode = vtkMRMLColorTableNode::SafeDownCast(scene->GetNodeByID(ctNodeid)); 
+		scene->RemoveNode(ctNode);
+
+	}
+
+	vtkSlicerSegmentationsModuleLogic::AddColorTabelNodeToParametersNode(scene);
+}
+
+
+
 
 //If ParametersNode Exist, and ColorTableNode Exist, Return ColorTableNode  ;
 vtkMRMLColorTableNode* vtkSlicerSegmentationsModuleLogic::GetColorTabelNodeFromParametersNode(vtkMRMLScene* scene)
@@ -220,6 +238,49 @@ vtkMRMLColorTableNode* vtkSlicerSegmentationsModuleLogic::GetColorTabelNodeFromP
 
 
 
+
+//Update the ParamtersCTNodeFromeSegmentationCTNode, Used for Labelmap show
+void vtkSlicerSegmentationsModuleLogic::UpdateParametersCTNodeFromSegmentationNode(vtkMRMLColorTableNode* parameterCTNode, vtkMRMLSegmentationNode* segmentation)
+{
+
+	vtkMRMLSegmentationDisplayNode * displayNode = vtkMRMLSegmentationDisplayNode::SafeDownCast(segmentation->GetDisplayNode());
+
+	vtkMRMLSegmentationDisplayNode::SegmentDisplayPropertiesMap segmentationproperties;
+
+	segmentationproperties = displayNode->GetSegmentationDisplayProperties();
+ 
+	int segmentsNum = segmentationproperties.size();
+ 
+	//Reset the ColorLookupTable
+	parameterCTNode->ResetColorLookupTable();
+	 
+	vtkMRMLSegmentationDisplayNode::SegmentDisplayPropertiesMap::iterator propIt;
+	int idx;
+
+	const char* segmentName;
+	double rgba[4];
+
+	for (idx = 0, propIt = segmentationproperties.begin(); propIt != segmentationproperties.end(); ++idx, ++propIt)
+	{
+		segmentName = propIt->first.c_str();
+		
+		rgba[0] = propIt->second.Color[0];
+		rgba[1] = propIt->second.Color[1];
+		rgba[2] = propIt->second.Color[2];
+
+		if (propIt->second.Visible2D)
+		{
+			rgba[3] = 1.0;
+		}
+		else
+		{
+			rgba[3] = 0.0;
+		}
+		parameterCTNode->AddColor( segmentName, rgba[0], rgba[1], rgba[2], rgba[3]);
+	//parameterCTNode->SetColor(idx+1,segmentName, rgba[0], rgba[1], rgba[2], rgba[3]);
+	}
+
+}
 
 
 

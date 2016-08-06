@@ -76,6 +76,8 @@ vtkSegmentation::vtkSegmentation()
   this->MasterRepresentationCallbackCommand = vtkCallbackCommand::New();
   this->MasterRepresentationCallbackCommand->SetClientData( reinterpret_cast<void *>(this) );
   this->MasterRepresentationCallbackCommand->SetCallback( vtkSegmentation::OnMasterRepresentationModified );
+
+  this->LastAssignedLable = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -434,7 +436,9 @@ bool vtkSegmentation::AddSegment(vtkSegment* segment, std::string segmentId/*=""
   this->InvokeEvent(vtkSegmentation::SegmentAdded, (void*)segmentIdChars);
 
   //Arrange the new Segments' Label;
-  this->ArrangeSegmentsLabels(); 
+  //this->ArrangeSegmentsLabels();  comment out by zoulian
+  this->LastAssignedLable++;
+  segment->SetLabel(this->LastAssignedLable);
   
   this->Modified();
 
@@ -512,7 +516,7 @@ void vtkSegmentation::RemoveSegment(SegmentMap::iterator segmentIt)
   this->InvokeEvent(vtkSegmentation::SegmentRemoved, (void*)segmentId.c_str());
 
   //Arrange the new Segments' Label;
-  this->ArrangeSegmentsLabels(); 
+  //this->ArrangeSegmentsLabels();  Comment out by zoulian
   
   this->Modified();
 }

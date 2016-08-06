@@ -75,6 +75,12 @@ public:
   //If ParametersNode Exist, and ColorTableNode Exist, Return ColorTableNode  ;
   static vtkMRMLColorTableNode* GetColorTabelNodeFromParametersNode(vtkMRMLScene* scene);
 
+  //Update the ParamtersCTNodeFromeSegmentationNode, Used for Labelmap show
+  static void UpdateParametersCTNodeFromSegmentationNode(vtkMRMLColorTableNode* parameterCTNode, vtkMRMLSegmentationNode* segmentation);
+
+  //If ParametersNode Exist, remove pre CTNode,add a new CTNode to ParamtersNode
+  static void ResetCTNodeOfParametersNode(vtkMRMLScene* scene);
+
 
   //TODO:
   /// Create a segmentation node for the given segmentation node

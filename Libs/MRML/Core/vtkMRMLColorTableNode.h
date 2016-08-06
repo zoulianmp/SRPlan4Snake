@@ -216,6 +216,11 @@ public:
   /// reset when close the scene
   virtual void Reset();
 
+
+  //reset the lookuptable
+
+  void ResetColorLookupTable();
+
   ///
   /// return the index associated with this color name, which can then be used
   /// to get the colour. Returns -1 on failure.
