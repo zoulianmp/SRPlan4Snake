@@ -113,14 +113,21 @@ public:
   void CreateGlyph(vtkPolyData * brush);
   void ScaleBrushSize(double scaleFactor);
 
-  void PaintAddPoint(int x, int y);
+  //Use Label Value for Brush Paint in Mouse Event Point
+  void PaintAddPoint(int x, int y, int label);
 
   void SetBrushSize(int size);
   void SetBrushShape(BrushType shape);
 
   void PaintFeedback();
-  void PaintApply();
-  void PaintBrush(double x, double y);
+
+  //Paint apply as label
+  void PaintApply(int label);
+
+  //Paint the Brush in x,y position and use  the label value
+  void PaintBrush(double x, double y,int label);
+
+
   void PaintPixel(double x, double y);
 
   void PositionActors();

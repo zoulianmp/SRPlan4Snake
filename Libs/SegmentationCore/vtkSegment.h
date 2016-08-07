@@ -33,6 +33,9 @@
 // Segmentation includes
 #include "vtkSegmentationCoreConfigure.h"
 
+class vtkCallbackCommand;
+
+
 /// \ingroup SegmentationCore
 class vtkSegmentationCore_EXPORT vtkSegment : public vtkObject
 {
@@ -109,9 +112,19 @@ protected:
   ~vtkSegment();
   void operator=(const vtkSegment&);
 
+  //When LabelMapImage of this segment Modified,Call this funciton to clear other representation
+  static void OnLabelMapImageModified(vtkObject* vtkNotUsed(caller),
+	  unsigned long vtkNotUsed(eid),
+	  void* clientData,
+	  void* vtkNotUsed(callData));
+
 protected:
   /// Stored representations. Map from type string to data object
   RepresentationMap Representations;
+
+
+  /// Command handling  LableMapImage modified events,the Master representation
+  vtkCallbackCommand* LabelMapImageCallbackCommand;
 
   /// Name (e.g. segment label in DICOM Segmentation Object)
   /// This is the default identifier of the segment within segmentation, so needs to be unique within a segmentation

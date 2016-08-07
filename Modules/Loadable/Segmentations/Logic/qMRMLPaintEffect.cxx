@@ -244,17 +244,21 @@ void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void
 	{
 		this->actionState = "painting";
 		int *xy = this->interactor->GetEventPosition();
-		this->PaintAddPoint(xy[0], xy[1]);
+		this->PaintAddPoint(xy[0], xy[1], this->UpdateLabelFromParametersNode());
 		this->AbortEvent(event);
 	}
 	else if (event == vtkCommand::LeftButtonReleaseEvent)
 	{
-		this->PaintApply();
+		this->PaintApply(this->UpdateLabelFromParametersNode());
 		this->actionState = "";
 		this->CursorOn();
 	}
 	else if (event == vtkCommand::RightButtonPressEvent)
 	{
+		this->actionState = "unpainting";
+		int *xy = this->interactor->GetEventPosition();
+		this->PaintAddPoint(xy[0], xy[1], 0);
+		this->AbortEvent(event);
 		
 	}
 	else if (event == vtkCommand::MiddleButtonPressEvent)
@@ -270,7 +274,10 @@ void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void
 	}
 	else if (event == vtkCommand::RightButtonReleaseEvent)
 	{
-		
+
+		this->PaintApply(0);
+		this->actionState = "";
+		this->CursorOn();
 
 	}
 	else if (event == vtkCommand::MouseMoveEvent)
@@ -279,7 +286,13 @@ void qMRMLPaintEffect::ProcessEvent(vtkObject *caller, unsigned long event, void
 		if (!strcmp(this->actionState, "painting") )
 		{
 			int *xy = this->interactor->GetEventPosition();
-			this->PaintAddPoint(xy[0], xy[1]);
+			this->PaintAddPoint(xy[0], xy[1], this->UpdateLabelFromParametersNode());
+			this->AbortEvent(event);
+		}
+		else if (!strcmp(this->actionState, "unpainting"))
+		{
+			int *xy = this->interactor->GetEventPosition();
+			this->PaintAddPoint(xy[0], xy[1], 0);
 			this->AbortEvent(event);
 		}
 	
@@ -432,7 +445,7 @@ void qMRMLPaintEffect::ScaleBrushSize(double scaleFactor)
 
 // depending on the delayedPaint mode, either paint the given point or queue it up with a marker
 //   for later painting
-void qMRMLPaintEffect::PaintAddPoint(int x, int y)
+void qMRMLPaintEffect::PaintAddPoint(int x, int y, int label)
 {
 
 	this->paintCoordinates->InsertNextPoint(double(x), double(y));
@@ -444,7 +457,7 @@ void qMRMLPaintEffect::PaintAddPoint(int x, int y)
 	}
 	else
 	{
-		this->PaintApply();
+		this->PaintApply(label);
 	}
 	
 
@@ -486,13 +499,13 @@ void qMRMLPaintEffect::PaintFeedback()
 	}
 }
 
-void qMRMLPaintEffect::PaintApply()
+void qMRMLPaintEffect::PaintApply(int label)
 {
 	int nCoordinates = this->paintCoordinates->GetNumberOfPoints();
 	for (int i = 0;i < nCoordinates; i++)
 	{
 		double * xy = this->paintCoordinates->GetPoint(i);
-		this->PaintBrush(xy[0], xy[1]);
+		this->PaintBrush(xy[0], xy[1],label);
 	}
 	this->paintCoordinates->Reset();
 	this->PaintFeedback();
@@ -512,7 +525,7 @@ void qMRMLPaintEffect::PaintApply()
 //(could be streched or rotate when transformed to IJK)
 //- make sure to hit every pixel in IJK space
 //- apply the threshold if selected
-void qMRMLPaintEffect::PaintBrush(double x, double y)
+void qMRMLPaintEffect::PaintBrush(double x, double y, int label)
 {
 	vtkMRMLSliceNode * sliceNode = this->sliceLogic->GetSliceNode();
 
@@ -665,7 +678,10 @@ void qMRMLPaintEffect::PaintBrush(double x, double y)
 	this->painter->SetBottomRight(br[0], br[1], br[2]);
 	this->painter->SetBrushCenter(brushCenter[0], brushCenter[1], brushCenter[2]);
 	this->painter->SetBrushRadius(this->brushRadius);
-	this->painter->SetPaintLabel(this->UpdateLabelFromParametersNode());
+	//this->painter->SetPaintLabel(this->UpdateLabelFromParametersNode());
+
+	this->painter->SetPaintLabel(label);
+	
 	this->painter->SetPaintOver(paintOver);
 	//this->painter->SetThresholdPaint(paintThreshold);
 	//this->painter->SetThresholdPaintRange(paintThresholdMin, paintThresholdMax);

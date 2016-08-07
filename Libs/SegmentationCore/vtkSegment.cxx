@@ -31,6 +31,10 @@
 #include <vtkMath.h>
 #include <vtkDataSet.h>
 
+#include "vtkCallbackCommand.h"
+#include "vtkSegmentationConverter.h"
+#include "vtkEventBroker.h"
+
 // STD includes
 #include <sstream>
 #include <algorithm>
@@ -48,6 +52,12 @@ vtkSegment::vtkSegment()
   this->DefaultColor[0] = 0.5;
   this->DefaultColor[1] = 0.5;
   this->DefaultColor[2] = 0.5;
+
+  
+  this->LabelMapImageCallbackCommand = vtkCallbackCommand::New();
+  this->LabelMapImageCallbackCommand->SetClientData(reinterpret_cast<void *>(this));
+  this->LabelMapImageCallbackCommand->SetCallback(vtkSegment::OnLabelMapImageModified);
+
 }
 
 //----------------------------------------------------------------------------
@@ -55,6 +65,15 @@ vtkSegment::~vtkSegment()
 {
   this->RemoveAllRepresentations();
   this->Representations.clear();
+
+  if (this->LabelMapImageCallbackCommand)
+  {
+	  this->LabelMapImageCallbackCommand->SetClientData(NULL);
+	  this->LabelMapImageCallbackCommand->Delete();
+	  this->LabelMapImageCallbackCommand = NULL;
+  }
+
+
 }
 
 //----------------------------------------------------------------------------
@@ -191,6 +210,15 @@ void vtkSegment::AddRepresentation(std::string name, vtkDataObject* representati
     return;
   }
 
+  const char* masterRepresentName =  vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName();
+  if (!strcmp(name.c_str(), masterRepresentName))
+  {
+	  //master represenataion Add observer
+	  vtkEventBroker::GetInstance()->AddObservation(
+		  representation, vtkCommand::ModifiedEvent, this, this->LabelMapImageCallbackCommand);
+	  
+  }
+
   this->Representations[name] = representation;
   representation->Register(this); // Otherwise the representation object may get deleted (and then crashes in vtkSegmentation::SegmentModified)
   this->Modified();
@@ -199,7 +227,19 @@ void vtkSegment::AddRepresentation(std::string name, vtkDataObject* representati
 //---------------------------------------------------------------------------
 void vtkSegment::RemoveRepresentation(std::string name)
 {
+
   vtkDataObject* representation = this->GetRepresentation(name);
+
+  const char* masterRepresentName = vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName();
+  if (!strcmp(name.c_str(), masterRepresentName))
+  {
+	  //master represenataion Add observer
+	  vtkEventBroker::GetInstance()->RemoveObservations(
+		  representation, vtkCommand::ModifiedEvent, this, this->LabelMapImageCallbackCommand);
+
+  }
+
+
   if (representation)
   {
     this->Representations.erase(name);
@@ -218,6 +258,18 @@ void vtkSegment::RemoveAllRepresentations(std::string exceptionRepresentationNam
     {
       RepresentationMap::iterator erasedIt = reprIt;
       vtkDataObject* representation = this->Representations[reprIt->first].GetPointer();
+
+	  //If Master representation removed, Remove the Observation
+	  const char* name = reprIt->first.c_str();
+	  const char* masterRepresentName = vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName();
+	  if (!strcmp(name , masterRepresentName))
+	  {
+		  //master represenataion Add observer
+		  vtkEventBroker::GetInstance()->RemoveObservations(
+			  representation, vtkCommand::ModifiedEvent, this, this->LabelMapImageCallbackCommand);
+
+	  }
+
       ++reprIt;
       this->Representations.erase(erasedIt);
       representation->UnRegister(this); // Not just call RemoveRepresentation to avoid multiple Modified calls
@@ -295,4 +347,18 @@ void vtkSegment::ExtendBounds(double partialBounds[6], double globalBounds[6])
   {
     globalBounds[5] = partialBounds[5];
   }
+}
+
+
+//The callback function for Process LabelMapImageModified by GUI
+void vtkSegment::OnLabelMapImageModified(vtkObject* vtkNotUsed(caller),
+	unsigned long vtkNotUsed(eid),
+	void* clientData,
+	void* vtkNotUsed(callData))
+{
+	const char* masterRepresentName = vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName();
+	vtkSegment * self = reinterpret_cast<vtkSegment *>(clientData);
+
+	self->RemoveAllRepresentations(masterRepresentName);
+
 }
