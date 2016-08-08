@@ -450,7 +450,7 @@ void qMRMLPaintEffect::PaintAddPoint(int x, int y, int label)
 
 	this->paintCoordinates->InsertNextPoint(double(x), double(y));
 
-
+	/*
 	if (this->delayedPaint )
 	{
 		this->PaintFeedback();
@@ -459,7 +459,7 @@ void qMRMLPaintEffect::PaintAddPoint(int x, int y, int label)
 	{
 		this->PaintApply(label);
 	}
-	
+	*/
 
 }
 
