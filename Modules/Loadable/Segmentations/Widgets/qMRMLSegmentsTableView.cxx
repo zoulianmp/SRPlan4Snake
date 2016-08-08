@@ -572,6 +572,21 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
 		int visible = changedItem->data(VisibilityRole).toInt();
 		properties.Visible3D = (bool)visible;
 		valueChanged = true;
+
+		//If 3DVisibility is On, Update the  ClosedSurface¡£
+		if ((bool)visible)
+		{	
+			const char* closedSurfaceName = vtkSegmentationConverter::GetSegmentationClosedSurfaceRepresentationName();
+			vtkDataObject * closedSurface =  segment->GetRepresentation(closedSurfaceName);
+			if (!closedSurface)
+			{
+				segment->UpdateClosedSurfaceFromLabelMapImage();
+			}
+			
+		}
+		
+
+
 	}
 
     // Color changed

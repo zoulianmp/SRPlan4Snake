@@ -81,6 +81,11 @@ public:
   /// Remove representation of given type
   void RemoveRepresentation(std::string name);
 
+
+  //Update The Closed Surface Representation from Labmap Image
+  void UpdateClosedSurfaceFromLabelMapImage();
+
+
   /// Remove all representations except one if specified. Fires only one Modified event
   /// \param exceptionRepresentationName Exception name that will not be removed (e.g. invalidate non-master representations), empty by default
   void RemoveAllRepresentations(std::string exceptionRepresentationName="");

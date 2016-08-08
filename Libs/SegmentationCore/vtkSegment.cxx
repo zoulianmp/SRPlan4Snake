@@ -23,6 +23,8 @@
 
 #include "vtkSegmentationConverterFactory.h"
 #include "vtkOrientedImageData.h"
+#include "vtkPolyData.h"
+#include "vtkBinaryLabelmapToClosedSurfaceConversionRule.h"
 
 // VTK includes
 #include <vtkNew.h>
@@ -247,6 +249,54 @@ void vtkSegment::RemoveRepresentation(std::string name)
     this->Modified();
   }
 }
+
+
+
+
+//Update The Closed Surface Representation from Labmap Image
+void vtkSegment::UpdateClosedSurfaceFromLabelMapImage()
+{
+	const char* masterRepresentName = vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName();
+
+	vtkOrientedImageData* labelMapImage = vtkOrientedImageData::SafeDownCast(this->GetRepresentation(masterRepresentName));
+
+	const char* closedSurfaceName = vtkSegmentationConverter::GetSegmentationClosedSurfaceRepresentationName();
+
+	vtkPolyData* closedSurface = vtkPolyData::SafeDownCast(this->GetRepresentation(closedSurfaceName));
+
+
+	vtkBinaryLabelmapToClosedSurfaceConversionRule * conversionRule = vtkBinaryLabelmapToClosedSurfaceConversionRule::New();
+
+	conversionRule->SetConversionParameter(conversionRule->GetDecimationFactorParameterName(),
+		"0.0", "Desired reduction in the total number of polygons (e.g., if set to 0.9, then reduce the data set to 10% of its original size)");
+
+	conversionRule->SetConversionParameter(conversionRule->GetSmoothingFactorParameterName(),
+		"0.1", "Relaxation factor for Laplacian smoothing. Value of 0 results in no smoothing, while 1 means significant smoothing.");
+
+
+	if (!closedSurface)
+	{
+		closedSurface = vtkPolyData::New();
+		conversionRule->Convert(labelMapImage, closedSurface);
+
+		this->AddRepresentation(closedSurfaceName, closedSurface);
+	}
+	else
+	{
+		conversionRule->Convert(labelMapImage, closedSurface);
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
 
 //---------------------------------------------------------------------------
 void vtkSegment::RemoveAllRepresentations(std::string exceptionRepresentationName/*=""*/)
