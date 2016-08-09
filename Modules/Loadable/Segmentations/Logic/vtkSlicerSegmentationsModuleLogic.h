@@ -172,7 +172,8 @@ public:
   //Get the SegmentationSubjectHierarchyNode for a given segmentationNode.
   static vtkMRMLSubjectHierarchyNode* GetSegmentationSHNodeForSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode);
 
-
+  //Update the Segment's ClosedSurface from LabelMapImage for a segment,in the given Scene
+  static void UpdateClosedSurfaceFromLabelMapImageForSegment(vtkMRMLScene* scene,vtkSegment * segment);
 
 
   /// Export segment to representation MRML node.

@@ -1241,6 +1241,64 @@ vtkDataObject* vtkSlicerSegmentationsModuleLogic::CreateRepresentationForOneSegm
   return representationCopy;
 }
 
+
+
+
+
+void vtkSlicerSegmentationsModuleLogic::UpdateClosedSurfaceFromLabelMapImageForSegment(vtkMRMLScene* scene,vtkSegment * segment)
+{
+	const char* masterRepresentName = vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName();
+
+
+
+	vtkImageData * labelImage = vtkImageData::SafeDownCast(segment->GetRepresentation(masterRepresentName));
+
+	
+    vtkMRMLLabelMapVolumeNode * labelMapNode = GetLabelMapVolumeNodebyImageData(scene, labelImage);
+
+
+	vtkOrientedImageData* orientedimage = vtkSlicerSegmentationsModuleLogic::CreateOrientedImageDataFromVolumeNode(labelMapNode);
+
+
+
+
+
+	const char* closedSurfaceName = vtkSegmentationConverter::GetSegmentationClosedSurfaceRepresentationName();
+
+	vtkPolyData* closedSurface = vtkPolyData::SafeDownCast(segment->GetRepresentation(closedSurfaceName));
+
+
+	vtkBinaryLabelmapToClosedSurfaceConversionRule * conversionRule = vtkBinaryLabelmapToClosedSurfaceConversionRule::New();
+
+	conversionRule->SetConversionParameter(conversionRule->GetDecimationFactorParameterName(),
+		"0.0", "Desired reduction in the total number of polygons (e.g., if set to 0.9, then reduce the data set to 10% of its original size)");
+
+	conversionRule->SetConversionParameter(conversionRule->GetSmoothingFactorParameterName(),
+		"0.1", "Relaxation factor for Laplacian smoothing. Value of 0 results in no smoothing, while 1 means significant smoothing.");
+
+
+	if (!closedSurface)
+	{
+		closedSurface = vtkPolyData::New();
+		conversionRule->Convert(orientedimage, closedSurface);
+
+		segment->AddRepresentation(closedSurfaceName, closedSurface);
+	}
+	else
+	{
+		conversionRule->Convert(orientedimage, closedSurface);
+	}
+
+
+
+}
+
+
+
+
+
+
+
 //-----------------------------------------------------------------------------
 bool vtkSlicerSegmentationsModuleLogic::ApplyParentTransformToOrientedImageData(vtkMRMLTransformableNode* transformableNode, vtkOrientedImageData* orientedImageData)
 {

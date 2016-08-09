@@ -252,13 +252,26 @@ void vtkSegment::RemoveRepresentation(std::string name)
 
 
 
-
+/*
 //Update The Closed Surface Representation from Labmap Image
 void vtkSegment::UpdateClosedSurfaceFromLabelMapImage()
 {
 	const char* masterRepresentName = vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName();
 
-	vtkOrientedImageData* labelMapImage = vtkOrientedImageData::SafeDownCast(this->GetRepresentation(masterRepresentName));
+
+
+	vtkImageData * labelImage = vtkImageData::SafeDownCast(this->GetRepresentation(masterRepresentName));
+
+	vtkMRMLScene * scene = qSlicerCoreAP
+	//The the vtkMRMLLabelMapVolumeNode by provided vtkImageData.
+	static vtkMRMLLabelMapVolumeNode * GetLabelMapVolumeNodebyImageData(vtkMRMLScene* scene, vtkImageData* imageData);
+
+
+
+
+	vtkOrientedImageData* labelMapImage 
+
+
 
 	const char* closedSurfaceName = vtkSegmentationConverter::GetSegmentationClosedSurfaceRepresentationName();
 
@@ -291,7 +304,7 @@ void vtkSegment::UpdateClosedSurfaceFromLabelMapImage()
 
 
 
-
+*/
 
 
 

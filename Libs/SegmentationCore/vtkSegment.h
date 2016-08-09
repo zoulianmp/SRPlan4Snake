@@ -83,7 +83,7 @@ public:
 
 
   //Update The Closed Surface Representation from Labmap Image
-  void UpdateClosedSurfaceFromLabelMapImage();
+  //void UpdateClosedSurfaceFromLabelMapImage();
 
 
   /// Remove all representations except one if specified. Fires only one Modified event

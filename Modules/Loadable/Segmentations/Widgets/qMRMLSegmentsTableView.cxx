@@ -580,7 +580,9 @@ void qMRMLSegmentsTableView::onSegmentTableItemChanged(QTableWidgetItem* changed
 			vtkDataObject * closedSurface =  segment->GetRepresentation(closedSurfaceName);
 			if (!closedSurface)
 			{
-				segment->UpdateClosedSurfaceFromLabelMapImage();
+				
+				vtkMRMLScene* scene = qSlicerCoreApplication::application()->mrmlScene();
+				vtkSlicerSegmentationsModuleLogic::UpdateClosedSurfaceFromLabelMapImageForSegment(scene, segment);
 			}
 			
 		}
