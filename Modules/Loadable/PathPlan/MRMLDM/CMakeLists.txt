@@ -9,15 +9,14 @@ set(${KIT}_INCLUDE_DIRECTORIES
   ${vtkSRPlan${MODULE_NAME}ModuleLogic_BINARY_DIR}
   ${vtkSRPlan${MODULE_NAME}ModuleMRML_SOURCE_DIR}
   ${vtkSRPlan${MODULE_NAME}ModuleMRML_BINARY_DIR}
-  ${vtkSRPlan${MODULE_NAME}ModuleVTKWidgets_SOURCE_DIR}
-  ${vtkSRPlan${MODULE_NAME}ModuleVTKWidgets_BINARY_DIR}
+
 )
 
 set(displayable_manager_SRCS
-  vtkMRML${MODULE_NAME}DisplayableManager3D.cxx
-  vtkMRML${MODULE_NAME}DisplayableManager2D.cxx
-  vtkMRML${MODULE_NAME}FiducialDisplayableManager3D.cxx
-  vtkMRML${MODULE_NAME}FiducialDisplayableManager2D.cxx
+  vtkMRMLMarkupsDisplayableManager3D.cxx
+  vtkMRMLMarkupsDisplayableManager2D.cxx
+  vtkMRMLMarkupsFiducialDisplayableManager3D.cxx
+  vtkMRMLMarkupsFiducialDisplayableManager2D.cxx
   )
 
 set(VTK_USE_INSTANTIATOR_NEW 1)
@@ -32,15 +31,15 @@ VTK_MAKE_INSTANTIATOR3("${MODULE_NAME}Instantiator"
 set(${KIT}_SRCS
   ${displayable_manager_instantiator_SRCS}
   ${displayable_manager_SRCS}
-  vtkMRML${MODULE_NAME}DisplayableManagerHelper.cxx
-  vtkMRML${MODULE_NAME}ClickCounter.cxx
+  vtkMRMLMarkupsDisplayableManagerHelper.cxx
+  vtkMRMLMarkupsClickCounter.cxx
 )
 
 set(${KIT}_TARGET_LIBRARIES
   ${MRML_LIBRARIES}
   vtkSRPlan${MODULE_NAME}ModuleLogic
   vtkSRPlan${MODULE_NAME}ModuleMRML
-  vtkSRPlan${MODULE_NAME}ModuleVTKWidgets
+   
 )
 
 #-----------------------------------------------------------------------------

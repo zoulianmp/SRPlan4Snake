@@ -15,17 +15,17 @@
 
 ==============================================================================*/
 
-// .NAME vtkSlicerMarkupsLogic - slicer logic class for volumes manipulation
+// .NAME vtkSRPlanPathPlanModuleLogic - slicer logic class for volumes manipulation
 // .SECTION Description
 // This class manages the logic associated with reading, saving,
 // and changing propertied of the volumes
 
 
-#ifndef __vtkSlicerMarkupsLogic_h
-#define __vtkSlicerMarkupsLogic_h
+#ifndef __vtkSRPlanPathPlanModuleLogic_h
+#define __vtkSRPlanPathPlanModuleLogic_h
 
 // Slicer includes
-#include "vtkMRMLAbstractLogic.h"
+#include "vtkSlicerModuleLogic.h"
 
 // MRML includes
 
@@ -38,13 +38,13 @@ class vtkMRMLMarkupsNode;
 class vtkMRMLMarkupsDisplayNode;
 
 /// \ingroup Slicer_QtModules_Markups
-class VTK_SRPlan_MARKUPS_MODULE_LOGIC_EXPORT vtkSlicerMarkupsLogic :
-  public vtkMRMLAbstractLogic
+class VTK_SRPlan_MARKUPS_MODULE_LOGIC_EXPORT vtkSRPlanPathPlanModuleLogic :
+  public vtkSlicerModuleLogic
 {
 public:
 
-  static vtkSlicerMarkupsLogic *New();
-  vtkTypeMacro(vtkSlicerMarkupsLogic,vtkSlicerModuleLogic);
+  static vtkSRPlanPathPlanModuleLogic *New();
+  vtkTypeMacro(vtkSRPlanPathPlanModuleLogic,vtkSlicerModuleLogic);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   virtual void ProcessMRMLNodesEvents(vtkObject *caller,
@@ -194,8 +194,8 @@ public:
   void SetSliceIntersectionsVisibility(bool flag);
 
 protected:
-  vtkSlicerMarkupsLogic();
-  virtual ~vtkSlicerMarkupsLogic();
+  vtkSRPlanPathPlanModuleLogic();
+  virtual ~vtkSRPlanPathPlanModuleLogic();
 
   /// Initialize listening to MRML events
   virtual void SetMRMLSceneInternal(vtkMRMLScene * newScene);
@@ -209,8 +209,8 @@ protected:
 
 private:
 
-  vtkSlicerMarkupsLogic(const vtkSlicerMarkupsLogic&); // Not implemented
-  void operator=(const vtkSlicerMarkupsLogic&);               // Not implemented
+  vtkSRPlanPathPlanModuleLogic(const vtkSRPlanPathPlanModuleLogic&); // Not implemented
+  void operator=(const vtkSRPlanPathPlanModuleLogic&);               // Not implemented
 
   /// keep a markups display node with default values that can be updated from
   /// the application settings

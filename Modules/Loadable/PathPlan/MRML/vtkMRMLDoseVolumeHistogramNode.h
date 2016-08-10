@@ -29,7 +29,7 @@
 #include <vector>
 #include <map>
 
-#include "vtkSlicerDoseVolumeHistogramModuleLogicExport.h"
+#include "vtkSRPlanPathPlanModuleMRMLExport.h"
 
 class vtkMRMLScalarVolumeNode;
 class vtkMRMLChartNode;
@@ -37,7 +37,7 @@ class vtkMRMLDoubleArrayNode;
 class vtkMRMLSegmentationNode;
 
 /// \ingroup SlicerRt_QtModules_DoseVolumeHistogram
-class VTK_SLICER_DOSEVOLUMEHISTOGRAM_LOGIC_EXPORT vtkMRMLDoseVolumeHistogramNode : public vtkMRMLNode
+class VTK_SRPlan_PATHPLAN_MODULE_MRML_EXPORT vtkMRMLDoseVolumeHistogramNode : public vtkMRMLNode
 {
 public:
   static vtkMRMLDoseVolumeHistogramNode *New();

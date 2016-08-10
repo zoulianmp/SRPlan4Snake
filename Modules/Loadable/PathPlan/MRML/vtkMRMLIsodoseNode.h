@@ -27,14 +27,14 @@
 #include <vtkMRML.h>
 #include <vtkMRMLNode.h>
 
-#include "vtkSlicerIsodoseModuleLogicExport.h"
+#include "vtkSRPlanPathPlanModuleMRMLExport.h"
 
 class vtkMRMLScalarVolumeNode;
 class vtkMRMLModelHierarchyNode;
 class vtkMRMLColorTableNode;
 
 /// \ingroup SlicerRt_QtModules_Isodose
-class VTK_SLICER_ISODOSE_LOGIC_EXPORT vtkMRMLIsodoseNode : public vtkMRMLNode
+class VTK_SRPlan_PATHPLAN_MODULE_MRML_EXPORT vtkMRMLIsodoseNode : public vtkMRMLNode
 {
 public:
   static vtkMRMLIsodoseNode *New();

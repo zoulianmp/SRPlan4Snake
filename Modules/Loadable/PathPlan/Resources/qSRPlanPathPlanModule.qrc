@@ -15,5 +15,8 @@
     <file>Icons/MarkupsSelected.png</file>
     <file>Icons/MarkupsSelectedOrUnselected.png</file>
     <file>Icons/MarkupsUnselected.png</file>
+	<file>Icons/DoseVolumeHistogram.png</file>
+    <file>Icons/LayoutFourUpQuantitativeView.png</file>
+    <file>Icons/LayoutOneUpQuantitativeView.png</file>
   </qresource>
 </RCC>

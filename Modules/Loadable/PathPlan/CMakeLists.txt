@@ -29,27 +29,27 @@ set(MODULE_INCLUDE_DIRECTORIES
   )
 
 set(MODULE_SRCS
-  qSlicer${MODULE_NAME}Module.cxx
-  qSlicer${MODULE_NAME}Module.h
-  qSlicer${MODULE_NAME}ModuleWidget.cxx
-  qSlicer${MODULE_NAME}ModuleWidget.h
- 
+  qSRPlan${MODULE_NAME}Module.cxx
+  qSRPlan${MODULE_NAME}Module.h
+  qSRPlan${MODULE_NAME}ModuleWidget.cxx
+  qSRPlan${MODULE_NAME}ModuleWidget.h
+  qSlicerMarkupsReader.h
+  qSlicerMarkupsReader.cxx
   )
 
 set(MODULE_MOC_SRCS
-  qSlicer${MODULE_NAME}Module.h
-  qSlicer${MODULE_NAME}ModuleWidget.h
+  qSRPlan${MODULE_NAME}Module.h
+  qSRPlan${MODULE_NAME}ModuleWidget.h
 
   )
 
 set(MODULE_UI_SRCS
-  Resources/UI/qSlicer${MODULE_NAME}Module.ui
-  Resources/UI/qSlicer${MODULE_NAME}SettingsPanel.ui
+  Resources/UI/qSRPlan${MODULE_NAME}Module.ui
+  #Resources/UI/qSlicer${MODULE_NAME}SettingsPanel.ui
   )
 
 set(MODULE_TARGET_LIBRARIES
   vtkSRPlan${MODULE_NAME}ModuleMRML
-  vtkSRPlan${MODULE_NAME}ModuleVTKWidgets
   vtkSRPlan${MODULE_NAME}ModuleMRMLDisplayableManager
   vtkSRPlan${MODULE_NAME}ModuleLogic
   qSRPlan${MODULE_NAME}ModuleWidgets
@@ -57,7 +57,7 @@ set(MODULE_TARGET_LIBRARIES
   )
 
 set(MODULE_RESOURCES
-  Resources/qSlicer${MODULE_NAME}Module.qrc
+  Resources/qSRPlan${MODULE_NAME}Module.qrc
   )
 
 #-----------------------------------------------------------------------------

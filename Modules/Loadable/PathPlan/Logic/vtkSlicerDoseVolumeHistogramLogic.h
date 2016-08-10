@@ -18,22 +18,22 @@
 
 ==============================================================================*/
 
-// .NAME vtkSlicerDoseVolumeHistogramModuleLogic - slicer logic class for volumes manipulation
+// .NAME vtkSlicerDoseVolumeHistogramLogic - slicer logic class for volumes manipulation
 // .SECTION Description
 // This class manages the logic associated with reading, saving,
 // and changing propertied of the volumes
 
 
-#ifndef __vtkSlicerDoseVolumeHistogramModuleLogic_h
-#define __vtkSlicerDoseVolumeHistogramModuleLogic_h
+#ifndef __vtkSlicerDoseVolumeHistogramLogic_h
+#define __vtkSlicerDoseVolumeHistogramLogic_h
 
 // Slicer includes
-#include "vtkSlicerModuleLogic.h"
+#include "vtkMRMLAbstractLogic.h"
 
 // VTK includes
 #include "vtkImageAccumulate.h"
 
-#include "vtkSlicerDoseVolumeHistogramModuleLogicExport.h"
+#include "vtkSlicerDoseVolumeHistogramLogicExport.h"
 
 class vtkOrientedImageData;
 class vtkMRMLDoubleArrayNode;
@@ -48,8 +48,8 @@ class vtkMRMLDoseVolumeHistogramNode;
 /// defined by a grid of voxels derived from the voxel grid in the dose volume. The dose grid is oversampled by a factor currently
 /// fixed to the value 2. The centre of each voxel is examined and if found to lie within a structure, is included in the volume for
 /// that structure. The dose value at the centre of the cube is interpolated in 3D from the dose grid.
-class VTK_SLICER_DOSEVOLUMEHISTOGRAM_LOGIC_EXPORT vtkSlicerDoseVolumeHistogramModuleLogic :
-  public vtkSlicerModuleLogic
+class VTK_SLICER_DOSEVOLUMEHISTOGRAM_LOGIC_EXPORT vtkSlicerDoseVolumeHistogramLogic :
+  public vtkMRMLAbstractLogic
 {
 public:
   // DoseVolumeHistogram constants
@@ -79,8 +79,8 @@ public:
   static const std::string DVH_CSV_HEADER_VOLUME_FIELD_END;
 
 public:
-  static vtkSlicerDoseVolumeHistogramModuleLogic *New();
-  vtkTypeMacro(vtkSlicerDoseVolumeHistogramModuleLogic, vtkSlicerModuleLogic);
+  static vtkSlicerDoseVolumeHistogramLogic *New();
+  vtkTypeMacro(vtkSlicerDoseVolumeHistogramLogic, vtkSlicerModuleLogic);
 
 public:
   /// Compute DVH based on parameter node selections (dose volume, segmentation, segment IDs)
@@ -173,8 +173,8 @@ protected:
   vtkMRMLChartViewNode* GetChartViewNode();
 
 protected:
-  vtkSlicerDoseVolumeHistogramModuleLogic();
-  virtual ~vtkSlicerDoseVolumeHistogramModuleLogic();
+  vtkSlicerDoseVolumeHistogramLogic();
+  virtual ~vtkSlicerDoseVolumeHistogramLogic();
 
   virtual void SetMRMLSceneInternal(vtkMRMLScene* newScene);
 
@@ -188,8 +188,8 @@ protected:
   virtual void OnMRMLSceneEndClose();
 
 private:
-  vtkSlicerDoseVolumeHistogramModuleLogic(const vtkSlicerDoseVolumeHistogramModuleLogic&); // Not implemented
-  void operator=(const vtkSlicerDoseVolumeHistogramModuleLogic&);               // Not implemented
+  vtkSlicerDoseVolumeHistogramLogic(const vtkSlicerDoseVolumeHistogramLogic&); // Not implemented
+  void operator=(const vtkSlicerDoseVolumeHistogramLogic&);               // Not implemented
 
 protected:
   /// Parameter set MRML node

@@ -8,8 +8,19 @@ set(${KIT}_INCLUDE_DIRECTORIES
   )
 
 set(${KIT}_SRCS
-  vtkSlicer${MODULE_NAME}Logic.cxx
-  vtkSlicer${MODULE_NAME}Logic.h
+  vtkSRPlan${MODULE_NAME}ModuleLogic.cxx
+  vtkSRPlan${MODULE_NAME}ModuleLogic.h
+  vtkMarkupsGlyphSource2D.h
+  vtkMarkupsGlyphSource2D.cxx
+  vtkSlicerRTScalarBarActor.h
+  vtkSlicerRTScalarBarActor.cxx
+  
+  vtkSlicerIsodoseLogic.h
+  vtkSlicerIsodoseLogic.cxx
+  vtkSlicerDoseVolumeHistogramLogic.h
+  vtkSlicerDoseVolumeHistogramLogic.cxx
+  vtkSlicerMarkupsLogic.h
+  vtkSlicerMarkupsLogic.cxx
   )
 
 set(${KIT}_TARGET_LIBRARIES

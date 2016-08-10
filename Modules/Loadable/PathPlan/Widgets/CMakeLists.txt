@@ -10,20 +10,24 @@ set(${KIT}_INCLUDE_DIRECTORIES
   )
 
 set(${KIT}_SRCS
-  qMRML${MODULE_NAME}FiducialProjectionPropertyWidget.cxx
-  qMRML${MODULE_NAME}FiducialProjectionPropertyWidget.h
+  qMRMLMarkupsFiducialProjectionPropertyWidget.cxx
+  qMRMLMarkupsFiducialProjectionPropertyWidget.h
+  qSlicerMarkupsSettingsPanel.h
+  qSlicerMarkupsSettingsPanel.cxx
   qSlicerSimpleMarkupsWidget.cxx
   qSlicerSimpleMarkupsWidget.h
   )
 
 set(${KIT}_MOC_SRCS
-  qMRML${MODULE_NAME}FiducialProjectionPropertyWidget.h
+  qMRMLMarkupsFiducialProjectionPropertyWidget.h
   qSlicerSimpleMarkupsWidget.h
+  qSlicerMarkupsSettingsPanel.h
   )
 
 set(${KIT}_UI_SRCS
-  Resources/UI/qMRML${MODULE_NAME}FiducialProjectionPropertyWidget.ui
+  Resources/UI/qMRMLMarkupsFiducialProjectionPropertyWidget.ui
   Resources/UI/qSlicerSimpleMarkupsWidget.ui
+  Resources/UI/qSlicerMarkupsSettingsPanel.ui
   )
 
 set(${KIT}_RESOURCES
@@ -60,7 +64,7 @@ endif()
 
 
 #-----------------------------------------------------------------------------
-add_subdirectory(DesignerPlugins)
+#add_subdirectory(DesignerPlugins)
 
 # Testing
 if(BUILD_TESTING)

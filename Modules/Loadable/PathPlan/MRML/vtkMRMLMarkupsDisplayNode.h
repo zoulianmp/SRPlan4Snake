@@ -24,12 +24,12 @@
 #ifndef __vtkMRMLMarkupsDisplayNode_h
 #define __vtkMRMLMarkupsDisplayNode_h
 
-#include "vtkSRPlanMarkupsModuleMRMLExport.h"
+#include "vtkSRPlanPathPlanModuleMRMLExport.h"
 
 #include "vtkMRMLDisplayNode.h"
 
 /// \ingroup Slicer_QtModules_Markups
-class  VTK_SRPlan_MARKUPS_MODULE_MRML_EXPORT vtkMRMLMarkupsDisplayNode : public vtkMRMLDisplayNode
+class  VTK_SRPlan_PATHPLAN_MODULE_MRML_EXPORT vtkMRMLMarkupsDisplayNode : public vtkMRMLDisplayNode
 {
 public:
   static vtkMRMLMarkupsDisplayNode *New();

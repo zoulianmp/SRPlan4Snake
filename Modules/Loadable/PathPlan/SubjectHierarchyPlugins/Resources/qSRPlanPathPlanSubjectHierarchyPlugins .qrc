@@ -1,5 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource>
     <file>Icons/Markup.png</file>
+	<file>Icons/IsodoseLines.png</file>
+	<file>Icons/DVH.png</file>
   </qresource>
 </RCC>

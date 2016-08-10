@@ -8,10 +8,22 @@ set(${KIT}_INCLUDE_DIRECTORIES
   )
 
 set(${KIT}_SRCS
-  vtkMRML${MODULE_NAME}DisplayNode.cxx
-  vtkMRML${MODULE_NAME}FiducialNode.cxx
-  vtkMRML${MODULE_NAME}Node.cxx
-  vtkMRML${MODULE_NAME}FiducialStorageNode.cxx
+  vtkMRMLMarkupsDisplayNode.cxx
+  vtkMRMLMarkupsFiducialNode.cxx
+  vtkMRMLMarkupsNode.cxx
+  vtkMRMLMarkupsFiducialStorageNode.cxx
+  vtkMRMLIsodoseNode.cxx
+  vtkMRMLDoseVolumeHistogramNode.cxx
+  
+  vtkMRMLMarkupsDisplayNode.h
+  vtkMRMLMarkupsFiducialNode.h
+  vtkMRMLMarkupsNode.h
+  vtkMRMLMarkupsFiducialStorageNode.h
+  vtkMRMLIsodoseNode.h
+  vtkMRMLDoseVolumeHistogramNode.h
+  
+  
+  
   )
 
 set(${KIT}_TARGET_LIBRARIES

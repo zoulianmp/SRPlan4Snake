@@ -15,10 +15,16 @@ set(${KIT}_INCLUDE_DIRECTORIES
 set(${KIT}_SRCS
   qSlicerSubjectHierarchyMarkupsPlugin.cxx
   qSlicerSubjectHierarchyMarkupsPlugin.h
+  qSlicerSubjectHierarchyDoseVolumeHistogramPlugin.h
+  qSlicerSubjectHierarchyDoseVolumeHistogramPlugin.cxx
+  qSlicerSubjectHierarchyIsodosePlugin.h
+  qSlicerSubjectHierarchyIsodosePlugin.cxx
   )
 
 set(${KIT}_MOC_SRCS
   qSlicerSubjectHierarchyMarkupsPlugin.h
+  qSlicerSubjectHierarchyDoseVolumeHistogramPlugin.h
+  qSlicerSubjectHierarchyIsodosePlugin.h
   )
 
 set(${KIT}_UI_SRCS

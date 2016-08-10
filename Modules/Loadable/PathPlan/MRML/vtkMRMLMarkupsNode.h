@@ -22,7 +22,7 @@
 #include "vtkMRMLDisplayableNode.h"
 
 // Markups includes
-#include "vtkSRPlanMarkupsModuleMRMLExport.h"
+#include "vtkSRPlanPathPlanModuleMRMLExport.h"
 
 // VTK includes
 #include <vtkSmartPointer.h>
@@ -62,7 +62,7 @@ typedef struct
 /// shown in the GUI).
 /// \sa vtkMRMLMarkupsDisplayNode
 /// \ingroup Slicer_QtModules_Markups
-class  VTK_SRPlan_MARKUPS_MODULE_MRML_EXPORT vtkMRMLMarkupsNode : public vtkMRMLDisplayableNode
+class  VTK_SRPlan_PATHPLAN_MODULE_MRML_EXPORT vtkMRMLMarkupsNode : public vtkMRMLDisplayableNode
 {
   /// Make the storage node a friend so that ReadDataInternal can set the markup
   /// ids

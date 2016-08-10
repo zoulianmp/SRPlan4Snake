@@ -26,11 +26,11 @@
 #define __vtkMRMLMarkupsFiducialStorageNode_h
 
 // Markups includes
-#include "vtkSRPlanMarkupsModuleMRMLExport.h"
+#include "vtkSRPlanPathPlanModuleMRMLExport.h"
 #include "vtkMRMLMarkupsStorageNode.h"
 
 /// \ingroup Slicer_QtModules_Markups
-class VTK_SRPlan_MARKUPS_MODULE_MRML_EXPORT vtkMRMLMarkupsFiducialStorageNode : public vtkMRMLMarkupsStorageNode
+class VTK_SRPlan_PATHPLAN_MODULE_MRML_EXPORT vtkMRMLMarkupsFiducialStorageNode : public vtkMRMLMarkupsStorageNode
 {
 public:
   static vtkMRMLMarkupsFiducialStorageNode *New();

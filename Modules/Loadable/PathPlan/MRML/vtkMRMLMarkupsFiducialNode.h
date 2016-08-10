@@ -22,7 +22,7 @@
 #include "vtkMRMLDisplayableNode.h"
 
 // Markups includes
-#include "vtkSRPlanMarkupsModuleMRMLExport.h"
+#include "vtkSRPlanPathPlanModuleMRMLExport.h"
 #include "vtkMRMLMarkupsDisplayNode.h"
 #include "vtkMRMLMarkupsNode.h"
 
@@ -33,7 +33,7 @@
 /// Fiducial Markups nodes contain a list of fiducial points.
 /// Visualization parameters are set in the vtkMRMLMarkupsDisplayNode class.
 /// \ingroup Slicer_QtModules_Markups
-class  VTK_SRPlan_MARKUPS_MODULE_MRML_EXPORT vtkMRMLMarkupsFiducialNode : public vtkMRMLMarkupsNode
+class  VTK_SRPlan_PATHPLAN_MODULE_MRML_EXPORT vtkMRMLMarkupsFiducialNode : public vtkMRMLMarkupsNode
 {
 public:
   static vtkMRMLMarkupsFiducialNode *New();

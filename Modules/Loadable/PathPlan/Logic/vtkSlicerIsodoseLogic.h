@@ -19,19 +19,19 @@
 
 ==============================================================================*/
 
-// .NAME vtkSlicerIsodoseModuleLogic - slicer logic class for isodose creation
+// .NAME vtkSlicerIsodoseLogic - slicer logic class for isodose creation
 // .SECTION Description
 // This class manages the logic associated with creating isodose lines and
 // surfaces from dose distributions
 
 
-#ifndef __vtkSlicerIsodoseModuleLogic_h
-#define __vtkSlicerIsodoseModuleLogic_h
+#ifndef __vtkSlicerIsodoseLogic_h
+#define __vtkSlicerIsodoseLogic_h
 
 // Slicer includes
-#include "vtkSlicerModuleLogic.h"
+#include "vtkMRMLAbstractLogic.h"
 
-#include "vtkSlicerIsodoseModuleLogicExport.h"
+#include "vtkSlicerIsodoseLogicExport.h"
 
 // MRML includes
 class vtkMRMLIsodoseNode;
@@ -39,8 +39,8 @@ class vtkMRMLModelHierarchyNode;
 class vtkMRMLModelDisplayNode;
 
 /// \ingroup SlicerRt_QtModules_Isodose
-class VTK_SLICER_ISODOSE_LOGIC_EXPORT vtkSlicerIsodoseModuleLogic :
-  public vtkSlicerModuleLogic
+class VTK_SLICER_ISODOSE_LOGIC_EXPORT vtkSlicerIsodoseLogic :
+  public vtkMRMLAbstractLogic
 {
 
 public:
@@ -52,8 +52,8 @@ public:
   static const std::string ISODOSE_ROOT_SUBJECT_HIERARCHY_NODE_NAME_POSTFIX;
 
 public:
-  static vtkSlicerIsodoseModuleLogic *New();
-  vtkTypeMacro(vtkSlicerIsodoseModuleLogic,vtkSlicerModuleLogic);
+  static vtkSlicerIsodoseLogic *New();
+  vtkTypeMacro(vtkSlicerIsodoseLogic,vtkSlicerModuleLogic);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   /// Set number of isodose levels
@@ -100,12 +100,12 @@ protected:
   virtual void OnMRMLSceneEndClose();
 
 protected:
-  vtkSlicerIsodoseModuleLogic();
-  virtual ~vtkSlicerIsodoseModuleLogic();
+  vtkSlicerIsodoseLogic();
+  virtual ~vtkSlicerIsodoseLogic();
 
 private:
-  vtkSlicerIsodoseModuleLogic(const vtkSlicerIsodoseModuleLogic&); // Not implemented
-  void operator=(const vtkSlicerIsodoseModuleLogic&);               // Not implemented
+  vtkSlicerIsodoseLogic(const vtkSlicerIsodoseLogic&); // Not implemented
+  void operator=(const vtkSlicerIsodoseLogic&);               // Not implemented
 protected:
   /// Parameter set MRML node
   vtkMRMLIsodoseNode* IsodoseNode;
