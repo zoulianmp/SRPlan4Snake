@@ -1,6 +1,6 @@
 /*==============================================================================
 
-  Program: 3D Slicer
+  Program: SRPlan4Snake
 
   Portions (c) Copyright Brigham and Women's Hospital (BWH) All Rights Reserved.
 
@@ -39,57 +39,57 @@
 
 // Markups includes
 #include "MarkupsInstantiator.h"
-#include "qSlicerMarkupsModule.h"
-#include "qSlicerMarkupsModuleWidget.h"
+#include "qSRPlanPathPlanModule.h"
+#include "qSRPlanPathPlanModuleWidget.h"
 #include "qSlicerMarkupsReader.h"
 //#include "qSlicerMarkupsSettingsPanel.h"
 //#include "vtkSlicerMarkupsLogic.h"
 
 //-----------------------------------------------------------------------------
-//Q_EXPORT_PLUGIN2(qSlicerMarkupsModule, qSlicerMarkupsModule);
+//Q_EXPORT_PLUGIN2(qSRPlanPathPlanModule, qSRPlanPathPlanModule);
 
 
 
 
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_Markups
-class qSlicerMarkupsModulePrivate
+class qSRPlanPathPlanModulePrivate
 {
 public:
-  qSlicerMarkupsModulePrivate();
+  qSRPlanPathPlanModulePrivate();
 };
 
 //-----------------------------------------------------------------------------
-// qSlicerMarkupsModulePrivate methods
+// qSRPlanPathPlanModulePrivate methods
 
 //-----------------------------------------------------------------------------
-qSlicerMarkupsModulePrivate::qSlicerMarkupsModulePrivate()
+qSRPlanPathPlanModulePrivate::qSRPlanPathPlanModulePrivate()
 {
 }
 
 //-----------------------------------------------------------------------------
-// qSlicerMarkupsModule methods
+// qSRPlanPathPlanModule methods
 
 //-----------------------------------------------------------------------------
-qSlicerMarkupsModule::qSlicerMarkupsModule(QObject* _parent)
+qSRPlanPathPlanModule::qSRPlanPathPlanModule(QObject* _parent)
   : Superclass(_parent)
-  , d_ptr(new qSlicerMarkupsModulePrivate)
+  , d_ptr(new qSRPlanPathPlanModulePrivate)
 {
 }
 
 //-----------------------------------------------------------------------------
-QStringList qSlicerMarkupsModule::categories()const
+QStringList qSRPlanPathPlanModule::categories()const
 {
   return QStringList() << "" << "Informatics";
 }
 
 //-----------------------------------------------------------------------------
-qSlicerMarkupsModule::~qSlicerMarkupsModule()
+qSRPlanPathPlanModule::~qSRPlanPathPlanModule()
 {
 }
 
 //-----------------------------------------------------------------------------
-QString qSlicerMarkupsModule::helpText()const
+QString qSRPlanPathPlanModule::helpText()const
 {
   QString help =
     "A module to create and manage markups in 2D and 3D."
@@ -100,13 +100,13 @@ QString qSlicerMarkupsModule::helpText()const
 }
 
 //-----------------------------------------------------------------------------
-QString qSlicerMarkupsModule::acknowledgementText()const
+QString qSRPlanPathPlanModule::acknowledgementText()const
 {
   return "This work was supported by NAMIC, NAC, and the Slicer Community.";
 }
 
 //-----------------------------------------------------------------------------
-QStringList qSlicerMarkupsModule::contributors()const
+QStringList qSRPlanPathPlanModule::contributors()const
 {
   QStringList moduleContributors;
   moduleContributors << QString("Nicole Aucoin (BWH)");
@@ -114,7 +114,7 @@ QStringList qSlicerMarkupsModule::contributors()const
 }
 
 //-----------------------------------------------------------------------------
-QIcon qSlicerMarkupsModule::icon()const
+QIcon qSRPlanPathPlanModule::icon()const
 {
   return QIcon(":/Icons/Markups.png");
 }
@@ -122,7 +122,7 @@ QIcon qSlicerMarkupsModule::icon()const
 
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModule::setup()
+void qSRPlanPathPlanModule::setup()
 {
   this->Superclass::setup();
 
@@ -153,10 +153,10 @@ void qSlicerMarkupsModule::setup()
   */
   // for now, don't use the settings panel as it's causing the logic values to
   // be reset on start up, just set things directly
-  qSlicerMarkupsModuleWidget* moduleWidget = dynamic_cast<qSlicerMarkupsModuleWidget*>(this->widgetRepresentation());
+  qSRPlanPathPlanModuleWidget* moduleWidget = dynamic_cast<qSRPlanPathPlanModuleWidget*>(this->widgetRepresentation());
   if (!moduleWidget)
     {
-    qDebug() << "qSlicerMarkupsModule::setup: unable to get the markups verion of the widget to set default display settings";
+    qDebug() << "qSRPlanPathPlanModule::setup: unable to get the markups verion of the widget to set default display settings";
     }
   else
     {
@@ -165,17 +165,20 @@ void qSlicerMarkupsModule::setup()
 
   // Register Subject Hierarchy core plugins
   qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(new qSlicerSubjectHierarchyMarkupsPlugin());
+  qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(new qSlicerSubjectHierarchyDoseVolumeHistogramPlugin());
+  qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(new qSlicerSubjectHierarchyIsodosePlugin());
+  
 }
 
 
 //-----------------------------------------------------------------------------
-qSlicerAbstractModuleRepresentation * qSlicerMarkupsModule::createWidgetRepresentation()
+qSlicerAbstractModuleRepresentation * qSRPlanPathPlanModule::createWidgetRepresentation()
 {
-  return new qSlicerMarkupsModuleWidget;
+  return new qSRPlanPathPlanModuleWidget;
 }
 
 //-----------------------------------------------------------------------------
-vtkMRMLAbstractLogic* qSlicerMarkupsModule::createLogic()
+vtkMRMLAbstractLogic* qSRPlanPathPlanModule::createLogic()
 {
   return vtkSlicerMarkupsLogic::New();
 }

@@ -1,7 +1,8 @@
 /*==============================================================================
 
-  Copyright (c) Laboratory for Percutaneous Surgery (PerkLab)
-  Queen's University, Kingston, ON, Canada. All Rights Reserved.
+  Program: 3D Slicer
+
+  Portions (c) Copyright Brigham and Women's Hospital (BWH) All Rights Reserved.
 
   See COPYRIGHT.txt
   or http://www.slicer.org/copyright/copyright.txt for details.
@@ -12,34 +13,31 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  This file was originally developed by Csaba Pinter, PerkLab, Queen's University
-  and was supported through the Applied Cancer Research Unit program of Cancer Care
-  Ontario with funds provided by the Ontario Ministry of Health and Long-Term Care
-
 ==============================================================================*/
 
-#ifndef __qSlicerDoseVolumeHistogramModule_h
-#define __qSlicerDoseVolumeHistogramModule_h
+#ifndef __qSRPlanPathPlanModule_h
+#define __qSRPlanPathPlanModule_h
 
 // SlicerQt includes
 #include "qSlicerLoadableModule.h"
 
-#include "qSlicerDoseVolumeHistogramModuleExport.h"
+#include "qSRPlanMarkupsModuleExport.h"
 
-class qSlicerDoseVolumeHistogramModulePrivate;
+class qSRPlanPathPlanModulePrivate;
 
-/// \ingroup SlicerRt_QtModules_DoseVolumeHistogram
-class Q_SLICER_QTMODULES_DOSEVOLUMEHISTOGRAM_EXPORT qSlicerDoseVolumeHistogramModule :
+/// \ingroup Slicer_QtModules_Markups
+class Q_SRPlan_QTMODULES_MARKUPS_EXPORT qSRPlanPathPlanModule :
   public qSlicerLoadableModule
 {
   Q_OBJECT
+  Q_PLUGIN_METADATA(IID "qSRPlanPathPlanModule" FILE "qSRPlanPathPlanModule.JSON")
   Q_INTERFACES(qSlicerLoadableModule);
 
 public:
 
   typedef qSlicerLoadableModule Superclass;
-  explicit qSlicerDoseVolumeHistogramModule(QObject *parent=0);
-  virtual ~qSlicerDoseVolumeHistogramModule();
+  explicit qSRPlanPathPlanModule(QObject *parent=0);
+  virtual ~qSRPlanPathPlanModule();
 
   qSlicerGetTitleMacro(QTMODULE_TITLE);
 
@@ -48,15 +46,15 @@ public:
 
   /// Return acknowledgements
   virtual QString acknowledgementText()const;
-  
+
+  /// Return the authors of the module
+  virtual QStringList  contributors()const;
+
   /// Return a custom icon for the module
   virtual QIcon icon()const;
 
-  /// Return the category name for the module
-  virtual QStringList categories() const;
-
-  /// Return the list of contributors of the module
-  virtual QStringList contributors() const;
+  /// Return the categories for the module
+  virtual QStringList categories()const;
 
 protected:
 
@@ -69,12 +67,11 @@ protected:
   /// Create and return the logic associated to this module
   virtual vtkMRMLAbstractLogic* createLogic();
 
-protected:
-  QScopedPointer<qSlicerDoseVolumeHistogramModulePrivate> d_ptr;
+  QScopedPointer<qSRPlanPathPlanModulePrivate> d_ptr;
 
 private:
-  Q_DECLARE_PRIVATE(qSlicerDoseVolumeHistogramModule);
-  Q_DISABLE_COPY(qSlicerDoseVolumeHistogramModule);
+  Q_DECLARE_PRIVATE(qSRPlanPathPlanModule);
+  Q_DISABLE_COPY(qSRPlanPathPlanModule);
 
 };
 

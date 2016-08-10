@@ -1,13 +1,12 @@
 
 #-----------------------------------------------------------------------------
-set(MODULE_NAME "Markups")
+set(MODULE_NAME "PathPlan")
 set(MODULE_TITLE "${MODULE_NAME}")
 
 string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
 
 #-----------------------------------------------------------------------------
 add_subdirectory(MRML)
-add_subdirectory(VTKWidgets)
 add_subdirectory(Logic)
 add_subdirectory(MRMLDM)
 add_subdirectory(SubjectHierarchyPlugins)
@@ -34,17 +33,13 @@ set(MODULE_SRCS
   qSlicer${MODULE_NAME}Module.h
   qSlicer${MODULE_NAME}ModuleWidget.cxx
   qSlicer${MODULE_NAME}ModuleWidget.h
-  qSlicer${MODULE_NAME}Reader.cxx
-  qSlicer${MODULE_NAME}Reader.h
-  qSlicer${MODULE_NAME}SettingsPanel.cxx
-  qSlicer${MODULE_NAME}SettingsPanel.h
+ 
   )
 
 set(MODULE_MOC_SRCS
   qSlicer${MODULE_NAME}Module.h
   qSlicer${MODULE_NAME}ModuleWidget.h
-  qSlicer${MODULE_NAME}Reader.h
-  qSlicer${MODULE_NAME}SettingsPanel.h
+
   )
 
 set(MODULE_UI_SRCS
