@@ -32,13 +32,13 @@
 // STD includes
 #include <cstdlib>
 
-#include "vtkSRPlanMarkupsModuleLogicExport.h"
+#include "vtkSRPlanPathPlanModuleLogicExport.h"
 
 class vtkMRMLMarkupsNode;
 class vtkMRMLMarkupsDisplayNode;
 
 /// \ingroup Slicer_QtModules_Markups
-class VTK_SRPlan_MARKUPS_MODULE_LOGIC_EXPORT vtkSlicerMarkupsLogic :
+class VTK_SRPlan_PATHPLAN_MODULE_LOGIC_EXPORT vtkSlicerMarkupsLogic :
   public vtkMRMLAbstractLogic
 {
 public:

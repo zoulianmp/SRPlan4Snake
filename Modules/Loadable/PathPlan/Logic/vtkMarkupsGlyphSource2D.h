@@ -31,7 +31,7 @@
 #ifndef __vtkMarkupsGlyphSource2D_h
 #define __vtkMarkupsGlyphSource2D_h
 
-#include "vtkSRPlanMarkupsModuleVTKWidgetsExport.h"
+#include "vtkSRPlanPathPlanModuleLogicExport.h"
 
 #include "vtkSlicerBaseLogic.h"
 
@@ -46,7 +46,7 @@ class vtkPoints;
 class vtkUnsignedCharArray;
 class vtkCellArray;
 
-class VTK_SRPlan_MARKUPS_MODULE_VTKWIDGETS_EXPORT vtkMarkupsGlyphSource2D : public vtkPolyDataAlgorithm
+class VTK_SRPlan_PATHPLAN_MODULE_LOGIC_EXPORT vtkMarkupsGlyphSource2D : public vtkPolyDataAlgorithm
 {
 public:
   vtkTypeMacro(vtkMarkupsGlyphSource2D,vtkPolyDataAlgorithm);

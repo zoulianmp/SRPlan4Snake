@@ -33,10 +33,10 @@
 #include "vtkVersion.h"
 
 // MRMLLogic includes
-#include "vtkSlicerIsodoseModuleWidgetsExport.h"
+#include "vtkSRPlanPathPlanModuleLogicExport.h"
 
 /// \ingroup SlicerRt_QtModules_Isodose
-class VTK_SLICER_ISODOSE_LOGIC_EXPORT vtkSlicerRTScalarBarActor 
+class VTK_SRPlan_PATHPLAN_MODULE_LOGIC_EXPORT vtkSlicerRTScalarBarActor
   : public vtkScalarBarActor
 {
 public:

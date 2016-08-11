@@ -33,7 +33,7 @@
 // VTK includes
 #include "vtkImageAccumulate.h"
 
-#include "vtkSlicerDoseVolumeHistogramLogicExport.h"
+#include "vtkSRPlanPathPlanModuleLogicExport.h"
 
 class vtkOrientedImageData;
 class vtkMRMLDoubleArrayNode;
@@ -48,7 +48,7 @@ class vtkMRMLDoseVolumeHistogramNode;
 /// defined by a grid of voxels derived from the voxel grid in the dose volume. The dose grid is oversampled by a factor currently
 /// fixed to the value 2. The centre of each voxel is examined and if found to lie within a structure, is included in the volume for
 /// that structure. The dose value at the centre of the cube is interpolated in 3D from the dose grid.
-class VTK_SLICER_DOSEVOLUMEHISTOGRAM_LOGIC_EXPORT vtkSlicerDoseVolumeHistogramLogic :
+class VTK_SRPlan_PATHPLAN_MODULE_LOGIC_EXPORT vtkSlicerDoseVolumeHistogramLogic :
   public vtkMRMLAbstractLogic
 {
 public:

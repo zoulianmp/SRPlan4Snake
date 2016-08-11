@@ -31,7 +31,7 @@
 // Slicer includes
 #include "vtkMRMLAbstractLogic.h"
 
-#include "vtkSlicerIsodoseLogicExport.h"
+#include "vtkSRPlanPathPlanModuleLogicExport.h"
 
 // MRML includes
 class vtkMRMLIsodoseNode;
@@ -39,7 +39,7 @@ class vtkMRMLModelHierarchyNode;
 class vtkMRMLModelDisplayNode;
 
 /// \ingroup SlicerRt_QtModules_Isodose
-class VTK_SLICER_ISODOSE_LOGIC_EXPORT vtkSlicerIsodoseLogic :
+class VTK_SRPlan_PATHPLAN_MODULE_LOGIC_EXPORT vtkSlicerIsodoseLogic :
   public vtkMRMLAbstractLogic
 {
 
