@@ -25,6 +25,8 @@
 #include "vtkMRMLMarkupsNode.h"
 #include "vtkMRMLMarkupsStorageNode.h"
 
+#include "vtkMRMLApplicationLogic.h"
+
 // Annotation MRML includes
 #include "vtkMRMLAnnotationFiducialNode.h"
 #include "vtkMRMLAnnotationPointDisplayNode.h"
@@ -44,6 +46,7 @@
 #include <vtkNew.h>
 #include <vtkObjectFactory.h>
 #include <vtkStringArray.h>
+#include "vtkCollection.h"
 
 // STD includes
 #include <cassert>

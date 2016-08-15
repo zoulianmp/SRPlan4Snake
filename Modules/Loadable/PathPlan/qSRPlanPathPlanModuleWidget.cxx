@@ -43,12 +43,14 @@
 #include "vtkMRMLSliceNode.h"
 
 // Markups includes
-#include "qSlicerMarkupsModule.h"
-#include "qSlicerMarkupsModuleWidget.h"
-#include "ui_qSlicerMarkupsModule.h"
+#include "qSRPlanPathPlanModuleWidget.h"
+#include "qSRPlanPathPlanModule.h"
+#include "ui_qSRPlanPathPlanModule.h"
 #include "vtkMRMLMarkupsFiducialNode.h"
 #include "vtkMRMLMarkupsNode.h"
 #include "vtkSlicerMarkupsLogic.h"
+
+
 
 // VTK includes
 #include <vtkMath.h>
@@ -59,15 +61,16 @@
 
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_Markups
-class qSlicerMarkupsModuleWidgetPrivate: public Ui_qSlicerMarkupsModule
+class qSRPlanPathPlanModuleWidgetPrivate: public Ui_qSRPlanPathPlanModule
 {
-  Q_DECLARE_PUBLIC(qSlicerMarkupsModuleWidget);
+	
+  Q_DECLARE_PUBLIC(qSRPlanPathPlanModuleWidget);
 protected:
-  qSlicerMarkupsModuleWidget* const q_ptr;
+  qSRPlanPathPlanModuleWidget* const q_ptr;
 
 public:
-  qSlicerMarkupsModuleWidgetPrivate(qSlicerMarkupsModuleWidget& object);
-  ~qSlicerMarkupsModuleWidgetPrivate();
+	qSRPlanPathPlanModuleWidgetPrivate(qSRPlanPathPlanModuleWidget& object);
+  ~qSRPlanPathPlanModuleWidgetPrivate();
 
   void setupUi(qSlicerWidget* widget);
 
@@ -95,10 +98,10 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// qSlicerMarkupsModuleWidgetPrivate methods
+// qSRPlanPathPlanModuleWidgetPrivate methods
 
 //-----------------------------------------------------------------------------
-qSlicerMarkupsModuleWidgetPrivate::qSlicerMarkupsModuleWidgetPrivate(qSlicerMarkupsModuleWidget& object)
+qSRPlanPathPlanModuleWidgetPrivate::qSRPlanPathPlanModuleWidgetPrivate(qSRPlanPathPlanModuleWidget& object)
   : q_ptr(&object)
 {
   this->columnLabels << "Selected" << "Locked" << "Visible" << "Name" << "Description" << "R" << "A" << "S";
@@ -118,21 +121,21 @@ qSlicerMarkupsModuleWidgetPrivate::qSlicerMarkupsModuleWidgetPrivate(qSlicerMark
 }
 
 //-----------------------------------------------------------------------------
-int qSlicerMarkupsModuleWidgetPrivate::columnIndex(QString label)
+int qSRPlanPathPlanModuleWidgetPrivate::columnIndex(QString label)
 {
   return this->columnLabels.indexOf(label);
 }
 
 //-----------------------------------------------------------------------------
-qSlicerMarkupsModuleWidgetPrivate::~qSlicerMarkupsModuleWidgetPrivate()
+qSRPlanPathPlanModuleWidgetPrivate::~qSRPlanPathPlanModuleWidgetPrivate()
 {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
+void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
 {
-  Q_Q(qSlicerMarkupsModuleWidget);
-  this->Ui_qSlicerMarkupsModule::setupUi(widget);
+  Q_Q(qSRPlanPathPlanModuleWidget);
+  this->Ui_qSRPlanPathPlanModule::setupUi(widget);
 
   //std::cout << "setupUI\n";
 
@@ -433,18 +436,18 @@ void qSlicerMarkupsModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
 }
 
 //-----------------------------------------------------------------------------
-int qSlicerMarkupsModuleWidgetPrivate::numberOfColumns()
+int qSRPlanPathPlanModuleWidgetPrivate::numberOfColumns()
 {
   return this->columnLabels.size();
 }
 
 //-----------------------------------------------------------------------------
-// qSlicerMarkupsModuleWidget methods
+// qSRPlanPathPlanModuleWidget methods
 
 //-----------------------------------------------------------------------------
-qSlicerMarkupsModuleWidget::qSlicerMarkupsModuleWidget(QWidget* _parent)
+qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
   : Superclass( _parent )
-    , d_ptr( new qSlicerMarkupsModuleWidgetPrivate(*this) )
+    , d_ptr( new qSRPlanPathPlanModuleWidgetPrivate(*this) )
 {
   this->pToAddShortcut = 0;
 
@@ -453,14 +456,14 @@ qSlicerMarkupsModuleWidget::qSlicerMarkupsModuleWidget(QWidget* _parent)
 
 
 //-----------------------------------------------------------------------------
-qSlicerMarkupsModuleWidget::~qSlicerMarkupsModuleWidget()
+qSRPlanPathPlanModuleWidget::~qSRPlanPathPlanModuleWidget()
 {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::setup()
+void qSRPlanPathPlanModuleWidget::setup()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
   d->setupUi(this);
   this->Superclass::setup();
   // for now disable the combo box: when the combo box has it's mrml scene
@@ -473,9 +476,9 @@ void qSlicerMarkupsModuleWidget::setup()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::enter()
+void qSRPlanPathPlanModuleWidget::enter()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   this->Superclass::enter();
 
@@ -521,7 +524,7 @@ void qSlicerMarkupsModuleWidget::enter()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::checkForAnnotationFiducialConversion()
+void qSRPlanPathPlanModuleWidget::checkForAnnotationFiducialConversion()
 {
   // check to see if there are any annotation fiducial nodes
   // and offer to import them as markups
@@ -562,7 +565,7 @@ void qSlicerMarkupsModuleWidget::checkForAnnotationFiducialConversion()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::installShortcuts()
+void qSRPlanPathPlanModuleWidget::installShortcuts()
 {
   // add some shortcut keys
   if (this->pToAddShortcut == 0)
@@ -574,7 +577,7 @@ void qSlicerMarkupsModuleWidget::installShortcuts()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::removeShortcuts()
+void qSRPlanPathPlanModuleWidget::removeShortcuts()
 {
   if (this->pToAddShortcut != 0)
     {
@@ -586,7 +589,7 @@ void qSlicerMarkupsModuleWidget::removeShortcuts()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::convertAnnotationFiducialsToMarkups()
+void qSRPlanPathPlanModuleWidget::convertAnnotationFiducialsToMarkups()
 {
   if (this->markupsLogic())
     {
@@ -595,7 +598,7 @@ void qSlicerMarkupsModuleWidget::convertAnnotationFiducialsToMarkups()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::exit()
+void qSRPlanPathPlanModuleWidget::exit()
 {
   this->Superclass::exit();
 
@@ -609,7 +612,7 @@ void qSlicerMarkupsModuleWidget::exit()
 }
 
 //-----------------------------------------------------------------------------
-vtkSlicerMarkupsLogic *qSlicerMarkupsModuleWidget::markupsLogic()
+vtkSlicerMarkupsLogic *qSRPlanPathPlanModuleWidget::markupsLogic()
 {
   if (this->logic() == NULL)
     {
@@ -620,9 +623,9 @@ vtkSlicerMarkupsLogic *qSlicerMarkupsModuleWidget::markupsLogic()
 
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::updateWidgetFromMRML()
+void qSRPlanPathPlanModuleWidget::updateWidgetFromMRML()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // std::cout << "updateWidgetFromMRML" << std::endl;
 
@@ -774,9 +777,9 @@ void qSlicerMarkupsModuleWidget::updateWidgetFromMRML()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::updateWidgetFromDisplayNode()
+void qSRPlanPathPlanModuleWidget::updateWidgetFromDisplayNode()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active markup
   vtkMRMLNode *markupsNodeMRML = NULL;
@@ -905,9 +908,9 @@ void qSlicerMarkupsModuleWidget::updateWidgetFromDisplayNode()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::updateMaximumScaleFromVolumes()
+void qSRPlanPathPlanModuleWidget::updateMaximumScaleFromVolumes()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   double maxSliceSpacing = 1.0;
 
@@ -964,9 +967,9 @@ void qSlicerMarkupsModuleWidget::updateMaximumScaleFromVolumes()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::updateRow(int m)
+void qSRPlanPathPlanModuleWidget::updateRow(int m)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // this is updating the qt widget from MRML, and should not trigger any updates on the node, so turn off events
   d->activeMarkupTableWidget->blockSignals(true);
@@ -1103,9 +1106,9 @@ void qSlicerMarkupsModuleWidget::updateRow(int m)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onNodeAddedEvent(vtkObject*, vtkObject* node)
+void qSRPlanPathPlanModuleWidget::onNodeAddedEvent(vtkObject*, vtkObject* node)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   if (!this->mrmlScene() || this->mrmlScene()->IsBatchProcessing())
     {
@@ -1120,7 +1123,7 @@ void qSlicerMarkupsModuleWidget::onNodeAddedEvent(vtkObject*, vtkObject* node)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onNodeRemovedEvent(vtkObject* scene, vtkObject* node)
+void qSRPlanPathPlanModuleWidget::onNodeRemovedEvent(vtkObject* scene, vtkObject* node)
 {
   Q_UNUSED(scene);
   Q_UNUSED(node);
@@ -1139,28 +1142,28 @@ void qSlicerMarkupsModuleWidget::onNodeRemovedEvent(vtkObject* scene, vtkObject*
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onMRMLSceneEndImportEvent()
+void qSRPlanPathPlanModuleWidget::onMRMLSceneEndImportEvent()
 {
   this->checkForAnnotationFiducialConversion();
   this->updateWidgetFromMRML();
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onMRMLSceneEndRestoreEvent()
+void qSRPlanPathPlanModuleWidget::onMRMLSceneEndRestoreEvent()
 {
   this->checkForAnnotationFiducialConversion();
   this->updateWidgetFromMRML();
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onMRMLSceneEndBatchProcessEvent()
+void qSRPlanPathPlanModuleWidget::onMRMLSceneEndBatchProcessEvent()
 {
   if (!this->mrmlScene())
     {
     return;
     }
   this->checkForAnnotationFiducialConversion();
-  // qDebug() << "qSlicerMarkupsModuleWidget::onMRMLSceneEndBatchProcessEvent";
+  // qDebug() << "qSRPlanPathPlanModuleWidget::onMRMLSceneEndBatchProcessEvent";
   std::string selectionNodeID = (this->markupsLogic() ? this->markupsLogic()->GetSelectionNodeID() : std::string(""));
   vtkMRMLNode *node = this->mrmlScene()->GetNodeByID(selectionNodeID.c_str());
   vtkMRMLSelectionNode *selectionNode = NULL;
@@ -1192,18 +1195,18 @@ void qSlicerMarkupsModuleWidget::onMRMLSceneEndBatchProcessEvent()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onMRMLSceneEndCloseEvent()
+void qSRPlanPathPlanModuleWidget::onMRMLSceneEndCloseEvent()
 {
   if (!this->mrmlScene() || this->mrmlScene()->IsBatchProcessing())
     {
     return;
     }
-  // qDebug() << "qSlicerMarkupsModuleWidget::onMRMLSceneEndCloseEvent";
+  // qDebug() << "qSRPlanPathPlanModuleWidget::onMRMLSceneEndCloseEvent";
   this->clearGUI();
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onPKeyActivated()
+void qSRPlanPathPlanModuleWidget::onPKeyActivated()
 {
   QPoint pos = QCursor::pos();
 
@@ -1221,9 +1224,9 @@ void qSlicerMarkupsModuleWidget::onPKeyActivated()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onSelectedColorPickerButtonChanged(QColor qcolor)
+void qSRPlanPathPlanModuleWidget::onSelectedColorPickerButtonChanged(QColor qcolor)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   double color[3];
   qMRMLUtils::qColorToColor(qcolor, color);
@@ -1248,9 +1251,9 @@ void qSlicerMarkupsModuleWidget::onSelectedColorPickerButtonChanged(QColor qcolo
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onUnselectedColorPickerButtonChanged(QColor qcolor)
+void qSRPlanPathPlanModuleWidget::onUnselectedColorPickerButtonChanged(QColor qcolor)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   double color[3];
   qMRMLUtils::qColorToColor(qcolor, color);
@@ -1275,9 +1278,9 @@ void qSlicerMarkupsModuleWidget::onUnselectedColorPickerButtonChanged(QColor qco
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onGlyphTypeComboBoxChanged(QString value)
+void qSRPlanPathPlanModuleWidget::onGlyphTypeComboBoxChanged(QString value)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   if (value.isEmpty())
     {
@@ -1303,9 +1306,9 @@ void qSlicerMarkupsModuleWidget::onGlyphTypeComboBoxChanged(QString value)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onGlyphScaleSliderWidgetChanged(double value)
+void qSRPlanPathPlanModuleWidget::onGlyphScaleSliderWidgetChanged(double value)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
   vtkMRMLMarkupsFiducialNode *listNode = NULL;
@@ -1326,9 +1329,9 @@ void qSlicerMarkupsModuleWidget::onGlyphScaleSliderWidgetChanged(double value)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onTextScaleSliderWidgetChanged(double value)
+void qSRPlanPathPlanModuleWidget::onTextScaleSliderWidgetChanged(double value)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
   vtkMRMLMarkupsFiducialNode *listNode = NULL;
@@ -1349,9 +1352,9 @@ void qSlicerMarkupsModuleWidget::onTextScaleSliderWidgetChanged(double value)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onOpacitySliderWidgetChanged(double value)
+void qSRPlanPathPlanModuleWidget::onOpacitySliderWidgetChanged(double value)
 {
-   Q_D(qSlicerMarkupsModuleWidget);
+   Q_D(qSRPlanPathPlanModuleWidget);
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
   vtkMRMLMarkupsFiducialNode *listNode = NULL;
@@ -1372,9 +1375,9 @@ void qSlicerMarkupsModuleWidget::onOpacitySliderWidgetChanged(double value)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onResetToDefaultDisplayPropertiesPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onResetToDefaultDisplayPropertiesPushButtonClicked()
 {
-   Q_D(qSlicerMarkupsModuleWidget);
+   Q_D(qSRPlanPathPlanModuleWidget);
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
   vtkMRMLMarkupsFiducialNode *listNode = NULL;
@@ -1405,9 +1408,9 @@ void qSlicerMarkupsModuleWidget::onResetToDefaultDisplayPropertiesPushButtonClic
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onSaveToDefaultDisplayPropertiesPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onSaveToDefaultDisplayPropertiesPushButtonClicked()
 {
-   Q_D(qSlicerMarkupsModuleWidget);
+   Q_D(qSRPlanPathPlanModuleWidget);
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
   vtkMRMLMarkupsFiducialNode *listNode = NULL;
@@ -1462,9 +1465,9 @@ void qSlicerMarkupsModuleWidget::onSaveToDefaultDisplayPropertiesPushButtonClick
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onVisibilityOnAllMarkupsInListPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onVisibilityOnAllMarkupsInListPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -1480,9 +1483,9 @@ void qSlicerMarkupsModuleWidget::onVisibilityOnAllMarkupsInListPushButtonClicked
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onVisibilityOffAllMarkupsInListPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onVisibilityOffAllMarkupsInListPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -1498,9 +1501,9 @@ void qSlicerMarkupsModuleWidget::onVisibilityOffAllMarkupsInListPushButtonClicke
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onVisibilityAllMarkupsInListToggled()
+void qSRPlanPathPlanModuleWidget::onVisibilityAllMarkupsInListToggled()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -1516,9 +1519,9 @@ void qSlicerMarkupsModuleWidget::onVisibilityAllMarkupsInListToggled()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onLockAllMarkupsInListPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onLockAllMarkupsInListPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
   vtkMRMLMarkupsNode *listNode = NULL;
@@ -1533,9 +1536,9 @@ void qSlicerMarkupsModuleWidget::onLockAllMarkupsInListPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onUnlockAllMarkupsInListPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onUnlockAllMarkupsInListPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -1551,9 +1554,9 @@ void qSlicerMarkupsModuleWidget::onUnlockAllMarkupsInListPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onLockAllMarkupsInListToggled()
+void qSRPlanPathPlanModuleWidget::onLockAllMarkupsInListToggled()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -1569,9 +1572,9 @@ void qSlicerMarkupsModuleWidget::onLockAllMarkupsInListToggled()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onSelectAllMarkupsInListPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onSelectAllMarkupsInListPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -1587,9 +1590,9 @@ void qSlicerMarkupsModuleWidget::onSelectAllMarkupsInListPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onDeselectAllMarkupsInListPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onDeselectAllMarkupsInListPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -1605,9 +1608,9 @@ void qSlicerMarkupsModuleWidget::onDeselectAllMarkupsInListPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onSelectedAllMarkupsInListToggled()
+void qSRPlanPathPlanModuleWidget::onSelectedAllMarkupsInListToggled()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -1622,9 +1625,9 @@ void qSlicerMarkupsModuleWidget::onSelectedAllMarkupsInListToggled()
     }
 }
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onMarkupScaleSliderWidgetValueChanged(double value)
+void qSRPlanPathPlanModuleWidget::onMarkupScaleSliderWidgetValueChanged(double value)
 {
-   Q_D(qSlicerMarkupsModuleWidget);
+   Q_D(qSRPlanPathPlanModuleWidget);
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
   vtkMRMLMarkupsFiducialNode *listNode = NULL;
@@ -1649,9 +1652,9 @@ void qSlicerMarkupsModuleWidget::onMarkupScaleSliderWidgetValueChanged(double va
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onAddMarkupPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onAddMarkupPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -1668,9 +1671,9 @@ void qSlicerMarkupsModuleWidget::onAddMarkupPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onMoveMarkupUpPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onMoveMarkupUpPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the selected rows
   QList<QTableWidgetItem *> selectedItems = d->activeMarkupTableWidget->selectedItems();
@@ -1699,9 +1702,9 @@ void qSlicerMarkupsModuleWidget::onMoveMarkupUpPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onMoveMarkupDownPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onMoveMarkupDownPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the selected rows
   QList<QTableWidgetItem *> selectedItems = d->activeMarkupTableWidget->selectedItems();
@@ -1729,9 +1732,9 @@ void qSlicerMarkupsModuleWidget::onMoveMarkupDownPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onDeleteMarkupPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onDeleteMarkupPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the selected rows
   QList<QTableWidgetItem *> selectedItems = d->activeMarkupTableWidget->selectedItems();
@@ -1803,9 +1806,9 @@ void qSlicerMarkupsModuleWidget::onDeleteMarkupPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onDeleteAllMarkupsInListPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onDeleteAllMarkupsInListPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
   vtkMRMLMarkupsNode *listNode = NULL;
@@ -1841,9 +1844,9 @@ void qSlicerMarkupsModuleWidget::onDeleteAllMarkupsInListPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupMRMLNodeChanged(vtkMRMLNode *markupsNode)
+void qSRPlanPathPlanModuleWidget::onActiveMarkupMRMLNodeChanged(vtkMRMLNode *markupsNode)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   //qDebug() << "onActiveMarkupMRMLNodeChanged, markupsNode is " << (markupsNode ? markupsNode->GetID() : "null");
 
@@ -1894,7 +1897,7 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupMRMLNodeChanged(vtkMRMLNode *mark
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupMRMLNodeAdded(vtkMRMLNode *markupsNode)
+void qSRPlanPathPlanModuleWidget::onActiveMarkupMRMLNodeAdded(vtkMRMLNode *markupsNode)
 {
   // qDebug() << "onActiveMarkupMRMLNodeAdded, markupsNode is " << (markupsNode ? markupsNode->GetID() : "null");
 
@@ -1923,9 +1926,9 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupMRMLNodeAdded(vtkMRMLNode *markup
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onSelectionNodeActivePlaceNodeIDChanged()
+void qSRPlanPathPlanModuleWidget::onSelectionNodeActivePlaceNodeIDChanged()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   //qDebug() << "onSelectionNodeActivePlaceNodeIDChanged";
   std::string listID = (this->markupsLogic() ? this->markupsLogic()->GetActiveListID() : std::string(""));
@@ -1949,9 +1952,9 @@ void qSlicerMarkupsModuleWidget::onSelectionNodeActivePlaceNodeIDChanged()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onListVisibileInvisiblePushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onListVisibileInvisiblePushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
   vtkMRMLMarkupsNode *listNode = NULL;
@@ -1971,9 +1974,9 @@ void qSlicerMarkupsModuleWidget::onListVisibileInvisiblePushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::updateListVisibileInvisiblePushButton(int visibleFlag)
+void qSRPlanPathPlanModuleWidget::updateListVisibileInvisiblePushButton(int visibleFlag)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // update the list visibility button icon and tool tip
   if (visibleFlag)
@@ -1989,9 +1992,9 @@ void qSlicerMarkupsModuleWidget::updateListVisibileInvisiblePushButton(int visib
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onListLockedUnlockedPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onListLockedUnlockedPushButtonClicked()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
   // get the active node
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
   vtkMRMLMarkupsNode *listNode = NULL;
@@ -2022,9 +2025,9 @@ void qSlicerMarkupsModuleWidget::onListLockedUnlockedPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onNameFormatLineEditTextEdited(const QString text)
+void qSRPlanPathPlanModuleWidget::onNameFormatLineEditTextEdited(const QString text)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active list
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -2042,9 +2045,9 @@ void qSlicerMarkupsModuleWidget::onNameFormatLineEditTextEdited(const QString te
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onResetNameFormatToDefaultPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onResetNameFormatToDefaultPushButtonClicked()
 {
-   Q_D(qSlicerMarkupsModuleWidget);
+   Q_D(qSRPlanPathPlanModuleWidget);
 
    // get the active list
    vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -2064,9 +2067,9 @@ void qSlicerMarkupsModuleWidget::onResetNameFormatToDefaultPushButtonClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onRenameAllWithCurrentNameFormatPushButtonClicked()
+void qSRPlanPathPlanModuleWidget::onRenameAllWithCurrentNameFormatPushButtonClicked()
 {
-   Q_D(qSlicerMarkupsModuleWidget);
+   Q_D(qSRPlanPathPlanModuleWidget);
 
    if (!this->markupsLogic())
     {
@@ -2084,9 +2087,9 @@ void qSlicerMarkupsModuleWidget::onRenameAllWithCurrentNameFormatPushButtonClick
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupTableCellChanged(int row, int column)
+void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int column)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
 //  qDebug() << QString("cell changed: row = ") + QString::number(row) + QString(", col = ") + QString::number(column);
   // get the active list
@@ -2219,9 +2222,9 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupTableCellChanged(int row, int col
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupTableCellClicked(QTableWidgetItem* item)
+void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellClicked(QTableWidgetItem* item)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   if (item == 0)
     {
@@ -2248,10 +2251,10 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupTableCellClicked(QTableWidgetItem
 
 }
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupTableCurrentCellChanged(
+void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCurrentCellChanged(
      int currentRow, int currentColumn, int previousRow, int previousColumn)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   Q_UNUSED(currentColumn);
   Q_UNUSED(previousRow);
@@ -2284,7 +2287,7 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupTableCurrentCellChanged(
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onRightClickActiveMarkupTableWidget(QPoint pos)
+void qSRPlanPathPlanModuleWidget::onRightClickActiveMarkupTableWidget(QPoint pos)
 {
   Q_UNUSED(pos);
 
@@ -2335,9 +2338,9 @@ void qSlicerMarkupsModuleWidget::onRightClickActiveMarkupTableWidget(QPoint pos)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::addSelectedCoordinatesToMenu(QMenu *menu)
+void qSRPlanPathPlanModuleWidget::addSelectedCoordinatesToMenu(QMenu *menu)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the selected rows
   QList<QTableWidgetItem *> selectedItems = d->activeMarkupTableWidget->selectedItems();
@@ -2442,9 +2445,9 @@ void qSlicerMarkupsModuleWidget::addSelectedCoordinatesToMenu(QMenu *menu)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onJumpSlicesActionTriggered()
+void qSRPlanPathPlanModuleWidget::onJumpSlicesActionTriggered()
 {
- Q_D(qSlicerMarkupsModuleWidget);
+ Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the selected rows
   QList<QTableWidgetItem *> selectedItems = d->activeMarkupTableWidget->selectedItems();
@@ -2478,9 +2481,9 @@ void qSlicerMarkupsModuleWidget::onJumpSlicesActionTriggered()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onRefocusCamerasActionTriggered()
+void qSRPlanPathPlanModuleWidget::onRefocusCamerasActionTriggered()
 {
- Q_D(qSlicerMarkupsModuleWidget);
+ Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the selected rows
   QList<QTableWidgetItem *> selectedItems = d->activeMarkupTableWidget->selectedItems();
@@ -2507,7 +2510,7 @@ void qSlicerMarkupsModuleWidget::onRefocusCamerasActionTriggered()
 }
 
 //-----------------------------------------------------------------------------
-QStringList qSlicerMarkupsModuleWidget::getOtherMarkupNames(vtkMRMLNode *thisMarkup)
+QStringList qSRPlanPathPlanModuleWidget::getOtherMarkupNames(vtkMRMLNode *thisMarkup)
 {
   QStringList otherMarkups;
 
@@ -2541,9 +2544,9 @@ QStringList qSlicerMarkupsModuleWidget::getOtherMarkupNames(vtkMRMLNode *thisMar
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onCopyToOtherListActionTriggered()
+void qSRPlanPathPlanModuleWidget::onCopyToOtherListActionTriggered()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   if (this->mrmlScene() == 0)
     {
@@ -2585,9 +2588,9 @@ void qSlicerMarkupsModuleWidget::onCopyToOtherListActionTriggered()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::copySelectedToNamedList(QString listName)
+void qSRPlanPathPlanModuleWidget::copySelectedToNamedList(QString listName)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // qDebug() << "copySelectedToNamedList: " << listName;
 
@@ -2654,9 +2657,9 @@ void qSlicerMarkupsModuleWidget::copySelectedToNamedList(QString listName)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onMoveToOtherListActionTriggered()
+void qSRPlanPathPlanModuleWidget::onMoveToOtherListActionTriggered()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   if (this->mrmlScene() == 0)
     {
@@ -2698,9 +2701,9 @@ void qSlicerMarkupsModuleWidget::onMoveToOtherListActionTriggered()
 }
 
 //-----------------------------------------------------------------------------
-  void qSlicerMarkupsModuleWidget::moveSelectedToNamedList(QString listName)
+  void qSRPlanPathPlanModuleWidget::moveSelectedToNamedList(QString listName)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // qDebug() << "moveSelectedToNamedList: " << listName;
 
@@ -2763,7 +2766,7 @@ void qSlicerMarkupsModuleWidget::onMoveToOtherListActionTriggered()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::observeMarkupsNode(vtkMRMLNode *markupsNode)
+void qSRPlanPathPlanModuleWidget::observeMarkupsNode(vtkMRMLNode *markupsNode)
 {
   if (this->mrmlScene())
     {
@@ -2876,9 +2879,9 @@ void qSlicerMarkupsModuleWidget::observeMarkupsNode(vtkMRMLNode *markupsNode)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::clearGUI()
+void qSRPlanPathPlanModuleWidget::clearGUI()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   d->activeMarkupTableWidget->clearContents();
   d->activeMarkupTableWidget->setRowCount(0);
@@ -2889,9 +2892,9 @@ void qSlicerMarkupsModuleWidget::clearGUI()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeLockModifiedEvent()
+void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeLockModifiedEvent()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active list
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -2917,9 +2920,9 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeLockModifiedEvent()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeLabelFormatModifiedEvent()
+void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeLabelFormatModifiedEvent()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active list
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -2935,7 +2938,7 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeLabelFormatModifiedEvent()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeNthMarkupModifiedEvent(vtkObject *caller, vtkObject *callData)
+void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeNthMarkupModifiedEvent(vtkObject *caller, vtkObject *callData)
 {
   //qDebug() << "onActiveMarkupsNodeNthMarkupModifiedEvent\n";
 
@@ -2956,7 +2959,7 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeNthMarkupModifiedEvent(vtkOb
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupsNodePointModifiedEvent(vtkObject *caller, vtkObject *callData)
+void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodePointModifiedEvent(vtkObject *caller, vtkObject *callData)
 {
   //qDebug() << "onActiveMarkupsNodePointModifiedEvent";
 
@@ -2978,9 +2981,9 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupsNodePointModifiedEvent(vtkObject
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeMarkupAddedEvent()//vtkMRMLNode *markupsNode)
+void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeMarkupAddedEvent()//vtkMRMLNode *markupsNode)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   //qDebug() << "onActiveMarkupsNodeMarkupAddedEvent";
 
@@ -3006,21 +3009,21 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeMarkupAddedEvent()//vtkMRMLN
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeMarkupRemovedEvent()//vtkMRMLNode *markupsNode)
+void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeMarkupRemovedEvent()//vtkMRMLNode *markupsNode)
 {
   // do a general update
   this->updateWidgetFromMRML();
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeDisplayModifiedEvent()
+void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeDisplayModifiedEvent()
 {
   // update the display properties
   this->updateWidgetFromDisplayNode();
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeTransformModifiedEvent()
+void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeTransformModifiedEvent()
 {
   // update the transform check box label
   // update the coordinates in the table
@@ -3028,7 +3031,7 @@ void qSlicerMarkupsModuleWidget::onActiveMarkupsNodeTransformModifiedEvent()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onSliceIntersectionsVisibilityToggled(bool flag)
+void qSRPlanPathPlanModuleWidget::onSliceIntersectionsVisibilityToggled(bool flag)
 {
   if (!this->markupsLogic())
     {
@@ -3039,9 +3042,9 @@ void qSlicerMarkupsModuleWidget::onSliceIntersectionsVisibilityToggled(bool flag
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onNewMarkupWithCurrentDisplayPropertiesTriggered()
+void qSRPlanPathPlanModuleWidget::onNewMarkupWithCurrentDisplayPropertiesTriggered()
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
 //  qDebug() << "onNewMarkupWithCurrentDisplayPropertiesTriggered";
 
@@ -3102,7 +3105,7 @@ void qSlicerMarkupsModuleWidget::onNewMarkupWithCurrentDisplayPropertiesTriggere
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::updateLogicFromSettings()
+void qSRPlanPathPlanModuleWidget::updateLogicFromSettings()
 {
   // update logic from settings
   if (this->logic() == NULL)
@@ -3178,7 +3181,7 @@ void qSlicerMarkupsModuleWidget::updateLogicFromSettings()
 }
 
 //-----------------------------------------------------------------------------
-bool qSlicerMarkupsModuleWidget::sliceIntersectionsVisible()
+bool qSRPlanPathPlanModuleWidget::sliceIntersectionsVisible()
 {
   if (!this->markupsLogic())
     {
@@ -3198,9 +3201,9 @@ bool qSlicerMarkupsModuleWidget::sliceIntersectionsVisible()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onHideCoordinateColumnsToggled(bool checked)
+void qSRPlanPathPlanModuleWidget::onHideCoordinateColumnsToggled(bool checked)
 {
-  Q_D(qSlicerMarkupsModuleWidget);
+  Q_D(qSRPlanPathPlanModuleWidget);
 
   d->activeMarkupTableWidget->setColumnHidden(d->columnIndex("R"), checked);
   d->activeMarkupTableWidget->setColumnHidden(d->columnIndex("A"), checked);
@@ -3221,7 +3224,7 @@ void qSlicerMarkupsModuleWidget::onHideCoordinateColumnsToggled(bool checked)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerMarkupsModuleWidget::onTransformedCoordinatesToggled(bool checked)
+void qSRPlanPathPlanModuleWidget::onTransformedCoordinatesToggled(bool checked)
 {
   Q_UNUSED(checked);
 

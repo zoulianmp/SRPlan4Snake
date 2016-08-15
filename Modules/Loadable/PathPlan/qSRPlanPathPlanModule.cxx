@@ -36,6 +36,8 @@
 // SubjectHierarchy Plugins includes
 #include "qSlicerSubjectHierarchyPluginHandler.h"
 #include "qSlicerSubjectHierarchyMarkupsPlugin.h"
+#include "qSlicerSubjectHierarchyDoseVolumeHistogramPlugin.h"
+#include "qSlicerSubjectHierarchyIsodosePlugin.h"
 
 // Markups includes
 #include "MarkupsInstantiator.h"

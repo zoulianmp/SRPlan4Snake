@@ -26,7 +26,7 @@
 // SubjectHierarchy includes
 #include "qSlicerSubjectHierarchyAbstractPlugin.h"
 
-#include "qSRPlanMarkupsSubjectHierarchyPluginsExport.h"
+#include "qSRPlanPathPlanSubjectHierarchyPluginsExport.h"
 
 class qSlicerSubjectHierarchyMarkupsPluginPrivate;
 class vtkMRMLNode;
@@ -39,7 +39,7 @@ class vtkMRMLSubjectHierarchyNode;
 //BTX
 
 /// \ingroup Slicer_QtModules_SubjectHierarchy_Plugins
-class Q_SRPlan_MARKUPS_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyMarkupsPlugin : public qSlicerSubjectHierarchyAbstractPlugin
+class Q_SRPlan_PATHPLAN_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyMarkupsPlugin : public qSlicerSubjectHierarchyAbstractPlugin
 {
 public:
   Q_OBJECT

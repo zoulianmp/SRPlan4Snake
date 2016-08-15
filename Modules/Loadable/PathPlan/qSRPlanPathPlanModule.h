@@ -21,12 +21,12 @@
 // SlicerQt includes
 #include "qSlicerLoadableModule.h"
 
-#include "qSRPlanMarkupsModuleExport.h"
+#include "qSRPlanPathPlanModuleExport.h"
 
 class qSRPlanPathPlanModulePrivate;
 
 /// \ingroup Slicer_QtModules_Markups
-class Q_SRPlan_QTMODULES_MARKUPS_EXPORT qSRPlanPathPlanModule :
+class Q_SRPlan_QTMODULES_PATHPLAN_EXPORT qSRPlanPathPlanModule :
   public qSlicerLoadableModule
 {
   Q_OBJECT

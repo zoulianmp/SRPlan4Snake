@@ -19,13 +19,13 @@
 #define VTKMRMLMARKUPSCLICKCOUNTER_H_
 
 // MarkupsModule includes
-#include "vtkSRPlanMarkupsModuleMRMLDisplayableManagerExport.h"
+#include "vtkSRPlanPathPlanModuleMRMLDisplayableManagerExport.h"
 
 // VTK include
 #include <vtkObject.h>
 
 /// \ingroup Slicer_QtModules_Markups
-class VTK_SRPlan_MARKUPS_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLMarkupsClickCounter :
+class VTK_SRPlan_PATHPLAN_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLMarkupsClickCounter :
     public vtkObject
 {
 public:

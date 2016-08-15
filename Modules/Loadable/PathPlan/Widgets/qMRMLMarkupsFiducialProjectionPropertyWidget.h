@@ -31,13 +31,13 @@
 // SlicerQt includes
 #include "qMRMLWidget.h"
 
-#include "qSRPlanMarkupsModuleWidgetsExport.h"
+#include "qSRPlanPathPlanModuleWidgetsExport.h"
 
 class qMRMLMarkupsFiducialProjectionPropertyWidgetPrivate;
 class vtkMRMLMarkupsFiducialNode;
 
 /// \ingroup Slicer_QtModules_Markups
-class Q_SRPlan_MODULE_MARKUPS_WIDGETS_EXPORT
+class Q_SRPlan_MODULE_PATHPLAN_WIDGETS_EXPORT
 qMRMLMarkupsFiducialProjectionPropertyWidget
   : public qMRMLWidget
 {

@@ -44,7 +44,7 @@ class VTK_SRPlan_PATHPLAN_MODULE_LOGIC_EXPORT vtkSlicerMarkupsLogic :
 public:
 
   static vtkSlicerMarkupsLogic *New();
-  vtkTypeMacro(vtkSlicerMarkupsLogic,vtkSlicerModuleLogic);
+  vtkTypeMacro(vtkSlicerMarkupsLogic, vtkMRMLAbstractLogic);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   virtual void ProcessMRMLNodesEvents(vtkObject *caller,

@@ -27,14 +27,14 @@
 #include "qMRMLUtils.h"
 
 // Markups Widgets includes
-#include "qSRPlanMarkupsModuleWidgetsExport.h"
+#include "qSRPlanPathPlanModuleWidgetsExport.h"
 #include "ui_qSlicerSimpleMarkupsWidget.h"
 
 
 class qSlicerSimpleMarkupsWidgetPrivate;
 
 /// \ingroup Slicer_QtModules_CreateModels
-class Q_SRPlan_MODULE_MARKUPS_WIDGETS_EXPORT 
+class Q_SRPlan_MODULE_PATHPLAN_WIDGETS_EXPORT
 qSlicerSimpleMarkupsWidget : public qSlicerWidget
 {
   Q_OBJECT

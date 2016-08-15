@@ -23,11 +23,11 @@
 #include <ctkSettingsPanel.h>
 
 // Markups includes
-#include "qSRPlanMarkupsModuleExport.h"
+#include "qSRPlanPathPlanModuleWidgetsExport.h"
 class qSlicerMarkupsSettingsPanelPrivate;
 class vtkSlicerMarkupsLogic;
 
-class Q_SRPlan_QTMODULES_MARKUPS_EXPORT qSlicerMarkupsSettingsPanel
+class Q_SRPlan_MODULE_PATHPLAN_WIDGETS_EXPORT qSlicerMarkupsSettingsPanel
   : public ctkSettingsPanel
 {
   Q_OBJECT

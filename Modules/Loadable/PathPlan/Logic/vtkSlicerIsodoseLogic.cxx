@@ -19,6 +19,8 @@
 
 ==============================================================================*/
 
+#include "vtkSRPlanConfigure.h"
+
 // Isodose includes
 #include "vtkSlicerIsodoseLogic.h"
 #include "vtkMRMLIsodoseNode.h"
@@ -271,8 +273,20 @@ void vtkSlicerIsodoseLogic::CreateDefaultIsodoseColorTable()
 //---------------------------------------------------------------------------
 void vtkSlicerIsodoseLogic::LoadDefaultIsodoseColorTable()
 {
+	// build up the vector
+	std::string slicerHome;
+	slicerHome = std::string(vtksys::SystemTools::GetEnv("SRPlan_HOME"));
+	std::vector<std::string> filesVector;
+	filesVector.push_back(""); // for relative path
+	filesVector.push_back(slicerHome);
+	filesVector.push_back(std::string(SRPlan_SHARE_DIR) + "/ColorFiles");
+	std::string resourcesDirString = vtksys::SystemTools::JoinPath(filesVector);
+
   // Load default color table file
-  std::string moduleShareDirectory = this->GetModuleShareDirectory();
+  //std::string moduleShareDirectory = this->GetModuleShareDirectory();
+
+  std::string moduleShareDirectory = resourcesDirString;
+
   std::string colorTableFilePath = moduleShareDirectory + "/" + vtkSlicerIsodoseLogic::ISODOSE_DEFAULT_ISODOSE_COLOR_TABLE_FILE_NAME;
   vtkMRMLColorTableNode* colorTableNode = NULL;
   if (vtksys::SystemTools::FileExists(colorTableFilePath.c_str()) && this->GetMRMLApplicationLogic() && this->GetMRMLApplicationLogic()->GetColorLogic())

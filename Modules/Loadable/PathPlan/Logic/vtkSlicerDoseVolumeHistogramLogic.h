@@ -80,7 +80,7 @@ public:
 
 public:
   static vtkSlicerDoseVolumeHistogramLogic *New();
-  vtkTypeMacro(vtkSlicerDoseVolumeHistogramLogic, vtkSlicerModuleLogic);
+  vtkTypeMacro(vtkSlicerDoseVolumeHistogramLogic, vtkMRMLAbstractLogic);
 
 public:
   /// Compute DVH based on parameter node selections (dose volume, segmentation, segment IDs)

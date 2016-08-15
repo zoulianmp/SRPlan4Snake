@@ -10,6 +10,10 @@ set(${KIT}_INCLUDE_DIRECTORIES
   ${MRMLCore_INCLUDE_DIRS}
   ${MRMLLogic_INCLUDE_DIRS}
   ${qMRMLWidgets_INCLUDE_DIRS}
+  ${SlicerRtCommon_INCLUDE_DIRS}
+  ${vtkSRPlanPathPlanModuleMRML_INCLUDE_DIRS}
+  ${vtkSRPlanPathPlanModuleLogic_INCLUDE_DIRS}
+
   )
 
 set(${KIT}_SRCS
@@ -38,6 +42,9 @@ set(${KIT}_RESOURCES
 set(${KIT}_TARGET_LIBRARIES
   vtkSRPlanSubjectHierarchyModuleLogic
   qSRPlanSubjectHierarchyModuleWidgets
+  vtkSlicerRtCommon
+  vtkSRPlanPathPlanModuleMRML
+  vtkSRPlanPathPlanModuleLogic
   MRMLCore
   MRMLLogic
   qMRMLWidgets

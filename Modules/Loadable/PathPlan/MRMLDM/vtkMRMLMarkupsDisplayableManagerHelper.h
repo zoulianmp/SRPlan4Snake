@@ -28,7 +28,7 @@
 #define VTKMRMLMARKUPSDISPLAYABLEMANAGERHELPER_H_
 
 // MarkupsModule includes
-#include "vtkSRPlanMarkupsModuleMRMLDisplayableManagerExport.h"
+#include "vtkSRPlanPathPlanModuleMRMLDisplayableManagerExport.h"
 
 // MarkupsModule/MRML includes
 #include <vtkMRMLMarkupsNode.h>
@@ -45,7 +45,7 @@
 class vtkMRMLMarkupsDisplayNode;
 
 /// \ingroup Slicer_QtModules_Markups
-class VTK_SRPlan_MARKUPS_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLMarkupsDisplayableManagerHelper :
+class VTK_SRPlan_PATHPLAN_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLMarkupsDisplayableManagerHelper :
     public vtkObject
 {
 public:

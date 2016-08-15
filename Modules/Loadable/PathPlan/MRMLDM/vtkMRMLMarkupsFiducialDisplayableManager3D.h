@@ -19,7 +19,7 @@
 #define __vtkMRMLMarkupsFiducialDisplayableManager3D_h
 
 // MarkupsModule includes
-#include "vtkSRPlanMarkupsModuleMRMLDisplayableManagerExport.h"
+#include "vtkSRPlanPathPlanModuleMRMLDisplayableManagerExport.h"
 
 // MarkupsModule/MRMLDisplayableManager includes
 #include "vtkMRMLMarkupsDisplayableManager3D.h"
@@ -30,7 +30,7 @@ class vtkMRMLMarkupsDisplayNode;
 class vtkTextWidget;
 
 /// \ingroup Slicer_QtModules_Markups
-class VTK_SRPlan_MARKUPS_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLMarkupsFiducialDisplayableManager3D :
+class VTK_SRPlan_PATHPLAN_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLMarkupsFiducialDisplayableManager3D :
     public vtkMRMLMarkupsDisplayableManager3D
 {
 public:

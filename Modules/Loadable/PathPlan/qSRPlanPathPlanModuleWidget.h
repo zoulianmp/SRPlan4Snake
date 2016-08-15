@@ -15,25 +15,25 @@
 
 ==============================================================================*/
 
-#ifndef __qSlicerMarkupsModuleWidget_h
-#define __qSlicerMarkupsModuleWidget_h
+#ifndef __qSRPlanPathPlanModuleWidget_h
+#define __qSRPlanPathPlanModuleWidget_h
 
 // SlicerQt includes
 #include "qSlicerAbstractModuleWidget.h"
 
-#include "qSRPlanMarkupsModuleExport.h"
+#include "qSRPlanPathPlanModuleExport.h"
 
 class QMenu;
 class QModelIndex;
 class QTableWidgetItem;
 class QShortcut;
-class qSlicerMarkupsModuleWidgetPrivate;
+class qSRPlanPathPlanModuleWidgetPrivate;
 class vtkMRMLMarkupsNode;
 class vtkMRMLNode;
 class vtkSlicerMarkupsLogic;
 
 /// \ingroup Slicer_QtModules_Markups
-class Q_SRPlan_QTMODULES_MARKUPS_EXPORT qSlicerMarkupsModuleWidget :
+class Q_SRPlan_QTMODULES_PATHPLAN_EXPORT qSRPlanPathPlanModuleWidget :
   public qSlicerAbstractModuleWidget
 {
   Q_OBJECT
@@ -41,8 +41,8 @@ class Q_SRPlan_QTMODULES_MARKUPS_EXPORT qSlicerMarkupsModuleWidget :
 public:
 
   typedef qSlicerAbstractModuleWidget Superclass;
-  qSlicerMarkupsModuleWidget(QWidget *parent=0);
-  virtual ~qSlicerMarkupsModuleWidget();
+  qSRPlanPathPlanModuleWidget(QWidget *parent=0);
+  virtual ~qSRPlanPathPlanModuleWidget();
 
   /// Set up the GUI from mrml when entering
   /// \sa updateMaximumScaleFromVolumes()
@@ -241,7 +241,7 @@ public slots:
   void onTransformedCoordinatesToggled(bool checked);
 
 protected:
-  QScopedPointer<qSlicerMarkupsModuleWidgetPrivate> d_ptr;
+  QScopedPointer<qSRPlanPathPlanModuleWidgetPrivate> d_ptr;
 
   virtual void setup();
 
@@ -251,8 +251,8 @@ protected:
   double volumeSpacingScaleFactor;
 
 private:
-  Q_DECLARE_PRIVATE(qSlicerMarkupsModuleWidget);
-  Q_DISABLE_COPY(qSlicerMarkupsModuleWidget);
+  Q_DECLARE_PRIVATE(qSRPlanPathPlanModuleWidget);
+  Q_DISABLE_COPY(qSRPlanPathPlanModuleWidget);
 
   QShortcut *pToAddShortcut;
 };

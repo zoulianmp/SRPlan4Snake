@@ -19,7 +19,7 @@
 #define __vtkMRMLMarkupsDisplayableManager3D_h
 
 // MarkupsModule includes
-#include "vtkSRPlanMarkupsModuleMRMLDisplayableManagerExport.h"
+#include "vtkSRPlanPathPlanModuleMRMLDisplayableManagerExport.h"
 
 // MarkupsModule/MRMLDisplayableManager includes
 #include "vtkMRMLMarkupsClickCounter.h"
@@ -38,7 +38,7 @@ class vtkMRMLMarkupsDisplayNode;
 class vtkAbstractWidget;
 
 /// \ingroup Slicer_QtModules_Markups
-class  VTK_SRPlan_MARKUPS_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLMarkupsDisplayableManager3D :
+class  VTK_SRPlan_PATHPLAN_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLMarkupsDisplayableManager3D :
     public vtkMRMLAbstractThreeDViewDisplayableManager
 {
 public:

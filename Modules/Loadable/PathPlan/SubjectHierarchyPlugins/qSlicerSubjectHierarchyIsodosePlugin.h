@@ -24,14 +24,14 @@
 // SlicerRt includes
 #include "qSlicerSubjectHierarchyAbstractPlugin.h"
 
-#include "qSlicerIsodoseSubjectHierarchyPluginsExport.h"
+#include "qSRPlanPathPlanSubjectHierarchyPluginsExport.h"
 
 class qSlicerSubjectHierarchyIsodosePluginPrivate;
 class vtkMRMLNode;
 class vtkMRMLSubjectHierarchyNode;
 
 /// \ingroup SlicerRt_QtModules_RtHierarchy
-class Q_SLICER_ISODOSE_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyIsodosePlugin : public qSlicerSubjectHierarchyAbstractPlugin
+class Q_SRPlan_PATHPLAN_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyIsodosePlugin : public qSlicerSubjectHierarchyAbstractPlugin
 {
 public:
   Q_OBJECT

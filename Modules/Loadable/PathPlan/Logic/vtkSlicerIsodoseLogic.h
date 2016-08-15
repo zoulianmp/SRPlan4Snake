@@ -53,7 +53,7 @@ public:
 
 public:
   static vtkSlicerIsodoseLogic *New();
-  vtkTypeMacro(vtkSlicerIsodoseLogic,vtkSlicerModuleLogic);
+  vtkTypeMacro(vtkSlicerIsodoseLogic, vtkMRMLAbstractLogic);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   /// Set number of isodose levels

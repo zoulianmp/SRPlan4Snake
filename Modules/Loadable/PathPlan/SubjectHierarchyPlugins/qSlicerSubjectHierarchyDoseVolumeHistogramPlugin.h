@@ -24,7 +24,7 @@
 // SlicerRt includes
 #include "qSlicerSubjectHierarchyAbstractPlugin.h"
 
-#include "qSlicerDoseVolumeHistogramSubjectHierarchyPluginsExport.h"
+#include "qSRPlanPathPlanSubjectHierarchyPluginsExport.h"
 
 class qSlicerSubjectHierarchyDoseVolumeHistogramPluginPrivate;
 class vtkMRMLNode;
@@ -32,7 +32,7 @@ class vtkMRMLSubjectHierarchyNode;
 class vtkMRMLDoseVolumeHistogramNode;
 
 /// \ingroup SlicerRt_QtModules_RtHierarchy
-class Q_SLICER_DOSEVOLUMEHISTOGRAM_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyDoseVolumeHistogramPlugin : public qSlicerSubjectHierarchyAbstractPlugin
+class Q_SRPlan_PATHPLAN_SUBJECT_HIERARCHY_PLUGINS_EXPORT qSlicerSubjectHierarchyDoseVolumeHistogramPlugin : public qSlicerSubjectHierarchyAbstractPlugin
 {
 public:
   Q_OBJECT
