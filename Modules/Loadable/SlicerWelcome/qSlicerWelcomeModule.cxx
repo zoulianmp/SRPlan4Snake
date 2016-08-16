@@ -98,7 +98,8 @@ QStringList qSlicerWelcomeModule::contributors()const
 //-----------------------------------------------------------------------------
 qSlicerAbstractModuleRepresentation* qSlicerWelcomeModule::createWidgetRepresentation()
 {
-  return new qSlicerWelcomeModuleWidget;
+	return 0;
+ // return new qSlicerWelcomeModuleWidget;
 }
 
 //-----------------------------------------------------------------------------
