@@ -25,7 +25,8 @@
 #include "vtkSegmentationConverterRule.h"
 #include "vtkSegmentationConverter.h"
 
-#include "vtkSegmentationCoreConfigure.h"
+//#include "vtkSegmentationCoreConfigure.h"
+#include "vtkMRMLWin32Header.h"
 
 class vtkPolyData;
 
@@ -33,7 +34,7 @@ class vtkPolyData;
 /// \brief Convert closed surface representation (vtkPolyData type) to binary
 ///   labelmap representation (vtkOrientedImageData type). The conversion algorithm
 ///   is based on image stencil.
-class vtkSegmentationCore_EXPORT vtkClosedSurfaceToBinaryLabelmapConversionRule
+class VTK_MRML_EXPORT vtkClosedSurfaceToBinaryLabelmapConversionRule
   : public vtkSegmentationConverterRule
 {
 public:

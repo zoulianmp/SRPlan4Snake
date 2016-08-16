@@ -28,7 +28,9 @@
 // VTK includes
 #include <vtkPolyDataCollection.h>
 
-#include "vtkSegmentationCoreConfigure.h"
+//#include "vtkSegmentationCoreConfigure.h"
+
+#include "vtkMRMLWin32Header.h"
 
 class vtkIntArray;
 
@@ -40,7 +42,7 @@ class vtkIntArray;
 ///   or allow the inner model to protrude the surface of the outer one. The size of this gap
 ///   or allowance is defined as a factor /sa ContainConstraintFactor of the outer model size.
 ///   This algorithm can be used to automatically determine optimal opacities in complex scenes.
-class vtkSegmentationCore_EXPORT vtkTopologicalHierarchy : public vtkObject
+class VTK_MRML_EXPORT vtkTopologicalHierarchy : public vtkObject
 {
 public:
 

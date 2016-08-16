@@ -21,7 +21,9 @@
 #ifndef __vtkSegmentationConverterRule_h
 #define __vtkSegmentationConverterRule_h
 
-#include "vtkSegmentationCoreConfigure.h"
+//#include "vtkSegmentationCoreConfigure.h"
+
+#include "vtkMRMLWin32Header.h"
 
 // VTK includes
 #include <vtkObject.h>
@@ -46,7 +48,7 @@ class vtkDataObject;
 /// \brief Abstract converter rule class. Subclasses perform conversions between specific
 ///   representation types. They define source and target type and provide ways to create those
 ///   types of objects.
-class vtkSegmentationCore_EXPORT vtkSegmentationConverterRule : public vtkObject
+class VTK_MRML_EXPORT vtkSegmentationConverterRule : public vtkObject
 {
 public:
   /// Conversion parameter list type. Maps the conversion parameter name to a pair consisting of the

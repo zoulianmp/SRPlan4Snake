@@ -45,7 +45,7 @@ SET (${KIT}_INCLUDE_DIRS
      ${MRMLCore_INCLUDE_DIRS}
      ${MRMLLogic_INCLUDE_DIRS}
      ${qMRMLWidgets_INCLUDE_DIRS}
-	 ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
+#	 ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
      CACHE INTERNAL "" FORCE)
 
 
@@ -57,7 +57,7 @@ SET (${KIT}_INCLUDE_DIRS
 #-----------------------------------------------------------------------------
 set(${KIT}_TARGET_LIBRARIES
   vtkSlicerRtCommon
-  vtkSRPlanSegmentationsModuleMRML
+#  vtkSRPlanSegmentationsModuleMRML
   vtkSRPlanSegmentationsModuleLogic
   qSRPlanSubjectHierarchyModuleWidgets
   MRMLCore

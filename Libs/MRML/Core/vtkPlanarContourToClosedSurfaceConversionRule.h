@@ -27,7 +27,8 @@
 #include "vtkSegmentationConverterRule.h"
 #include "vtkSegmentationConverter.h"
 
-#include "vtkSegmentationCoreConfigure.h"
+//#include "vtkSegmentationCoreConfigure.h"
+#include "vtkMRMLWin32Header.h"
 
 // VTK includes
 #include "vtkPointLocator.h"
@@ -46,7 +47,7 @@ class vtkPoints;
 ///   Paper about the method:
 ///   http://perk.cs.queensu.ca/contents/reconstruction-surfaces-planar-contours-through-contour-interpolation
 ///
-class vtkSegmentationCore_EXPORT vtkPlanarContourToClosedSurfaceConversionRule
+class VTK_MRML_EXPORT vtkPlanarContourToClosedSurfaceConversionRule
   : public vtkSegmentationConverterRule
 {
 public:

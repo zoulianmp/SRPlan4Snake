@@ -70,6 +70,8 @@ set(include_dirs
   ${vtkAddon_INCLUDE_DIRS}
   ${vtkITK_INCLUDE_DIRS}
   ${FreeSurfer_INCLUDE_DIRS}
+ 
+  
   )
 if(MRML_USE_vtkTeem)
   list(APPEND include_dirs ${vtkTeem_INCLUDE_DIRS})
@@ -98,10 +100,53 @@ if(NOT ${PROJECT_NAME}_INSTALL_NO_DEVELOPMENT)
     DESTINATION include/${PROJECT_NAME} COMPONENT Development)
 endif()
 
+
 # --------------------------------------------------------------------------
 # Sources
 # --------------------------------------------------------------------------
+
+
+SET (vtkSegmentationCore_SRCS 
+  vtkOrientedImageData.cxx
+  vtkOrientedImageData.h
+  vtkOrientedImageDataResample.cxx
+  vtkOrientedImageDataResample.h
+  vtkSegment.cxx
+  vtkSegment.h
+  vtkSegmentation.cxx
+  vtkSegmentation.h
+  vtkSegmentationConverter.cxx
+  vtkSegmentationConverter.h
+  vtkSegmentationConverterFactory.cxx
+  vtkSegmentationConverterFactory.h
+  vtkSegmentationConverterRule.cxx
+  vtkSegmentationConverterRule.h
+  vtkTopologicalHierarchy.cxx
+  vtkTopologicalHierarchy.h
+  vtkBinaryLabelmapToClosedSurfaceConversionRule.cxx
+  vtkBinaryLabelmapToClosedSurfaceConversionRule.h
+  vtkClosedSurfaceToBinaryLabelmapConversionRule.cxx
+  vtkClosedSurfaceToBinaryLabelmapConversionRule.h
+  vtkCalculateOversamplingFactor.cxx
+  vtkCalculateOversamplingFactor.h
+  vtkPlanarContourToClosedSurfaceConversionRule.cxx
+  vtkPlanarContourToClosedSurfaceConversionRule.h
+  )
+ 
+SET (Segmentation_SRCS
+  vtkMRMLSegmentationNode.cxx
+  vtkMRMLSegmentationNode.h
+  vtkMRMLSegmentationDisplayNode.cxx
+  vtkMRMLSegmentationDisplayNode.h
+  vtkMRMLSegmentationStorageNode.cxx
+  vtkMRMLSegmentationStorageNode.h
+  )
+
+
 set(MRMLCore_SRCS
+  ${vtkSegmentationCore_SRCS}
+  ${Segmentation_SRCS}
+
   vtkEventBroker.cxx
   vtkImageBimodalAnalysis.cxx
   vtkDataFileFormatHelper.cxx
@@ -208,6 +253,15 @@ set(MRMLCore_SRCS
   # Classes for 2D Plotting
   vtkMRMLDoubleArrayNode.cxx
   vtkMRMLDoubleArrayStorageNode.cxx
+  
+  #SegmentationNode
+  vtkMRMLSegmentationNode.cxx
+  vtkMRMLSegmentationNode.h
+  vtkMRMLSegmentationDisplayNode.cxx
+  vtkMRMLSegmentationDisplayNode.h
+  vtkMRMLSegmentationStorageNode.cxx
+  vtkMRMLSegmentationStorageNode.h
+  
   # Note: when you add new node types, add
   # register code to the vtkMRMLScene constructor
   )
@@ -264,6 +318,7 @@ set(libs
   ${VTK_LIBRARIES}
   vtkIOInfovis
   FreeSurfer
+  
   )
 if(MRML_USE_vtkTeem)
   list(APPEND libs vtkTeem)

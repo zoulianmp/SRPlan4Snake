@@ -45,7 +45,8 @@
 #include "qSRPlanPathPlanModuleWidget.h"
 #include "qSlicerMarkupsReader.h"
 //#include "qSlicerMarkupsSettingsPanel.h"
-//#include "vtkSlicerMarkupsLogic.h"
+
+#include "vtkSRPlanPathPlanModuleLogic.h"
 
 //-----------------------------------------------------------------------------
 //Q_EXPORT_PLUGIN2(qSRPlanPathPlanModule, qSRPlanPathPlanModule);
@@ -176,11 +177,13 @@ void qSRPlanPathPlanModule::setup()
 //-----------------------------------------------------------------------------
 qSlicerAbstractModuleRepresentation * qSRPlanPathPlanModule::createWidgetRepresentation()
 {
-  return new qSRPlanPathPlanModuleWidget;
+
+   return new qSRPlanPathPlanModuleWidget;
 }
 
 //-----------------------------------------------------------------------------
 vtkMRMLAbstractLogic* qSRPlanPathPlanModule::createLogic()
 {
-  return vtkSlicerMarkupsLogic::New();
+	return 0;
+  //return vtkSRPlanPathPlanModuleLogic::New();
 }

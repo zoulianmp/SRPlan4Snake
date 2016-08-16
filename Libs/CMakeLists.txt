@@ -26,7 +26,6 @@ list(APPEND dirs
   vtkITK
   FreeSurfer
   MRML/Core
-  SegmentationCore
   SlicerRtCommon
   )
 if(SRPlan_BUILD_CLI_SUPPORT)

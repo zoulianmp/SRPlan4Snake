@@ -25,14 +25,16 @@
 #include "vtkSegmentationConverterRule.h"
 #include "vtkSegmentationConverter.h"
 
-#include "vtkSegmentationCoreConfigure.h"
+//#include "vtkSegmentationCoreConfigure.h"
+
+#include "vtkMRMLWin32Header.h"
 
 /// \ingroup SegmentationCore
 /// \brief Convert binary labelmap representation (vtkOrientedImageData type) to
 ///   closed surface representation (vtkPolyData type). The conversion algorithm
 ///   performs a marching cubes operation on the image data followed by an optional
 ///   decimation step.
-class vtkSegmentationCore_EXPORT vtkBinaryLabelmapToClosedSurfaceConversionRule
+class VTK_MRML_EXPORT vtkBinaryLabelmapToClosedSurfaceConversionRule
   : public vtkSegmentationConverterRule
 {
 public:

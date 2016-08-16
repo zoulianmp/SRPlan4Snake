@@ -22,7 +22,8 @@
 #define __vtkOrientedImageData_h
 
 // Segmentation includes
-#include "vtkSegmentationCoreConfigure.h"
+//#include "vtkSegmentationCoreConfigure.h"
+#include "vtkMRMLWin32Header.h"
 
 #include "vtkImageData.h"
 
@@ -33,7 +34,7 @@ class vtkMatrix4x4;
 ///
 /// This extends vtkImageData to arbitrary grid orientation.
 ///
-class vtkSegmentationCore_EXPORT vtkOrientedImageData : public vtkImageData
+class VTK_MRML_EXPORT vtkOrientedImageData : public vtkImageData
 {
 public:
   static vtkOrientedImageData *New();

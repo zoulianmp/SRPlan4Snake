@@ -33,14 +33,14 @@
 #include "vtkSegmentationConverter.h"
 #include "vtkSegmentationConverterRule.h"
 
-#include "vtkSegmentationCoreConfigure.h"
+
 
 class vtkAbstractTransform;
 class vtkCallbackCommand;
 class vtkStringArray;
 
 /// \ingroup SegmentationCore
-class vtkSegmentationCore_EXPORT vtkSegmentation : public vtkObject
+class VTK_MRML_EXPORT vtkSegmentation : public vtkObject
 {
 public:
   enum

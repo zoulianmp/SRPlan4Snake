@@ -49,13 +49,15 @@
 #include "vtkMRMLMarkupsFiducialNode.h"
 #include "vtkMRMLMarkupsNode.h"
 #include "vtkSlicerMarkupsLogic.h"
+#include "vtkMRMLApplicationLogic.h"
+
 
 // VTK includes
 #include <vtkMath.h>
 #include <vtkNew.h>
 
 #include <math.h>
-
+#include <vtkCollection.h>
 
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_Markups

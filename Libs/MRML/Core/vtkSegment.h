@@ -31,13 +31,13 @@
 #include <map>
 
 // Segmentation includes
-#include "vtkSegmentationCoreConfigure.h"
+#include "vtkMRMLWin32Header.h"
 
 class vtkCallbackCommand;
 
 
 /// \ingroup SegmentationCore
-class vtkSegmentationCore_EXPORT vtkSegment : public vtkObject
+class VTK_MRML_EXPORT vtkSegment : public vtkObject
 {
   typedef std::map<std::string, vtkSmartPointer<vtkDataObject> > RepresentationMap;
 

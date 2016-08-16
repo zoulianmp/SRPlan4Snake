@@ -32,7 +32,7 @@
 #include <vector>
 
 // Segmentation includes
-#include "vtkSegmentationCoreConfigure.h"
+
 
 #include "vtkSegmentationConverterRule.h"
 
@@ -44,7 +44,7 @@ class vtkOrientedImageData;
 
 /// \ingroup SegmentationCore
 /// \brief Class that can convert between different representations of a segment.
-class vtkSegmentationCore_EXPORT vtkSegmentationConverter : public vtkObject
+class VTK_MRML_EXPORT vtkSegmentationConverter : public vtkObject
 {
 public:
   typedef std::vector< vtkSmartPointer<vtkSegmentationConverterRule> > ConverterRulesListType;

@@ -5,8 +5,8 @@ set(KIT ${PROJECT_NAME})
 set(${KIT}_EXPORT_DIRECTIVE "Q_SRPlan_MODULE_${MODULE_NAME_UPPER}_WIDGETS_EXPORT")
 
 set(${KIT}_INCLUDE_DIRECTORIES
-  ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
-  ${MRMLLogic__INCLUDE_DIRS}
+ # ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
+  ${MRMLLogic_INCLUDE_DIRS}
   ${vtkSRPlanSegmentationsModuleLogic_INCLUDE_DIRS}
   )
 
@@ -64,7 +64,7 @@ set(${KIT}_RESOURCES
   )
 
 set(${KIT}_TARGET_LIBRARIES
-  vtkSRPlanSegmentationsModuleMRML
+  #vtkSRPlanSegmentationsModuleMRML
   vtkSRPlanSegmentationsModuleLogic
   ${MRMLLogic}
   )

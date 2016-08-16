@@ -9,7 +9,7 @@ set(${KIT}_EXPORT_DIRECTIVE "VTK_SRPlan_${MODULE_NAME_UPPER}_LOGIC_EXPORT")
 set(${KIT}_INCLUDE_DIRECTORIES
     ${CMAKE_CURRENT_SOURCE_DIR} 
 	${CMAKE_CURRENT_BINARY_DIR} 
-	${vtkSegmentationCore_INCLUDE_DIRS}
+	#${vtkSegmentationCore_INCLUDE_DIRS}
 	${SRPlan_Base_INCLUDE_DIRS} 
     ${Qt5Core_INCLUDE_DIRS}
 	${Qt5Widgets_INCLUDE_DIRS}
@@ -18,7 +18,7 @@ set(${KIT}_INCLUDE_DIRECTORIES
 
 	${CTK_INCLUDE_DIRS}
 
-    ${vtkSlicerSegmentationsModuleMRML_INCLUDE_DIRS}
+   # ${vtkSlicerSegmentationsModuleMRML_INCLUDE_DIRS}
 
 	${qSRPlanVolumesModule_INCLUDE_DIRS}
     ${vtkSRPlanVolumesModuleLogic_INCLUDE_DIRS}
@@ -77,7 +77,7 @@ set(${KIT}_MOC_SRCS
   
   
 set(${KIT}_TARGET_LIBRARIES
-  vtkSRPlan${MODULE_NAME}ModuleMRML
+ # vtkSRPlan${MODULE_NAME}ModuleMRML
   ${CTK_LIBRARIES}
   vtkSRPlanVolumesModuleLogic
   qSRPlanVolumesModule

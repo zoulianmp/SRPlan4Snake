@@ -21,7 +21,8 @@
 #ifndef __vtkSegmentationConverterFactory_h
 #define __vtkSegmentationConverterFactory_h
 
-#include "vtkSegmentationCoreConfigure.h"
+//#include "vtkSegmentationCoreConfigure.h"
+#include "vtkMRMLWin32Header.h"
 
 // VTK includes
 #include <vtkObject.h>
@@ -38,7 +39,7 @@ class vtkDataObject;
 ///
 /// This singleton class is a repository of all segmentation converter rules.
 /// Singleton pattern adopted from vtkEventBroker class.
-class vtkSegmentationCore_EXPORT vtkSegmentationConverterFactory : public vtkObject
+class VTK_MRML_EXPORT vtkSegmentationConverterFactory : public vtkObject
 {
 public:
   typedef std::vector< vtkSmartPointer<vtkSegmentationConverterRule> > RuleListType;
@@ -119,7 +120,7 @@ private:
 };
 
 /// Utility class to make sure qSlicerModuleManager is initialized before it is used.
-class vtkSegmentationCore_EXPORT vtkSegmentationConverterFactoryInitialize
+class VTK_MRML_EXPORT vtkSegmentationConverterFactoryInitialize
 {
 public:
   typedef vtkSegmentationConverterFactoryInitialize Self;

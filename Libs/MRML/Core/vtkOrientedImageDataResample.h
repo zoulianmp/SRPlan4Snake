@@ -22,7 +22,9 @@
 #define __vtkOrientedImageDataResample_h
 
 // Segmentation includes
-#include "vtkSegmentationCoreConfigure.h"
+//#include "vtkSegmentationCoreConfigure.h"
+#include "vtkMRMLWin32Header.h"
+
 
 #include "vtkObject.h"
 #include <algorithm>
@@ -37,7 +39,7 @@ class vtkAbstractTransform;
 
 /// \ingroup SegmentationCore
 /// \brief Utility functions for resampling oriented image data
-class vtkSegmentationCore_EXPORT vtkOrientedImageDataResample : public vtkObject
+class VTK_MRML_EXPORT vtkOrientedImageDataResample : public vtkObject
 {
 public:
   static vtkOrientedImageDataResample *New();

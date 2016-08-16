@@ -143,6 +143,8 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
 
   //std::cout << "setupUI\n";
 
+  /*
+
   // use the ctk color dialog on the color picker buttons
   this->selectedColorPickerButton->setDialogOptions(ctkColorPickerButton::UseCTKColorDialog);
   this->unselectedColorPickerButton->setDialogOptions(ctkColorPickerButton::UseCTKColorDialog);
@@ -437,6 +439,7 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   this->activeMarkupTableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
   QObject::connect(this->activeMarkupTableWidget, SIGNAL(customContextMenuRequested(QPoint)),
                    q, SLOT(onRightClickActiveMarkupTableWidget(QPoint)));
+				   */
 }
 
 //-----------------------------------------------------------------------------
@@ -633,6 +636,7 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromMRML()
 
   // std::cout << "updateWidgetFromMRML" << std::endl;
 
+  /*
   if (!this->mrmlScene())
     {
     this->clearGUI();
@@ -733,7 +737,7 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromMRML()
     {
     d->pointFiducialProjectionWidget->setMRMLFiducialNode(0);
     }
-
+  
   // update the list name format
   QString nameFormat = QString(markupsNode->GetMarkupLabelFormat().c_str());
   d->nameFormatLineEdit->setText(nameFormat);
@@ -778,6 +782,8 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromMRML()
     {
     this->updateRow(m);
     }
+
+	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -800,6 +806,7 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromDisplayNode()
   double *color;
   QColor qColor;
 
+  /*
   if (displayNode)
     {
     // views
@@ -818,7 +825,7 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromDisplayNode()
 
     // opacity
     double opacity = displayNode->GetOpacity();
-    d->opacitySliderWidget->setValue(opacity);
+  //  d->opacitySliderWidget->setValue(opacity);
 
     // now for some markups specific display properties
     vtkMRMLMarkupsDisplayNode *markupsDisplayNode = vtkMRMLMarkupsDisplayNode::SafeDownCast(displayNode);
@@ -853,7 +860,7 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromDisplayNode()
         {
         d->glyphScaleSliderWidget->setMaximum(glyphScale);
         }
-      d->glyphScaleSliderWidget->setValue(glyphScale);
+    //  d->glyphScaleSliderWidget->setValue(glyphScale);
 
       // text scale
       double textScale = markupsDisplayNode->GetTextScale();
@@ -909,6 +916,8 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromDisplayNode()
       d->textScaleSliderWidget->setValue(this->markupsLogic()->GetDefaultMarkupsDisplayNodeTextScale());
       }
     }
+
+  */
 }
 
 //-----------------------------------------------------------------------------
@@ -952,6 +961,8 @@ void qSRPlanPathPlanModuleWidget::updateMaximumScaleFromVolumes()
         }
       }
     }
+
+  /*
   double maxScale = maxSliceSpacing * this->volumeSpacingScaleFactor;
   // round it up to nearest multiple of 10
   maxScale = ceil(maxScale / 10.0) * 10.0;
@@ -968,6 +979,7 @@ void qSRPlanPathPlanModuleWidget::updateMaximumScaleFromVolumes()
     {
     d->markupScaleSliderWidget->setMaximum(maxScale);
     }
+	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -975,6 +987,8 @@ void qSRPlanPathPlanModuleWidget::updateRow(int m)
 {
   Q_D(qSRPlanPathPlanModuleWidget);
 
+
+  /*
   // this is updating the qt widget from MRML, and should not trigger any updates on the node, so turn off events
   d->activeMarkupTableWidget->blockSignals(true);
 
@@ -1107,6 +1121,7 @@ void qSRPlanPathPlanModuleWidget::updateRow(int m)
 
   // unblock so that changes to the table will propagate to MRML
   d->activeMarkupTableWidget->blockSignals(false);
+  */
 }
 
 //-----------------------------------------------------------------------------
@@ -2095,6 +2110,8 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
 {
   Q_D(qSRPlanPathPlanModuleWidget);
 
+  /*
+
 //  qDebug() << QString("cell changed: row = ") + QString::number(row) + QString(", col = ") + QString::number(column);
   // get the active list
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -2181,7 +2198,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
 
     // get the old value
     double point[3] = {0.0, 0.0, 0.0};
-    if (d->transformedCoordinatesCheckBox->isChecked())
+  if (d->transformedCoordinatesCheckBox->isChecked())
       {
       double worldPoint[4] = {0.0, 0.0, 0.0, 1.0};
       listNode->GetMarkupPointWorld(n, 0, worldPoint);
@@ -2223,6 +2240,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
     {
     qDebug() << QString("Cell Changed: unknown column: ") + QString::number(column);
     }
+	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -2264,6 +2282,8 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCurrentCellChanged(
   Q_UNUSED(previousRow);
   Q_UNUSED(previousColumn);
 
+  /*
+
   // is jumping disabled?
   if (!d->jumpSlicesGroupBox->isChecked())
     {
@@ -2279,15 +2299,17 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCurrentCellChanged(
     }
   // offset or center?
   bool jumpCentered = false;
-  if (d->jumpCenteredRadioButton->isChecked())
-    {
-    jumpCentered = true;
-    }
+  //if (d->jumpCenteredRadioButton->isChecked())
+ //   {
+  //  jumpCentered = true;
+ //   }
   // jump to it
   if (this->markupsLogic())
     {
     this->markupsLogic()->JumpSlicesToNthPointInMarkup(mrmlNode->GetID(), currentRow, jumpCentered);
     }
+
+	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -2346,6 +2368,8 @@ void qSRPlanPathPlanModuleWidget::addSelectedCoordinatesToMenu(QMenu *menu)
 {
   Q_D(qSRPlanPathPlanModuleWidget);
 
+
+  /*
   // get the selected rows
   QList<QTableWidgetItem *> selectedItems = d->activeMarkupTableWidget->selectedItems();
 
@@ -2446,6 +2470,7 @@ void qSRPlanPathPlanModuleWidget::addSelectedCoordinatesToMenu(QMenu *menu)
     menu->addAction(QString("Summed linear distance: %1").arg(distance));
     }
   menu->addSeparator();
+  */
 }
 
 //-----------------------------------------------------------------------------
@@ -2469,6 +2494,8 @@ void qSRPlanPathPlanModuleWidget::onJumpSlicesActionTriggered()
     return;
     }
 
+
+  /*
   // offset or center?
   bool jumpCentered = false;
   if (d->jumpCenteredRadioButton->isChecked())
@@ -2482,6 +2509,7 @@ void qSRPlanPathPlanModuleWidget::onJumpSlicesActionTriggered()
     // use the first selected
     this->markupsLogic()->JumpSlicesToNthPointInMarkup(mrmlNode->GetID(), selectedItems.at(0)->row(), jumpCentered);
     }
+	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -2892,7 +2920,7 @@ void qSRPlanPathPlanModuleWidget::clearGUI()
 
   // setting a null node requires casting (and triggers a memory leak),
   // so disable it instead
-  d->listDisplayNodeViewComboBox->setEnabled(false);
+//  d->listDisplayNodeViewComboBox->setEnabled(false);
 }
 
 //-----------------------------------------------------------------------------
@@ -2926,6 +2954,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeLockModifiedEvent()
 //-----------------------------------------------------------------------------
 void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeLabelFormatModifiedEvent()
 {
+	/*
   Q_D(qSRPlanPathPlanModuleWidget);
 
   // get the active list
@@ -2939,6 +2968,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeLabelFormatModifiedEvent()
     {
     d->nameFormatLineEdit->setText(markupsNode->GetMarkupLabelFormat().c_str());
     }
+	*/
 }
 
 //-----------------------------------------------------------------------------
@@ -2990,6 +3020,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeMarkupAddedEvent()//vtkMRML
   Q_D(qSRPlanPathPlanModuleWidget);
 
   //qDebug() << "onActiveMarkupsNodeMarkupAddedEvent";
+  /*
 
   QString activeMarkupsNodeID = d->activeMarkupMRMLNodeComboBox->currentNodeID();
 
@@ -3010,6 +3041,8 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeMarkupAddedEvent()//vtkMRML
     {
     d->activeMarkupTableWidget->setCurrentCell(newRow, 0);
     }
+
+	*/
 }
 
 //-----------------------------------------------------------------------------

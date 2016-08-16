@@ -80,6 +80,10 @@ set(DisplayableManager_SRCS
   vtkMRMLCrosshairDisplayableManager.cxx
   vtkMRMLModelSliceDisplayableManager.cxx
   vtkMRMLVolumeGlyphSliceDisplayableManager.cxx
+  
+  #Segmentation associated 
+  vtkMRMLSegmentationsDisplayableManager3D.cxx
+  vtkMRMLSegmentationsDisplayableManager2D.cxx
   )
 
 set(KIT_SRCS

@@ -32,13 +32,15 @@
 // SegmentationCore includes
 #include "vtkOrientedImageData.h"
 
-#include "vtkSegmentationCoreConfigure.h"
+//#include "vtkSegmentationCoreConfigure.h"
+
+#include "vtkMRMLWin32Header.h"
 
 class vtkPiecewiseFunction;
 
 /// \ingroup SegmentationCore
 /// \brief Calculate oversampling factor based on model properties using fuzzy logics
-class vtkSegmentationCore_EXPORT vtkCalculateOversamplingFactor : public vtkObject
+class VTK_MRML_EXPORT vtkCalculateOversamplingFactor : public vtkObject
 {
 public:
   static vtkCalculateOversamplingFactor *New();
