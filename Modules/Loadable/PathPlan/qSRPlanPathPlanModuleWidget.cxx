@@ -42,6 +42,9 @@
 #include "vtkMRMLSliceLogic.h"
 #include "vtkMRMLSliceNode.h"
 
+#include "vtkMRMLApplicationLogic.h"
+
+
 // Markups includes
 #include "qSRPlanPathPlanModuleWidget.h"
 #include "qSRPlanPathPlanModule.h"
@@ -55,6 +58,7 @@
 // VTK includes
 #include <vtkMath.h>
 #include <vtkNew.h>
+#include <vtkCollection.h>
 
 #include <math.h>
 

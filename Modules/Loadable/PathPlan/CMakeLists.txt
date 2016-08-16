@@ -21,8 +21,8 @@ set(MODULE_INCLUDE_DIRECTORIES
   ${CMAKE_CURRENT_BINARY_DIR}/Logic
   ${CMAKE_CURRENT_SOURCE_DIR}/MRML
   ${CMAKE_CURRENT_BINARY_DIR}/MRML
-  ${CMAKE_CURRENT_SOURCE_DIR}/SubjectHierarchyPlugins
-  ${CMAKE_CURRENT_BINARY_DIR}/SubjectHierarchyPlugins
+#  ${CMAKE_CURRENT_SOURCE_DIR}/SubjectHierarchyPlugins
+#  ${CMAKE_CURRENT_BINARY_DIR}/SubjectHierarchyPlugins
   ${qSRPlanSubjectHierarchyModuleWidgets_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/Widgets
   ${CMAKE_CURRENT_BINARY_DIR}/Widgets
@@ -40,7 +40,7 @@ set(MODULE_SRCS
 set(MODULE_MOC_SRCS
   qSRPlan${MODULE_NAME}Module.h
   qSRPlan${MODULE_NAME}ModuleWidget.h
-
+  qSlicerMarkupsReader.h
   )
 
 set(MODULE_UI_SRCS
@@ -53,7 +53,7 @@ set(MODULE_TARGET_LIBRARIES
   vtkSRPlan${MODULE_NAME}ModuleMRMLDisplayableManager
   vtkSRPlan${MODULE_NAME}ModuleLogic
   qSRPlan${MODULE_NAME}ModuleWidgets
-  qSRPlan${MODULE_NAME}SubjectHierarchyPlugins
+#  qSRPlan${MODULE_NAME}SubjectHierarchyPlugins
   )
 
 set(MODULE_RESOURCES

@@ -35,12 +35,12 @@
 
 // SubjectHierarchy Plugins includes
 #include "qSlicerSubjectHierarchyPluginHandler.h"
-#include "qSlicerSubjectHierarchyMarkupsPlugin.h"
-#include "qSlicerSubjectHierarchyDoseVolumeHistogramPlugin.h"
-#include "qSlicerSubjectHierarchyIsodosePlugin.h"
+//#include "qSlicerSubjectHierarchyMarkupsPlugin.h"
+//#include "qSlicerSubjectHierarchyDoseVolumeHistogramPlugin.h"
+//#include "qSlicerSubjectHierarchyIsodosePlugin.h"
 
 // Markups includes
-#include "MarkupsInstantiator.h"
+#include "PathPlanInstantiator.h"
 #include "qSRPlanPathPlanModule.h"
 #include "qSRPlanPathPlanModuleWidget.h"
 #include "qSlicerMarkupsReader.h"
@@ -166,9 +166,9 @@ void qSRPlanPathPlanModule::setup()
     }
 
   // Register Subject Hierarchy core plugins
-  qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(new qSlicerSubjectHierarchyMarkupsPlugin());
-  qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(new qSlicerSubjectHierarchyDoseVolumeHistogramPlugin());
-  qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(new qSlicerSubjectHierarchyIsodosePlugin());
+ // qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(new qSlicerSubjectHierarchyMarkupsPlugin());
+ // qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(new qSlicerSubjectHierarchyDoseVolumeHistogramPlugin());
+ // qSlicerSubjectHierarchyPluginHandler::instance()->registerPlugin(new qSlicerSubjectHierarchyIsodosePlugin());
   
 }
 
