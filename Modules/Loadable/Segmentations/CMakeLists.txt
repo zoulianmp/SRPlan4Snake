@@ -19,9 +19,9 @@ set(MODULE_EXPORT_DIRECTIVE "Q_SRPlan_QTMODULES_${MODULE_NAME_UPPER}_EXPORT")
 
 
 set(MODULE_INCLUDE_DIRECTORIES
-  ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
+#  ${vtkSRPlanSegmentationsModuleMRML_INCLUDE_DIRS}
   ${vtkSRPlanSegmentationsModuleLogic_INCLUDE_DIRS}
-  ${vtkSRPlanSegmentationsModuleMRMLDisplayableManager_INCLUDE_DIRS}
+#  ${vtkSRPlanSegmentationsModuleMRMLDisplayableManager_INCLUDE_DIRS}
   ${qSRPlanSegmentationsModuleWidgets_INCLUDE_DIRS}
   ${qSRPlanSegmentationsSubjectHierarchyPlugins_INCLUDE_DIRS}
   )
@@ -54,9 +54,9 @@ set(MODULE_UI_SRCS
   )
 
 set(MODULE_TARGET_LIBRARIES
-  vtkSRPlan${MODULE_NAME}ModuleMRML
+ # vtkSRPlan${MODULE_NAME}ModuleMRML
   vtkSRPlan${MODULE_NAME}ModuleLogic
-  vtkSRPlan${MODULE_NAME}ModuleMRMLDisplayableManager
+ #  vtkSRPlan${MODULE_NAME}ModuleMRMLDisplayableManager
   qSRPlan${MODULE_NAME}ModuleWidgets
   qSRPlan${MODULE_NAME}SubjectHierarchyPlugins
   )
