@@ -118,20 +118,7 @@ public slots:
   /// them from hierarchies to Markups list nodes
   void convertAnnotationFiducialsToMarkups();
 
-  /// Display property slots
-  void onSelectedColorPickerButtonChanged(QColor qcolor);
-  void onUnselectedColorPickerButtonChanged(QColor qcolor);
-  void onGlyphTypeComboBoxChanged(QString value);
-  void onGlyphScaleSliderWidgetChanged(double value);
-  void onTextScaleSliderWidgetChanged(double value);
-  void onOpacitySliderWidgetChanged(double value);
-
-  void onMarkupScaleSliderWidgetValueChanged(double value);
-
-  /// Display property button slots
-  void onResetToDefaultDisplayPropertiesPushButtonClicked();
-  void onSaveToDefaultDisplayPropertiesPushButtonClicked();
-
+  
   /// List button slots
   void onVisibilityOnAllMarkupsInListPushButtonClicked();
   void onVisibilityOffAllMarkupsInListPushButtonClicked();
@@ -143,8 +130,8 @@ public slots:
   void onDeselectAllMarkupsInListPushButtonClicked();
   void onSelectedAllMarkupsInListToggled();
   void onAddMarkupPushButtonClicked();
-  void onMoveMarkupUpPushButtonClicked();
-  void onMoveMarkupDownPushButtonClicked();
+
+
   void onDeleteMarkupPushButtonClicked();
   void onDeleteAllMarkupsInListPushButtonClicked();
 
@@ -165,16 +152,7 @@ public slots:
   /// Toggle the markups node locked flag
   void onListLockedUnlockedPushButtonClicked();
 
-  /// Update the markup label from the line edit entry
-  void onNameFormatLineEditTextEdited(const QString text);
-
-  /// Reset the name format string and use list name to default
-  void onResetNameFormatToDefaultPushButtonClicked();
-
-  /// Iterate over the markups in the currently active list and rename them
-  /// using the current name format. Attempts to preserve any numbers already
-  /// present.
-  void onRenameAllWithCurrentNameFormatPushButtonClicked();
+  
 
   /// Update the mrml node from the table
   void onActiveMarkupTableCellChanged(int row, int column);
@@ -229,17 +207,7 @@ public slots:
   /// current markups node if set, otherwise just uses the defaults.
   void onNewMarkupWithCurrentDisplayPropertiesTriggered();
 
-  /// Update the slice intersection visibility on all the slice composite
-  /// nodes in the scene
-  /// \sa sliceIntersectionsVisible()
-  void onSliceIntersectionsVisibilityToggled(bool checked);
-
-  /// update visibility of the coordinate columns in the table
-  void onHideCoordinateColumnsToggled(bool checked);
-
-  /// update the coordinates shown in the table to be either the transformed coordiantes (checked) or the untransformed coordiantes (unchecked)
-  void onTransformedCoordinatesToggled(bool checked);
-
+  
 protected:
   QScopedPointer<qSRPlanPathPlanModuleWidgetPrivate> d_ptr;
 

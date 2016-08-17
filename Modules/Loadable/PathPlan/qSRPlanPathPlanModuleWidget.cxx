@@ -52,7 +52,7 @@
 #include "vtkMRMLMarkupsFiducialNode.h"
 #include "vtkMRMLMarkupsNode.h"
 #include "vtkSlicerMarkupsLogic.h"
-
+#include "vtkSRPlanPathPlanModuleLogic.h"
 
 
 // VTK includes
@@ -143,64 +143,7 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
 
   //std::cout << "setupUI\n";
 
-  /*
-
-  // use the ctk color dialog on the color picker buttons
-  this->selectedColorPickerButton->setDialogOptions(ctkColorPickerButton::UseCTKColorDialog);
-  this->unselectedColorPickerButton->setDialogOptions(ctkColorPickerButton::UseCTKColorDialog);
-
-  // set up the display properties
-  QObject::connect(this->selectedColorPickerButton, SIGNAL(colorChanged(QColor)),
-                   q, SLOT(onSelectedColorPickerButtonChanged(QColor)));
-  QObject::connect(this->unselectedColorPickerButton, SIGNAL(colorChanged(QColor)),
-                q, SLOT(onUnselectedColorPickerButtonChanged(QColor)));
-  QObject::connect(this->glyphTypeComboBox, SIGNAL(currentIndexChanged(QString)),
-                q, SLOT(onGlyphTypeComboBoxChanged(QString)));
-  QObject::connect(this->glyphScaleSliderWidget, SIGNAL(valueChanged(double)),
-                   q, SLOT(onGlyphScaleSliderWidgetChanged(double)));
-  QObject::connect(this->textScaleSliderWidget, SIGNAL(valueChanged(double)),
-                   q, SLOT(onTextScaleSliderWidgetChanged(double)));
-  QObject::connect(this->opacitySliderWidget, SIGNAL(valueChanged(double)),
-                   q, SLOT(onOpacitySliderWidgetChanged(double)));
-
-  // populate the glyph type combo box
-  if (this->glyphTypeComboBox->count() == 0)
-    {
-    vtkNew<vtkMRMLMarkupsDisplayNode> displayNode;
-    int min = displayNode->GetMinimumGlyphType();
-    int max = displayNode->GetMaximumGlyphType();
-    this->glyphTypeComboBox->setEnabled(false);
-    for (int i = min; i <= max; i++)
-      {
-      displayNode->SetGlyphType(i);
-      this->glyphTypeComboBox->addItem(displayNode->GetGlyphTypeAsString());
-      }
-    this->glyphTypeComboBox->setEnabled(true);
-    }
-  // set the default value if not set
-  if (this->glyphTypeComboBox->currentIndex() == 0)
-    {
-    vtkNew<vtkMRMLMarkupsDisplayNode> displayNode;
-    QString glyphType = QString(displayNode->GetGlyphTypeAsString());
-    this->glyphTypeComboBox->setEnabled(false);
-    int index =  this->glyphTypeComboBox->findData(glyphType);
-    if (index != -1)
-      {
-      this->glyphTypeComboBox->setCurrentIndex(index);
-      }
-    else
-      {
-      // glyph types start at 1, combo box is 0 indexed
-      this->glyphTypeComboBox->setCurrentIndex(displayNode->GetGlyphType() - 1);
-      }
-    this->glyphTypeComboBox->setEnabled(true);
-    }
-  // set up the display properties buttons
-  QObject::connect(this->resetToDefaultDisplayPropertiesPushButton,  SIGNAL(clicked()),
-                   q, SLOT(onResetToDefaultDisplayPropertiesPushButtonClicked()));
-  QObject::connect(this->saveToDefaultDisplayPropertiesPushButton,  SIGNAL(clicked()),
-                   q, SLOT(onSaveToDefaultDisplayPropertiesPushButtonClicked()));
-
+  
   // set up the list buttons
   // visibility
   // first add actions to the menu, then hook them up
@@ -289,20 +232,14 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   // add
   QObject::connect(this->addMarkupPushButton, SIGNAL(clicked()),
                    q, SLOT(onAddMarkupPushButtonClicked()));
-  // move
-  QObject::connect(this->moveMarkupUpPushButton, SIGNAL(clicked()),
-                   q, SLOT(onMoveMarkupUpPushButtonClicked()));
-  QObject::connect(this->moveMarkupDownPushButton, SIGNAL(clicked()),
-                   q, SLOT(onMoveMarkupDownPushButtonClicked()));
+ 
   // delete
   QObject::connect(this->deleteMarkupPushButton, SIGNAL(clicked()),
                    q, SLOT(onDeleteMarkupPushButtonClicked()));
   QObject::connect(this->deleteAllMarkupsInListPushButton, SIGNAL(clicked()),
                    q, SLOT(onDeleteAllMarkupsInListPushButtonClicked()));
 
-  // markup scale
-  QObject::connect(this->markupScaleSliderWidget, SIGNAL(valueChanged(double)),
-                   q, SLOT(onMarkupScaleSliderWidgetValueChanged(double)));
+
 
   // set up the active markups node selector
   QObject::connect(this->activeMarkupMRMLNodeComboBox, SIGNAL(currentNodeChanged(vtkMRMLNode*)),
@@ -310,28 +247,7 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   QObject::connect(this->activeMarkupMRMLNodeComboBox, SIGNAL(nodeAddedByUser(vtkMRMLNode*)),
                    q, SLOT(onActiveMarkupMRMLNodeAdded(vtkMRMLNode*)));
 
-  // Make sure tha the Jump to Slices radio buttons match the default of the
-  // MRML slice node
-  vtkNew<vtkMRMLSliceNode> sliceNode;
-  if (sliceNode->GetJumpMode() == vtkMRMLSliceNode::OffsetJumpSlice)
-    {
-    if (this->jumpOffsetRadioButton->isChecked() != true)
-      {
-      this->jumpOffsetRadioButton->setChecked(true);
-      }
-    }
-  else if (sliceNode->GetJumpMode() == vtkMRMLSliceNode::CenteredJumpSlice)
-    {
-    if (this->jumpCenteredRadioButton->isChecked() != true)
-      {
-      this->jumpCenteredRadioButton->setChecked(true);
-      }
-    }
-  // update the checked state of showing the slice intersections
-  this->sliceIntersectionsVisibilityCheckBox->setChecked(q->sliceIntersectionsVisible());
-  QObject::connect(this->sliceIntersectionsVisibilityCheckBox,
-                   SIGNAL(toggled(bool)),
-                   q, SLOT(onSliceIntersectionsVisibilityToggled(bool)));
+
 
   //
   // add an action to create a new markups list using the display node
@@ -354,26 +270,7 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
                    q, SLOT(onListVisibileInvisiblePushButtonClicked()));
   QObject::connect(this->listLockedUnlockedPushButton, SIGNAL(clicked()),
                    q, SLOT(onListLockedUnlockedPushButtonClicked()));
-  //
-  // set up the name format line edit
-  //
-  QObject::connect(this->nameFormatLineEdit, SIGNAL(textEdited(const QString &)),
-                   q, SLOT(onNameFormatLineEditTextEdited(const QString &)));
-  //
-  // set up the reset format button
-  //
-  QObject::connect(this->resetNameFormatToDefaultPushButton, SIGNAL(clicked()),
-                   q, SLOT(onResetNameFormatToDefaultPushButtonClicked()));
-  //
-  // set up the rename all button
-  //
-  QObject::connect(this->renameAllWithCurrentNameFormatPushButton, SIGNAL(clicked()),
-                   q, SLOT(onRenameAllWithCurrentNameFormatPushButtonClicked()));
-  //
-  // set up the convert annotations button
-  //
-  QObject::connect(this->convertAnnotationFiducialsPushButton, SIGNAL(clicked()),
-                   q, SLOT(convertAnnotationFiducialsToMarkups()));
+  
 
   //
   // set up the table
@@ -396,14 +293,7 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   this->activeMarkupTableWidget->setColumnWidth(this->columnIndex("A"), 65);
   this->activeMarkupTableWidget->setColumnWidth(this->columnIndex("S"), 65);
 
-  // show/hide the coordinate columns
-  QObject::connect(this->hideCoordinateColumnsCheckBox,
-                   SIGNAL(toggled(bool)),
-                   q, SLOT(onHideCoordinateColumnsToggled(bool)));
-  // show transformed/untransformed coordinates
-  QObject::connect(this->transformedCoordinatesCheckBox,
-                   SIGNAL(toggled(bool)),
-                   q, SLOT(onTransformedCoordinatesToggled(bool)));
+ 
 
   // use an icon for some column headers
   // selected is a check box
@@ -439,7 +329,7 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   this->activeMarkupTableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
   QObject::connect(this->activeMarkupTableWidget, SIGNAL(customContextMenuRequested(QPoint)),
                    q, SLOT(onRightClickActiveMarkupTableWidget(QPoint)));
-				   */
+				
 }
 
 //-----------------------------------------------------------------------------
@@ -625,7 +515,12 @@ vtkSlicerMarkupsLogic *qSRPlanPathPlanModuleWidget::markupsLogic()
     {
     return NULL;
     }
-  return vtkSlicerMarkupsLogic::SafeDownCast(this->logic());
+
+  vtkSRPlanPathPlanModuleLogic * pathPlanLogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
+
+
+
+  return pathPlanLogic->GetMarkupsLogic();
 }
 
 
@@ -636,7 +531,7 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromMRML()
 
   // std::cout << "updateWidgetFromMRML" << std::endl;
 
-  /*
+  
   if (!this->mrmlScene())
     {
     this->clearGUI();
@@ -723,52 +618,7 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromMRML()
     d->listLockedUnlockedPushButton->setIcon(QIcon(":Icons/Medium/SlicerUnlock.png"));
     d->listLockedUnlockedPushButton->setToolTip(QString("Click to lock this markup list so that the markups cannot be moved by the mouse"));
     }
-
-  // update slice intersections
-  d->sliceIntersectionsVisibilityCheckBox->setChecked(this->sliceIntersectionsVisible());
-
-  // update the point projections
-  if (markupsNode->IsA("vtkMRMLMarkupsFiducialNode"))
-    {
-    d->pointFiducialProjectionWidget->setMRMLFiducialNode(
-        vtkMRMLMarkupsFiducialNode::SafeDownCast(markupsNode));
-    }
-  else
-    {
-    d->pointFiducialProjectionWidget->setMRMLFiducialNode(0);
-    }
   
-  // update the list name format
-  QString nameFormat = QString(markupsNode->GetMarkupLabelFormat().c_str());
-  d->nameFormatLineEdit->setText(nameFormat);
-
-  // update the transform checkbox label to reflect current transform node name
-  const char *transformNodeID = markupsNode->GetTransformNodeID();
-  if (transformNodeID == NULL)
-    {
-    d->transformedCoordinatesCheckBox->setText("Transformed");
-    }
-  else
-    {
-    const char *xformName = NULL;
-    if (this->mrmlScene() &&
-        this->mrmlScene()->GetNodeByID(transformNodeID))
-      {
-      xformName = this->mrmlScene()->GetNodeByID(transformNodeID)->GetName();
-      }
-    if (xformName)
-      {
-      d->transformedCoordinatesCheckBox->setText(QString("Transformed (") +
-                                                 QString(xformName) +
-                                                 QString(")"));
-      }
-    else
-      {
-      d->transformedCoordinatesCheckBox->setText(QString("Transformed (") +
-                                                 QString(transformNodeID) +
-                                                 QString(")"));
-      }
-    }
 
   // update the table
   int numberOfMarkups = markupsNode->GetNumberOfMarkups();
@@ -783,7 +633,7 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromMRML()
     this->updateRow(m);
     }
 
-	*/
+	
 }
 
 //-----------------------------------------------------------------------------
@@ -806,118 +656,8 @@ void qSRPlanPathPlanModuleWidget::updateWidgetFromDisplayNode()
   double *color;
   QColor qColor;
 
-  /*
-  if (displayNode)
-    {
-    // views
-    d->listDisplayNodeViewComboBox->setEnabled(true);
-    d->listDisplayNodeViewComboBox->setMRMLDisplayNode(displayNode);
-
-    // selected color
-    color = displayNode->GetSelectedColor();
-    qMRMLUtils::colorToQColor(color, qColor);
-    d->selectedColorPickerButton->setColor(qColor);
-
-    // unselected color
-    color = displayNode->GetColor();
-    qMRMLUtils::colorToQColor(color, qColor);
-    d->unselectedColorPickerButton->setColor(qColor);
-
-    // opacity
-    double opacity = displayNode->GetOpacity();
-  //  d->opacitySliderWidget->setValue(opacity);
-
-    // now for some markups specific display properties
-    vtkMRMLMarkupsDisplayNode *markupsDisplayNode = vtkMRMLMarkupsDisplayNode::SafeDownCast(displayNode);
-    if (markupsDisplayNode)
-      {
-      // does the glyph type combo box have entries?
-      if (d->glyphTypeComboBox->count() == 0)
-        {
-        qDebug() << "No entries in the glyph type combo box";
-        }
-      else
-        {
-        // glyph type
-        const char *glyphType = markupsDisplayNode->GetGlyphTypeAsString();
-        int index =  d->glyphTypeComboBox->findData(QString(glyphType));
-        if (index != -1)
-          {
-          d->glyphTypeComboBox->setCurrentIndex(index);
-          }
-        else
-          {
-          // glyph types start at 1, combo box is 0 indexed
-          d->glyphTypeComboBox->setCurrentIndex(markupsDisplayNode->GetGlyphType() - 1);
-          }
-        }
-
-      // glyph scale
-      double glyphScale = markupsDisplayNode->GetGlyphScale();
-
-      // make sure that the slider can accomodate this scale
-      if (glyphScale > d->glyphScaleSliderWidget->maximum())
-        {
-        d->glyphScaleSliderWidget->setMaximum(glyphScale);
-        }
-    //  d->glyphScaleSliderWidget->setValue(glyphScale);
-
-      // text scale
-      double textScale = markupsDisplayNode->GetTextScale();
-      if (textScale > d->textScaleSliderWidget->maximum())
-        {
-        d->textScaleSliderWidget->setMaximum(textScale);
-        }
-      d->textScaleSliderWidget->setValue(textScale);
-      }
-    }
-  else
-    {
-    // disable the views combo box for now
-    d->listDisplayNodeViewComboBox->setEnabled(false);
-
-    // reset to defaults from logic
-    if (this->markupsLogic())
-      {
-      color = this->markupsLogic()->GetDefaultMarkupsDisplayNodeSelectedColor();
-      qMRMLUtils::colorToQColor(color, qColor);
-      d->selectedColorPickerButton->setColor(qColor);
-      color = this->markupsLogic()->GetDefaultMarkupsDisplayNodeColor();
-      qMRMLUtils::colorToQColor(color, qColor);
-      d->unselectedColorPickerButton->setColor(qColor);
-      d->opacitySliderWidget->setValue(this->markupsLogic()->GetDefaultMarkupsDisplayNodeOpacity());
-      QString glyphTypeString = QString(this->markupsLogic()->GetDefaultMarkupsDisplayNodeGlyphTypeAsString().c_str());
-      int glyphTypeInt = this->markupsLogic()->GetDefaultMarkupsDisplayNodeGlyphType();
-      // glyph types start at 1, combo box is 0 indexed
-      int glyphTypeIndex = glyphTypeInt - 1;
-      if (glyphTypeIndex != -1)
-        {
-        d->glyphTypeComboBox->setCurrentIndex(glyphTypeIndex);
-        }
-
-      // make sure that the slider max values can accommodate the default settings
-      if (d->glyphScaleSliderWidget->maximum() <
-          this->markupsLogic()->GetDefaultMarkupsDisplayNodeGlyphScale())
-        {
-        d->glyphScaleSliderWidget->setMaximum(
-          this->markupsLogic()->GetDefaultMarkupsDisplayNodeGlyphScale());
-        }
-      // glyph scale
-      d->glyphScaleSliderWidget->setValue(this->markupsLogic()->GetDefaultMarkupsDisplayNodeGlyphScale());
-
-      // check slider max
-      if (d->textScaleSliderWidget->maximum() <
-          this->markupsLogic()->GetDefaultMarkupsDisplayNodeTextScale())
-        {
-        d->textScaleSliderWidget->setMaximum(
-          this->markupsLogic()->GetDefaultMarkupsDisplayNodeTextScale());
-        }
-      // text scale
-      d->textScaleSliderWidget->setValue(this->markupsLogic()->GetDefaultMarkupsDisplayNodeTextScale());
-      }
-    }
-
-  */
+  
+ 
 }
 
 //-----------------------------------------------------------------------------
@@ -962,24 +702,7 @@ void qSRPlanPathPlanModuleWidget::updateMaximumScaleFromVolumes()
       }
     }
 
-  /*
-  double maxScale = maxSliceSpacing * this->volumeSpacingScaleFactor;
-  // round it up to nearest multiple of 10
-  maxScale = ceil(maxScale / 10.0) * 10.0;
-
-  if (maxScale > d->glyphScaleSliderWidget->maximum())
-    {
-    d->glyphScaleSliderWidget->setMaximum(maxScale);
-    }
-  if (maxScale > d->textScaleSliderWidget->maximum())
-    {
-    d->textScaleSliderWidget->setMaximum(maxScale);
-    }
-  if (maxScale > d->markupScaleSliderWidget->maximum())
-    {
-    d->markupScaleSliderWidget->setMaximum(maxScale);
-    }
-	*/
+  
 }
 
 //-----------------------------------------------------------------------------
@@ -988,7 +711,7 @@ void qSRPlanPathPlanModuleWidget::updateRow(int m)
   Q_D(qSRPlanPathPlanModuleWidget);
 
 
-  /*
+  
   // this is updating the qt widget from MRML, and should not trigger any updates on the node, so turn off events
   d->activeMarkupTableWidget->blockSignals(true);
 
@@ -1093,20 +816,10 @@ void qSRPlanPathPlanModuleWidget::updateRow(int m)
      }
 
    // point
-   double point[3] = {0.0, 0.0, 0.0};
-   if (d->transformedCoordinatesCheckBox->isChecked())
-     {
-     double worldPoint[4] = {0.0, 0.0, 0.0, 1.0};
-     markupsNode->GetMarkupPointWorld(m, 0, worldPoint);
-     for (int p = 0; p < 3; ++p)
-       {
-       point[p] = worldPoint[p];
-       }
-     }
-   else
-     {
-     markupsNode->GetMarkupPoint(m, 0, point);
-     }
+  double point[3] = {0.0, 0.0, 0.0};
+   
+  markupsNode->GetMarkupPoint(m, 0, point);
+ 
   int rColumnIndex = d->columnIndex("R");
   for (int p = 0; p < 3; p++)
     {
@@ -1121,7 +834,7 @@ void qSRPlanPathPlanModuleWidget::updateRow(int m)
 
   // unblock so that changes to the table will propagate to MRML
   d->activeMarkupTableWidget->blockSignals(false);
-  */
+  
 }
 
 //-----------------------------------------------------------------------------
@@ -1242,246 +955,6 @@ void qSRPlanPathPlanModuleWidget::onPKeyActivated()
   QCoreApplication::sendEvent(widget, &click);
 }
 
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onSelectedColorPickerButtonChanged(QColor qcolor)
-{
-  Q_D(qSRPlanPathPlanModuleWidget);
-
-  double color[3];
-  qMRMLUtils::qColorToColor(qcolor, color);
-
-   // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsFiducialNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsFiducialNode::SafeDownCast(mrmlNode);
-    }
-  // get the display node
-  vtkMRMLMarkupsDisplayNode *displayNode = NULL;
-  if (listNode)
-    {
-    displayNode = listNode->GetMarkupsDisplayNode();
-    }
-  if (displayNode)
-    {
-    displayNode->SetSelectedColor(color);
-    }
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onUnselectedColorPickerButtonChanged(QColor qcolor)
-{
-  Q_D(qSRPlanPathPlanModuleWidget);
-
-  double color[3];
-  qMRMLUtils::qColorToColor(qcolor, color);
-
-   // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsFiducialNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsFiducialNode::SafeDownCast(mrmlNode);
-    }
-  // get the display node
-  vtkMRMLMarkupsDisplayNode *displayNode = NULL;
-  if (listNode)
-    {
-    displayNode = listNode->GetMarkupsDisplayNode();
-    }
-  if (displayNode)
-    {
-    displayNode->SetColor(color);
-    }
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onGlyphTypeComboBoxChanged(QString value)
-{
-  Q_D(qSRPlanPathPlanModuleWidget);
-
-  if (value.isEmpty())
-    {
-    return;
-    }
-  // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsFiducialNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsFiducialNode::SafeDownCast(mrmlNode);
-    }
-  // get the display node
-  vtkMRMLMarkupsDisplayNode *displayNode = NULL;
-  if (listNode)
-    {
-    displayNode = listNode->GetMarkupsDisplayNode();
-    }
-  if (displayNode)
-    {
-    displayNode->SetGlyphTypeFromString(value.toLatin1());
-    }
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onGlyphScaleSliderWidgetChanged(double value)
-{
-  Q_D(qSRPlanPathPlanModuleWidget);
-  // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsFiducialNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsFiducialNode::SafeDownCast(mrmlNode);
-    }
-  // get the display node
-  vtkMRMLMarkupsDisplayNode *displayNode = NULL;
-  if (listNode)
-    {
-    displayNode = listNode->GetMarkupsDisplayNode();
-    }
-  if (displayNode)
-    {
-    displayNode->SetGlyphScale(value);
-    }
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onTextScaleSliderWidgetChanged(double value)
-{
-  Q_D(qSRPlanPathPlanModuleWidget);
-  // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsFiducialNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsFiducialNode::SafeDownCast(mrmlNode);
-    }
-  // get the display node
-  vtkMRMLMarkupsDisplayNode *displayNode = NULL;
-  if (listNode)
-    {
-    displayNode = listNode->GetMarkupsDisplayNode();
-    }
-  if (displayNode)
-    {
-    displayNode->SetTextScale(value);
-    }
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onOpacitySliderWidgetChanged(double value)
-{
-   Q_D(qSRPlanPathPlanModuleWidget);
-  // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsFiducialNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsFiducialNode::SafeDownCast(mrmlNode);
-    }
-  // get the display node
-  vtkMRMLMarkupsDisplayNode *displayNode = NULL;
-  if (listNode)
-    {
-    displayNode = listNode->GetMarkupsDisplayNode();
-    }
-  if (displayNode)
-    {
-    displayNode->SetOpacity(value);
-    }
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onResetToDefaultDisplayPropertiesPushButtonClicked()
-{
-   Q_D(qSRPlanPathPlanModuleWidget);
-  // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsFiducialNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsFiducialNode::SafeDownCast(mrmlNode);
-    }
-  if (!listNode)
-    {
-    return;
-    }
-  // get the display node
-  vtkMRMLMarkupsDisplayNode *displayNode = NULL;
-  displayNode = listNode->GetMarkupsDisplayNode();
-  if (!displayNode)
-    {
-    return;
-    }
-
-  // set the display node from the logic defaults
-  if (this->markupsLogic())
-    {
-    this->markupsLogic()->SetDisplayNodeToDefaults(displayNode);
-    }
-
-  // push an update on the GUI
-  this->updateWidgetFromMRML();
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onSaveToDefaultDisplayPropertiesPushButtonClicked()
-{
-   Q_D(qSRPlanPathPlanModuleWidget);
-  // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsFiducialNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsFiducialNode::SafeDownCast(mrmlNode);
-    }
-  if (!listNode)
-    {
-    return;
-    }
-  // get the display node
-  vtkMRMLMarkupsDisplayNode *displayNode = NULL;
-  displayNode = listNode->GetMarkupsDisplayNode();
-  if (!displayNode)
-    {
-    return;
-    }
-
-  // save the settings
-  QSettings *settings = qSlicerApplication::application()->settingsDialog()->settings();
-  settings->setValue("Markups/GlyphType", displayNode->GetGlyphTypeAsString());
-  QColor qcolor;
-  double  *selectedColor = displayNode->GetSelectedColor();
-  if (selectedColor)
-    {
-    qcolor = QColor::fromRgbF(selectedColor[0], selectedColor[1], selectedColor[2]);
-    }
-  settings->setValue("Markups/SelectedColor", qcolor);
-  double *unselectedColor = displayNode->GetColor();
-  if (unselectedColor)
-    {
-    qcolor = QColor::fromRgbF(unselectedColor[0], unselectedColor[1], unselectedColor[2]);
-    }
-  settings->setValue("Markups/UnselectedColor", qcolor);
-  settings->setValue("Markups/GlyphScale", displayNode->GetGlyphScale());
-  settings->setValue("Markups/TextScale", displayNode->GetTextScale());
-  settings->setValue("Markups/Opacity", displayNode->GetOpacity());
-
-  // projection
-  settings->setValue("Markups/SliceProjection", displayNode->GetSliceProjection());
-  double *projectionColor = displayNode->GetSliceProjectionColor();
-  if (projectionColor)
-    {
-    qcolor = QColor::fromRgbF(projectionColor[0], projectionColor[1], projectionColor[2]);
-    }
-  settings->setValue("Markups/SliceProjectionColor", qcolor);
-  settings->setValue("Markups/SliceProjectionOpacity", displayNode->GetSliceProjectionOpacity());
-
-  // set the logic defaults from the settings
-  this->updateLogicFromSettings();
-}
 
 //-----------------------------------------------------------------------------
 void qSRPlanPathPlanModuleWidget::onVisibilityOnAllMarkupsInListPushButtonClicked()
@@ -1643,32 +1116,6 @@ void qSRPlanPathPlanModuleWidget::onSelectedAllMarkupsInListToggled()
     this->markupsLogic()->ToggleAllMarkupsSelected(listNode);
     }
 }
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onMarkupScaleSliderWidgetValueChanged(double value)
-{
-   Q_D(qSRPlanPathPlanModuleWidget);
-  // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsFiducialNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsFiducialNode::SafeDownCast(mrmlNode);
-    }
-  // get the display node
-  vtkMRMLMarkupsDisplayNode *displayNode = NULL;
-  if (listNode)
-    {
-    displayNode = listNode->GetMarkupsDisplayNode();
-    }
-  if (displayNode)
-    {
-    // apply the value for both glyph and text scale
-    int disabledModify = displayNode->StartModify();
-    displayNode->SetGlyphScale(value);
-    displayNode->SetTextScale(value);
-    displayNode->EndModify(disabledModify);
-    }
-}
 
 //-----------------------------------------------------------------------------
 void qSRPlanPathPlanModuleWidget::onAddMarkupPushButtonClicked()
@@ -1689,66 +1136,7 @@ void qSRPlanPathPlanModuleWidget::onAddMarkupPushButtonClicked()
     }
 }
 
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onMoveMarkupUpPushButtonClicked()
-{
-  Q_D(qSRPlanPathPlanModuleWidget);
 
-  // get the selected rows
-  QList<QTableWidgetItem *> selectedItems = d->activeMarkupTableWidget->selectedItems();
-
-  // first, that only one is selected
-  if ((selectedItems.size() / d->numberOfColumns()) != 1)
-    {
-    qDebug() << "Move up: only select one markup to move, current selected: " << selectedItems.size() << ", number of columns = " << d->numberOfColumns();
-    return;
-    }
-  // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsNode::SafeDownCast(mrmlNode);
-    }
-  if (listNode)
-    {
-    int thisIndex = selectedItems.at(0)->row();
-    //qDebug() << "Swapping " << thisIndex << " and " << thisIndex - 1;
-    listNode->SwapMarkups(thisIndex, thisIndex - 1);
-    // now make sure the new row is selected so a user can keep moving it up
-    d->activeMarkupTableWidget->selectRow(thisIndex - 1);
-    }
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onMoveMarkupDownPushButtonClicked()
-{
-  Q_D(qSRPlanPathPlanModuleWidget);
-
-  // get the selected rows
-  QList<QTableWidgetItem *> selectedItems = d->activeMarkupTableWidget->selectedItems();
-
-  // first, that only one is selected
-  if ((selectedItems.size() / d->numberOfColumns()) != 1)
-    {
-    return;
-    }
-  // get the active node
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsNode::SafeDownCast(mrmlNode);
-    }
-  if (listNode)
-    {
-    int thisIndex = selectedItems.at(0)->row();
-    //qDebug() << "Swapping " << thisIndex << " and " << thisIndex + 1;
-    listNode->SwapMarkups(thisIndex, thisIndex + 1);
-    // now make sure the new row is selected so a user can keep moving it down
-    d->activeMarkupTableWidget->selectRow(thisIndex + 1);
-    }
-}
 
 //-----------------------------------------------------------------------------
 void qSRPlanPathPlanModuleWidget::onDeleteMarkupPushButtonClicked()
@@ -2043,74 +1431,13 @@ void qSRPlanPathPlanModuleWidget::onListLockedUnlockedPushButtonClicked()
     }
 }
 
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onNameFormatLineEditTextEdited(const QString text)
-{
-  Q_D(qSRPlanPathPlanModuleWidget);
-
-  // get the active list
-  vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-  vtkMRMLMarkupsNode *listNode = NULL;
-  if (mrmlNode)
-    {
-    listNode = vtkMRMLMarkupsNode::SafeDownCast(mrmlNode);
-    }
-  if (!listNode)
-    {
-    qDebug() << QString("Name format edited: unable to get current list");
-    return;
-    }
-  listNode->SetMarkupLabelFormat(std::string(text.toLatin1()));
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onResetNameFormatToDefaultPushButtonClicked()
-{
-   Q_D(qSRPlanPathPlanModuleWidget);
-
-   // get the active list
-   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-   vtkMRMLMarkupsNode *listNode = NULL;
-   if (mrmlNode)
-     {
-     listNode = vtkMRMLMarkupsNode::SafeDownCast(mrmlNode);
-     }
-   if (!listNode)
-     {
-     qDebug() << QString("Reset name format: unable to get current list");
-     return;
-     }
-   // make a new default markups node and use its value for the name format
-   vtkNew<vtkMRMLMarkupsNode> defaultNode;
-   listNode->SetMarkupLabelFormat(defaultNode->GetMarkupLabelFormat());
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onRenameAllWithCurrentNameFormatPushButtonClicked()
-{
-   Q_D(qSRPlanPathPlanModuleWidget);
-
-   if (!this->markupsLogic())
-    {
-    qDebug() << "Cannot rename without a logic class!";
-    return;
-    }
-   // get the active list
-   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
-   vtkMRMLMarkupsNode *listNode = NULL;
-   if (mrmlNode)
-     {
-     listNode = vtkMRMLMarkupsNode::SafeDownCast(mrmlNode);
-     }
-   this->markupsLogic()->RenameAllMarkupsFromCurrentFormat(listNode);
-}
 
 //-----------------------------------------------------------------------------
 void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int column)
 {
   Q_D(qSRPlanPathPlanModuleWidget);
 
-  /*
+  
 
 //  qDebug() << QString("cell changed: row = ") + QString::number(row) + QString(", col = ") + QString::number(column);
   // get the active list
@@ -2198,19 +1525,9 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
 
     // get the old value
     double point[3] = {0.0, 0.0, 0.0};
-  if (d->transformedCoordinatesCheckBox->isChecked())
-      {
-      double worldPoint[4] = {0.0, 0.0, 0.0, 1.0};
-      listNode->GetMarkupPointWorld(n, 0, worldPoint);
-      for (int p = 0; p < 3; ++p)
-       {
-       point[p] = worldPoint[p];
-       }
-      }
-    else
-      {
-      listNode->GetMarkupPoint(n, 0, point);
-      }
+  
+    listNode->GetMarkupPoint(n, 0, point);
+
 
     // changed?
     double minChange = 0.001;
@@ -2221,14 +1538,9 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
       vtkMRMLMarkupsFiducialNode *fidList = vtkMRMLMarkupsFiducialNode::SafeDownCast(listNode);
       if (fidList)
         {
-        if (d->transformedCoordinatesCheckBox->isChecked())
-          {
-          fidList->SetNthFiducialWorldCoordinates(n, newPoint);
-          }
-        else
-          {
+        
           fidList->SetNthFiducialPositionFromArray(n, newPoint);
-          }
+         
         }
       }
     else
@@ -2240,7 +1552,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
     {
     qDebug() << QString("Cell Changed: unknown column: ") + QString::number(column);
     }
-	*/
+	
 }
 
 //-----------------------------------------------------------------------------
@@ -2282,14 +1594,8 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCurrentCellChanged(
   Q_UNUSED(previousRow);
   Q_UNUSED(previousColumn);
 
-  /*
+  
 
-  // is jumping disabled?
-  if (!d->jumpSlicesGroupBox->isChecked())
-    {
-    return;
-    }
-  // otherwise jump to that slice
 
   // get the active list
   vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -2309,7 +1615,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCurrentCellChanged(
     this->markupsLogic()->JumpSlicesToNthPointInMarkup(mrmlNode->GetID(), currentRow, jumpCentered);
     }
 
-	*/
+	
 }
 
 //-----------------------------------------------------------------------------
@@ -3020,7 +2326,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeMarkupAddedEvent()//vtkMRML
   Q_D(qSRPlanPathPlanModuleWidget);
 
   //qDebug() << "onActiveMarkupsNodeMarkupAddedEvent";
-  /*
+  
 
   QString activeMarkupsNodeID = d->activeMarkupMRMLNodeComboBox->currentNodeID();
 
@@ -3037,12 +2343,13 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeMarkupAddedEvent()//vtkMRML
   // (if jump slices on click in table is selected, selecting the new
   // row before the point coordinates are updated will cause the slices
   // to jump to 0,0,0)
-  if (!d->jumpSlicesGroupBox->isChecked())
-    {
-    d->activeMarkupTableWidget->setCurrentCell(newRow, 0);
-    }
 
-	*/
+ // if (!d->jumpSlicesGroupBox->isChecked())
+ //   {
+ //   d->activeMarkupTableWidget->setCurrentCell(newRow, 0);
+ //   }
+
+	
 }
 
 //-----------------------------------------------------------------------------
@@ -3067,16 +2374,6 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeTransformModifiedEvent()
   this->updateWidgetFromMRML();
 }
 
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onSliceIntersectionsVisibilityToggled(bool flag)
-{
-  if (!this->markupsLogic())
-    {
-    qWarning() << "Unable to get markups logic";
-    return;
-    }
-  this->markupsLogic()->SetSliceIntersectionsVisibility(flag);
-}
 
 //-----------------------------------------------------------------------------
 void qSRPlanPathPlanModuleWidget::onNewMarkupWithCurrentDisplayPropertiesTriggered()
@@ -3235,37 +2532,4 @@ bool qSRPlanPathPlanModuleWidget::sliceIntersectionsVisible()
     // if all or some are visible, return true
     return true;
     }
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onHideCoordinateColumnsToggled(bool checked)
-{
-  Q_D(qSRPlanPathPlanModuleWidget);
-
-  d->activeMarkupTableWidget->setColumnHidden(d->columnIndex("R"), checked);
-  d->activeMarkupTableWidget->setColumnHidden(d->columnIndex("A"), checked);
-  d->activeMarkupTableWidget->setColumnHidden(d->columnIndex("S"), checked);
-
-  if (!checked)
-    {
-    // back to default column widths
-    d->activeMarkupTableWidget->setColumnWidth(d->columnIndex("Name"), 60);
-    d->activeMarkupTableWidget->setColumnWidth(d->columnIndex("Description"), 120);
-    }
-  else
-    {
-    // expand the name and description columns
-    d->activeMarkupTableWidget->setColumnWidth(d->columnIndex("Name"), 120);
-    d->activeMarkupTableWidget->setColumnWidth(d->columnIndex("Description"), 240);
-    }
-}
-
-//-----------------------------------------------------------------------------
-void qSRPlanPathPlanModuleWidget::onTransformedCoordinatesToggled(bool checked)
-{
-  Q_UNUSED(checked);
-
-  // update the GUI
-  // tbd: only update the coordinates
-  this->updateWidgetFromMRML();
 }

@@ -138,7 +138,11 @@ void qSRPlanPathPlanModule::setup()
 
   // Register IO
   qSlicerIOManager* ioManager = qSlicerApplication::application()->ioManager();
-  qSlicerMarkupsReader *markupsIO = new qSlicerMarkupsReader(vtkSlicerMarkupsLogic::SafeDownCast(this->logic()), this);
+
+  vtkSRPlanPathPlanModuleLogic * pathPlanLogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
+
+
+  qSlicerMarkupsReader *markupsIO = new qSlicerMarkupsReader(pathPlanLogic->GetMarkupsLogic(), this);
   ioManager->registerIO(markupsIO);
   ioManager->registerIO(new qSlicerNodeWriter(
                             "MarkupsFiducials", markupsIO->fileType(),
