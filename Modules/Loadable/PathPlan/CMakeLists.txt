@@ -6,11 +6,11 @@ set(MODULE_TITLE "${MODULE_NAME}")
 string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
 
 #-----------------------------------------------------------------------------
-#add_subdirectory(MRML)
-#add_subdirectory(Logic)
-#add_subdirectory(MRMLDM)
+add_subdirectory(MRML)
+add_subdirectory(Logic)
+add_subdirectory(MRMLDM)
 #add_subdirectory(SubjectHierarchyPlugins)
-#add_subdirectory(Widgets)
+add_subdirectory(Widgets)
 
 #-----------------------------------------------------------------------------
 set(MODULE_EXPORT_DIRECTIVE "Q_SRPlan_QTMODULES_${MODULE_NAME_UPPER}_EXPORT")
@@ -49,8 +49,8 @@ set(MODULE_UI_SRCS
   )
 
 set(MODULE_TARGET_LIBRARIES
-#  vtkSRPlan${MODULE_NAME}ModuleMRML
-#  vtkSRPlan${MODULE_NAME}ModuleMRMLDisplayableManager
+  vtkSRPlan${MODULE_NAME}ModuleMRML
+  vtkSRPlan${MODULE_NAME}ModuleMRMLDisplayableManager
   vtkSRPlan${MODULE_NAME}ModuleLogic
   qSRPlan${MODULE_NAME}ModuleWidgets
 #  qSRPlan${MODULE_NAME}SubjectHierarchyPlugins

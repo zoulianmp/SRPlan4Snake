@@ -40,11 +40,11 @@
 //#include "qSlicerSubjectHierarchyIsodosePlugin.h"
 
 // Markups includes
-#include "PathPlanInstantiator.h"
+//#include "PathPlanInstantiator.h"
 #include "qSRPlanPathPlanModule.h"
 #include "qSRPlanPathPlanModuleWidget.h"
 #include "qSlicerMarkupsReader.h"
-//#include "qSlicerMarkupsSettingsPanel.h"
+#include "qSlicerMarkupsSettingsPanel.h"
 
 #include "vtkSRPlanPathPlanModuleLogic.h"
 
@@ -129,6 +129,7 @@ void qSRPlanPathPlanModule::setup()
 {
   this->Superclass::setup();
 
+  
   // Register displayable managers
   // 3D
   vtkMRMLThreeDViewDisplayableManagerFactory::GetInstance()->RegisterDisplayableManager("vtkMRMLMarkupsFiducialDisplayableManager3D");
@@ -153,7 +154,7 @@ void qSRPlanPathPlanModule::setup()
       "Markups", panel);
     panel->setMarkupsLogic(vtkSlicerMarkupsLogic::SafeDownCast(this->logic()));
     }
-  */
+ */
   // for now, don't use the settings panel as it's causing the logic values to
   // be reset on start up, just set things directly
   qSRPlanPathPlanModuleWidget* moduleWidget = dynamic_cast<qSRPlanPathPlanModuleWidget*>(this->widgetRepresentation());
@@ -177,13 +178,13 @@ void qSRPlanPathPlanModule::setup()
 //-----------------------------------------------------------------------------
 qSlicerAbstractModuleRepresentation * qSRPlanPathPlanModule::createWidgetRepresentation()
 {
-
+   
    return new qSRPlanPathPlanModuleWidget;
 }
 
 //-----------------------------------------------------------------------------
 vtkMRMLAbstractLogic* qSRPlanPathPlanModule::createLogic()
 {
-	return 0;
-  //return vtkSRPlanPathPlanModuleLogic::New();
+	
+    return vtkSRPlanPathPlanModuleLogic::New();
 }

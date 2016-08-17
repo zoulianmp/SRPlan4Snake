@@ -58,6 +58,19 @@ include_directories(${include_dirs})
 ADD_LIBRARY(${lib_name} ${SlicerRtCommon_SRCS})
 TARGET_LINK_LIBRARIES( ${lib_name} ${SlicerRtCommon_LIBS} )
 
+
+
+
+if(SRPlan_OUT_UNIFY)
+   add_custom_command(
+        TARGET ${lib_name}
+        POST_BUILD
+        COMMAND  ${CMAKE_COMMAND} -E copy  $<TARGET_FILE:${lib_name}> ${SRPlan_OUT_Library})
+
+endif()
+
+
+
 if(NOT DEFINED ${PROJECT_NAME}_INSTALL_BIN_DIR)
   set(${PROJECT_NAME}_INSTALL_BIN_DIR bin)
 endif()
