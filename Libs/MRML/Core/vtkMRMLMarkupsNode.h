@@ -46,6 +46,9 @@ typedef struct
   bool Selected;
   bool Locked;
   bool Visibility;
+
+  float Weight;  //used for
+
 } Markup;
 
 /// \brief MRML node to represent a list of markups
@@ -286,6 +289,10 @@ public:
   std::string GetNthMarkupLabel(int n = 0);
   /// Set the Label on the nth markup
   void SetNthMarkupLabel(int n, std::string label);
+
+  float GetNthMarkupWeight(int n);
+  void SetNthMarkupWeight(int n, float weight);
+
   /// Get the Description on the nth markup, returns an empty string if the
   /// markup doesn't exist
   std::string GetNthMarkupDescription(int n = 0);

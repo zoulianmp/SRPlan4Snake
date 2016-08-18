@@ -18,5 +18,7 @@
 	<file>Icons/DoseVolumeHistogram.png</file>
     <file>Icons/LayoutFourUpQuantitativeView.png</file>
     <file>Icons/LayoutOneUpQuantitativeView.png</file>
+	<file>Icons/RealTrace.png</file>
+	<file>Icons/DoseCalculate.png</file>
   </qresource>
 </RCC>

@@ -108,7 +108,7 @@ private:
 qSRPlanPathPlanModuleWidgetPrivate::qSRPlanPathPlanModuleWidgetPrivate(qSRPlanPathPlanModuleWidget& object)
   : q_ptr(&object)
 {
-  this->columnLabels << "Selected" << "Locked" << "Visible" << "Name" << "Description" << "R" << "A" << "S";
+  this->columnLabels << "Selected" << "Locked" << "Visible" << "Name" << "Weight" << "R" << "A" << "S";
 
   this->newMarkupWithCurrentDisplayPropertiesAction = 0;
   this->visibilityMenu = 0;
@@ -287,8 +287,8 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   this->activeMarkupTableWidget->horizontalHeader()->setFixedHeight(32);
 
   // adjust the column widths
-  this->activeMarkupTableWidget->setColumnWidth(this->columnIndex("Name"), 60);
-  this->activeMarkupTableWidget->setColumnWidth(this->columnIndex("Description"), 120);
+  this->activeMarkupTableWidget->setColumnWidth(this->columnIndex("Name"), 120);
+  this->activeMarkupTableWidget->setColumnWidth(this->columnIndex("Weight"), 60);
   this->activeMarkupTableWidget->setColumnWidth(this->columnIndex("R"), 65);
   this->activeMarkupTableWidget->setColumnWidth(this->columnIndex("A"), 65);
   this->activeMarkupTableWidget->setColumnWidth(this->columnIndex("S"), 65);
@@ -806,6 +806,18 @@ void qSRPlanPathPlanModuleWidget::updateRow(int m)
      d->activeMarkupTableWidget->setItem(m,nameIndex,new QTableWidgetItem(markupLabel));
      }
 
+   
+
+   // Weight
+   int WeightIndex = d->columnIndex("Weight");
+   QString markupWeight = QString::number(markupsNode->GetNthMarkupWeight(m), 'f', 3);
+   if (d->activeMarkupTableWidget->item(m, WeightIndex) == NULL ||
+	   d->activeMarkupTableWidget->item(m, WeightIndex)->text() != markupLabel)
+   {
+	   d->activeMarkupTableWidget->setItem(m, WeightIndex, new QTableWidgetItem(markupWeight));
+   }
+
+   /*
    // description
    int descriptionIndex = d->columnIndex("Description");
    QString markupDescription = QString(markupsNode->GetNthMarkupDescription(m).c_str());
@@ -814,6 +826,9 @@ void qSRPlanPathPlanModuleWidget::updateRow(int m)
      {
      d->activeMarkupTableWidget->setItem(m,descriptionIndex,new QTableWidgetItem(markupDescription));
      }
+
+	 */
+
 
    // point
   double point[3] = {0.0, 0.0, 0.0};
@@ -1501,10 +1516,10 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
     std::string name = std::string(item->text().toLatin1());
     listNode->SetNthMarkupLabel(n, name);
     }
-  else if (column ==  d->columnIndex("Description"))
+  else if (column ==  d->columnIndex("Weight"))
     {
-    std::string description = std::string(item->text().toLatin1());
-    listNode->SetNthMarkupDescription(n, description);
+     float weight =  item->text().toFloat();
+     listNode->SetNthMarkupWeight(n, weight);
     }
   else if (column == d->columnIndex("R") ||
            column == d->columnIndex("A") ||

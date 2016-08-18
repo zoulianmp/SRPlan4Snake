@@ -480,6 +480,8 @@ void vtkMRMLMarkupsNode::InitMarkup(Markup *markup)
   markup->Selected = true;
   markup->Locked = false;
   markup->Visibility = true;
+  
+  markup->Weight = 0;
 }
 
 //-----------------------------------------------------------
@@ -508,6 +510,8 @@ int vtkMRMLMarkupsNode::AddMarkupWithNPoints(int n, std::string label)
     }
   Markup markup;
   markup.Label = label;
+  markup.Weight = 0;
+
   this->InitMarkup(&markup);
   for (int i = 0; i < n; i++)
     {
@@ -541,6 +545,8 @@ int vtkMRMLMarkupsNode::AddPointToNewMarkup(vtkVector3d point, std::string label
   newmarkup.points.push_back(point);
   this->Markups.push_back(newmarkup);
   this->MaximumNumberOfMarkups++;
+
+  newmarkup.Weight = 0;
 
   markupIndex = this->Markups.size() - 1;
 
@@ -1133,6 +1139,41 @@ void vtkMRMLMarkupsNode::SetNthMarkupLabel(int n, std::string label)
       }
     }
 }
+
+
+float vtkMRMLMarkupsNode::GetNthMarkupWeight(int n)
+{
+	if (this->MarkupExists(n))
+	{
+		Markup *markup = this->GetNthMarkup(n);
+		if (markup)
+		{
+			return markup->Weight;
+		}
+	}
+	return 0;
+
+}
+
+
+void vtkMRMLMarkupsNode::SetNthMarkupWeight(int n, float weight)
+{
+	if (this->MarkupExists(n))
+	{
+		Markup *markup = this->GetNthMarkup(n);
+		if (markup)
+		{
+			if (markup->Weight != weight)
+			{
+				markup->Weight = weight;
+				int markupIndex = n;
+				this->Modified();
+				this->InvokeCustomModifiedEvent(vtkMRMLMarkupsNode::NthMarkupModifiedEvent, (void*)&markupIndex);
+			}
+		}
+	}
+}
+
 
 //---------------------------------------------------------------------------
 std::string vtkMRMLMarkupsNode::GetNthMarkupDescription(int n)

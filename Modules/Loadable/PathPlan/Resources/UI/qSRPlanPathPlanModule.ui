@@ -21,10 +21,162 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout"/>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="headSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="doseCalculatePushButton">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Calculate current snake path dose distribution</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../qSRPlanPathPlanModule.qrc">
+         <normaloff>:/Icons/DoseCalculate.png</normaloff>:/Icons/DoseCalculate.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>55</width>
+         <height>55</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="headSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="realTracePushButton">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Start real tracing the snake motion along designed path</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../qSRPlanPathPlanModule.qrc">
+         <normaloff>:/Icons/RealTrace.png</normaloff>:/Icons/RealTrace.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>55</width>
+         <height>55</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="headSpacer1">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Maximum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="3">
+      <widget class="QPushButton" name="listVisibileInvisiblePushButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Toggle the list visibility, which will over ride the visibility of markups in the list.</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:Icons/Medium/SlicerVisible.png</normaloff>:Icons/Medium/SlicerVisible.png</iconset>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="1">
       <widget class="QLabel" name="activeMarkupMRMLNodeLabel">
        <property name="minimumSize">
@@ -41,26 +193,21 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="qMRMLNodeComboBox" name="activeMarkupMRMLNodeComboBox" native="true">
-       <property name="toolTip">
-        <string>Select or create a snake path</string>
+     <item row="0" column="0">
+      <spacer name="preSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="nodeTypes" stdset="0">
-        <stringlist>
-         <string>vtkMRMLMarkupsFiducialNode</string>
-        </stringlist>
+       <property name="sizeType">
+        <enum>QSizePolicy::Maximum</enum>
        </property>
-       <property name="baseName" stdset="0">
-        <string>Path</string>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>30</width>
+         <height>20</height>
+        </size>
        </property>
-       <property name="addEnabled" stdset="0">
-        <bool>true</bool>
-       </property>
-       <property name="renameEnabled" stdset="0">
-        <bool>true</bool>
-       </property>
-      </widget>
+      </spacer>
      </item>
      <item row="0" column="4">
       <widget class="QPushButton" name="listLockedUnlockedPushButton">
@@ -94,53 +241,26 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
-      <widget class="QPushButton" name="listVisibileInvisiblePushButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>30</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
+     <item row="0" column="2">
+      <widget class="qMRMLNodeComboBox" name="activeMarkupMRMLNodeComboBox" native="true">
        <property name="toolTip">
-        <string>Toggle the list visibility, which will over ride the visibility of markups in the list.</string>
+        <string>Select or create a snake path</string>
        </property>
-       <property name="text">
-        <string/>
+       <property name="nodeTypes" stdset="0">
+        <stringlist>
+         <string>vtkMRMLMarkupsFiducialNode</string>
+        </stringlist>
        </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:Icons/Medium/SlicerVisible.png</normaloff>:Icons/Medium/SlicerVisible.png</iconset>
+       <property name="baseName" stdset="0">
+        <string>Path</string>
+       </property>
+       <property name="addEnabled" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="renameEnabled" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
-     </item>
-     <item row="0" column="0">
-      <spacer name="preSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Maximum</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>30</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
    </item>
