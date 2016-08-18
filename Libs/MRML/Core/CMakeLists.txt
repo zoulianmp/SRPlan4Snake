@@ -142,11 +142,31 @@ SET (Segmentation_SRCS
   vtkMRMLSegmentationStorageNode.h
   )
 
+  
+set(Markups_SRCS
+  vtkMRMLMarkupsDisplayNode.cxx
+  vtkMRMLMarkupsFiducialNode.cxx
+  vtkMRMLMarkupsNode.cxx
+  vtkMRMLMarkupsFiducialStorageNode.cxx
+  vtkMRMLIsodoseNode.cxx
+  vtkMRMLDoseVolumeHistogramNode.cxx
+  
+  vtkMRMLMarkupsDisplayNode.h
+  vtkMRMLMarkupsFiducialNode.h
+  vtkMRMLMarkupsNode.h
+  vtkMRMLMarkupsFiducialStorageNode.h
+  vtkMRMLIsodoseNode.h
+  vtkMRMLDoseVolumeHistogramNode.h 
+  
+  vtkMarkupsGlyphSource2D.h
+  vtkMarkupsGlyphSource2D.cxx
+  )
 
 set(MRMLCore_SRCS
   ${vtkSegmentationCore_SRCS}
   ${Segmentation_SRCS}
-
+  ${Markups_SRCS}
+  
   vtkEventBroker.cxx
   vtkImageBimodalAnalysis.cxx
   vtkDataFileFormatHelper.cxx

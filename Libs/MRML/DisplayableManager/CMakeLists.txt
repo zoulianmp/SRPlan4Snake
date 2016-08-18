@@ -68,8 +68,19 @@ endif()
 # --------------------------------------------------------------------------
 # Sources
 # --------------------------------------------------------------------------
-set(DisplayableManager_SRCS
 
+
+set(Markup_DM_SRCS
+  vtkMRMLMarkupsDisplayableManager3D.cxx
+  vtkMRMLMarkupsDisplayableManager2D.cxx
+  vtkMRMLMarkupsFiducialDisplayableManager3D.cxx
+  vtkMRMLMarkupsFiducialDisplayableManager2D.cxx
+  )
+
+
+set(DisplayableManager_SRCS
+   ${Markup_DM_SRCS}
+   
   # DisplayableManager associated with ThreeDView
   vtkMRMLCameraDisplayableManager.cxx
   vtkMRMLModelDisplayableManager.cxx
@@ -105,6 +116,11 @@ set(KIT_SRCS
 
   # Proxy classes
   vtkMRMLLightBoxRendererManagerProxy.cxx
+  
+  #Markups DM Associated Classes
+  vtkMRMLMarkupsDisplayableManagerHelper.cxx
+  vtkMRMLMarkupsClickCounter.cxx
+  
   )
 
 set_source_files_properties(

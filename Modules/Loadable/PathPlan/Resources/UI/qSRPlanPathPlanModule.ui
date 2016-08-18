@@ -25,39 +25,44 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="2">
-      <widget class="QPushButton" name="listVisibileInvisiblePushButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+     <item row="0" column="1">
+      <widget class="QLabel" name="activeMarkupMRMLNodeLabel">
        <property name="minimumSize">
         <size>
-         <width>30</width>
+         <width>80</width>
          <height>0</height>
         </size>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Toggle the list visibility, which will over ride the visibility of markups in the list.</string>
-       </property>
        <property name="text">
-        <string/>
+        <string>Active Snake Path</string>
        </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:Icons/Medium/SlicerVisible.png</normaloff>:Icons/Medium/SlicerVisible.png</iconset>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
+     <item row="0" column="2">
+      <widget class="qMRMLNodeComboBox" name="activeMarkupMRMLNodeComboBox" native="true">
+       <property name="toolTip">
+        <string>Select or create a snake path</string>
+       </property>
+       <property name="nodeTypes" stdset="0">
+        <stringlist>
+         <string>vtkMRMLMarkupsFiducialNode</string>
+        </stringlist>
+       </property>
+       <property name="baseName" stdset="0">
+        <string>Path</string>
+       </property>
+       <property name="addEnabled" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="renameEnabled" stdset="0">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
       <widget class="QPushButton" name="listLockedUnlockedPushButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -89,36 +94,53 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="activeMarkupMRMLNodeLabel">
-       <property name="text">
-        <string>Active  Snake Path</string>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="listVisibileInvisiblePushButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Toggle the list visibility, which will over ride the visibility of markups in the list.</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:Icons/Medium/SlicerVisible.png</normaloff>:Icons/Medium/SlicerVisible.png</iconset>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="qMRMLNodeComboBox" name="activeMarkupMRMLNodeComboBox" native="true">
-       <property name="toolTip">
-        <string>Select or create a markups list</string>
+     <item row="0" column="0">
+      <spacer name="preSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="nodeTypes" stdset="0">
-        <stringlist>
-         <string>vtkMRMLMarkupsFiducialNode</string>
-        </stringlist>
+       <property name="sizeType">
+        <enum>QSizePolicy::Maximum</enum>
        </property>
-       <property name="baseName" stdset="0">
-        <string>F</string>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>30</width>
+         <height>20</height>
+        </size>
        </property>
-       <property name="addEnabled" stdset="0">
-        <bool>true</bool>
-       </property>
-       <property name="renameEnabled" stdset="0">
-        <bool>true</bool>
-       </property>
-      </widget>
+      </spacer>
      </item>
     </layout>
    </item>

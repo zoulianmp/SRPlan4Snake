@@ -14,8 +14,8 @@ set(${KIT}_INCLUDE_DIRECTORIES
 set(${KIT}_SRCS
   vtkSRPlan${MODULE_NAME}ModuleLogic.cxx
   vtkSRPlan${MODULE_NAME}ModuleLogic.h
-  vtkMarkupsGlyphSource2D.h
-  vtkMarkupsGlyphSource2D.cxx
+ # vtkMarkupsGlyphSource2D.h
+ # vtkMarkupsGlyphSource2D.cxx
   vtkSlicerRTScalarBarActor.h
   vtkSlicerRTScalarBarActor.cxx
   
@@ -30,7 +30,7 @@ set(${KIT}_SRCS
 set(${KIT}_TARGET_LIBRARIES
   MRMLLogic
   SRPlanBaseLogic
-  vtkSRPlan${MODULE_NAME}ModuleMRML
+  #vtkSRPlan${MODULE_NAME}ModuleMRML
   vtkSRPlanAnnotationsModuleMRML
   vtkSlicerRtCommon
   vtkSRPlanSegmentationsModuleLogic

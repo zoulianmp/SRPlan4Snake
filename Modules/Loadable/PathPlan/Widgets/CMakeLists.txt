@@ -34,7 +34,7 @@ set(${KIT}_RESOURCES
   )
 
 set(${KIT}_TARGET_LIBRARIES
-  vtkSRPlan${MODULE_NAME}ModuleMRML
+  #vtkSRPlan${MODULE_NAME}ModuleMRML
   vtkSRPlan${MODULE_NAME}ModuleLogic
   )
 
