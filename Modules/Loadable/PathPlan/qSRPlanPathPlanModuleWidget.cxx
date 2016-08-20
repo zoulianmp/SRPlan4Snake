@@ -1259,11 +1259,13 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 		std::string realTracFile;
 		if (vtksys::SystemTools::GetEnv("OPTIC_TRAC") != NULL)
 		{
-			realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC"));
+			realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC") + std::string("\\RealtimePosition.txt"));
 		}
 
 		//QFile opticTracFile("D:/00-SRPlan/SRPlan4SnakeVC2015Bin/Output/share/NetworkShare/RealtimePosition.txt");
-		QFile opticTracFile("E:/CodeLearn/RealtimePosition.txt");
+		//QFile opticTracFile("E:/CodeLearn/RealtimePosition.txt");
+
+		QFile opticTracFile(realTracFile.c_str());
 		bool suc  =  opticTracFile.open(QIODevice::ReadOnly);
 		QTextStream tracStream(&opticTracFile);
 
