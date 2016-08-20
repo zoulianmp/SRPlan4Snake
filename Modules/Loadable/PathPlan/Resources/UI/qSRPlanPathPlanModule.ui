@@ -102,7 +102,8 @@
        </property>
        <property name="icon">
         <iconset resource="../qSRPlanPathPlanModule.qrc">
-         <normaloff>:/Icons/RealTrace.png</normaloff>:/Icons/RealTrace.png</iconset>
+         <normaloff>:/Icons/RealTrace.png</normaloff>
+         <normalon>:/Icons/TracStop.png</normalon>:/Icons/RealTrace.png</iconset>
        </property>
        <property name="iconSize">
         <size>

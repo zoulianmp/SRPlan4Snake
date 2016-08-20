@@ -1173,6 +1173,8 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 	//if checked ,start to tracing the snake motion,else stop the motion tracing
 	if (checked)
 	{
+		
+
 		// get the active node
 		vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
 		vtkMRMLMarkupsNode *listNode = NULL;
@@ -1196,7 +1198,7 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 				
 
 				connect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
-				this->tracingTimer->start(60000);
+				this->tracingTimer->start(1000);
 
 
 			}
@@ -1220,6 +1222,7 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 	}
 	else
 	{
+		
 		this->tracingTimer->stop();
 		disconnect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
 
