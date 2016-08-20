@@ -62,6 +62,7 @@
 #include <vtkNew.h>
 #include <vtkCollection.h>
 
+#include <vtksys/SystemTools.hxx>
 #include <math.h>
 
 
@@ -1250,6 +1251,13 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 		Markup * markup = listNode->GetMarkupByLabel(realTracLabel);
 
 		int index = listNode->GetMarkupIndexByByLabel(realTracLabel);
+
+
+		std::string realTracFile;
+		if (vtksys::SystemTools::GetEnv("OPTIC_TRAC") != NULL)
+		{
+			realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC"));
+		}
 
 		//QFile opticTracFile("D:/00-SRPlan/SRPlan4SnakeVC2015Bin/Output/share/NetworkShare/RealtimePosition.txt");
 		QFile opticTracFile("E:/CodeLearn/RealtimePosition.txt");
