@@ -44,7 +44,6 @@
 //----------------------------------------------------------------------------
 vtkMRMLNodeNewMacro(vtkMRMLMarkupsNode);
 
-
 //----------------------------------------------------------------------------
 vtkMRMLMarkupsNode::vtkMRMLMarkupsNode()
 {
@@ -981,6 +980,57 @@ Markup* vtkMRMLMarkupsNode::GetMarkupByID(const char* markupID)
     }
   return NULL;
 }
+
+
+
+
+///give a label, require the label markup
+
+bool vtkMRMLMarkupsNode::ExistMarkup(const char* label)
+{
+	Markup * markup = this->GetMarkupByLabel(label);
+
+	if (markup == NULL)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+
+
+}
+
+Markup* vtkMRMLMarkupsNode::GetMarkupByLabel(const char* label)
+{
+
+	int numMarkups = this->GetNumberOfMarkups();
+	Markup * markup;
+
+	for (int m = 0; m<numMarkups; m++)
+	{
+		markup = this->GetNthMarkup(m);
+
+		if (markup->Label.compare(label) == 0)
+		{
+			return markup;
+		}
+	}
+
+	return NULL;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 //-----------------------------------------------------------
 void vtkMRMLMarkupsNode::SetNthMarkupID(int n, std::string id)

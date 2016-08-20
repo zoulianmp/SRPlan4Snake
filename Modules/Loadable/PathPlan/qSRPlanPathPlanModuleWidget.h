@@ -131,6 +131,7 @@ public slots:
   void onSelectedAllMarkupsInListToggled();
   void onAddMarkupPushButtonClicked();
 
+  void onRealTracePushButtonClicked();
 
   void onDeleteMarkupPushButtonClicked();
   void onDeleteAllMarkupsInListPushButtonClicked();

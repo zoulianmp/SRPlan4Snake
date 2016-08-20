@@ -232,6 +232,13 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   // add
   QObject::connect(this->addMarkupPushButton, SIGNAL(clicked()),
                    q, SLOT(onAddMarkupPushButtonClicked()));
+
+
+  // realtime tracing 
+
+  QObject::connect(this->realTracePushButton, SIGNAL(clicked()),
+	  q, SLOT(onRealTracePushButtonClicked()));
+
  
   // delete
   QObject::connect(this->deleteMarkupPushButton, SIGNAL(clicked()),
@@ -1150,6 +1157,59 @@ void qSRPlanPathPlanModuleWidget::onAddMarkupPushButtonClicked()
     listNode->AddMarkupWithNPoints(1);
     }
 }
+
+void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	bool checked = d->realTracePushButton->isChecked();
+
+	//if checked ,start to tracing the snake motion,else stop the motion tracing
+	if (checked)
+	{
+		// get the active node
+		vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
+		vtkMRMLMarkupsNode *listNode = NULL;
+		if (mrmlNode)
+		{
+			listNode = vtkMRMLMarkupsNode::SafeDownCast(mrmlNode);
+		}
+		if (listNode)
+		{
+			const char * realTracLabel = vtkMRMLMarkupsNode::GetRealTraceMarkupLabel();
+
+			//make sure there is a tracing flag
+			bool exist = listNode->ExistMarkup(realTracLabel);
+
+			if (exist)
+			{
+
+			}
+			else
+			{
+				// for now, assume a fiducial
+				listNode->AddMarkupWithNPoints(1, realTracLabel);
+			}
+			 
+
+			
+		}
+
+	}
+	else
+	{
+
+
+	}
+
+
+
+
+
+
+
+}
+
 
 
 
