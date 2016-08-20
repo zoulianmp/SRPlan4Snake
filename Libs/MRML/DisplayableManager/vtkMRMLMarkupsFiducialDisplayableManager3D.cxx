@@ -500,6 +500,26 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::SetNthSeed(int n, vtkMRMLMarkup
     }
 
   handleRep->SetUniformScale(displayNode->GetGlyphScale());
+
+  //Changed the color of Trace Mark Added by zoulian
+
+  const char* traceLable = vtkMRMLMarkupsNode::GetRealTraceMarkupLabel();
+  if (textString.compare(traceLable) == 0)
+  {
+	
+	  double Tracecolor[3];
+	  Tracecolor[0] = 1.0  ;
+	  Tracecolor[1] = 1.0 ;
+	  Tracecolor[2] = 0.0;
+	  handleRep->GetLabelTextActor()->GetProperty()->SetColor(Tracecolor);
+
+	  prop = handleRep->GetProperty();
+      prop->SetColor(Tracecolor);
+	 
+  }
+
+
+
 }
 
 //---------------------------------------------------------------------------

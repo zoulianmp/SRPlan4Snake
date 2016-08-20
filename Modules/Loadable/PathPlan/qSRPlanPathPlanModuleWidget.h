@@ -23,6 +23,8 @@
 
 #include "qSRPlanPathPlanModuleExport.h"
 
+class QTimer;
+
 class QMenu;
 class QModelIndex;
 class QTableWidgetItem;
@@ -208,7 +210,10 @@ public slots:
   /// current markups node if set, otherwise just uses the defaults.
   void onNewMarkupWithCurrentDisplayPropertiesTriggered();
 
-  
+  //when timer timeout,update the TraceMark Position.
+  void UpdateTraceMarkPosition();
+
+
 protected:
   QScopedPointer<qSRPlanPathPlanModuleWidgetPrivate> d_ptr;
 
@@ -224,6 +229,8 @@ private:
   Q_DISABLE_COPY(qSRPlanPathPlanModuleWidget);
 
   QShortcut *pToAddShortcut;
+
+  QTimer *tracingTimer;
 };
 
 #endif

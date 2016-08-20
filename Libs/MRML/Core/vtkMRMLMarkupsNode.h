@@ -86,7 +86,7 @@ public:
 
   virtual const char* GetIcon() {return "";};
 
-  static const char* GetRealTraceMarkupLabel() { return "RealTraceMark"; };
+  static const char* GetRealTraceMarkupLabel() { return "TMark"; };
 
   //--------------------------------------------------------------------------
   // MRMLNode methods
@@ -260,9 +260,10 @@ public:
   Markup* GetMarkupByID(const char* markupID);
 
 
+  //Used by Tracing Mark
   bool ExistMarkup(const char* label);
   Markup* GetMarkupByLabel(const char* label);
-
+  int  GetMarkupIndexByByLabel(const char* label);
 
 
   /// Get the Selected flag on the nth markup, returns false if markup doesn't

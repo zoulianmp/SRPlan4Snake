@@ -1002,6 +1002,27 @@ bool vtkMRMLMarkupsNode::ExistMarkup(const char* label)
 
 }
 
+int vtkMRMLMarkupsNode::GetMarkupIndexByByLabel(const char* label)
+{
+
+	int numMarkups = this->GetNumberOfMarkups();
+	Markup * markup;
+
+	for (int m = 0; m<numMarkups; m++)
+	{
+		markup = this->GetNthMarkup(m);
+
+		if (markup->Label.compare(label) == 0)
+		{
+			return m;
+		}
+	}
+
+	return -1;
+
+}
+
+
 Markup* vtkMRMLMarkupsNode::GetMarkupByLabel(const char* label)
 {
 

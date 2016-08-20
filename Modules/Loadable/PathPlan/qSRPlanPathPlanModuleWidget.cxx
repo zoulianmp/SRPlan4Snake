@@ -28,6 +28,8 @@
 #include <QStringList>
 #include <QTableWidgetItem>
 
+#include "QTimer.h"
+
 // CTK includes
 #include "ctkMessageBox.h"
 
@@ -354,6 +356,9 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
     , d_ptr( new qSRPlanPathPlanModuleWidgetPrivate(*this) )
 {
   this->pToAddShortcut = 0;
+
+  this->tracingTimer = 0;
+
 
   this->volumeSpacingScaleFactor = 10.0;
 }
@@ -1183,22 +1188,39 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 
 			if (exist)
 			{
+				if (this->tracingTimer == NULL)
+				{
+					this->tracingTimer = new QTimer(this);
+				}
+				
+
+				connect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
+				this->tracingTimer->start(60000);
+
 
 			}
 			else
 			{
 				// for now, assume a fiducial
 				listNode->AddMarkupWithNPoints(1, realTracLabel);
+				if (this->tracingTimer == NULL)
+				{
+					this->tracingTimer = new QTimer(this);
+				}
+				connect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
+				this->tracingTimer->start(1000);
+
 			}
 			 
-
+		
 			
 		}
 
 	}
 	else
 	{
-
+		this->tracingTimer->stop();
+		disconnect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
 
 	}
 
@@ -1211,6 +1233,58 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 }
 
 
+void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+	// get the active node
+	vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
+	vtkMRMLMarkupsNode *listNode = NULL;
+	if (mrmlNode)
+	{
+		listNode = vtkMRMLMarkupsNode::SafeDownCast(mrmlNode);
+	}
+	if (listNode)
+	{
+		const char * realTracLabel = vtkMRMLMarkupsNode::GetRealTraceMarkupLabel();
+
+		Markup * markup = listNode->GetMarkupByLabel(realTracLabel);
+
+		int index = listNode->GetMarkupIndexByByLabel(realTracLabel);
+
+		//QFile opticTracFile("D:/00-SRPlan/SRPlan4SnakeVC2015Bin/Output/share/NetworkShare/RealtimePosition.txt");
+		QFile opticTracFile("E:/CodeLearn/RealtimePosition.txt");
+		bool suc  =  opticTracFile.open(QIODevice::ReadOnly);
+		QTextStream tracStream(&opticTracFile);
+
+		QString line;
+		line = tracStream.readLine();
+		QStringList list = line.split(",");
+
+		opticTracFile.close();
+
+
+		double x, y, z;
+
+		x = list[0].toDouble();
+		y = list[1].toDouble();
+		z = list[2].toDouble();
+
+		int pointIndex = 0;
+	 
+		markup->points[pointIndex].SetX(x);
+		markup->points[pointIndex].SetY(y);
+		markup->points[pointIndex].SetZ(z);
+
+		// throw an event to let listeners know the position has changed
+		listNode->Modified();
+		listNode->InvokeCustomModifiedEvent(vtkMRMLMarkupsNode::PointModifiedEvent, (void*)&index);
+
+		
+	}
+	
+	
+
+}
 
 
 //-----------------------------------------------------------------------------
