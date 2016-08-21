@@ -3,6 +3,7 @@
         <file>Icons/AddLabelmap.png</file>
         <file>Icons/Segmentations.png</file>
         <file>Icons/paintbrush.png</file>
+		<file>Icons/paintbrushdo.png</file>
         <file>Icons/poly.png</file>
     </qresource>
 </RCC>

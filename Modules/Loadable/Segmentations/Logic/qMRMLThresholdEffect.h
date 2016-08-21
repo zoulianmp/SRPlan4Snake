@@ -83,7 +83,8 @@ public:
   //void PrintSelf(ostream& os, vtkIndent indent);
 
 	void SetupThreshold();
-
+	//The enum type for Threshold Type
+	enum ThresholdMode {  ByLower, Between, ByUpper};
 
   virtual void ProcessEvent(vtkObject *caller, unsigned long event,void *callData);
  
@@ -96,9 +97,11 @@ public:
 
   void SetThresholdMin( int min);
   void SetThresholdMax( int max);
-  void ApplyThreshold();
-  void PreviewThreshold();
 
+  void ApplyThreshold(ThresholdMode type );
+  void PreviewThreshold(ThresholdMode type);
+
+   
 
 
 

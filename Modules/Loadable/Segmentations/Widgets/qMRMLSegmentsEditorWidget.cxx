@@ -231,11 +231,17 @@ void qMRMLSegmentsEditorWidget::onThresholdClicked()
 //	{
 //		d->pushButton_poly->setChecked(false);
 //	}
+	if (d->pushButton_threshold->isChecked())
+	{
+		this->editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::Threshold);
+		d->groupBox_threshould->setEnabled(true);
+	}
+	else
+	{
+		d->groupBox_threshould->setEnabled(false);
+	}
 	
 	
-	this->editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::Threshold);
-
-	d->groupBox_threshould->setEnabled(true);
 }
 
 
@@ -387,7 +393,20 @@ void  qMRMLSegmentsEditorWidget::doThreshouldPreview()
 		thresholdEffect->SetThresholdMin(min);
 		thresholdEffect->SetThresholdMax(max);
 
-		thresholdEffect->PreviewThreshold();
+		if (min < -980) 
+		{
+			thresholdEffect->PreviewThreshold(qMRMLThresholdEffect::ByLower);
+		}
+		else if (max > 980)
+		{
+			thresholdEffect->PreviewThreshold(qMRMLThresholdEffect::ByUpper);
+		}
+		else
+		{
+			thresholdEffect->PreviewThreshold(qMRMLThresholdEffect::Between);
+		}
+
+		
 	}
 
 
@@ -415,7 +434,19 @@ void qMRMLSegmentsEditorWidget::onWLApplyPushButtonClicked()
 		thresholdEffect->SetThresholdMin(min);
 		thresholdEffect->SetThresholdMax(max);
 
-		thresholdEffect->ApplyThreshold();
+		if (min < -980)
+		{
+			thresholdEffect->ApplyThreshold(qMRMLThresholdEffect::ByLower);
+		}
+		else if (max > 980)
+		{
+			thresholdEffect->ApplyThreshold(qMRMLThresholdEffect::ByUpper);
+		}
+		else
+		{
+			thresholdEffect->ApplyThreshold(qMRMLThresholdEffect::Between);
+		}
+		 
 	}
 
 

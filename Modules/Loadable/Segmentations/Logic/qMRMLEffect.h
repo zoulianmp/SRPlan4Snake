@@ -203,7 +203,7 @@ protected:
   vtkImageData* scopedImageBuffer;   // also as extractImage 
   vtkImageSlicePaint * scopedSlicePaint; //used for painter
 
-  float paintColor[3] = {0,0,0};
+  float paintColor[3] = {0.0,1.0,0};
 
 
 

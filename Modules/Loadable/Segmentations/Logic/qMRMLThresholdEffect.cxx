@@ -130,7 +130,7 @@ void qMRMLThresholdEffect::InitFeedbackActor()
 
 }
 
-void qMRMLThresholdEffect::ApplyThreshold()
+void qMRMLThresholdEffect::ApplyThreshold(ThresholdMode type)
 {
 	if (!this->editorLogic->GetBackgroundImage() || !this->editorLogic->GetLabelImage())
 	{
@@ -139,7 +139,20 @@ void qMRMLThresholdEffect::ApplyThreshold()
 
 	vtkImageThreshold* thresh = vtkImageThreshold::New();
 	thresh->SetInputData(this->editorLogic->GetBackgroundImage());
-	thresh->ThresholdBetween(this->min, this->max);
+
+	switch (type)
+	{
+	case ByLower:
+		thresh->ThresholdByLower(this->max) ;
+		break;
+	case Between:
+		thresh->ThresholdBetween(this->min, this->max);
+		break;
+	case ByUpper:
+		thresh->ThresholdByUpper(this->min);
+		break;
+	}
+
 	thresh->SetInValue(this->editorLogic->GetLabel());
 	thresh->SetOutValue(0);
 	thresh->SetOutputScalarType(this->editorLogic->GetLabelImage()->GetScalarType());
@@ -151,7 +164,7 @@ void qMRMLThresholdEffect::ApplyThreshold()
 }
 
 
-void qMRMLThresholdEffect::PreviewThreshold()
+void qMRMLThresholdEffect::PreviewThreshold(ThresholdMode type)
 {
 	if (!this->editorLogic->GetBackgroundImage() || !this->editorLogic->GetLabelImage())
 	{
@@ -165,7 +178,7 @@ void qMRMLThresholdEffect::PreviewThreshold()
 	lut->SetNumberOfTableValues(2);
 	lut->SetTableRange(0, 1);
 	lut->SetTableValue(0, 0, 0, 0, 0);
-	lut->SetTableValue(1, color[0], color[1], color[2], color[3]);
+	lut->SetTableValue(1, color[0], color[1], color[2], 0.8);
 
 	vtkImageMapToRGBA * map = vtkImageMapToRGBA::New();
 
@@ -178,7 +191,22 @@ void qMRMLThresholdEffect::PreviewThreshold()
 	vtkMRMLSliceLayerLogic * backgroundLogic = this->sliceLogic->GetBackgroundLayer();
 
 	thresh->SetInputConnection(backgroundLogic->GetReslice()->GetOutputPort());
-	thresh->ThresholdBetween(this->min, this->max);
+
+
+
+	switch (type)
+	{
+	case ByLower:
+		thresh->ThresholdByLower(this->max);
+		break;
+	case Between:
+		thresh->ThresholdBetween(this->min, this->max);
+		break;
+	case ByUpper:
+		thresh->ThresholdByUpper(this->min);
+		break;
+	}
+	//thresh->ThresholdBetween(this->min, this->max);
 	thresh->SetInValue(1);
 	thresh->SetOutValue(0);
 	thresh->SetOutputScalarTypeToUnsignedChar();
@@ -190,4 +218,3 @@ void qMRMLThresholdEffect::PreviewThreshold()
 	this->sliceView->scheduleRender();
 
 }
-

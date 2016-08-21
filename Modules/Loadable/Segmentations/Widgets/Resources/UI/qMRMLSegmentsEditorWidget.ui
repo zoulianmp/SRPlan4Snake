@@ -78,7 +78,8 @@
     </property>
     <property name="icon">
      <iconset resource="../../../Resources/qSRPlanSegmentationsModule.qrc">
-      <normaloff>:/Icons/paintbrush.png</normaloff>:/Icons/paintbrush.png</iconset>
+      <normaloff>:/Icons/paintbrush.png</normaloff>
+      <normalon>:/Icons/paintbrushdo.png</normalon>:/Icons/paintbrush.png</iconset>
     </property>
     <property name="iconSize">
      <size>
