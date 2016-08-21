@@ -91,6 +91,12 @@ void qMRMLWindowLevelPanelPrivate::init()
   QObject::connect(this->spinBox_l, SIGNAL(valueChanged(int)),
 	  q, SLOT(onLevelChanged(int)));
 
+
+  QObject::connect(this->wlApplyPushButton, SIGNAL(clicked()),
+	  q, SLOT(onWLApplyPushButtonClicked()));
+
+
+
   
 }
 
@@ -199,7 +205,11 @@ void qMRMLWindowLevelPanel::onWLCustomizedSelected()
 }
 
 
-
+QPushButton * qMRMLWindowLevelPanel::wlApplyPushButton()
+{
+	Q_D(qMRMLWindowLevelPanel);
+	return d->wlApplyPushButton;
+}
 
 
 
@@ -213,4 +223,29 @@ void qMRMLWindowLevelPanel::onLevelChanged(int)
 {
 
 
+}
+
+
+void qMRMLWindowLevelPanel::onWLApplyPushButtonClicked()
+{
+	int i = 89;
+
+}
+
+
+bool qMRMLWindowLevelPanel::SetSegmentsEditorLogic(qMRMLSegmentsEditorLogic * editorLogic)
+{
+	if (editorLogic != NULL)
+	{
+		this->editorLogic = editorLogic;
+		//		if (editorLogic->GetSegmentsEditorWidget() != this)
+		//			editorLogic->SetSegmentsEditorWidget(this);
+		return true;
+	}
+	return false;
+}
+
+qMRMLSegmentsEditorLogic * qMRMLWindowLevelPanel::GetSegmentsEditorLogic()
+{
+	return this->editorLogic;
 }

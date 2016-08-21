@@ -63,9 +63,10 @@ public:
 
   void EnableEffectButtons();
 
-  int GetBrushSize();
-   
+ // int GetBrushSize();
+  void ConvertWLtoMinMax(int w, int l, int & min, int &max);
 
+  void ConvertMinMaxtoWL(int min, int max, int & w, int &l);
 
 public slots:
   /// Set segmentation MRML node
@@ -78,17 +79,34 @@ public slots:
 
 void onPaintBrushClicked();
 
-void onPolyClicked();
+//void onPolyClicked();
 
 
 void onThresholdClicked();
 
 // PaintBrush Effect Slots
-void onBrushStyleRoundClicked();
-void onBrushStyleSquareClicked();
-void onBrushSizeChanged(int size);
+//void onBrushStyleRoundClicked();
+//void onBrushStyleSquareClicked();
+//void onBrushSizeChanged(int size);
 
 
+
+void onWLAbdomenSelected();
+void onWLBrainSelected();
+void onWLAirSelected();
+void onWLBoneSelected();
+void onWLLungSelected();
+//void onWLCustomizedSelected();
+
+
+
+void onWindowLevelChanged(int);
+
+
+void onWLDoubleRangeSliderValueChanged(double value);
+
+
+void onWLApplyPushButtonClicked();
 
 
 
@@ -101,6 +119,8 @@ protected slots:
 
   /// Populate segment combobox according to the segmentation node
 //  void populateSegmentCombobox();
+
+void  doThreshouldPreview();
 
 signals:
 //  void currentNodeChanged(vtkMRMLNode*);

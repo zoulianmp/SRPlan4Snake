@@ -74,35 +74,69 @@ void qMRMLSegmentsEditorWidgetPrivate::init()
   Q_Q(qMRMLSegmentsEditorWidget);
   this->setupUi(q);
 
-  qMRMLWindowLevelPanel* wlpanel = new qMRMLWindowLevelPanel(this->page_threshould_options);
+ // qMRMLWindowLevelPanel* wlpanel = new qMRMLWindowLevelPanel(this->page_threshould_options);
 
-  wlpanel->setLayout(this->page_threshould_options->layout());
+//  wlpanel->setLayout(this->page_threshould_options->layout());
   
+//  wlpanel->SetSegmentsEditorLogic(q->GetSegmentsEditorLogic());
     
   // Make connections
   QObject::connect( this->pushButton_paintbrush, SIGNAL(clicked()),
     q, SLOT(onPaintBrushClicked( )) );
 
-  QObject::connect(this->pushButton_poly, SIGNAL(clicked()),
-	  q, SLOT(onPolyClicked()));
-
+ 
 
   QObject::connect(this->pushButton_threshold, SIGNAL(clicked()),
 	  q, SLOT(onThresholdClicked()));
 
-  //PaintBrush Effect
-  QObject::connect(this->btnRound, SIGNAL(clicked()),
-	  q, SLOT(onBrushStyleRoundClicked()));
-
-  QObject::connect(this->btnSquare, SIGNAL(clicked()),
-	  q, SLOT(onBrushStyleSquareClicked()));
-
-//  QObject::connect(this->inBrushSizeSlider, SIGNAL(valueChanged(int)),
-//	  q, SLOT(onBrushSizeChanged()));
-
-
-
   
+
+
+  this->spinBox_l->setReadOnly(true);
+  this->spinBox_w->setReadOnly(true);
+
+
+
+
+  QObject::connect(this->toolButton_abdomen, SIGNAL(clicked()),
+	  q, SLOT(onWLAbdomenSelected()));
+
+
+  QObject::connect(this->toolButton_brain, SIGNAL(clicked()),
+	  q, SLOT(onWLBrainSelected()));
+
+  QObject::connect(this->toolButton_air, SIGNAL(clicked()),
+	  q, SLOT(onWLAirSelected()));
+
+  QObject::connect(this->toolButton_bone, SIGNAL(clicked()),
+	  q, SLOT(onWLBoneSelected()));
+
+  QObject::connect(this->toolButton_lung, SIGNAL(clicked()),
+	  q, SLOT(onWLLungSelected()));
+
+    
+
+
+
+  QObject::connect(this->spinBox_w, SIGNAL(valueChanged(int)),
+	  q, SLOT(onWindowLevelChanged(int)));
+
+  QObject::connect(this->spinBox_l, SIGNAL(valueChanged(int)),
+	  q, SLOT(onWindowLevelChanged(int)));
+
+
+  QObject::connect(this->wlApplyPushButton, SIGNAL(clicked()),
+	  q, SLOT(onWLApplyPushButtonClicked()));
+
+  QObject::connect(this->wlDoubleRangeSlider, SIGNAL(minimumPositionChanged(double )),
+	  q, SLOT(onWLDoubleRangeSliderValueChanged(double )));
+   
+  QObject::connect(this->wlDoubleRangeSlider, SIGNAL(maximumPositionChanged(double )),
+	  q, SLOT(onWLDoubleRangeSliderValueChanged(double )));
+
+ 
+  
+
   
 }
 
@@ -137,12 +171,12 @@ void qMRMLSegmentsEditorWidget::onPaintBrushClicked()
 	Q_D(qMRMLSegmentsEditorWidget);
 
  
-	d->stackedWidget_options->setCurrentIndex(0);
+//	d->stackedWidget_options->setCurrentIndex(0);
 
-	if (d->pushButton_poly->isChecked())
-	{
-		d->pushButton_poly->setChecked(false);
-	}
+//	if (d->pushButton_poly->isChecked())
+//	{
+//		d->pushButton_poly->setChecked(false);
+//	}
 
 	if (d->pushButton_threshold->isChecked())
 	{
@@ -152,13 +186,14 @@ void qMRMLSegmentsEditorWidget::onPaintBrushClicked()
 	qMRMLSegmentsEditorLogic * editorLogic = this->GetSegmentsEditorLogic();
     editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
 
-	
+	d->groupBox_threshould->setEnabled(false);
 }
 
+/*
 void qMRMLSegmentsEditorWidget::onPolyClicked()
 {
 	Q_D(qMRMLSegmentsEditorWidget);
-	d->stackedWidget_options->setCurrentIndex(1);
+//	d->stackedWidget_options->setCurrentIndex(1);
 
 
 	if (d->pushButton_paintbrush->isChecked())
@@ -176,13 +211,15 @@ void qMRMLSegmentsEditorWidget::onPolyClicked()
 
 
 }
+
+*/
 //***************************************************************************
 //***********    Threshold Effect Panel**********************
 //***************************************************************************
 void qMRMLSegmentsEditorWidget::onThresholdClicked()
 {
 	Q_D(qMRMLSegmentsEditorWidget);
-	d->stackedWidget_options->setCurrentIndex(2);
+//	d->stackedWidget_options->setCurrentIndex(2);
 
 
 	if (d->pushButton_paintbrush->isChecked())
@@ -190,25 +227,28 @@ void qMRMLSegmentsEditorWidget::onThresholdClicked()
 		d->pushButton_paintbrush->setChecked(false);
 	}
 
-	if (d->pushButton_poly->isChecked())
-	{
-		d->pushButton_poly->setChecked(false);
-	}
+//	if (d->pushButton_poly->isChecked())
+//	{
+//		d->pushButton_poly->setChecked(false);
+//	}
 	
 	
 	this->editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::Threshold);
 
-
+	d->groupBox_threshould->setEnabled(true);
 }
 
 
 bool qMRMLSegmentsEditorWidget::SetSegmentsEditorLogic(qMRMLSegmentsEditorLogic * editorLogic)
 {
+	Q_D(qMRMLSegmentsEditorWidget);
+
 	if (editorLogic != NULL)
 	{
 		this->editorLogic = editorLogic;
 //		if (editorLogic->GetSegmentsEditorWidget() != this)
 //			editorLogic->SetSegmentsEditorWidget(this);
+	//	d->wlpanel->SetSegmentsEditorLogic(editorLogic);
 		return true;
 	}
 	return false;
@@ -224,49 +264,194 @@ void qMRMLSegmentsEditorWidget::EnableEffectButtons()
 {
 	Q_D(qMRMLSegmentsEditorWidget);
 	d->pushButton_paintbrush->setEnabled(true);
-	d->pushButton_poly->setEnabled(true);
+//	d->pushButton_poly->setEnabled(true);
 	d->pushButton_threshold->setEnabled(true);
 
 }
 
-int qMRMLSegmentsEditorWidget::GetBrushSize()
+
+
+void qMRMLSegmentsEditorWidget::onWLAbdomenSelected()
 {
 	Q_D(qMRMLSegmentsEditorWidget);
-	return d->inBrushSizeSlider->value();
-};
+	//Abdomen W/L = 350/40
+//	d->spinBox_l->setReadOnly(true);
+//	d->spinBox_w->setReadOnly(true);
 
 
+	d->spinBox_l->setValue(350);
+	d->spinBox_w->setValue(40);
+
+	
+}
 
 
-
-
-
-
-
-
-
-void qMRMLSegmentsEditorWidget::onBrushStyleRoundClicked()
+void qMRMLSegmentsEditorWidget::onWLBrainSelected()
 {
-	qMRMLPaintEffect* paintEffect = qMRMLPaintEffect::SafeDownCast(this->editorLogic->GetCurrentEffect());
-	paintEffect->SetBrushShape(qMRMLPaintEffect::Circle);
+	Q_D(qMRMLSegmentsEditorWidget);
+	//Brain W/L = 100/50
+//	d->spinBox_l->setReadOnly(true);
+//	d->spinBox_w->setReadOnly(true);
+
+	d->spinBox_w->setValue(100);
+	d->spinBox_l->setValue(50);
+
+	
+}
+
+
+void qMRMLSegmentsEditorWidget::onWLAirSelected()
+{
+	Q_D(qMRMLSegmentsEditorWidget);
+	//Air W/L = 1000/-426
+//	d->spinBox_l->setReadOnly(true);
+//	d->spinBox_w->setReadOnly(true);
+
+	d->spinBox_w->setValue(1000);
+	d->spinBox_l->setValue(-426);
+
+	
+}
+
+
+void qMRMLSegmentsEditorWidget::onWLBoneSelected()
+{
+	Q_D(qMRMLSegmentsEditorWidget);
+	//Bone W/L = 1000/400
+//	d->spinBox_l->setReadOnly(true);
+//	d->spinBox_w->setReadOnly(true);
+
+	d->spinBox_w->setValue(1000);
+	d->spinBox_l->setValue(400);
+
+	
+}
+
+void qMRMLSegmentsEditorWidget::onWLLungSelected()
+{
+	Q_D(qMRMLSegmentsEditorWidget);
+
+
+//	d->spinBox_l->setReadOnly(true);
+//	d->spinBox_w->setReadOnly(true);
+
+	//Lung W/L = 1400/-500
+	d->spinBox_w->setValue(1400);
+	d->spinBox_l->setValue(-500);
+
+
+}
+ 
+ 
+
+
+void qMRMLSegmentsEditorWidget::onWindowLevelChanged(int)
+{
+	Q_D(qMRMLSegmentsEditorWidget);
+	int min;
+	int max;
+
+	int w = d->spinBox_w->value();
+	int l = d->spinBox_l->value();
+
+	this->ConvertWLtoMinMax(w, l, min, max);
+
+	d->wlDoubleRangeSlider->setValues(min, max);
+
+	
+	this->doThreshouldPreview();
+}
 
 
 
+
+
+void  qMRMLSegmentsEditorWidget::doThreshouldPreview()
+{
+	Q_D(qMRMLSegmentsEditorWidget);
+
+	int window = d->spinBox_w->value();
+	int level = d->spinBox_l->value();
+
+
+	int min = level - window / 2;
+	int max = level + window / 2;
+
+
+	qMRMLThresholdEffect * thresholdEffect;
+	qMRMLSegmentsEditorLogic::EffectMode currentMode = this->editorLogic->GetCurrentEffectMode();
+
+	if (currentMode == qMRMLSegmentsEditorLogic::Threshold)
+	{
+		thresholdEffect = qMRMLThresholdEffect::SafeDownCast(this->editorLogic->GetCurrentEffect());
+	}
+
+	if (thresholdEffect)
+	{
+		thresholdEffect->SetThresholdMin(min);
+		thresholdEffect->SetThresholdMax(max);
+
+		thresholdEffect->PreviewThreshold();
+	}
 
 
 }
 
-void qMRMLSegmentsEditorWidget::onBrushStyleSquareClicked()
+
+void qMRMLSegmentsEditorWidget::onWLApplyPushButtonClicked()
 {
-	qMRMLPaintEffect* paintEffect = qMRMLPaintEffect::SafeDownCast(this->editorLogic->GetCurrentEffect());
-	paintEffect->SetBrushShape(qMRMLPaintEffect::Square);
+	Q_D(qMRMLSegmentsEditorWidget);
+
+	int window = d->spinBox_w->value();
+	int level = d->spinBox_l->value();
+
+
+	int min = level - window / 2;
+	int max = level + window / 2;
+
+
+	qMRMLThresholdEffect * thresholdEffect;
+	qMRMLSegmentsEditorLogic::EffectMode currentMode = this->editorLogic->GetCurrentEffectMode();
+
+	if (currentMode == qMRMLSegmentsEditorLogic::Threshold)
+	{
+		thresholdEffect = qMRMLThresholdEffect::SafeDownCast(this->editorLogic->GetCurrentEffect());
+	}
+
+	if (thresholdEffect)
+	{
+		thresholdEffect->SetThresholdMin(min);
+		thresholdEffect->SetThresholdMax(max);
+
+		thresholdEffect->ApplyThreshold();
+	}
+
 
 }
 
-void qMRMLSegmentsEditorWidget::onBrushSizeChanged(int size)
+void qMRMLSegmentsEditorWidget::ConvertWLtoMinMax(int w, int l, int & min, int &max)
 {
-	qMRMLPaintEffect* paintEffect = qMRMLPaintEffect::SafeDownCast(this->editorLogic->GetCurrentEffect());
-	paintEffect->SetBrushSize(size);
+ 	min = l - w / 2;
+	max = l + w / 2;
+}
 
+void qMRMLSegmentsEditorWidget::ConvertMinMaxtoWL(int min, int max, int & w, int &l)
+{
+	w = (max - min);
+    l = (min + max) / 2;
+}
 
+void qMRMLSegmentsEditorWidget::onWLDoubleRangeSliderValueChanged(double value)
+{
+	Q_D(qMRMLSegmentsEditorWidget);
+
+	double min = int(d->wlDoubleRangeSlider->minimumValue());
+	double max = int(d->wlDoubleRangeSlider->maximumValue());
+
+	int w;
+	int l;
+
+	this->ConvertMinMaxtoWL(min, max, w, l);
+	d->spinBox_w->setValue(w);
+	d->spinBox_l->setValue(l);
 }

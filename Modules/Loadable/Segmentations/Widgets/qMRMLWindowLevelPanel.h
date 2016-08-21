@@ -25,7 +25,9 @@
 
 // MRMLWidgets includes
 #include "QWidget.h"
+#include "QPushButton.h"
 
+#include "qMRMLSegmentsEditorLogic.h"
 #include "qSRPlanSegmentationsModuleWidgetsExport.h"
 
 
@@ -53,9 +55,11 @@ public:
   /// Destructor
   virtual ~qMRMLWindowLevelPanel();
 
-  
+  QPushButton * wlApplyPushButton();
 
-
+  //set the segments editor logic to widget
+  bool SetSegmentsEditorLogic(qMRMLSegmentsEditorLogic * editorLogic);
+  qMRMLSegmentsEditorLogic * GetSegmentsEditorLogic();
 
 
 public slots:
@@ -73,13 +77,14 @@ void onWLCustomizedSelected();
 void onWindowChanged(int);
 void onLevelChanged(int);
 
+void onWLApplyPushButtonClicked();
 
 protected slots:
   
 
 protected:
   QScopedPointer<qMRMLWindowLevelPanelPrivate> d_ptr;
-
+  qMRMLSegmentsEditorLogic * editorLogic;
 private:
   Q_DECLARE_PRIVATE(qMRMLWindowLevelPanel);
   Q_DISABLE_COPY(qMRMLWindowLevelPanel);

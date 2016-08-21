@@ -6,400 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>421</width>
-    <height>189</height>
+    <width>439</width>
+    <height>263</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QStackedWidget" name="stackedWidget_options">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>80</y>
-     <width>391</width>
-     <height>111</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>0</number>
-   </property>
-   <widget class="QWidget" name="page_paintbrush_options">
-    <widget class="QLabel" name="label_3">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Brush Size(mm):</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>71</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Brush Style:</string>
-     </property>
-    </widget>
-    <widget class="QSpinBox" name="inBrushSizeSpinbox">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>40</y>
-       <width>48</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>48</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;lt;html&amp;gt;&amp;lt;head/&amp;gt;&amp;lt;body&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span style=&amp;quot; font-weight:600;&amp;quot;&amp;gt;Brush Size (+, - keys)&amp;lt;/span&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;Adjust the radius of the paintbrush.&amp;lt;/p&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>50</number>
-     </property>
-     <property name="singleStep">
-      <number>5</number>
-     </property>
-     <property name="displayIntegerBase">
-      <number>10</number>
-     </property>
-    </widget>
-    <widget class="QSlider" name="inBrushSizeSlider">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>40</y>
-       <width>104</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Brush Size (+, - keys)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Adjust the radius of the paintbrush.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>50</number>
-     </property>
-     <property name="singleStep">
-      <number>5</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="QToolButton" name="btnRound">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>10</y>
-       <width>23</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>26</width>
-       <height>26</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Round brush shape (⌘B to cycle)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>round</string>
-     </property>
-     <property name="icon">
-      <iconset resource="../qSRPlanSegmentationsModuleWidgets.qrc">
-       <normaloff>:/Icons/brush_shape_round.png</normaloff>:/Icons/brush_shape_round.png</iconset>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="autoExclusive">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QToolButton" name="btnSquare">
-     <property name="geometry">
-      <rect>
-       <x>130</x>
-       <y>10</y>
-       <width>23</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>26</width>
-       <height>26</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Square brush shape (⌘B to cycle)&lt;/span&gt;&lt;/p&gt;</string>
-     </property>
-     <property name="text">
-      <string>square</string>
-     </property>
-     <property name="icon">
-      <iconset resource="../qSRPlanSegmentationsModuleWidgets.qrc">
-       <normaloff>:/Icons/brush_shape_square.png</normaloff>:/Icons/brush_shape_square.png</iconset>
-     </property>
-     <property name="shortcut">
-      <string>Ctrl+S</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="autoExclusive">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="page_poly_options">
-    <widget class="QCheckBox" name="chkInvertPolygon">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>70</y>
-       <width>111</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, polygon drawing operations are inverted, i.e., the outside of the polygon is filled with the active label.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>Invert polygon</string>
-     </property>
-    </widget>
-    <widget class="QWidget" name="grpSegmentLength" native="true">
-     <property name="geometry">
-      <rect>
-       <x>170</x>
-       <y>30</y>
-       <width>174</width>
-       <height>38</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="leftMargin">
-       <number>40</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QSpinBox" name="inSegmentLength">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>3</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>48</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::PlusMinus</enum>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>30</number>
-          </property>
-          <property name="singleStep">
-           <number>3</number>
-          </property>
-          <property name="value">
-           <number>5</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="inSegmentLengthSlider">
-          <property name="toolTip">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Helvetica'; font-size:12px; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Set the overall opacity of segmentation labels.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;[A]: Make more transparent&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;[D]: Make more opaque&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;[S]: Toggle on/off&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>30</number>
-          </property>
-          <property name="singleStep">
-           <number>1</number>
-          </property>
-          <property name="pageStep">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>30</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::NoTicks</enum>
-          </property>
-          <property name="tickInterval">
-           <number>25</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="grpCurveStyle" native="true">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>38</y>
-       <width>174</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QRadioButton {
-  padding: 0px;
-}</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="spacing">
-       <number>4</number>
-      </property>
-      <property name="leftMargin">
-       <number>20</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QRadioButton" name="btnSmooth">
-        <property name="text">
-         <string>Smooth curve</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="btnPiecewiseLinear">
-        <property name="text">
-         <string>Polygon</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QLabel" name="label_5">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>174</width>
-       <height>14</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Freehand drawing style:</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>10</y>
-       <width>134</width>
-       <height>14</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Segment length:(mm)</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="page_threshould_options">
-    <widget class="qMRMLWindowLevelPanel" name="wlpanel" native="true">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>381</width>
-       <height>91</height>
-      </rect>
-     </property>
-    </widget>
-   </widget>
-  </widget>
   <widget class="QGroupBox" name="groupbox_editTools">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>331</width>
-     <height>81</height>
+     <width>121</width>
+     <height>80</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <property name="minimumSize">
     <size>
@@ -415,7 +42,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <widget class="QPushButton" name="pushButton_paintbrush">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -463,51 +90,13 @@ p, li { white-space: pre-wrap; }
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_poly">
+   <widget class="QPushButton" name="pushButton_threshold">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>30</y>
-      <width>40</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>40</width>
-      <height>40</height>
-     </size>
-    </property>
-    <property name="toolTip">
-     <string>Use polygon draw pen contouring structure</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="../../../Resources/qSRPlanSegmentationsModule.qrc">
-      <normaloff>:/Icons/poly.png</normaloff>:/Icons/poly.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>40</width>
-      <height>40</height>
-     </size>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_threshold">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>110</x>
       <y>30</y>
       <width>41</width>
       <height>41</height>
@@ -537,82 +126,307 @@ p, li { white-space: pre-wrap; }
     </property>
    </widget>
   </widget>
+  <widget class="QGroupBox" name="groupBox_threshould">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>80</y>
+     <width>401</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>120</height>
+    </size>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QToolButton" name="toolButton_bone">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>20</y>
+      <width>60</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>Bone W/L</string>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../qSRPlanSegmentationsModuleWidgets.qrc">
+      <normaloff>:/Icons/WindowLevelPreset-CT-bone.png</normaloff>:/Icons/WindowLevelPreset-CT-bone.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_w">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>90</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Window</string>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="toolButton_air">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>20</y>
+      <width>60</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>Air W/L</string>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../qSRPlanSegmentationsModuleWidgets.qrc">
+      <normaloff>:/Icons/WindowLevelPreset-CT-air.png</normaloff>:/Icons/WindowLevelPreset-CT-air.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="toolButton_lung">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>20</y>
+      <width>60</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>Lung W/L</string>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../qSRPlanSegmentationsModuleWidgets.qrc">
+      <normaloff>:/Icons/WindowLevelPreset-Lung.png</normaloff>:/Icons/WindowLevelPreset-Lung.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>45</width>
+      <height>45</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_l">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>90</y>
+      <width>81</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>-2000</number>
+    </property>
+    <property name="maximum">
+     <number>2000</number>
+    </property>
+    <property name="singleStep">
+     <number>100</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_w">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>90</y>
+      <width>91</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>3000</number>
+    </property>
+    <property name="singleStep">
+     <number>50</number>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="toolButton_brain">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>60</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>Brain W/L</string>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../qSRPlanSegmentationsModuleWidgets.qrc">
+      <normaloff>:/Icons/WindowLevelPreset-Brain.png</normaloff>:/Icons/WindowLevelPreset-Brain.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>45</width>
+      <height>45</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="wlApplyPushButton">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>90</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Apply</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_l">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>90</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Level</string>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="toolButton_abdomen">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>20</y>
+      <width>60</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>Abodomen W/L</string>
+    </property>
+    <property name="text">
+     <string>...</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../qSRPlanSegmentationsModuleWidgets.qrc">
+      <normaloff>:/Icons/WindowLevelPreset-Abdomen.png</normaloff>:/Icons/WindowLevelPreset-Abdomen.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>45</width>
+      <height>45</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="ctkDoubleRangeSlider" name="wlDoubleRangeSlider">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>120</y>
+      <width>351</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <double>-1000.000000000000000</double>
+    </property>
+    <property name="maximum">
+     <double>1000.000000000000000</double>
+    </property>
+    <property name="singleStep">
+     <double>50.000000000000000</double>
+    </property>
+    <property name="minimumValue">
+     <double>-1000.000000000000000</double>
+    </property>
+    <property name="maximumValue">
+     <double>1000.000000000000000</double>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>qMRMLWindowLevelPanel</class>
+   <class>ctkDoubleRangeSlider</class>
    <extends>QWidget</extends>
-   <header>qMRMLWindowLevelPanel.h</header>
+   <header>ctkDoubleRangeSlider.h</header>
   </customwidget>
  </customwidgets>
  <resources>
   <include location="../qSRPlanSegmentationsModuleWidgets.qrc"/>
   <include location="../../../Resources/qSRPlanSegmentationsModule.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>inBrushSizeSpinbox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>inBrushSizeSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>103</x>
-     <y>128</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>181</x>
-     <y>130</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>inBrushSizeSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>inBrushSizeSpinbox</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>181</x>
-     <y>130</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>103</x>
-     <y>128</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>inSegmentLength</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>inSegmentLengthSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>229</x>
-     <y>128</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>298</x>
-     <y>128</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>inSegmentLengthSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>inSegmentLength</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>298</x>
-     <y>128</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>229</x>
-     <y>128</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
