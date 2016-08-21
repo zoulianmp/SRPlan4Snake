@@ -419,12 +419,15 @@ void qMRMLEffect::XYZToRAS(float *xyzPoint, float * ras)
 float * qMRMLEffect::GetPaintColor() //get the rgba
 {
 	//vtkMRMLSliceLayerLogic *  sliceLayerLogic = this->sliceLogic->GetLayerLogic();
+	return this->paintColor;
 	
-	
-	float color[4];
-	
-	return color;
-	
+}
+
+void qMRMLEffect::SetPaintColor(double * rgb)
+{
+	this->paintColor[0] = rgb[0];
+	this->paintColor[1] = rgb[1];
+	this->paintColor[2] = rgb[2];
 }
 
 

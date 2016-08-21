@@ -369,13 +369,9 @@ void qMRMLSegmentsEditorWidget::onWindowLevelChanged(int)
 void  qMRMLSegmentsEditorWidget::doThreshouldPreview()
 {
 	Q_D(qMRMLSegmentsEditorWidget);
-
-	int window = d->spinBox_w->value();
-	int level = d->spinBox_l->value();
-
-
-	int min = level - window / 2;
-	int max = level + window / 2;
+ 
+	int min = int(d->wlDoubleRangeSlider->minimumValue());
+	int max = int(d->wlDoubleRangeSlider->maximumValue());
 
 
 	qMRMLThresholdEffect * thresholdEffect;
@@ -402,12 +398,8 @@ void qMRMLSegmentsEditorWidget::onWLApplyPushButtonClicked()
 {
 	Q_D(qMRMLSegmentsEditorWidget);
 
-	int window = d->spinBox_w->value();
-	int level = d->spinBox_l->value();
-
-
-	int min = level - window / 2;
-	int max = level + window / 2;
+	int min = int(d->wlDoubleRangeSlider->minimumValue());
+	int max = int(d->wlDoubleRangeSlider->maximumValue());
 
 
 	qMRMLThresholdEffect * thresholdEffect;
@@ -454,4 +446,6 @@ void qMRMLSegmentsEditorWidget::onWLDoubleRangeSliderValueChanged(double value)
 	this->ConvertMinMaxtoWL(min, max, w, l);
 	d->spinBox_w->setValue(w);
 	d->spinBox_l->setValue(l);
+
+	this->doThreshouldPreview();
 }

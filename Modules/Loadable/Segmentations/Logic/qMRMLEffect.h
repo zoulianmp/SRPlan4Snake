@@ -132,6 +132,8 @@ if a subclass provides a list of scope options then a selection menu will be pro
   void XYZToRAS(float *xyzPoint, float * ras);
 
   float * GetPaintColor(); //get the rgba
+  void SetPaintColor(double * rgb);
+
   vtkImageData* GetScopedLayer(vtkMRMLSliceLayerLogic * layerLogic);
 
   vtkImageData* GetScopedBackground();
@@ -200,6 +202,10 @@ protected:
   //instance variables used internally buffer for result of scoped editing
   vtkImageData* scopedImageBuffer;   // also as extractImage 
   vtkImageSlicePaint * scopedSlicePaint; //used for painter
+
+  float paintColor[3] = {0,0,0};
+
+
 
  };
 
