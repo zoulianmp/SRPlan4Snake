@@ -178,7 +178,7 @@ void qMRMLThresholdEffect::PreviewThreshold(ThresholdMode type)
 	lut->SetNumberOfTableValues(2);
 	lut->SetTableRange(0, 1);
 	lut->SetTableValue(0, 0, 0, 0, 0);
-	lut->SetTableValue(1, color[0], color[1], color[2], 0.8);
+	lut->SetTableValue(1, color[0], color[1], color[2], 1.0);
 
 	vtkImageMapToRGBA * map = vtkImageMapToRGBA::New();
 
@@ -217,4 +217,11 @@ void qMRMLThresholdEffect::PreviewThreshold(ThresholdMode type)
 
 	this->sliceView->scheduleRender();
 
+}
+
+
+void qMRMLThresholdEffect::HidePreviewContent()
+{
+	this->cursorActor->VisibilityOff();
+	this->sliceView->scheduleRender();
 }

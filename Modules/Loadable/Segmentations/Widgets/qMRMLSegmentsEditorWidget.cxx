@@ -90,13 +90,7 @@ void qMRMLSegmentsEditorWidgetPrivate::init()
 	  q, SLOT(onThresholdClicked()));
 
   
-
-
-  this->spinBox_l->setReadOnly(true);
-  this->spinBox_w->setReadOnly(true);
-
-
-
+    
 
   QObject::connect(this->toolButton_abdomen, SIGNAL(clicked()),
 	  q, SLOT(onWLAbdomenSelected()));
@@ -239,6 +233,7 @@ void qMRMLSegmentsEditorWidget::onThresholdClicked()
 	else
 	{
 		d->groupBox_threshould->setEnabled(false);
+		qMRMLThresholdEffect::SafeDownCast(this->editorLogic->GetCurrentEffect())->HidePreviewContent();
 	}
 	
 	

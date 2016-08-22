@@ -101,7 +101,8 @@ public:
   void ApplyThreshold(ThresholdMode type );
   void PreviewThreshold(ThresholdMode type);
 
-   
+  //Hide the cursorActor in the slice View
+  void HidePreviewContent();
 
 
 
