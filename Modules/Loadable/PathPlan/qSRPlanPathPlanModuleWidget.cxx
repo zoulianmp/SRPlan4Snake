@@ -1186,6 +1186,11 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 		{
 			const char * realTracLabel = vtkMRMLMarkupsNode::GetRealTraceMarkupLabel();
 
+			//Scale out for 3D Tracing show
+			vtkMRMLMarkupsDisplayNode * displayNode = vtkMRMLMarkupsDisplayNode::SafeDownCast(listNode->GetDisplayNode());
+
+			displayNode->SetGlyphScale(6.0);
+
 			//make sure there is a tracing flag
 			bool exist = listNode->ExistMarkup(realTracLabel);
 
@@ -1226,6 +1231,22 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 		this->tracingTimer->stop();
 		disconnect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
 
+		//Scale in ,restore the markup to defalt display
+
+		vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
+		vtkMRMLMarkupsNode *listNode = NULL;
+		if (mrmlNode)
+		{
+			listNode = vtkMRMLMarkupsNode::SafeDownCast(mrmlNode);
+		}
+		if (listNode)
+		{
+		
+			vtkMRMLMarkupsDisplayNode * displayNode = vtkMRMLMarkupsDisplayNode::SafeDownCast(listNode->GetDisplayNode());
+
+			displayNode->SetGlyphScale( 2.1); //Default Vale is 2.1
+
+		}
 	}
 
 
