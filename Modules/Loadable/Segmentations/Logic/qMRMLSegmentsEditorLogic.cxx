@@ -412,18 +412,18 @@ void qMRMLSegmentsEditorLogic::SetCurrentEffectMode(EffectMode effect)
 
 			break;
 
+		case None:
+			{
+			this->GetCurrentEffect()->CleanUp();
+			this->CurrentEffect = NULL;
+			this->CurrentEffectMode = None;
+			}
+		 
 		
 		}
 	}
 	
-	/*else
-	{ 
-		this->GetCurrentEffect()->CleanUp();
-		this->CurrentEffect = NULL;
-		this->CurrentEffectMode = None;
-
-	}
-	*/
+	
 }
 
 

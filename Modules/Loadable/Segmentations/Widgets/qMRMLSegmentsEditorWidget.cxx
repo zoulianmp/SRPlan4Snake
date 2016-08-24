@@ -175,12 +175,35 @@ void qMRMLSegmentsEditorWidget::onPaintBrushClicked()
 	if (d->pushButton_threshold->isChecked())
 	{
 		d->pushButton_threshold->setChecked(false);
+		d->groupBox_threshould->setEnabled(false);
 	}
 
-	qMRMLSegmentsEditorLogic * editorLogic = this->GetSegmentsEditorLogic();
-    editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
 
-	d->groupBox_threshould->setEnabled(false);
+	if (d->pushButton_paintbrush->isChecked())
+	{
+		qMRMLSegmentsEditorLogic * editorLogic = this->GetSegmentsEditorLogic();
+		editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
+
+		
+	}
+	else
+	{
+		qMRMLSegmentsEditorLogic * editorLogic = this->GetSegmentsEditorLogic();
+		editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::None);	 
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 /*

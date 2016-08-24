@@ -518,7 +518,6 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 	 
 
   //Enable the Segmentation Effect Buttons
-
   d->EditorBox->EnableEffectButtons();
   
 }
@@ -554,9 +553,10 @@ void qSlicerSegmentationsModuleWidget::onDeleteSelectedSegments()
 	
 	 vtkMRMLScene* scene = qSlicerCoreApplication::application()->mrmlScene();
 	 vtkMRMLLabelMapVolumeNode * labMapNode = vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyImageData(scene, lableMapImage);
-	 scene->RemoveNode(labMapNode);
 
      currentSegmentationNode->GetSegmentation()->RemoveSegment(segmentId.toLatin1().constData());
+
+	 scene->RemoveNode(labMapNode);
   }
 
  // vtkSlicerSegmentationsModuleLogic::ResetCTNodeOfParametersNode(this->mrmlScene());
