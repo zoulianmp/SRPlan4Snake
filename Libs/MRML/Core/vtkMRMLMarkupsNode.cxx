@@ -523,7 +523,18 @@ int vtkMRMLMarkupsNode::AddMarkupWithNPoints(int n, std::string label)
   this->Markups.push_back(markup);
   this->MaximumNumberOfMarkups++;
 
-  markupIndex = this->GetNumberOfMarkups() - 1;
+  int preSize = this->GetNumberOfMarkups();
+
+  if (preSize >0)
+  {
+	  markupIndex = preSize -1;
+  }
+  else if (preSize == 0)
+  {
+	  markupIndex = 0;
+  }
+
+ 
 
   this->Modified();
   this->InvokeCustomModifiedEvent(vtkMRMLMarkupsNode::MarkupAddedEvent, (void*)&markupIndex);

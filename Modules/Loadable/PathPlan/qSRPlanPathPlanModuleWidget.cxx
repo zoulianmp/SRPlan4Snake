@@ -1274,6 +1274,17 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 
 		Markup * markup = listNode->GetMarkupByLabel(realTracLabel);
 
+		//All the Markups have been deleted,
+		if (!markup)
+		{
+			this->tracingTimer->stop();
+			disconnect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
+			return;
+		}
+		
+
+
+
 		int index = listNode->GetMarkupIndexByByLabel(realTracLabel);
 
 
@@ -1313,7 +1324,11 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 		listNode->Modified();
 		listNode->InvokeCustomModifiedEvent(vtkMRMLMarkupsNode::PointModifiedEvent, (void*)&index);
 
-		
+	
+			
+		vtkSRPlanPathPlanModuleLogic * Mlogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
+				
+		Mlogic->GetMarkupsLogic()->JumpSlicesToLocation(x, y, z, true);
 	}
 	
 	
