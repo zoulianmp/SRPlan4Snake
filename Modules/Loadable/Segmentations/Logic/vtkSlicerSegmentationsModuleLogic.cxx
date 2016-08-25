@@ -1267,33 +1267,36 @@ void vtkSlicerSegmentationsModuleLogic::UpdateClosedSurfaceFromLabelMapImageForS
 
 	vtkPolyData* closedSurface = vtkPolyData::SafeDownCast(segment->GetRepresentation(closedSurfaceName));
 
-
-	vtkBinaryLabelmapToClosedSurfaceConversionRule * conversionRule = vtkBinaryLabelmapToClosedSurfaceConversionRule::New();
-
-	conversionRule->SetConversionParameter(conversionRule->GetDecimationFactorParameterName(),
-		"0.0", "Desired reduction in the total number of polygons (e.g., if set to 0.9, then reduce the data set to 10% of its original size)");
-
-	conversionRule->SetConversionParameter(conversionRule->GetSmoothingFactorParameterName(),
-		"0.1", "Relaxation factor for Laplacian smoothing. Value of 0 results in no smoothing, while 1 means significant smoothing.");
-
+	int label = segment->GetLabel();
 
 	if (!closedSurface)
 	{
-		closedSurface = vtkPolyData::New();
-		conversionRule->Convert(orientedimage, closedSurface);
+		closedSurface = vtkPolyData::New();	
+		vtkSlicerSegmentationsModuleLogic::ConvertLabelmapToClosedSurface(orientedimage,closedSurface,label);
 
 		segment->AddRepresentation(closedSurfaceName, closedSurface);
 	}
 	else
 	{
-		conversionRule->Convert(orientedimage, closedSurface);
+		vtkSlicerSegmentationsModuleLogic::ConvertLabelmapToClosedSurface(orientedimage, closedSurface, label);
 	}
-
-
 
 }
 
+bool vtkSlicerSegmentationsModuleLogic::ConvertLabelmapToClosedSurface(vtkOrientedImageData* labelMapImage, vtkPolyData* closedSurface, int Label)
+{
 
+	vtkBinaryLabelmapToClosedSurfaceConversionRule * conversionRule = vtkBinaryLabelmapToClosedSurfaceConversionRule::New();
+
+	conversionRule->SetConversionParameter(conversionRule->GetDecimationFactorParameterName(),
+		"0.6", "Desired reduction in the total number of polygons (e.g., if set to 0.9, then reduce the data set to 10% of its original size)");
+
+	conversionRule->SetConversionParameter(conversionRule->GetSmoothingFactorParameterName(),
+		"0.3", "Relaxation factor for Laplacian smoothing. Value of 0 results in no smoothing, while 1 means significant smoothing.");
+
+	return conversionRule->ConvertUseLabel(labelMapImage, closedSurface, Label);
+
+}
 
 
 

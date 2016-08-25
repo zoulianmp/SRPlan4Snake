@@ -38,6 +38,8 @@ class vtkCallbackCommand;
 class vtkOrientedImageData;
 class vtkDataObject;
 class vtkGeneralTransform;
+class vtkPolyData;
+
 
 class vtkMRMLScalarVolumeNode;
 class vtkMRMLSegmentationStorageNode;
@@ -227,6 +229,7 @@ public:
   //vtkSlicerVolumesLogic * GetVolumesLogic();
  // void SetVolumesLogic(vtkSlicerVolumesLogic * volumeslogic);
 
+  static bool ConvertLabelmapToClosedSurface(vtkOrientedImageData* labelMapImage, vtkPolyData* closedSurface, int Label =1);
 
 protected:
   virtual void SetMRMLSceneInternal(vtkMRMLScene * newScene);

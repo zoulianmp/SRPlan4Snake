@@ -61,6 +61,9 @@ public:
   /// Update the target representation based on the source representation
   virtual bool Convert(vtkDataObject* sourceRepresentation, vtkDataObject* targetRepresentation);
 
+  /// Update the target representation based on the source representation
+  bool ConvertUseLabel(vtkDataObject* sourceRepresentation, vtkDataObject* targetRepresentation, int label);
+
   /// Get the cost of the conversion.
   virtual unsigned int GetConversionCost(vtkDataObject* sourceRepresentation=NULL, vtkDataObject* targetRepresentation=NULL);
 
