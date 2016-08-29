@@ -1,0 +1,1 @@
+C:\BaseLibsInstall\CTK\lib\ctk-0.1;C:\BaseLibsInstall\CURL\bin;C:\BaseLibsInstall\DCMTK\bin;C:\BaseLibsInstall\ITK\bin;C:\BaseLibsInstall\LibArchive\bin;C:\BaseLibsInstall\QtSOAP\bin;C:\BaseLibsInstall\Teem\bin;C:\BaseLibsInstall\VTK7.0\bin;C:\BaseLibsInstall\zlib\bin;%SRPlan_HOME%;%SRPlan_HOME%\qt-loadable-modules
