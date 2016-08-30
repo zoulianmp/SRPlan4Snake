@@ -32,7 +32,7 @@ if(SRPlan_BUILD_CLI_SUPPORT)
   list(APPEND dirs MRML/CLI)
 endif()
 list(APPEND dirs
-#  RemoteIO
+  RemoteIO
   MRML/Logic
   MRML/DisplayableManager
   )

@@ -1289,46 +1289,57 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 
 
 		std::string realTracFile;
-		if (vtksys::SystemTools::GetEnv("OPTIC_TRAC") != NULL)
-		{
-			realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC") + std::string("\\RealtimePosition.txt"));
-		}
+		realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC_FILE"));
+
+	//	if (vtksys::SystemTools::GetEnv("OPTIC_TRAC") != NULL)
+	//	{
+	//		realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC") + std::string("\\RealtimePosition.txt"));
+	//	}
 
 		//QFile opticTracFile("D:/00-SRPlan/SRPlan4SnakeVC2015Bin/Output/share/NetworkShare/RealtimePosition.txt");
 		//QFile opticTracFile("E:/CodeLearn/RealtimePosition.txt");
 
 		QFile opticTracFile(realTracFile.c_str());
 		bool suc  =  opticTracFile.open(QIODevice::ReadOnly);
-		QTextStream tracStream(&opticTracFile);
 
-		QString line;
-		line = tracStream.readLine();
-		QStringList list = line.split(",");
+		if (suc)
+		{
+			QTextStream tracStream(&opticTracFile);
 
-		opticTracFile.close();
+			QString line;
+			line = tracStream.readLine();
+			QStringList list = line.split(",");
+
+			opticTracFile.close();
 
 
-		double x, y, z;
+			double x, y, z;
 
-		x = list[0].toDouble();
-		y = list[1].toDouble();
-		z = list[2].toDouble();
+			x = list[0].toDouble();
+			y = list[1].toDouble();
+			z = list[2].toDouble();
 
-		int pointIndex = 0;
-	 
-		markup->points[pointIndex].SetX(x);
-		markup->points[pointIndex].SetY(y);
-		markup->points[pointIndex].SetZ(z);
+			int pointIndex = 0;
 
-		// throw an event to let listeners know the position has changed
-		listNode->Modified();
-		listNode->InvokeCustomModifiedEvent(vtkMRMLMarkupsNode::PointModifiedEvent, (void*)&index);
+			markup->points[pointIndex].SetX(x);
+			markup->points[pointIndex].SetY(y);
+			markup->points[pointIndex].SetZ(z);
 
-	
-			
-		vtkSRPlanPathPlanModuleLogic * Mlogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
-				
-		Mlogic->GetMarkupsLogic()->JumpSlicesToLocation(x, y, z, true);
+			// throw an event to let listeners know the position has changed
+			listNode->Modified();
+			listNode->InvokeCustomModifiedEvent(vtkMRMLMarkupsNode::PointModifiedEvent, (void*)&index);
+
+
+
+			vtkSRPlanPathPlanModuleLogic * Mlogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
+
+			Mlogic->GetMarkupsLogic()->JumpSlicesToLocation(x, y, z, true);
+		
+		
+		
+		}
+
+		
 	}
 	
 	

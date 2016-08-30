@@ -317,12 +317,15 @@ void vtkMRMLSegmentationNode::OnSegmentAdded(vtkObject* vtkNotUsed(caller), unsi
     return;
   }
 
+
+  /* comment out the Regenerate DisplayMergedLabelmap by zoulian
   // Re-generate merged labelmap with the added segment
   if (self->HasMergedLabelmap())
   {
     self->ReGenerateDisplayedMergedLabelmap();
   }
 
+  */
   // Invoke node event
   self->InvokeCustomModifiedEvent(vtkSegmentation::SegmentAdded, (void*)segmentId);
 
@@ -371,11 +374,14 @@ void vtkMRMLSegmentationNode::OnSegmentRemoved(vtkObject* vtkNotUsed(caller), un
       vtkSegment::SEGMENT_COLOR_VALUE_INVALID[2], vtkSegment::SEGMENT_COLOR_VALUE_INVALID[3] );
   }
 
+
+  /* comment out the Regenerate DisplayMergedLabelmap by zoulian
   // Re-generate merged labelmap without the removed segment
   if (self->HasMergedLabelmap())
   {
     self->ReGenerateDisplayedMergedLabelmap();
   }
+  */
 
   // Invoke node event
   self->InvokeCustomModifiedEvent(vtkSegmentation::SegmentRemoved, (void*)segmentId);
@@ -416,11 +422,17 @@ void vtkMRMLSegmentationNode::OnRepresentationCreated(vtkObject* vtkNotUsed(call
   // Get created representation name
   char* targetRepresentationName = reinterpret_cast<char*>(callData);
 
+
+
+  /* comment out the Regenerate DisplayMergedLabelmap by zoulian
+
   // Re-generate merged labelmap with modified representation
   if (!(self->Scene && self->Scene->IsImporting()) && self->HasMergedLabelmap())
   {
     self->ReGenerateDisplayedMergedLabelmap();
   }
+
+  */
 
   // Show new representation if model
   vtkSmartPointer<vtkMRMLSegmentationDisplayNode> displayNode = vtkMRMLSegmentationDisplayNode::SafeDownCast(self->GetDisplayNode());
@@ -765,6 +777,8 @@ vtkImageData* vtkMRMLSegmentationNode::GetImageData()
     }
   }
 
+
+  /* comment out the Regenerate DisplayMergedLabelmap by zoulian
   // Perform merging if necessary
   if (mergeNecessary)
   {
@@ -788,6 +802,8 @@ vtkImageData* vtkMRMLSegmentationNode::GetImageData()
       }
     }
   }
+
+  */
 
   // If no merging is needed, simply return stored image data
   return imageData;

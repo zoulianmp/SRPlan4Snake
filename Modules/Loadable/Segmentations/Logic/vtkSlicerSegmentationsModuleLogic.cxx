@@ -428,10 +428,15 @@ void vtkSlicerSegmentationsModuleLogic::OnMRMLSceneEndImport()
   for (unsigned int nodeIndex=0; nodeIndex<numberOfNodes; nodeIndex++)
   {
     vtkMRMLSegmentationNode* node = vtkMRMLSegmentationNode::SafeDownCast(segmentationNodes[nodeIndex]);
-    if (node && node->HasMergedLabelmap())
+    
+
+	/* comment out the Regenerate DisplayMergedLabelmap by zoulian
+	if (node && node->HasMergedLabelmap())
     {
       node->ReGenerateDisplayedMergedLabelmap();
     }
+	*/
+
   }
 }
 
