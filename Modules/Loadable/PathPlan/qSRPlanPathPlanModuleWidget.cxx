@@ -1170,6 +1170,10 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 
 	bool checked = d->realTracePushButton->isChecked();
 
+	QString timestring = QString(vtksys::SystemTools::GetEnv("SNAKE_UPDATE_TIME_S"));
+ 
+	int timeSnap = timestring.toInt();
+
 	//if checked ,start to tracing the snake motion,else stop the motion tracing
 	if (checked)
 	{
@@ -1203,7 +1207,7 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 				
 
 				connect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
-				this->tracingTimer->start(1000);
+				this->tracingTimer->start(timeSnap);
 
 
 			}
@@ -1216,7 +1220,9 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 					this->tracingTimer = new QTimer(this);
 				}
 				connect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
-				this->tracingTimer->start(1000);
+
+
+				this->tracingTimer->start(timeSnap);
 
 			}
 			 
