@@ -1,0 +1,20 @@
+Image parameter
+kv:65
+MA:2
+MS:15
+FPS:0
+BodyPartCSCN:head
+ViewPosCS:PA
+captureFrameNum:90
+Width:1560
+Height:1440
+Image parameter
+kv:65
+MA:2
+MS:15
+FPS:0
+BodyPartCSCN:head
+ViewPosCS:PA
+captureFrameNum:90
+Width:1560
+Height:1440

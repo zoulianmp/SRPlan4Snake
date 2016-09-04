@@ -1,0 +1,90 @@
+Reference: Tags of MetaImage
+
+MetaObject Tags
+The tags of MetaObject are:
+Comment
+MET_STRING
+User defined - arbitrary
+ObjectType
+MET_STRING
+Defined by derived objects 每 e.g., Tube, Image
+ObjectSubType
+MET_STRING
+Defined by derived objects 每 currently not used
+TransformType
+MET_STRING
+Defined by derived objects 每 e.g., Rigid
+NDims
+MET_INT
+Defined at object instantiation
+Name
+MET_STRING
+User defined
+ID
+MET_INT
+User defined else -1
+ParentID
+MET_INT
+User defined else -1
+BinaryData
+MET_STRING
+Are the data associated with this object stored at Binary or ASCII
+Defined by derived objects
+ElementByteOrderMSB
+MET_STRING
+BinaryDataByteOrderMSB
+MET_STRING
+Color
+MET_FLOAT_ARRAY[4]
+R, G, B, alpha (opacity)
+Position
+MET_FLOAT_ARRAY[NDims]
+X, Y, Z,＃ of real-world coordinate of 0,0,0 index of image)
+Orientation
+MET_FLOAT_MATRIX[NDims][NDims]
+[0][0],[0][1],[0][2] specify X, Y, Z＃ direction in real-world of X-axis of image
+[1][0],[1][1],[1][2] specify X, Y, Z＃ direction in real-world of Y-axis of image, etc.
+AnatomicalOrientation
+MET_STRING
+Specify anatomic ordering of the axis. Use only [R|L] | [A|P] | [S|I] per axis. For example, if the three letter code for (column index, row index, slice index is) ILP, then the origin is at the superior, right, anterior corner of the volume, and therefore the axes run from superior to inferior, from right to left, from anterior to posterior.
+ElementSpacing
+MET_FLOAT_ARRAY[NDims]
+The distance between voxel centers
+Tags Added by MetaImage
+In addition to the above tags, MetaImage provides the following tags:
+DimSize
+MET_INT_ARRAY[NDims]
+Number of elements per axis in data
+HeaderSize
+MET_INT
+Number of Bytes to skip at the head of each data file.
+Specify 每1 to have MetaImage calculate the header size based on the assumption that the data occurs at the end of the file.
+Specify 0 if the data occurs at the begining of the file.
+Modality
+MET_STRING
+One of enum type: MET_MOD_CT, MET_MOD_MR, MET_MOD_US＃ See metaImageTypes.h
+SequenceID
+MET_INT_ARRAY[4]
+Four values comprising a DICOM sequence: Study, Series, Image numbers
+ElementMin
+MET_FLOAT
+Minimum value in the data
+ElementMax
+MET_FLOAT
+Maximum value in the data
+ElementNumberOfChannels
+MET_INT
+Number of values (of type ElementType) per voxel
+ElementSize
+MET_FLOAT_ARRAY[NDims]
+Physical size of each voxel
+ElementType
+MET_STRING
+One of enum type: MET_UCHAR, MET_CHAR＃ See metaTypes.h
+ElementDataFile
+MET_STRING
+One of the following:
+Name of the file to be loaded
+A printf-style string followed by the min, max, and step values to be used to pass an argument to the string to create list of file names to be loaded (must be (N-1)D blocks of data per file).
+LIST [X] 每 This specifies that starting on the next line is a list of files (one filename per line) in which the data is stored. Each file (by default) contains an (N-1)D block of data. If a second argument is given, its first character must be a number that specifies the dimension of the data in each file. For example ElementDataFile = LIST 2D means that there will be a 2D block of data per file.
+LOCAL 每 Indicates that the data begins at the beginning of the next line.

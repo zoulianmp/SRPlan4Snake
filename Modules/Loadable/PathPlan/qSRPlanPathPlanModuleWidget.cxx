@@ -1170,7 +1170,7 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 
 	bool checked = d->realTracePushButton->isChecked();
 
-	QString timestring = QString(vtksys::SystemTools::GetEnv("SNAKE_UPDATE_TIME_S"));
+	QString timestring = QString(vtksys::SystemTools::GetEnv("SNAKE_UPDATE_TIME_MS"));
  
 	int timeSnap = timestring.toInt();
 
