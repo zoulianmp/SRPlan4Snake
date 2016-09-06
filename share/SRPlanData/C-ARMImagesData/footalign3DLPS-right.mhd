@@ -1,0 +1,13 @@
+ObjectType = Image
+NDims = 3
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = False
+TransformMatrix =0 0 -1 -1 0 0 0 1 0 
+Offset = 0.0 0.0 0.0
+CenterOfRotation = 0 0 0
+AnatomicalOrientation = IS
+ElementSpacing = 0.428862 0.428862 0.42884
+DimSize = 256 256 256
+ElementType = MET_USHORT
+ElementDataFile = footalign3D.raw
