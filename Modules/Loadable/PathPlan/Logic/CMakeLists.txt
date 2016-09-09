@@ -19,6 +19,9 @@ set(${KIT}_SRCS
   vtkSlicerRTScalarBarActor.h
   vtkSlicerRTScalarBarActor.cxx
   
+  vtkSRPlanBDoseLogic.h
+  vtkSRPlanBDoseLogic.cxx
+  
   vtkSlicerIsodoseLogic.h
   vtkSlicerIsodoseLogic.cxx
   vtkSlicerDoseVolumeHistogramLogic.h
