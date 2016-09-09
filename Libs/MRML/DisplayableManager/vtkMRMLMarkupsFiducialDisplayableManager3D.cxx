@@ -54,6 +54,8 @@
 #include <vtkSeedRepresentation.h>
 #include <vtkSphereSource.h>
 
+#include <vtkConeSource.h>
+
 // STD includes
 #include <sstream>
 #include <string>
@@ -516,6 +518,15 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::SetNthSeed(int n, vtkMRMLMarkup
 	  prop = handleRep->GetProperty();
       prop->SetColor(Tracecolor);
 	 
+	  //Changed the Glyph To Cone
+	  vtkNew<vtkConeSource> coneSource;
+	  coneSource->SetResolution(8);
+	  //Need update other parameters from parametersNode
+
+	  coneSource->Update();
+	  handleRep->SetHandle(coneSource->GetOutput());
+
+
   }
 
 

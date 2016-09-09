@@ -11,6 +11,19 @@ set(${KIT}_INCLUDE_DIRECTORIES
 	${vtkSRPlanSegmentationsModuleLogic_INCLUDE_DIRECTORIES}
   )
 
+  
+set( SeedLibSrc 
+     libbrachy.h
+	 read_seeds.cxx 
+	 seed_pdose.cxx 
+	 v_interp.cxx
+	 bin_search.cxx
+	 get_phys_dat_dir.cxx
+	 vtkIr192SeedSource.cxx
+)
+
+  
+  
 set(${KIT}_SRCS
   vtkSRPlan${MODULE_NAME}ModuleLogic.cxx
   vtkSRPlan${MODULE_NAME}ModuleLogic.h
@@ -19,8 +32,8 @@ set(${KIT}_SRCS
   vtkSlicerRTScalarBarActor.h
   vtkSlicerRTScalarBarActor.cxx
   
-  vtkSRPlanBDoseLogic.h
-  vtkSRPlanBDoseLogic.cxx
+#  vtkSRPlanBDoseLogic.h
+#  vtkSRPlanBDoseLogic.cxx
   
   vtkSlicerIsodoseLogic.h
   vtkSlicerIsodoseLogic.cxx
@@ -28,6 +41,8 @@ set(${KIT}_SRCS
   vtkSlicerDoseVolumeHistogramLogic.cxx
   vtkSlicerMarkupsLogic.h
   vtkSlicerMarkupsLogic.cxx
+  
+  ${SeedLibSrc}
   )
 
 set(${KIT}_TARGET_LIBRARIES
