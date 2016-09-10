@@ -30,6 +30,7 @@ class vtkMRMLMarkupsFiducialNode;
 class vtkSlicerViewerWidget;
 class vtkMRMLMarkupsDisplayNode;
 class vtkTextWidget;
+class vtkActor;
 
 /// \ingroup Slicer_QtModules_Markups
 class VTK_MRML_DISPLAYABLEMANAGER_EXPORT vtkMRMLMarkupsFiducialDisplayableManager3D :
@@ -82,12 +83,15 @@ protected:
   virtual void OnMRMLSceneEndClose();
 
   //added by zoulian
-  void PlaceSnakeHead();
+  void PlaceSnakeHead(double centerX, double centerY, double centerZ, double orientX, double orientY, double orientZ);
 
 private:
 
   vtkMRMLMarkupsFiducialDisplayableManager3D(const vtkMRMLMarkupsFiducialDisplayableManager3D&); /// Not implemented
   void operator=(const vtkMRMLMarkupsFiducialDisplayableManager3D&); /// Not Implemented
+
+  vtkActor * m_SnakeHead = NULL;
+
 };
 
 #endif

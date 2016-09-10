@@ -385,6 +385,10 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
 //-----------------------------------------------------------------------------
 qSRPlanPathPlanModuleWidget::~qSRPlanPathPlanModuleWidget()
 {
+	if (this->m_SnakeHeadRenderer)
+	{
+		this->m_SnakeHeadRenderer->Delete();
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -1192,9 +1196,8 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 	int timeSnap = timestring.toInt();
 
 	if (!this->m_SnakeHeadRenderer)
-	{
-		vtkNew<vtkRenderer> renderer;
-		this->m_SnakeHeadRenderer = renderer.GetPointer();
+	{ 
+		this->m_SnakeHeadRenderer = vtkRenderer::New();
 	}
 
 
@@ -1343,11 +1346,15 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 			opticTracFile.close();
 
 
-			double x, y, z;
+			double x, y, z, Dx,Dy,Dz;
 
 			x = list[0].toDouble();
 			y = list[1].toDouble();
 			z = list[2].toDouble();
+
+			Dx = list[3].toDouble();
+			Dy = list[4].toDouble();
+			Dz = list[5].toDouble();
 
 			int pointIndex = 0;
 
@@ -1364,7 +1371,9 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 			vtkSRPlanPathPlanModuleLogic * Mlogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
 
 			Mlogic->GetMarkupsLogic()->JumpSlicesToLocation(x, y, z, true);
-		
+
+			//RealTime Tracing
+			//this->PlaceSnakeHead(x, y, z, Dx, Dy, Dz);
 		
 		
 		}
@@ -2777,11 +2786,11 @@ void qSRPlanPathPlanModuleWidget::PlaceSnakeHead(double centerX, double centerY,
 {
 	if (!this->m_SnakeHeadRenderer)
 	{
-		vtkNew<vtkRenderer> renderer;
-		this->m_SnakeHeadRenderer = renderer.GetPointer();
+	 
+		this->m_SnakeHeadRenderer = vtkRenderer::New();
 	}
 
-	this->m_SnakeHeadRenderer->RemoveAllViewProps();
+	//this->m_SnakeHeadRenderer->RemoveAllViewProps();
 
 		
 	double Tracecolor[3];
@@ -2823,11 +2832,9 @@ void qSRPlanPathPlanModuleWidget::PlaceSnakeHead(double centerX, double centerY,
 	vtkRenderWindow * renderWindow = ThreeDw->threeDView()->renderWindow();
 
 	vtkRenderer * renderer = this->m_SnakeHeadRenderer;
-
-	renderWindow->AddRenderer(renderer);
-
 	renderer->AddActor(actor.GetPointer());
 
+	renderWindow->AddRenderer(renderer);
 	renderWindow->Render();
 
 }

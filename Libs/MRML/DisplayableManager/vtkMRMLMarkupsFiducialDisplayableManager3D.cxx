@@ -532,13 +532,22 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::SetNthSeed(int n, vtkMRMLMarkup
 	 // prop->SetColor(Tracecolor);
 	  prop->SetOpacity(0);
 
+	  //Get the SnakeHead Parameters
 
-	 // this->PlaceSnakeHead();
+	  //fiducial xyz,snakehead center position
+	  double centerPos[3];
+	  fiducialNode->GetNthFiducialPosition(n, centerPos);
 
+	  //snakehead Direction
 
+	  double direction[3] = {1.0,0,0};
 
+	 
 
+	  //Place the snake head
+	  this->PlaceSnakeHead(centerPos[0],centerPos[1], centerPos[2], direction[0], direction[1], direction[2]);
 
+  
 
   }
 
@@ -549,11 +558,44 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::SetNthSeed(int n, vtkMRMLMarkup
 
 
 
-
-
-//add by zoulian used for show snake head
-void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead()
+int  qMRMLPaintEffect::UpdateSnakeHeadDirectionFromParametersNode()
 {
+	//Update the ParametersNode
+	vtkMRMLScene * scene = qSlicerCoreApplication::application()->mrmlScene();
+	vtkMRMLGeneralParametersNode* parametersNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+
+
+
+	int size = scene->GetNumberOfNodesByClass("vtkMRMLGeneralParametersNode");
+	for (int i = 0; i < size; i++)
+	{
+		vtkMRMLGeneralParametersNode* Node;
+		Node = vtkMRMLGeneralParametersNode::SafeDownCast(scene->GetNthNodeByClass(i, "vtkMRMLGeneralParametersNode"));
+		if (!strcmp(Node->GetModuleName(), "Segmentation") && !strcmp(Node->GetSingletonTag(), "Segmentation"))
+		{
+			return Node;
+		}
+
+	}
+	return NULL;
+
+
+
+	std::string label = parametersNode->GetParameter("label");
+	QString qlabel = QString::fromStdString(label);
+
+	this->paintLabel = qlabel.toInt();
+
+	return this->paintLabel;
+}
+
+
+
+
+void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead(double centerX, double centerY, double centerZ, double orientX, double orientY, double orientZ)
+{
+	
+
 
 	double Tracecolor[3];
 	Tracecolor[0] = 1.0;
@@ -566,6 +608,10 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead()
 	coneSource->SetHeight(20);
 	coneSource->SetAngle(40);
 	coneSource->CappingOn();
+
+	coneSource->SetCenter(centerX, centerY, centerZ);
+	coneSource->SetDirection(orientX, orientY, orientZ);
+
 	//Need update other parameters from parametersNode
 
 	coneSource->Update();
@@ -582,19 +628,18 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead()
 	prop->SetColor(Tracecolor);
 
 	//Changed the Glyph To Cone
-
-
-
-
+ 
 	vtkRenderer * render = this->GetRenderer();
+
+	if (m_SnakeHead)
+	{
+		render->RemoveActor(m_SnakeHead);
+	}
 
 	render->AddActor(actor.GetPointer());
 
-
+	m_SnakeHead = actor.GetPointer();
 }
-
-
-
 
 
 
