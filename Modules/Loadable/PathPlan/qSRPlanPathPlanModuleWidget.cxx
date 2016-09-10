@@ -62,6 +62,22 @@
 #include <vtkNew.h>
 #include <vtkCollection.h>
 
+
+#include <vtkConeSource.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkProperty.h>
+#include <vtkRenderer.h>
+
+//3D RenderWindow
+#include "qSlicerLayoutManager.h"
+#include "qSlicerApplication.h"
+#include "qMRMLThreeDWidget.h"
+#include "qMRMLThreeDView.h"
+
+#include "vtkRenderWindow.h"
+
+
 #include <vtksys/SystemTools.hxx>
 #include <math.h>
 
@@ -359,6 +375,7 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
   this->pToAddShortcut = 0;
 
   this->tracingTimer = 0;
+  this->m_SnakeHeadRenderer = NULL;
 
 
   this->volumeSpacingScaleFactor = 10.0;
@@ -1173,6 +1190,13 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 	QString timestring = QString(vtksys::SystemTools::GetEnv("SNAKE_UPDATE_TIME_MS"));
  
 	int timeSnap = timestring.toInt();
+
+	if (!this->m_SnakeHeadRenderer)
+	{
+		vtkNew<vtkRenderer> renderer;
+		this->m_SnakeHeadRenderer = renderer.GetPointer();
+	}
+
 
 	//if checked ,start to tracing the snake motion,else stop the motion tracing
 	if (checked)
@@ -2747,4 +2771,63 @@ bool qSRPlanPathPlanModuleWidget::sliceIntersectionsVisible()
     // if all or some are visible, return true
     return true;
     }
+}
+
+void qSRPlanPathPlanModuleWidget::PlaceSnakeHead(double centerX, double centerY, double centerZ, double orientX, double orientY, double orientZ)
+{
+	if (!this->m_SnakeHeadRenderer)
+	{
+		vtkNew<vtkRenderer> renderer;
+		this->m_SnakeHeadRenderer = renderer.GetPointer();
+	}
+
+	this->m_SnakeHeadRenderer->RemoveAllViewProps();
+
+		
+	double Tracecolor[3];
+	Tracecolor[0] = 1.0;
+	Tracecolor[1] = 1.0;
+	Tracecolor[2] = 0.0;
+
+
+	vtkNew<vtkConeSource> coneSource;
+	coneSource->SetResolution(30);
+	coneSource->SetHeight(20);
+	coneSource->SetAngle(40);
+	coneSource->CappingOn();
+
+	coneSource->SetCenter(centerX, centerY, centerZ);
+	coneSource->SetDirection(orientX, orientY, orientZ);
+
+	//Need update other parameters from parametersNode
+
+	coneSource->Update();
+
+	vtkNew<vtkPolyDataMapper> mapper;
+	mapper->SetInputConnection(coneSource->GetOutputPort());
+
+
+	vtkNew<vtkActor> actor;
+	actor->SetMapper(mapper.GetPointer());
+
+
+	vtkProperty *prop = actor->GetProperty();
+	prop->SetColor(Tracecolor);
+
+	//Changed the Glyph To Cone
+
+
+	qSlicerLayoutManager * layoutmanager = qSlicerApplication::application()->layoutManager();
+	qMRMLThreeDWidget * ThreeDw = layoutmanager->threeDWidget(0);
+
+	vtkRenderWindow * renderWindow = ThreeDw->threeDView()->renderWindow();
+
+	vtkRenderer * renderer = this->m_SnakeHeadRenderer;
+
+	renderWindow->AddRenderer(renderer);
+
+	renderer->AddActor(actor.GetPointer());
+
+	renderWindow->Render();
+
 }

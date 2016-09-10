@@ -24,6 +24,8 @@
 #include "qSRPlanPathPlanModuleExport.h"
 
 class QTimer;
+class vtkRenderer;
+
 
 class QMenu;
 class QModelIndex;
@@ -33,6 +35,8 @@ class qSRPlanPathPlanModuleWidgetPrivate;
 class vtkMRMLMarkupsNode;
 class vtkMRMLNode;
 class vtkSlicerMarkupsLogic;
+
+
 
 /// \ingroup Slicer_QtModules_Markups
 class Q_SRPlan_QTMODULES_PATHPLAN_EXPORT qSRPlanPathPlanModuleWidget :
@@ -90,6 +94,10 @@ public:
   /// Query the logic as to the state of the slice intersection visibility on
   /// the slice composite nodes
   bool sliceIntersectionsVisible();
+
+
+  //added by zoulian
+  void PlaceSnakeHead(double centerX,double centerY,double centerZ,double orientX, double orientY, double orientZ);
 
 public slots:
 
@@ -231,6 +239,7 @@ private:
   QShortcut *pToAddShortcut;
 
   QTimer *tracingTimer;
+  vtkRenderer * m_SnakeHeadRenderer; //Used for SnakeHead Cone Show
 };
 
 #endif

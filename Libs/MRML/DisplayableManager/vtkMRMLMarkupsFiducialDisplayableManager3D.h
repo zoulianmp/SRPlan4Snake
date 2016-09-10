@@ -81,6 +81,9 @@ protected:
   // Clean up when scene closes
   virtual void OnMRMLSceneEndClose();
 
+  //added by zoulian
+  void PlaceSnakeHead();
+
 private:
 
   vtkMRMLMarkupsFiducialDisplayableManager3D(const vtkMRMLMarkupsFiducialDisplayableManager3D&); /// Not implemented

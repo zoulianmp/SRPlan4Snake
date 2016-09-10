@@ -55,6 +55,9 @@
 #include <vtkSphereSource.h>
 
 #include <vtkConeSource.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+
 
 // STD includes
 #include <sstream>
@@ -508,23 +511,33 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::SetNthSeed(int n, vtkMRMLMarkup
   const char* traceLable = vtkMRMLMarkupsNode::GetRealTraceMarkupLabel();
   if (textString.compare(traceLable) == 0)
   {
-	
+	 /* pre code
 	  double Tracecolor[3];
 	  Tracecolor[0] = 1.0  ;
 	  Tracecolor[1] = 1.0 ;
 	  Tracecolor[2] = 0.0;
 	  handleRep->GetLabelTextActor()->GetProperty()->SetColor(Tracecolor);
 
-	  prop = handleRep->GetProperty();
-      prop->SetColor(Tracecolor);
-	 
+	
 	  //Changed the Glyph To Cone
-	  vtkNew<vtkConeSource> coneSource;
-	  coneSource->SetResolution(8);
-	  //Need update other parameters from parametersNode
-
-	  coneSource->Update();
+	  vtkPolyData * p = handleRep->GetHandle();
 	  handleRep->SetHandle(coneSource->GetOutput());
+
+	  */
+
+	  //Not show the predefined mark 
+	  handleRep->GetLabelTextActor()->GetProperty()->SetOpacity(0);
+
+	  prop = handleRep->GetProperty();
+	 // prop->SetColor(Tracecolor);
+	  prop->SetOpacity(0);
+
+
+	 // this->PlaceSnakeHead();
+
+
+
+
 
 
   }
@@ -532,6 +545,59 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::SetNthSeed(int n, vtkMRMLMarkup
 
 
 }
+
+
+
+
+
+
+//add by zoulian used for show snake head
+void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead()
+{
+
+	double Tracecolor[3];
+	Tracecolor[0] = 1.0;
+	Tracecolor[1] = 1.0;
+	Tracecolor[2] = 0.0;
+
+
+	vtkNew<vtkConeSource> coneSource;
+	coneSource->SetResolution(30);
+	coneSource->SetHeight(20);
+	coneSource->SetAngle(40);
+	coneSource->CappingOn();
+	//Need update other parameters from parametersNode
+
+	coneSource->Update();
+
+	vtkNew<vtkPolyDataMapper> mapper;
+	mapper->SetInputConnection(coneSource->GetOutputPort());
+
+
+	vtkNew<vtkActor> actor;
+	actor->SetMapper(mapper.GetPointer());
+
+
+	vtkProperty *prop = actor->GetProperty();
+	prop->SetColor(Tracecolor);
+
+	//Changed the Glyph To Cone
+
+
+
+
+	vtkRenderer * render = this->GetRenderer();
+
+	render->AddActor(actor.GetPointer());
+
+
+}
+
+
+
+
+
+
 
 //---------------------------------------------------------------------------
 /// Propagate properties of MRML node to widget.
