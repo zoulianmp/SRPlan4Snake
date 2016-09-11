@@ -111,6 +111,8 @@ public:
 	//Background Volume Related
 	vtkMRMLVolumeNode * GetBackgroundVolume();
 	vtkImageData * GetBackgroundImage();
+	// &lo, int& hi
+	double * GetBackgroundImageScalarRange();
 	char * GetBackgroundID();
 
 	//Label Volume Related

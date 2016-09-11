@@ -520,6 +520,16 @@ vtkImageData * qMRMLSegmentsEditorLogic::GetBackgroundImage()
 
 }
 
+
+double *  qMRMLSegmentsEditorLogic::GetBackgroundImageScalarRange()
+{
+
+	vtkImageData * backgroundImage = this->GetBackgroundImage();
+
+	return backgroundImage->GetScalarRange();
+}
+
+
 char * qMRMLSegmentsEditorLogic::GetBackgroundID()
 {
 	vtkMRMLSliceCompositeNode* compNode = this->GetCompositeNode();

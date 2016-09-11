@@ -259,7 +259,10 @@ void qMRMLSegmentsEditorWidget::onThresholdClicked()
 		qMRMLThresholdEffect::SafeDownCast(this->editorLogic->GetCurrentEffect())->HidePreviewContent();
 	}
 	
-	
+	//Use the Background Image Scalar lo,hi to set the DoubleRangeSlider
+	double* scalarRange = this->editorLogic->GetBackgroundImageScalarRange();
+
+	d->wlDoubleRangeSlider->setRange(scalarRange[0], scalarRange[1]);
 }
 
 
@@ -411,11 +414,14 @@ void  qMRMLSegmentsEditorWidget::doThreshouldPreview()
 		thresholdEffect->SetThresholdMin(min);
 		thresholdEffect->SetThresholdMax(max);
 
-		if (min < -980) 
+		int rangeMin = d->wlDoubleRangeSlider->minimum();
+		int rangeMax = d->wlDoubleRangeSlider->maximum();
+
+		if ((min - rangeMin) < 20) 
 		{
 			thresholdEffect->PreviewThreshold(qMRMLThresholdEffect::ByLower);
 		}
-		else if (max > 980)
+		else if ((rangeMax - max) < 20)
 		{
 			thresholdEffect->PreviewThreshold(qMRMLThresholdEffect::ByUpper);
 		}
@@ -452,11 +458,15 @@ void qMRMLSegmentsEditorWidget::onWLApplyPushButtonClicked()
 		thresholdEffect->SetThresholdMin(min);
 		thresholdEffect->SetThresholdMax(max);
 
-		if (min < -980)
+
+		int rangeMin = d->wlDoubleRangeSlider->minimum();
+		int rangeMax = d->wlDoubleRangeSlider->maximum();
+
+		if ((min - rangeMin) < 20)
 		{
 			thresholdEffect->ApplyThreshold(qMRMLThresholdEffect::ByLower);
 		}
-		else if (max > 980)
+		else if ((rangeMax - max) < 20)
 		{
 			thresholdEffect->ApplyThreshold(qMRMLThresholdEffect::ByUpper);
 		}

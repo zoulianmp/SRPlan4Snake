@@ -612,8 +612,8 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead(double centerX, 
 
 	vtkNew<vtkConeSource> coneSource;
 	coneSource->SetResolution(30);
-	coneSource->SetHeight(30);
-	coneSource->SetRadius(10);
+	coneSource->SetHeight(15);
+	coneSource->SetRadius(5);
 	coneSource->SetAngle(20);
 	coneSource->CappingOn();
 
