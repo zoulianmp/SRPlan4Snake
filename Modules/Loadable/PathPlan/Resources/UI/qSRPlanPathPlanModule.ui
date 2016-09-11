@@ -471,6 +471,9 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="QLCDNumber" name="lcdNumber"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -508,6 +511,22 @@
     <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>doseCalculatePushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>lcdNumber</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>183</x>
+     <y>888</y>
     </hint>
    </hints>
   </connection>

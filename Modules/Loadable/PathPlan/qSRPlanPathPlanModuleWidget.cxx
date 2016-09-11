@@ -142,6 +142,8 @@ qSRPlanPathPlanModuleWidgetPrivate::qSRPlanPathPlanModuleWidgetPrivate(qSRPlanPa
   this->lockMenu = 0;
   this->lockAllMarkupsInListAction = 0;
   this->unlockAllMarkupsInListAction = 0;
+
+  
 }
 
 //-----------------------------------------------------------------------------
@@ -373,6 +375,8 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
   : Superclass( _parent )
     , d_ptr( new qSRPlanPathPlanModuleWidgetPrivate(*this) )
 {
+
+	Q_D(qSRPlanPathPlanModuleWidget);
   this->pToAddShortcut = 0;
 
   this->tracingTimer = 0;
@@ -380,6 +384,8 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
 
 
   this->volumeSpacingScaleFactor = 10.0;
+
+
 }
 
 
@@ -411,6 +417,7 @@ void qSRPlanPathPlanModuleWidget::enter()
 
   this->Superclass::enter();
 
+  d->lcdNumber->hide();
   // qDebug() << "enter widget";
 
   // set up mrml scene observations so that the GUI gets updated
