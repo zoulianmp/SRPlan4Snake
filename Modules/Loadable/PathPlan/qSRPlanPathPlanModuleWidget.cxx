@@ -77,6 +77,7 @@
 
 #include "vtkRenderWindow.h"
 
+#include "vtkMRMLGeneralParametersNode.h"
 
 #include <vtksys/SystemTools.hxx>
 #include <math.h>
@@ -375,7 +376,7 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
   this->pToAddShortcut = 0;
 
   this->tracingTimer = 0;
-  this->m_SnakeHeadRenderer = NULL;
+
 
 
   this->volumeSpacingScaleFactor = 10.0;
@@ -385,10 +386,7 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
 //-----------------------------------------------------------------------------
 qSRPlanPathPlanModuleWidget::~qSRPlanPathPlanModuleWidget()
 {
-	if (this->m_SnakeHeadRenderer)
-	{
-		this->m_SnakeHeadRenderer->Delete();
-	}
+	
 }
 
 //-----------------------------------------------------------------------------
@@ -1195,10 +1193,7 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
  
 	int timeSnap = timestring.toInt();
 
-	if (!this->m_SnakeHeadRenderer)
-	{ 
-		this->m_SnakeHeadRenderer = vtkRenderer::New();
-	}
+
 
 
 	//if checked ,start to tracing the snake motion,else stop the motion tracing
@@ -1218,9 +1213,9 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 			const char * realTracLabel = vtkMRMLMarkupsNode::GetRealTraceMarkupLabel();
 
 			//Scale out for 3D Tracing show
-			vtkMRMLMarkupsDisplayNode * displayNode = vtkMRMLMarkupsDisplayNode::SafeDownCast(listNode->GetDisplayNode());
+			//vtkMRMLMarkupsDisplayNode * displayNode = vtkMRMLMarkupsDisplayNode::SafeDownCast(listNode->GetDisplayNode());
 
-			displayNode->SetGlyphScale(6.0);
+			//displayNode->SetGlyphScale(6.0);
 
 			//make sure there is a tracing flag
 			bool exist = listNode->ExistMarkup(realTracLabel);
@@ -1230,10 +1225,11 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 				if (this->tracingTimer == NULL)
 				{
 					this->tracingTimer = new QTimer(this);
+					connect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
 				}
 				
 
-				connect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
+			
 				this->tracingTimer->start(timeSnap);
 
 
@@ -1245,9 +1241,10 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 				if (this->tracingTimer == NULL)
 				{
 					this->tracingTimer = new QTimer(this);
-				}
-				connect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
+					connect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
 
+				}
+			
 
 				this->tracingTimer->start(timeSnap);
 
@@ -1262,10 +1259,11 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 	{
 		
 		this->tracingTimer->stop();
-		disconnect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
+	//	disconnect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
 
 		//Scale in ,restore the markup to defalt display
 
+		/*
 		vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
 		vtkMRMLMarkupsNode *listNode = NULL;
 		if (mrmlNode)
@@ -1280,6 +1278,8 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 			displayNode->SetGlyphScale( 2.1); //Default Vale is 2.1
 
 		}
+		*/
+
 	}
 
 
@@ -1346,15 +1346,16 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 			opticTracFile.close();
 
 
-			double x, y, z, Dx,Dy,Dz;
+			double x, y, z;
+			double Direction[3];
 
 			x = list[0].toDouble();
 			y = list[1].toDouble();
 			z = list[2].toDouble();
 
-			Dx = list[3].toDouble();
-			Dy = list[4].toDouble();
-			Dz = list[5].toDouble();
+			Direction[0] = list[3].toDouble();
+			Direction[1] = list[4].toDouble();
+			Direction[2] = list[5].toDouble();
 
 			int pointIndex = 0;
 
@@ -1366,7 +1367,7 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 			listNode->Modified();
 			listNode->InvokeCustomModifiedEvent(vtkMRMLMarkupsNode::PointModifiedEvent, (void*)&index);
 
-
+			this->SaveSnakeHeadDirectionToParametersNode(Direction);
 
 			vtkSRPlanPathPlanModuleLogic * Mlogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
 
@@ -1385,6 +1386,34 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 
 }
 
+
+void qSRPlanPathPlanModuleWidget::SaveSnakeHeadDirectionToParametersNode(double * directionxyz)
+{
+	if (!m_parametersNode)
+	{
+		//Update the ParametersNode
+		vtkMRMLScene * scene = qSlicerCoreApplication::application()->mrmlScene();
+
+		int size = scene->GetNumberOfNodesByClass("vtkMRMLGeneralParametersNode");
+		for (int i = 0; i < size; i++)
+		{
+			vtkMRMLGeneralParametersNode* Node;
+			Node = vtkMRMLGeneralParametersNode::SafeDownCast(scene->GetNthNodeByClass(i, "vtkMRMLGeneralParametersNode"));
+			if (!strcmp(Node->GetModuleName(), "Segmentation") && !strcmp(Node->GetSingletonTag(), "Segmentation"))
+			{
+				m_parametersNode = Node;
+			}
+
+		}
+	}
+
+	
+	m_parametersNode->SetParameter("SnakeHeadDirectionX", QString::number(directionxyz[0]).toStdString());
+	m_parametersNode->SetParameter("SnakeHeadDirectionY", QString::number(directionxyz[1]).toStdString());
+	m_parametersNode->SetParameter("SnakeHeadDirectionZ", QString::number(directionxyz[2]).toStdString());
+	 
+	
+}
 
 //-----------------------------------------------------------------------------
 void qSRPlanPathPlanModuleWidget::onDeleteMarkupPushButtonClicked()
@@ -2782,16 +2811,10 @@ bool qSRPlanPathPlanModuleWidget::sliceIntersectionsVisible()
     }
 }
 
+/*
 void qSRPlanPathPlanModuleWidget::PlaceSnakeHead(double centerX, double centerY, double centerZ, double orientX, double orientY, double orientZ)
 {
-	if (!this->m_SnakeHeadRenderer)
-	{
-	 
-		this->m_SnakeHeadRenderer = vtkRenderer::New();
-	}
-
-	//this->m_SnakeHeadRenderer->RemoveAllViewProps();
-
+	
 		
 	double Tracecolor[3];
 	Tracecolor[0] = 1.0;
@@ -2838,3 +2861,5 @@ void qSRPlanPathPlanModuleWidget::PlaceSnakeHead(double centerX, double centerY,
 	renderWindow->Render();
 
 }
+
+*/

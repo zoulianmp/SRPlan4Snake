@@ -36,6 +36,7 @@ class vtkMRMLMarkupsNode;
 class vtkMRMLNode;
 class vtkSlicerMarkupsLogic;
 
+class vtkMRMLGeneralParametersNode;
 
 
 /// \ingroup Slicer_QtModules_Markups
@@ -215,12 +216,12 @@ public slots:
   void onActiveMarkupsNodeTransformModifiedEvent();
 
   /// Create a new markups node and copy the display node settings from the
-  /// current markups node if set, otherwise just uses the defaults.
+  /// current markups node  if set, otherwise just uses the defaults.
   void onNewMarkupWithCurrentDisplayPropertiesTriggered();
 
   //when timer timeout,update the TraceMark Position.
   void UpdateTraceMarkPosition();
-
+  void SaveSnakeHeadDirectionToParametersNode(double * directionxyz);
 
 protected:
   QScopedPointer<qSRPlanPathPlanModuleWidgetPrivate> d_ptr;
@@ -239,7 +240,8 @@ private:
   QShortcut *pToAddShortcut;
 
   QTimer *tracingTimer;
-  vtkRenderer * m_SnakeHeadRenderer; //Used for SnakeHead Cone Show
+  vtkMRMLGeneralParametersNode* m_parametersNode=NULL;
+  //vtkRenderer * m_SnakeHeadRenderer; //Used for SnakeHead Cone Show
 };
 
 #endif

@@ -59,6 +59,9 @@
 #include <vtkActor.h>
 
 
+#include "vtkMRMLGeneralParametersNode.h"
+
+
 // STD includes
 #include <sstream>
 #include <string>
@@ -542,7 +545,7 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::SetNthSeed(int n, vtkMRMLMarkup
 
 	  double direction[3] = {1.0,0,0};
 
-	 
+	  this->UpdateSnakeHeadDirectionFromParametersNode(direction);
 
 	  //Place the snake head
 	  this->PlaceSnakeHead(centerPos[0],centerPos[1], centerPos[2], direction[0], direction[1], direction[2]);
@@ -557,36 +560,40 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::SetNthSeed(int n, vtkMRMLMarkup
 
 
 
-
-int  qMRMLPaintEffect::UpdateSnakeHeadDirectionFromParametersNode()
+void  vtkMRMLMarkupsFiducialDisplayableManager3D::UpdateSnakeHeadDirectionFromParametersNode(double* headDirection)
 {
-	//Update the ParametersNode
-	vtkMRMLScene * scene = qSlicerCoreApplication::application()->mrmlScene();
-	vtkMRMLGeneralParametersNode* parametersNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+	
 
 
-
-	int size = scene->GetNumberOfNodesByClass("vtkMRMLGeneralParametersNode");
-	for (int i = 0; i < size; i++)
+	if (!m_parametersNode)
 	{
-		vtkMRMLGeneralParametersNode* Node;
-		Node = vtkMRMLGeneralParametersNode::SafeDownCast(scene->GetNthNodeByClass(i, "vtkMRMLGeneralParametersNode"));
-		if (!strcmp(Node->GetModuleName(), "Segmentation") && !strcmp(Node->GetSingletonTag(), "Segmentation"))
+		
+		//Update the ParametersNode
+		vtkMRMLScene * scene = this->GetMRMLScene();
+
+		int size = scene->GetNumberOfNodesByClass("vtkMRMLGeneralParametersNode");
+		for (int i = 0; i < size; i++)
 		{
-			return Node;
+			vtkMRMLGeneralParametersNode* Node;
+			Node = vtkMRMLGeneralParametersNode::SafeDownCast(scene->GetNthNodeByClass(i, "vtkMRMLGeneralParametersNode"));
+			if (!strcmp(Node->GetModuleName(), "Segmentation") && !strcmp(Node->GetSingletonTag(), "Segmentation"))
+			{
+				m_parametersNode = Node;
+			}
+
 		}
-
 	}
-	return NULL;
 
+	 
+	//Get the Direction component from parametersNode
+	std::string dx = m_parametersNode->GetParameter("SnakeHeadDirectionX");
+	std::string dy = m_parametersNode->GetParameter("SnakeHeadDirectionY");
+	std::string dz = m_parametersNode->GetParameter("SnakeHeadDirectionZ");
 
-
-	std::string label = parametersNode->GetParameter("label");
-	QString qlabel = QString::fromStdString(label);
-
-	this->paintLabel = qlabel.toInt();
-
-	return this->paintLabel;
+	headDirection[0] = atof(dx.c_str());
+	headDirection[1] = atof(dy.c_str());
+	headDirection[2] = atof(dz.c_str());
+	
 }
 
 
@@ -605,12 +612,13 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead(double centerX, 
 
 	vtkNew<vtkConeSource> coneSource;
 	coneSource->SetResolution(30);
-	coneSource->SetHeight(20);
-	coneSource->SetAngle(40);
+	coneSource->SetHeight(30);
+	coneSource->SetRadius(10);
+	coneSource->SetAngle(20);
 	coneSource->CappingOn();
 
 	coneSource->SetCenter(centerX, centerY, centerZ);
-	coneSource->SetDirection(orientX, orientY, orientZ);
+	coneSource->SetDirection(-orientX, -orientY, -orientZ);
 
 	//Need update other parameters from parametersNode
 

@@ -129,8 +129,9 @@ void vtkSlicerSegmentationsModuleLogic::CreateParametersNode(vtkMRMLScene* scene
 	parametersNode->SetParameter("LabelmapColorTableNode", ""); //the current CorlorTableNode uid in scene, us it to get the ColorTableNode.
 
 
-	parametersNode->SetParameter("SnakeHeadDirection", ""); //the SnakeHead Direction.
-
+	parametersNode->SetParameter("SnakeHeadDirectionX", "1.0"); //the SnakeHead Direction X component.
+	parametersNode->SetParameter("SnakeHeadDirectionY", "0.0"); //the SnakeHead Direction Y component.
+	parametersNode->SetParameter("SnakeHeadDirectionZ", "0.0"); //the SnakeHead Direction Z component.
 
 
 
