@@ -106,7 +106,9 @@ typedef struct
 
 
 int read_seeds(int *num_seeds, SEED_SPEC **seed_list);
-float seed_pdose(SEED_SPEC *seed_spec, int exact, float x, float y, float z);
+
+//if distance longer than cutoff ,return dose as 0.0
+float seed_pdose(SEED_SPEC *seed_spec, int exact, float x, float y, float z, float cutoff);
 
 
 

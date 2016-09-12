@@ -36,6 +36,9 @@ vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, ActiveTableID);
 vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, ActiveViewID);
 vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, ActiveLayoutID);
 vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, ActiveVolumeID);
+vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, PlanPrimaryVolumeID);
+vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, ActiveSegmentationID);
+
 
 const char* vtkMRMLSelectionNode::UnitNodeReferenceRole = "unit/";
 const char* vtkMRMLSelectionNode::UnitNodeReferenceMRMLAttributeName = "UnitNodeRef";
@@ -61,6 +64,9 @@ vtkMRMLSelectionNode::vtkMRMLSelectionNode()
   this->ActiveTableID = NULL;
   this->ActiveViewID = NULL;
   this->ActiveLayoutID = NULL;
+  this->PlanPrimaryVolumeID = NULL;
+  this->ActiveSegmentationID = NULL;
+
 
   this->AddNodeReferenceRole(this->GetUnitNodeReferenceRole(),
                              this->GetUnitNodeReferenceMRMLAttributeName());
@@ -124,6 +130,18 @@ vtkMRMLSelectionNode::~vtkMRMLSelectionNode()
     delete [] this->ActiveLayoutID;
     this->ActiveLayoutID = NULL;
     }
+  if (this->PlanPrimaryVolumeID)
+  {
+	  delete[] this->PlanPrimaryVolumeID;
+	  this->PlanPrimaryVolumeID = NULL;
+  }
+  if (this->ActiveSegmentationID)
+  {
+	  delete[] this->ActiveSegmentationID;
+	  this->ActiveSegmentationID = NULL;
+  }
+  
+
 }
 
 //----------------------------------------------------------------------------
@@ -156,6 +174,9 @@ void vtkMRMLSelectionNode::WriteXML(ostream& of, int nIndent)
   of << indent << " activeTableID=\"" << (this->ActiveTableID ? this->ActiveTableID : "NULL") << "\"";
   of << indent << " activeViewID=\"" << (this->ActiveViewID ? this->ActiveViewID : "NULL") << "\"";
   of << indent << " activeLayoutID=\"" << (this->ActiveLayoutID ? this->ActiveLayoutID : "NULL") << "\"";
+  of << indent << " planPrimaryVolumeID=\"" << (this->PlanPrimaryVolumeID ? this->PlanPrimaryVolumeID : "NULL") << "\"";
+  of << indent << " activeSegmentationID=\"" << (this->ActiveSegmentationID ? this->ActiveSegmentationID : "NULL") << "\"";
+  
 
   if (this->ModelHierarchyDisplayNodeClassName.size() > 0)
     {
@@ -191,6 +212,9 @@ void vtkMRMLSelectionNode::SetSceneReferences()
   this->Scene->AddReferencedNodeID(this->ActiveTableID, this);
   this->Scene->AddReferencedNodeID(this->ActiveViewID, this);
   this->Scene->AddReferencedNodeID(this->ActiveLayoutID, this);
+  this->Scene->AddReferencedNodeID(this->PlanPrimaryVolumeID, this);
+  this->Scene->AddReferencedNodeID(this->ActiveSegmentationID, this);
+  
 }
 
 //----------------------------------------------------------------------------
@@ -237,6 +261,15 @@ if ( this->ActiveTableID && !strcmp (oldID, this->ActiveTableID ))
     {
     this->SetActiveLayoutID (newID );
     }
+  if (this->PlanPrimaryVolumeID && !strcmp(oldID, this->PlanPrimaryVolumeID))
+  {
+	  this->SetPlanPrimaryVolumeID(newID);
+  }
+  if (this->ActiveSegmentationID && !strcmp(oldID, this->ActiveSegmentationID))
+  {
+	  this->SetActiveSegmentationID(newID);
+  }
+  
 }
 
 //-----------------------------------------------------------
@@ -284,6 +317,16 @@ void vtkMRMLSelectionNode::UpdateReferences()
     {
     this->SetActiveTableID(NULL);
     }
+  if (this->PlanPrimaryVolumeID != NULL && this->Scene->GetNodeByID(this->PlanPrimaryVolumeID) == NULL)
+  {
+	  this->SetPlanPrimaryVolumeID(NULL);
+  }
+  if (this->ActiveSegmentationID != NULL && this->Scene->GetNodeByID(this->ActiveSegmentationID) == NULL)
+  {
+	  this->SetActiveSegmentationID(NULL);
+  }
+
+  
 }
 //----------------------------------------------------------------------------
 void vtkMRMLSelectionNode::ReadXMLAttributes(const char** atts)
@@ -301,6 +344,13 @@ void vtkMRMLSelectionNode::ReadXMLAttributes(const char** atts)
     {
     attName = *(atts++);
     attValue = *(atts++);
+
+	
+	if (!strcmp(attName, "planPrimaryVolumeID"))
+	{
+		this->SetPlanPrimaryVolumeID(attValue);
+		//this->Scene->AddReferencedNodeID(this->ActiveVolumeID, this);
+	}
     if (!strcmp(attName, "activeVolumeID"))
       {
       this->SetActiveVolumeID(attValue);
@@ -407,6 +457,9 @@ void vtkMRMLSelectionNode::Copy(vtkMRMLNode *anode)
   Superclass::Copy(anode);
   vtkMRMLSelectionNode *node = vtkMRMLSelectionNode::SafeDownCast(anode);
 
+  
+  this->SetPlanPrimaryVolumeID(node->GetPlanPrimaryVolumeID());
+
   this->SetActiveVolumeID(node->GetActiveVolumeID());
   this->SetSecondaryVolumeID(node->GetActiveVolumeID());
   this->SetActiveLabelVolumeID(node->GetActiveLabelVolumeID());
@@ -426,6 +479,7 @@ void vtkMRMLSelectionNode::PrintSelf(ostream& os, vtkIndent indent)
 {
   Superclass::PrintSelf(os,indent);
 
+  os << "PlanPrimaryVolumeID: " << ((this->PlanPrimaryVolumeID) ? this->PlanPrimaryVolumeID : "None") << "\n";
   os << "ActiveVolumeID: " << ( (this->ActiveVolumeID) ? this->ActiveVolumeID : "None" ) << "\n";
   os << "SecondaryVolumeID: " << ( (this->SecondaryVolumeID) ? this->SecondaryVolumeID : "None" ) << "\n";
   os << "ActiveLabelVolumeID: " << ( (this->ActiveLabelVolumeID) ? this->ActiveLabelVolumeID : "None" ) << "\n";

@@ -32,8 +32,8 @@ set(${KIT}_SRCS
   vtkSlicerRTScalarBarActor.h
   vtkSlicerRTScalarBarActor.cxx
   
-#  vtkSRPlanBDoseLogic.h
-#  vtkSRPlanBDoseLogic.cxx
+  vtkSRPlanBDoseCalculateLogic.h
+  vtkSRPlanBDoseCalculateLogic.cxx
   
   vtkSlicerIsodoseLogic.h
   vtkSlicerIsodoseLogic.cxx

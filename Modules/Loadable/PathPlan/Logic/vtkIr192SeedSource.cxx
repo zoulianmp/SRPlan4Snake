@@ -221,9 +221,8 @@ void vtkIr192SeedSource::UpdateDoseKernalVolume()
 				{
 					Pz= m_grid_spacing*0.05; //Used for Center Voxel dose calculation
 				}
-
-
-			    dosevalue = seed_pdose(&m_Ir192Spec, 0, Px, Py, Pz);
+		
+			    dosevalue = seed_pdose(&m_Ir192Spec, 0, Px, Py, Pz, m_cutoff);
 
 				m_DoseKernal->SetScalarComponentFromFloat(x,y,z,0, dosevalue);
 

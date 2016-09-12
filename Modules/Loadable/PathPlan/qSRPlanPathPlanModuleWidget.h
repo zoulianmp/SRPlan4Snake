@@ -142,7 +142,9 @@ public slots:
   void onSelectedAllMarkupsInListToggled();
   void onAddMarkupPushButtonClicked();
 
+  //Realtime tracing and DOSE Calculation
   void onRealTracePushButtonClicked();
+  void onDoseCalculatePushButtonClicked();
 
   void onDeleteMarkupPushButtonClicked();
   void onDeleteAllMarkupsInListPushButtonClicked();

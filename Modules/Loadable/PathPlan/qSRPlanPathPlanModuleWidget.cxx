@@ -261,6 +261,11 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   QObject::connect(this->realTracePushButton, SIGNAL(clicked()),
 	  q, SLOT(onRealTracePushButtonClicked()));
 
+  QObject::connect(this->doseCalculatePushButton, SIGNAL(clicked()),
+	  q, SLOT(onDoseCalculatePushButtonClicked()));
+  
+
+
  
   // delete
   QObject::connect(this->deleteMarkupPushButton, SIGNAL(clicked()),
@@ -417,7 +422,8 @@ void qSRPlanPathPlanModuleWidget::enter()
 
   this->Superclass::enter();
 
-  d->lcdNumber->hide();
+  d->isoDoseGroup->hide();
+
   // qDebug() << "enter widget";
 
   // set up mrml scene observations so that the GUI gets updated
@@ -1190,9 +1196,21 @@ void qSRPlanPathPlanModuleWidget::onAddMarkupPushButtonClicked()
     }
 }
 
+
+void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+	if (d->isoDoseGroup->isHidden())
+	    d->isoDoseGroup->show();
+
+}
+
+
 void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 {
 	Q_D(qSRPlanPathPlanModuleWidget);
+	if (!d->isoDoseGroup->isHidden())
+    	d->isoDoseGroup->hide();
 
 	bool checked = d->realTracePushButton->isChecked();
 
@@ -1206,7 +1224,7 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 	//if checked ,start to tracing the snake motion,else stop the motion tracing
 	if (checked)
 	{
-		
+		d->doseCalculatePushButton->setDisabled(true);
 
 		// get the active node
 		vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
@@ -1266,6 +1284,9 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 	{
 		
 		this->tracingTimer->stop();
+
+		d->doseCalculatePushButton->setEnabled(true);
+
 	//	disconnect(tracingTimer, SIGNAL(timeout()), this, SLOT(UpdateTraceMarkPosition()));
 
 		//Scale in ,restore the markup to defalt display
@@ -1590,6 +1611,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupMRMLNodeChanged(vtkMRMLNode *mar
 //-----------------------------------------------------------------------------
 void qSRPlanPathPlanModuleWidget::onActiveMarkupMRMLNodeAdded(vtkMRMLNode *markupsNode)
 {
+	Q_D(qSRPlanPathPlanModuleWidget);
   // qDebug() << "onActiveMarkupMRMLNodeAdded, markupsNode is " << (markupsNode ? markupsNode->GetID() : "null");
 
   if (this->markupsLogic())
@@ -1614,6 +1636,10 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupMRMLNodeAdded(vtkMRMLNode *marku
     {
     this->markupsLogic()->SetActiveListID(displayableNode);
     }
+
+  d->doseCalculatePushButton->setEnabled(true);
+  d->realTracePushButton->setEnabled(true);
+
 }
 
 //-----------------------------------------------------------------------------

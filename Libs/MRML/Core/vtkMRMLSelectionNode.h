@@ -77,6 +77,23 @@ class VTK_MRML_EXPORT vtkMRMLSelectionNode : public vtkMRMLNode
   void SetActiveLabelVolumeID(const char* id);
   void SetReferenceActiveLabelVolumeID (const char *id) { this->SetActiveLabelVolumeID(id); };
 
+
+  /// the ID of a MRMLVolumeNode£¬The Primary Image Volume ID for RT Plan .PlanPrimaryVolume added by zoulian
+  vtkGetStringMacro(PlanPrimaryVolumeID);
+  void SetPlanPrimaryVolumeID(const char* id);
+  void SetReferencePlanPrimaryVolumeID(const char *id) { this->SetPlanPrimaryVolumeID(id); };
+
+
+  /// the ID of a activeSegmentation, Used for DVH statistics calculation added by zoulian
+  vtkGetStringMacro(ActiveSegmentationID);
+  void SetActiveSegmentationID(const char* id);
+  void SetReferenceActiveSegmentationID(const char *id) { this->SetActiveSegmentationID(id); };
+
+
+  
+
+
+
   /// \deprecated Get the ID of a vtkMRMLFiducialListNode
   /// \sa SetActiveFiducialListID, SetReferenceActiveFiducialListID
   vtkGetStringMacro (ActiveFiducialListID);
@@ -268,6 +285,9 @@ protected:
   char *ActiveTableID;
   char *ActiveViewID;
   char *ActiveLayoutID;
+
+  char *PlanPrimaryVolumeID; //Used for Dose Calculation
+  char *ActiveSegmentationID; //Structure SET
 
   /// displayable/Display node class pairs for contolling
   /// to which display node to apply properties in hierarchy display widgets

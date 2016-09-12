@@ -17,7 +17,7 @@
 
 // The x,y,z position unit should given by cm
 float
-seed_pdose(SEED_SPEC *seed_spec, int exact, float x, float y, float z)
+seed_pdose(SEED_SPEC *seed_spec, int exact, float x, float y, float z, float cutoff)
 {
     float dist_square;
     static float gamma;
@@ -33,6 +33,10 @@ seed_pdose(SEED_SPEC *seed_spec, int exact, float x, float y, float z)
     if (dist_square < .00001)
 	dist_square = .00001;
     dist = sqrt(dist_square);
+	
+	if (dist > cutoff)
+		return 0.0;
+	
     seed_table_index = (int) (dist*100.0);
     if (exact || (seed_table_index >= SEED_RADII)) 
 	{
