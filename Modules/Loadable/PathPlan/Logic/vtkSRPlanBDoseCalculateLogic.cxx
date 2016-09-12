@@ -75,17 +75,116 @@ vtkStandardNewMacro(vtkSRPlanBDoseCalculateLogic);
 //----------------------------------------------------------------------------
 vtkSRPlanBDoseCalculateLogic::vtkSRPlanBDoseCalculateLogic()
 {
+	double m_gridSize = 2.5 ; // dose voxel length unit : mm 
+	double m_cutoff = 10;
  
+	planPrimaryVolume = NULL; //The Primary Image Volume for RT Plan 
+
+	snakePath = NULL; //the Snake Path
+    Ir192Seed =NULL;
+    doseVolume = NULL; //The
 }
 
 //----------------------------------------------------------------------------
 vtkSRPlanBDoseCalculateLogic::~vtkSRPlanBDoseCalculateLogic()
 {
   
+
 }
 
 //----------------------------------------------------------------------------
 void vtkSRPlanBDoseCalculateLogic::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
+}
+
+void vtkSRPlanBDoseCalculateLogic::SetPlanPrimaryVolumeNode(vtkMRMLScalarVolumeNode * primary)
+{
+	vtkSetAndObserveMRMLNodeMacro(this->planPrimaryVolume, primary);
+}
+
+vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::GetPlanPrimaryVolumeNode()
+{
+	return this->planPrimaryVolume;
+
+}
+
+
+void vtkSRPlanBDoseCalculateLogic::SetSnakePlanPath(vtkMRMLMarkupsNode * snakePath)
+{
+	vtkSetAndObserveMRMLNodeMacro(this->snakePath, snakePath);
+
+}
+
+vtkMRMLMarkupsNode * vtkSRPlanBDoseCalculateLogic::GetSnakePlanPath()
+{
+	return this->snakePath;
+}
+
+
+void vtkSRPlanBDoseCalculateLogic::SetDoseCalculateGridSize(double gridSize)
+{
+	this->m_gridSize = gridSize;
+
+}
+
+//The length in mm,to determine the range of seed source dose distribution
+void vtkSRPlanBDoseCalculateLogic::SetDoseCalculateCutoff(double cutoff)
+{
+	this->m_cutoff = cutoff;
+}
+
+
+void vtkSRPlanBDoseCalculateLogic::StartDoseCalcualte()
+{
+	// 1 . Prepare a Dose Grid Volume for Dose Calculate
+
+	if (!planPrimaryVolume || !snakePath)
+		return;
+	this->PrepareDoseGridVolumeNode();
+
+
+	// 2 . Prepare the Ir192 3D Dose Kernal
+
+	this->PrepareIr192SeedKernal();
+
+	// 3 . Calculate the Dose Distribution
+
+	this->DoseSuperposition(snakePath, Ir192Seed->GetDoseKernalVolume());
+
+}
+
+vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::GetCalculatedDoseVolume()
+{
+	return this->doseVolume;
+}
+
+
+void vtkSRPlanBDoseCalculateLogic::PrepareDoseGridVolumeNode()
+{
+
+	vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::
+
+		int dimensions[3] = { 0, 0, 0 };
+	doseVolumeNode->GetImageData()->GetDimensions(dimensions);
+	vtkSmartPointer<vtkImageReslice> reslice = vtkSmartPointer<vtkImageReslice>::New();
+	reslice->SetInputData(doseVolumeNode->GetImageData());
+	reslice->SetOutputOrigin(0, 0, 0);
+	reslice->SetOutputSpacing(1, 1, 1);
+	reslice->SetOutputExtent(0, dimensions[0] - 1, 0, dimensions[1] - 1, 0, dimensions[2] - 1);
+	reslice->SetResliceTransform(outputIJK2IJKResliceTransform);
+	reslice->Update();
+	vtkSmartPointer<vtkImageData> reslicedDoseVolumeImage = reslice->GetOutput();
+}
+
+void vtkSRPlanBDoseCalculateLogic::PrepareIr192SeedKernal()
+{
+
+
+}
+
+void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakePath, vtkImageData * doseKernal)
+{
+
+
 }

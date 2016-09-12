@@ -48,6 +48,9 @@
 
 #include "vtkMRMLColorTableNode.h"
 
+#include "vtkMRMLSelectionNode.h"
+
+
 // VTK includes
 #include <vtkSmartPointer.h>
 #include "vtkImageData.h"
@@ -354,6 +357,12 @@ void qSlicerSegmentationsModuleWidget::onSegmentationNodeChanged(vtkMRMLNode* no
 
   // Update UI from selected segmentation node
   this->updateWidgetFromMRML();
+  
+  //Update the  ActiveSegmentationNode of SelectionNode
+  vtkMRMLScene* scene = this->mrmlScene();
+  vtkMRMLSelectionNode * selectionNode = vtkMRMLSelectionNode::SafeDownCast(scene->GetNthNodeByClass(0, "vtkMRMLSelectionNode"));
+  selectionNode->SetActiveSegmentationID(segmentationNode->GetID());
+
 }
 
 //-----------------------------------------------------------------------------

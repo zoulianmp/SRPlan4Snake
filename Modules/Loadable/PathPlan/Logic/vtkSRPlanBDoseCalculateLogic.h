@@ -34,26 +34,56 @@
 #include "vtkSRPlanPathPlanModuleLogicExport.h"
 
 
+#include "vtkMRMLMarkupsNode.h"
+#include "vtkMRMLVolumeNode.h"
+#include <vtkMRMLScalarVolumeNode.h>
+
+#include "vtkIr192SeedSource.h"
+/*
+vtkMRMLScene* scene = this->mrmlScene();
+vtkMRMLSelectionNode * selectionNode = vtkMRMLSelectionNode::SafeDownCast(scene->GetNthNodeByClass(0, "vtkMRMLSelectionNode"));
+selectionNode->SetActiveSegmentationID(segmentationNode->GetID());
+*/
+
+
 
 /// \ingroup SlicerRt_QtModules_Isodose
 class VTK_SRPlan_PATHPLAN_MODULE_LOGIC_EXPORT vtkSRPlanBDoseCalculateLogic :
   public vtkMRMLAbstractLogic
 {
 
-public:
  
-
 public:
   static vtkSRPlanBDoseCalculateLogic *New();
   vtkTypeMacro(vtkSRPlanBDoseCalculateLogic, vtkMRMLAbstractLogic);
   void PrintSelf(ostream& os, vtkIndent indent);
 
-  
-
-protected:
- 
+   
 
 public:
+	//Set the Primary Plan Volume
+	void SetPlanPrimaryVolumeNode(vtkMRMLScalarVolumeNode * primary);
+	vtkMRMLScalarVolumeNode * GetPlanPrimaryVolumeNode();
+
+
+	void SetSnakePlanPath(vtkMRMLMarkupsNode * snakePath);
+	vtkMRMLMarkupsNode * GetSnakePlanPath();
+
+	void SetDoseCalculateGridSize(double gridSize);
+
+	//The length in mm,to determine the range of seed source dose distribution
+	void SetDoseCalculateCutoff(double cutoff);
+
+	void StartDoseCalcualte();
+
+	// 
+	void PrepareDoseGridVolumeNode();
+
+	void PrepareIr192SeedKernal();
+
+	void DoseSuperposition(vtkMRMLMarkupsNode * snakePath , vtkImageData * doseKernal);
+
+	vtkMRMLScalarVolumeNode * GetCalculatedDoseVolume();
   
 protected:
 
@@ -64,9 +94,24 @@ protected:
 
 private:
 	vtkSRPlanBDoseCalculateLogic(const vtkSRPlanBDoseCalculateLogic&); // Not implemented
-  void operator=(const vtkSRPlanBDoseCalculateLogic&);               // Not implemented
+    void operator=(const vtkSRPlanBDoseCalculateLogic&);               // Not implemented
+
 protected:
-  
+	vtkMRMLScalarVolumeNode * planPrimaryVolume; //The Primary Image Volume for RT Plan 
+
+	vtkMRMLMarkupsNode * snakePath; //the Snake Path
+
+	vtkIr192SeedSource * Ir192Seed;
+
+	vtkMRMLScalarVolumeNode * doseVolume; //The calculated Dosevolume Node
+
+
+
+	double m_gridSize; // dose voxel length unit : mm 
+
+	double m_cutoff; //Using the cutoff value in mm unit, to define the dose kernal 
+
+
 };
 
 #endif

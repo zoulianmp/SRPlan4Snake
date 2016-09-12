@@ -68,6 +68,8 @@
 #include "vtkSlicerVolumesLogic.h"
 #include "qSlicerApplication.h"
 
+#include "vtkMRMLSelectionNode.h"
+
 // STD includes
 #include <set>
 
@@ -844,6 +846,10 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 	scene->AddNode(templabelmapnode);
 
 
+	vtkMRMLSelectionNode * selectionNode = vtkMRMLSelectionNode::SafeDownCast(scene->GetNthNodeByClass(0, "vtkMRMLSelectionNode"));
+
+	
+
 	if (SegmentationSH)
 	{
 		
@@ -860,6 +866,8 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 			{
 				nodeSelector->setCurrentNode(SegmentationSH->GetAssociatedNode());
 			}
+			
+			selectionNode->SetActiveSegmentationID(SegmentationSH->GetAssociatedNode()->GetID());
 			
 		}
 
@@ -890,6 +898,10 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 		vtkStdString basename = mastervolume->GetName();
 
 		
+		//UpDate the SelectionNode,save the plan primaryVolume and ActiveSegmentation
+
+		selectionNode->SetActiveSegmentationID(segmentation->GetID());
+		selectionNode->SetPlanPrimaryVolumeID(mastervolume->GetID());
 
 		// related templabelmapnode to SegmentationSH
 		SegmentationSH->AddUID(vtkMRMLSubjectHierarchyConstants::GetTempLabelMapUIDName(), templabelmapnode->GetID());
@@ -917,5 +929,5 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 
 	}
 
-	
+
 }
