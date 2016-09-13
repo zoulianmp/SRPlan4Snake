@@ -145,13 +145,125 @@ void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGrid()
 	//Clone vtkMRMLScalarVolume without imagedata
 	this->doseVolume = vtkSlicerVolumesLogic::CloneVolumeWithoutImageData(this->GetMRMLScene(), planPrimaryVolume, emptyDoseGrid);
 
+	//************************************************************
 	//create empty vtkImageData, Set and Observer
 
+	double rasBounds[6];
+	planPrimaryVolume->GetRASBounds(rasBounds);
+
+	double rmin, rmax, amin, amax, smin, smax;
+	rmin = rasBounds[0];
+	rmax = rasBounds[1];
+	amin = rasBounds[2];
+	amax = rasBounds[3];
+	smin = rasBounds[4];
+	smax = rasBounds[5];
+
+	//planPrimaryVolume->GetRASToIJKMatrix()
+
+
+	//vtkMRMLVolumeNode::GetRASToIJKMatrix(vtkMatrix4x4* mat)
+
+
+//	m_gridSize
 
 
 
 
 }
+
+
+
+/*
+
+
+Superclass::GetRASBounds( bounds);
+
+vtkImageData *volumeImage;
+if (! (volumeImage = this->GetImageData()) )
+{
+return;
+}
+
+//
+// Get the size of the volume in RAS space
+// - map the size of the volume in IJK into RAS
+// - map the middle of the volume to RAS for the center
+//   (IJK space always has origin at first pixel)
+//
+
+vtkNew<vtkGeneralTransform> transform;
+transform->PostMultiply();
+transform->Identity();
+
+vtkNew<vtkMatrix4x4> ijkToRAS;
+this->GetIJKToRASMatrix(ijkToRAS.GetPointer());
+transform->Concatenate(ijkToRAS.GetPointer());
+
+vtkMRMLTransformNode *transformNode = this->GetParentTransformNode();
+
+if ( transformNode )
+{
+vtkNew<vtkGeneralTransform> worldTransform;
+worldTransform->Identity();
+//transformNode->GetTransformFromWorld(worldTransform);
+transformNode->GetTransformToWorld(worldTransform.GetPointer());
+transform->Concatenate(worldTransform.GetPointer());
+}
+
+int dimensions[3];
+int i,j,k;
+volumeImage->GetDimensions(dimensions);
+double doubleDimensions[4], *rasHDimensions;
+double minBounds[3], maxBounds[3];
+
+for ( i=0; i<3; i++)
+{
+minBounds[i] = 1.0e10;
+maxBounds[i] = -1.0e10;
+}
+for ( i=0; i<2; i++)
+{
+for ( j=0; j<2; j++)
+{
+for ( k=0; k<2; k++)
+{
+doubleDimensions[0] = i*(dimensions[0]) - 0.5;
+doubleDimensions[1] = j*(dimensions[1]) - 0.5 ;
+doubleDimensions[2] = k*(dimensions[2]) - 0.5;
+doubleDimensions[3] = 1;
+rasHDimensions = transform->TransformDoublePoint( doubleDimensions);
+for (int n=0; n<3; n++) {
+if (rasHDimensions[n] < minBounds[n])
+{
+minBounds[n] = rasHDimensions[n];
+}
+if (rasHDimensions[n] > maxBounds[n])
+{
+maxBounds[n] = rasHDimensions[n];
+}
+}
+}
+}
+}
+
+for ( i=0; i<3; i++)
+{
+bounds[2*i]   = minBounds[i];
+bounds[2*i+1] = maxBounds[i];
+}
+
+
+*/
+
+
+
+
+
+
+
+
+
 
 
 
