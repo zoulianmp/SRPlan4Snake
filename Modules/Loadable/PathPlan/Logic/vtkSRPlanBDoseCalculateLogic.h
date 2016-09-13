@@ -85,8 +85,9 @@ public:
 
 	vtkMRMLScalarVolumeNode * GetCalculatedDoseVolume();
 
-	//Initialize the empty Dose Grid,prepare for Dose Calculation
-	void InitializeEmptyDosGrid();
+	//Initialize the empty Dose Grid Node,prepare for Dose Calculation
+	//as vtkMRMLScalarVolumeNode * doseVolume; //The calculated Dosevolume Node
+	void InitializeEmptyDosGridNode();
 	
   
 protected:

@@ -26,8 +26,12 @@ vtkIr192SeedSource::vtkIr192SeedSource()
 	//the c-arm image size is 256*256
 	//voxel spacing is 0.43 mm the all range is 110 mm
 	
-	m_grid_spacing = 2.0; // unit is mm voxel length
+	this->m_grid_spacing = 2.0; // unit is mm voxel length
     m_cutoff = 50; // unit mm
+
+
+	this->m_kernal_invalid = false;
+
 
 	this->SetupIr192Seed();
 
@@ -37,7 +41,7 @@ vtkIr192SeedSource::vtkIr192SeedSource()
 
 
 
-	m_kernal_invalid = false; 
+   
 }
 
 //----------------------------------------------------------------------------

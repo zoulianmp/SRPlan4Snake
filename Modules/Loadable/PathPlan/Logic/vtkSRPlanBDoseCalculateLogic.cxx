@@ -79,14 +79,14 @@ vtkStandardNewMacro(vtkSRPlanBDoseCalculateLogic);
 //----------------------------------------------------------------------------
 vtkSRPlanBDoseCalculateLogic::vtkSRPlanBDoseCalculateLogic()
 {
-	double m_gridSize = 2.5 ; // dose voxel length unit : mm 
-	double m_cutoff = 10;
+	this->m_gridSize = 2.5 ; // dose voxel length unit : mm 
+	this->m_cutoff = 10;
  
-	planPrimaryVolume = NULL; //The Primary Image Volume for RT Plan 
+	this->planPrimaryVolume = NULL; //The Primary Image Volume for RT Plan 
 
-	snakePath = NULL; //the Snake Path
-    Ir192Seed =NULL;
-    doseVolume = NULL; //The
+	this->snakePath = NULL; //the Snake Path
+    this-> Ir192Seed =NULL;
+    this->doseVolume = NULL; //The
 }
 
 //----------------------------------------------------------------------------
@@ -132,9 +132,9 @@ void vtkSRPlanBDoseCalculateLogic::SetDoseCalculateGridSize(double gridSize)
 
 }
 
-
+//Step 1
 //Initialize the empty Dose Grid,prepare for Dose Calculation
-void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGrid()
+void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGridNode()
 {
 	if (!planPrimaryVolume)
 	{
@@ -145,11 +145,15 @@ void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGrid()
 	//Clone vtkMRMLScalarVolume without imagedata
 	this->doseVolume = vtkSlicerVolumesLogic::CloneVolumeWithoutImageData(this->GetMRMLScene(), planPrimaryVolume, emptyDoseGrid);
 
+	// Set DoseGrid spacing
+	doseVolume->SetSpacing(m_gridSize, m_gridSize, m_gridSize);
+
 	//************************************************************
 	//create empty vtkImageData, Set and Observer
 
 	double rasBounds[6];
 	planPrimaryVolume->GetRASBounds(rasBounds);
+
 
 	double rmin, rmax, amin, amax, smin, smax;
 	rmin = rasBounds[0];
@@ -159,113 +163,118 @@ void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGrid()
 	smin = rasBounds[4];
 	smax = rasBounds[5];
 
+
+
+	double rLen, aLen, sLen;
+
+	rLen = rasBounds[1] - rasBounds[0];
+
+	aLen = rasBounds[3] - rasBounds[2];
+
+	sLen = rasBounds[5] - rasBounds[4];
+
+	//The Unit vector
+	double rUnit[3] = { rLen , 0.0, 0.0};
+
+	double aUnit[3] = { 0.0, aLen, 0.0};
+
+	double sUnit[3] = { 0.0, 0.0, sLen};
+
+	
 	//planPrimaryVolume->GetRASToIJKMatrix()
 
 
-	//vtkMRMLVolumeNode::GetRASToIJKMatrix(vtkMatrix4x4* mat)
+
+	vtkNew<vtkGeneralTransform> transform;
+	transform->PostMultiply();
+	transform->Identity();
 
 
-//	m_gridSize
+	//Refered by, PlanImage
+	//vtkNew<vtkMatrix4x4> planVolumeRASToIJK;
+	//planPrimaryVolume->GetRASToIJKMatrix(planVolumeRASToIJK.GetPointer());
+
+
+	vtkNew<vtkMatrix4x4> doseGridRASToIJK;
+	doseVolume->GetRASToIJKMatrix(doseGridRASToIJK.GetPointer());
+
+
+	//******************************************
+	//Clone the doseGridRASToIJK, Use the matrix get the new spacing IJK Dimensions
+	vtkNew<vtkMatrix4x4> midRASToIJK;
+	midRASToIJK->DeepCopy(doseGridRASToIJK.GetPointer());
+
+
+	midRASToIJK->SetElement(0, 3, 0.0);
+	midRASToIJK->SetElement(1, 3, 0.0);
+	midRASToIJK->SetElement(2, 3, 0.0);
+
+	transform->Concatenate(midRASToIJK.GetPointer());
+
+
+	//transform->Concatenate(doseGridRASToIJK.GetPointer());
+
+	double* vFromR, * vFromA, *vFromS;
+ 
+	double vR[3] = { 0.0,0.0,0.0 };
+	double vA[3] = { 0.0,0.0,0.0 };
+	double vS[3] = { 0.0,0.0,0.0 };
+
+
+	//The Empty Dose Grid IJK Dims
+		
+	int IJKDims[3] = {0,0,0};
+
+	
+	vFromR = transform->TransformDoublePoint(rUnit);
+
+
+	vR[0] = vFromR[0];
+	vR[1] = vFromR[1];
+	vR[2] = vFromR[2];
+	
 
 
 
+	vFromA = transform->TransformDoublePoint(aUnit); 
+
+	vA[0] = vFromA[0];
+	vA[1] = vFromA[1];
+	vA[2] = vFromA[2];
+	 
+
+		
+	vFromS = transform->TransformDoublePoint(sUnit);
+	vS[0] = vFromS[0];
+	vS[1] = vFromS[1];
+	vS[2] = vFromS[2];
+
+	double tR, tA, tS;
+
+
+	for (int i = 0; i<3; i++)
+	{
+		tR = vR[i];
+		tA = vA[i];		
+		tS = vS[i];
+
+		if (abs(tR) > 0.0001)
+			IJKDims[i] = int(abs(tR));
+
+		if (abs(tA) > 0.0001)
+			IJKDims[i] = int(abs(tA));
+
+		if (abs(tS) > 0.0001)
+			IJKDims[i] = int(abs(tS));
+
+	}
+
+	
+	vtkImageData * doseGrid =  CreateEmptyDoseGrid(IJKDims);
+
+  	doseVolume->SetAndObserveImageData(doseGrid );
 
 }
-
-
-
-/*
-
-
-Superclass::GetRASBounds( bounds);
-
-vtkImageData *volumeImage;
-if (! (volumeImage = this->GetImageData()) )
-{
-return;
-}
-
-//
-// Get the size of the volume in RAS space
-// - map the size of the volume in IJK into RAS
-// - map the middle of the volume to RAS for the center
-//   (IJK space always has origin at first pixel)
-//
-
-vtkNew<vtkGeneralTransform> transform;
-transform->PostMultiply();
-transform->Identity();
-
-vtkNew<vtkMatrix4x4> ijkToRAS;
-this->GetIJKToRASMatrix(ijkToRAS.GetPointer());
-transform->Concatenate(ijkToRAS.GetPointer());
-
-vtkMRMLTransformNode *transformNode = this->GetParentTransformNode();
-
-if ( transformNode )
-{
-vtkNew<vtkGeneralTransform> worldTransform;
-worldTransform->Identity();
-//transformNode->GetTransformFromWorld(worldTransform);
-transformNode->GetTransformToWorld(worldTransform.GetPointer());
-transform->Concatenate(worldTransform.GetPointer());
-}
-
-int dimensions[3];
-int i,j,k;
-volumeImage->GetDimensions(dimensions);
-double doubleDimensions[4], *rasHDimensions;
-double minBounds[3], maxBounds[3];
-
-for ( i=0; i<3; i++)
-{
-minBounds[i] = 1.0e10;
-maxBounds[i] = -1.0e10;
-}
-for ( i=0; i<2; i++)
-{
-for ( j=0; j<2; j++)
-{
-for ( k=0; k<2; k++)
-{
-doubleDimensions[0] = i*(dimensions[0]) - 0.5;
-doubleDimensions[1] = j*(dimensions[1]) - 0.5 ;
-doubleDimensions[2] = k*(dimensions[2]) - 0.5;
-doubleDimensions[3] = 1;
-rasHDimensions = transform->TransformDoublePoint( doubleDimensions);
-for (int n=0; n<3; n++) {
-if (rasHDimensions[n] < minBounds[n])
-{
-minBounds[n] = rasHDimensions[n];
-}
-if (rasHDimensions[n] > maxBounds[n])
-{
-maxBounds[n] = rasHDimensions[n];
-}
-}
-}
-}
-}
-
-for ( i=0; i<3; i++)
-{
-bounds[2*i]   = minBounds[i];
-bounds[2*i+1] = maxBounds[i];
-}
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -274,9 +283,13 @@ vtkImageData * vtkSRPlanBDoseCalculateLogic::CreateEmptyDoseGrid(int * dims)
 {
 
 	// Create an image data
-	vtkSmartPointer<vtkImageData> imageData =
-		vtkSmartPointer<vtkImageData>::New();
+	//vtkSmartPointer<vtkImageData> imageData =
+	//	vtkSmartPointer<vtkImageData>::New();
 
+	vtkImageData *  imageData = vtkImageData::New();
+
+	imageData->SetOrigin(0.0,0.0,0.0);
+	imageData->SetSpacing(1, 1, 1);
 	// Specify the size of the image data
 	imageData->SetDimensions(dims[0], dims[1],dims[2]);
 
@@ -315,8 +328,7 @@ void vtkSRPlanBDoseCalculateLogic::StartDoseCalcualte()
 
 	if (!planPrimaryVolume || !snakePath)
 		return;
-	this->PrepareDoseGridVolumeNode();
-
+	this->InitializeEmptyDosGridNode();
 
 	// 2 . Prepare the Ir192 3D Dose Kernal
 
@@ -324,7 +336,9 @@ void vtkSRPlanBDoseCalculateLogic::StartDoseCalcualte()
 
 	// 3 . Calculate the Dose Distribution
 
-	this->DoseSuperposition(snakePath, Ir192Seed->GetDoseKernalVolume());
+	vtkImageData* kernal = this->Ir192Seed->GetDoseKernalVolume();
+
+	this->DoseSuperposition(snakePath, kernal);
 
 }
 
@@ -334,32 +348,20 @@ vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::GetCalculatedDoseVolume(
 }
 
 
-void vtkSRPlanBDoseCalculateLogic::PrepareDoseGridVolumeNode()
-{
-
-	/*	vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::
-	int dimensions[3] = { 0, 0, 0 };
-	doseVolumeNode->GetImageData()->GetDimensions(dimensions);
-	vtkSmartPointer<vtkImageReslice> reslice = vtkSmartPointer<vtkImageReslice>::New();
-	reslice->SetInputData(doseVolumeNode->GetImageData());
-	reslice->SetOutputOrigin(0, 0, 0);
-	reslice->SetOutputSpacing(1, 1, 1);
-	reslice->SetOutputExtent(0, dimensions[0] - 1, 0, dimensions[1] - 1, 0, dimensions[2] - 1);
-	reslice->SetResliceTransform(outputIJK2IJKResliceTransform);
-	reslice->Update();
-	vtkSmartPointer<vtkImageData> reslicedDoseVolumeImage = reslice->GetOutput();
-
-	*/
-}
-
+//Step 2 , Prepare The SeedSource 
 void vtkSRPlanBDoseCalculateLogic::PrepareIr192SeedKernal()
 {
+	this->Ir192Seed = vtkIr192SeedSource::New();
+	this->Ir192Seed->SetGridSpacing(this->m_gridSize);
+	this->Ir192Seed->SetDoseKernalCutoff(this->m_cutoff);
 
+	this->Ir192Seed->SetupIr192Seed();
+	this->Ir192Seed->UpdateDoseKernalVolume();
 
 }
 
 void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakePath, vtkImageData * doseKernal)
 {
-
+	int i = 0;
 
 }
