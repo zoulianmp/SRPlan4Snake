@@ -37,7 +37,7 @@ vtkIr192SeedSource::vtkIr192SeedSource()
 
 
 	// Update the Dose Kernal
-	this->UpdateDoseKernalVolume();
+	//this->UpdateDoseKernalVolume();
 
 
 
@@ -197,7 +197,7 @@ void vtkIr192SeedSource::UpdateDoseKernalVolume()
 
  	int halfsize = int(m_cutoff / m_grid_spacing);
 
-	halfsize = 1;
+	//halfsize = 1;
 
 	m_DoseKernal->SetExtent(-halfsize, halfsize, -halfsize, halfsize, -halfsize, halfsize);
 	int* extent = m_DoseKernal->GetExtent();
@@ -235,7 +235,7 @@ void vtkIr192SeedSource::UpdateDoseKernalVolume()
 	}
 
 	//Just for debug
-	this->PrintROIDose(m_DoseKernal, extent);
+	//this->PrintROIDose(m_DoseKernal, extent);
 }
 
 vtkImageData * vtkIr192SeedSource::GetDoseKernalVolume()

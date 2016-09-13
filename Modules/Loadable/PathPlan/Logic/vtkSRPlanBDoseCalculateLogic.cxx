@@ -80,7 +80,7 @@ vtkStandardNewMacro(vtkSRPlanBDoseCalculateLogic);
 vtkSRPlanBDoseCalculateLogic::vtkSRPlanBDoseCalculateLogic()
 {
 	this->m_gridSize = 2.5 ; // dose voxel length unit : mm 
-	this->m_cutoff = 10;
+	this->m_cutoff = 50; //Cutoff Distance from center unit:mm
  
 	this->planPrimaryVolume = NULL; //The Primary Image Volume for RT Plan 
 
