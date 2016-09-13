@@ -6,7 +6,7 @@
 
 #include "QDialog.h"
 
-#include "vtkMRMLDisplayNode.h";
+#include "vtkMRMLDisplayNode.h"
 
 #include "qSRPlanSegmentationsModuleExport.h"
 

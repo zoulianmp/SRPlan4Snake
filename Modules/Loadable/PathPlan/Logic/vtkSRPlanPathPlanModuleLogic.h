@@ -27,8 +27,9 @@
 // Slicer includes
 #include "vtkSlicerModuleLogic.h"
 
+#include "vtkMRMLSelectionNode.h"
 #include "vtkSlicerMarkupsLogic.h"
-
+#include "vtkSRPlanBDoseCalculateLogic.h"
 
 // MRML includes
 
@@ -53,8 +54,13 @@ public:
 
   void SetMarkupsLogic(vtkSlicerMarkupsLogic * markupsLogic);
 
-  vtkSlicerMarkupsLogic * GetMarkupsLogic();
+  //Get the SelectionNode of MRML Scene
+  vtkMRMLSelectionNode * GetSelectionNode();
+  //Get the SelectionNode of MRML Scene
+  void SetSelectionNode(vtkMRMLSelectionNode * selectionNode);
 
+  vtkSlicerMarkupsLogic * GetMarkupsLogic();
+  vtkSRPlanBDoseCalculateLogic * GetBDoseCalculateLogic();
 
 protected:
   vtkSRPlanPathPlanModuleLogic();
@@ -69,9 +75,11 @@ private:
   vtkSRPlanPathPlanModuleLogic(const vtkSRPlanPathPlanModuleLogic&); // Not implemented
   void operator=(const vtkSRPlanPathPlanModuleLogic&);               // Not implemented
 
+  vtkMRMLSelectionNode * selectionNode;
   
   vtkSmartPointer<vtkSlicerMarkupsLogic> MarkupsLogic;
 
+  vtkSmartPointer<vtkSRPlanBDoseCalculateLogic> BDoseCalLogic;
 
 
 };

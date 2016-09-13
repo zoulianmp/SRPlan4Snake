@@ -47,6 +47,10 @@
 #include <vtkMRMLColorLogic.h>
 #include <vtkMRMLApplicationLogic.h>
 #include <vtkMRMLScene.h>
+#include "vtkSlicerVolumesLogic.h"
+
+
+
 
 // VTK includes
 #include <vtkNew.h>
@@ -128,6 +132,64 @@ void vtkSRPlanBDoseCalculateLogic::SetDoseCalculateGridSize(double gridSize)
 
 }
 
+
+//Initialize the empty Dose Grid,prepare for Dose Calculation
+void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGrid()
+{
+	if (!planPrimaryVolume)
+	{
+		return;
+	}
+
+	char * emptyDoseGrid = "DoseGrid";
+	//Clone vtkMRMLScalarVolume without imagedata
+	this->doseVolume = vtkSlicerVolumesLogic::CloneVolumeWithoutImageData(this->GetMRMLScene(), planPrimaryVolume, emptyDoseGrid);
+
+	//create empty vtkImageData, Set and Observer
+
+
+
+
+
+}
+
+
+
+
+
+//Given a Dose Grid dimensions as i,j,k ,and create empty Image Data.
+vtkImageData * vtkSRPlanBDoseCalculateLogic::CreateEmptyDoseGrid(int * dims)
+{
+
+	// Create an image data
+	vtkSmartPointer<vtkImageData> imageData =
+		vtkSmartPointer<vtkImageData>::New();
+
+	// Specify the size of the image data
+	imageData->SetDimensions(dims[0], dims[1],dims[2]);
+
+	imageData->AllocateScalars(VTK_DOUBLE, 1);
+
+	// Fill every entry of the image data with x,y,z
+	//int* dims = imageData->GetDimensions();
+
+	double *ptr = static_cast<double *>(imageData->GetScalarPointer(0, 0, 0));
+	for (int z = 0; z < dims[2]; z++)
+	{
+		for (int y = 0; y < dims[1]; y++)
+		{
+			for (int x = 0; x < dims[0]; x++)
+			{
+				*ptr++ = 0.0;
+				
+			}
+		}
+	}
+
+	return imageData;
+
+}
+
 //The length in mm,to determine the range of seed source dose distribution
 void vtkSRPlanBDoseCalculateLogic::SetDoseCalculateCutoff(double cutoff)
 {
@@ -163,9 +225,8 @@ vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::GetCalculatedDoseVolume(
 void vtkSRPlanBDoseCalculateLogic::PrepareDoseGridVolumeNode()
 {
 
-	vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::
-
-		int dimensions[3] = { 0, 0, 0 };
+	/*	vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::
+	int dimensions[3] = { 0, 0, 0 };
 	doseVolumeNode->GetImageData()->GetDimensions(dimensions);
 	vtkSmartPointer<vtkImageReslice> reslice = vtkSmartPointer<vtkImageReslice>::New();
 	reslice->SetInputData(doseVolumeNode->GetImageData());
@@ -175,6 +236,8 @@ void vtkSRPlanBDoseCalculateLogic::PrepareDoseGridVolumeNode()
 	reslice->SetResliceTransform(outputIJK2IJKResliceTransform);
 	reslice->Update();
 	vtkSmartPointer<vtkImageData> reslicedDoseVolumeImage = reslice->GetOutput();
+
+	*/
 }
 
 void vtkSRPlanBDoseCalculateLogic::PrepareIr192SeedKernal()

@@ -1200,8 +1200,49 @@ void qSRPlanPathPlanModuleWidget::onAddMarkupPushButtonClicked()
 void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 {
 	Q_D(qSRPlanPathPlanModuleWidget);
+
+	//********************************************************
+	//Get the Logic and input Data Sets
+
+	vtkMRMLScene *scene = this->mrmlScene();
+
+	vtkSRPlanPathPlanModuleLogic * PathPlanLogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
+
+	vtkSRPlanBDoseCalculateLogic * BDoseLogic = PathPlanLogic->GetBDoseCalculateLogic();
+
+	
+	vtkMRMLSelectionNode * selectionNode = PathPlanLogic->GetSelectionNode();
+	if (!selectionNode)
+	{
+		selectionNode = vtkMRMLSelectionNode::SafeDownCast(scene->GetNthNodeByClass(0, "vtkMRMLSelectionNode"));
+		PathPlanLogic->SetSelectionNode(selectionNode);
+	}
+
+
+	char * planVolumeID = selectionNode->GetPlanPrimaryVolumeID();
+	char * snakePathID = selectionNode->GetActivePlaceNodeID();
+	char * segmenatationID = selectionNode->GetActiveSegmentationID();
+
+	vtkMRMLScalarVolumeNode* ScalarNode = vtkMRMLScalarVolumeNode::SafeDownCast(scene->GetNodeByID(planVolumeID));
+
+	
+
+
+	BDoseLogic->SetPlanPrimaryVolumeNode(vtkMRMLScalarVolumeNode::SafeDownCast(scene->GetNodeByID(planVolumeID)));
+	BDoseLogic->SetSnakePlanPath(vtkMRMLMarkupsNode::SafeDownCast(scene->GetNodeByID(snakePathID)));
+
+	BDoseLogic->StartDoseCalcualte();
+
+
+	vtkMRMLScalarVolumeNode* DoseDistribution = BDoseLogic->GetCalculatedDoseVolume();
+
+	//********************************************************
+	//Begin the ISO DOSE Evaluation Function
+
+	//Show the ISO Dose GUI
 	if (d->isoDoseGroup->isHidden())
-	    d->isoDoseGroup->show();
+		d->isoDoseGroup->show();
+	
 
 }
 

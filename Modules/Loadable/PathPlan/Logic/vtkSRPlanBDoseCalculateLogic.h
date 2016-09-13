@@ -84,9 +84,14 @@ public:
 	void DoseSuperposition(vtkMRMLMarkupsNode * snakePath , vtkImageData * doseKernal);
 
 	vtkMRMLScalarVolumeNode * GetCalculatedDoseVolume();
+
+	//Initialize the empty Dose Grid,prepare for Dose Calculation
+	void InitializeEmptyDosGrid();
+	
   
 protected:
-
+	//Create a empty IJK ImageData, Origin(0,0,0),spacing(1,1,1)
+	vtkImageData * CreateEmptyDoseGrid(int * dims);
 
 protected:
 	vtkSRPlanBDoseCalculateLogic();
