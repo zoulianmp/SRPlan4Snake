@@ -45,7 +45,11 @@
 #include "vtkMRMLSliceNode.h"
 
 #include "vtkMRMLApplicationLogic.h"
+#include "vtkMRMLColorTableNode.h"
+#include "vtkMRMLIsodoseNode.h"
+#include "vtkSlicerIsodoseLogic.h"
 
+#include "vtkMRMLScalarVolumeDisplayNode.h"
 
 // Markups includes
 #include "qSRPlanPathPlanModuleWidget.h"
@@ -81,6 +85,8 @@
 
 #include <vtksys/SystemTools.hxx>
 #include <math.h>
+
+
 
 
 //-----------------------------------------------------------------------------
@@ -1194,6 +1200,10 @@ void qSRPlanPathPlanModuleWidget::onAddMarkupPushButtonClicked()
     // for now, assume a fiducial
     listNode->AddMarkupWithNPoints(1);
     }
+
+  this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+
+   
 }
 
 
@@ -1229,7 +1239,7 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 	//The length in mm,to determine the range of seed source dose distribution
 
 	BDoseLogic->SetDoseCalculateGridSize(1.0);
-	BDoseLogic->SetDoseCalculateCutoff(5.0);
+	BDoseLogic->SetDoseCalculateCutoff(50.0);
 
 
 
@@ -1238,18 +1248,87 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 
 	BDoseLogic->StartDoseCalcualte();
 
-
+	//Get the Final Dose distribution for ISO Dose Node 
 	vtkMRMLScalarVolumeNode* DoseDistribution = BDoseLogic->GetCalculatedDoseVolume();
+
+	//Generate a relative distribution,100 is the maximum.
+	BDoseLogic->NormalizedToMaximum(DoseDistribution);
 
 	//********************************************************
 	//Begin the ISO DOSE Evaluation Function
 
-	//Show the ISO Dose GUI
-	if (d->isoDoseGroup->isHidden())
-		d->isoDoseGroup->show();
 	
+	this->enterIsoDoseEvaluationFunction(DoseDistribution);
+
+	//Show the ISO Dose GUI
+	//if (d->isoDoseGroup->isHidden())
+	//	d->isoDoseGroup->show();
 
 }
+
+//Given a Dose distribution Volume, enter the ISO DoseEvaluate Function
+void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVolumeNode* doseGrid)
+{
+	vtkSlicerIsodoseLogic *	isoLogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic())->GetISODoseLogic();
+
+	std::string volumeNodeName = doseGrid->GetName();
+
+	char* DefaultDoseColorTableNodeId = isoLogic->GetDefaultIsodoseColorTableNodeId();
+
+	// Create dose color table from default isodose color table
+	
+	vtkMRMLColorTableNode* defaultIsodoseColorTable = vtkMRMLColorTableNode::SafeDownCast(
+		this->mrmlScene()->GetNodeByID(DefaultDoseColorTableNodeId));
+
+	// Create isodose parameter set node and set color table to default
+	std::string isodoseParameterSetNodeName;
+	isodoseParameterSetNodeName =this->mrmlScene()->GenerateUniqueName(
+		vtkSlicerIsodoseLogic::ISODOSE_PARAMETER_SET_BASE_NAME_PREFIX + volumeNodeName);
+
+	vtkSmartPointer<vtkMRMLIsodoseNode> isodoseParameterSetNode = vtkSmartPointer<vtkMRMLIsodoseNode>::New();
+	isodoseParameterSetNode->SetName(isodoseParameterSetNodeName.c_str());
+	isodoseParameterSetNode->SetAndObserveDoseVolumeNode(doseGrid);
+
+	if (isoLogic && defaultIsodoseColorTable)
+	{
+		isodoseParameterSetNode->SetAndObserveColorTableNode(defaultIsodoseColorTable);
+	}
+	this->mrmlScene()->AddNode(isodoseParameterSetNode);
+
+	//TODO: Generate isodose surfaces if chosen so by the user in the hanging protocol options
+
+	// Set default colormap to the loaded one if found or generated, or to rainbow otherwise
+	vtkSmartPointer<vtkMRMLScalarVolumeDisplayNode> volumeDisplayNode = vtkSmartPointer<vtkMRMLScalarVolumeDisplayNode>::New();
+	volumeDisplayNode->SetAndObserveColorNodeID(DefaultDoseColorTableNodeId);
+
+	this->mrmlScene()->AddNode(volumeDisplayNode);
+	doseGrid->SetAndObserveDisplayNodeID(volumeDisplayNode->GetID());
+
+	// Set window/level to match the isodose levels
+	if (isoLogic && defaultIsodoseColorTable)
+	{
+		std::stringstream ssMin;
+		ssMin << defaultIsodoseColorTable->GetColorName(0);;
+		int minDoseInDefaultIsodoseLevels;
+		ssMin >> minDoseInDefaultIsodoseLevels;
+
+		std::stringstream ssMax;
+		ssMax << defaultIsodoseColorTable->GetColorName(defaultIsodoseColorTable->GetNumberOfColors() - 1);
+		int maxDoseInDefaultIsodoseLevels;
+		ssMax >> maxDoseInDefaultIsodoseLevels;
+
+		volumeDisplayNode->AutoWindowLevelOff();
+		volumeDisplayNode->SetWindowLevelMinMax(minDoseInDefaultIsodoseLevels, maxDoseInDefaultIsodoseLevels);
+	}
+
+	// Set display threshold
+
+	volumeDisplayNode->AutoThresholdOff();
+	volumeDisplayNode->SetLowerThreshold(5);
+	volumeDisplayNode->SetApplyThreshold(1);
+
+}
+
 
 
 void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
@@ -1561,6 +1640,9 @@ void qSRPlanPathPlanModuleWidget::onDeleteMarkupPushButtonClicked()
 
   // clear the selection on the table
   d->activeMarkupTableWidget->clearSelection();
+
+  this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+
 }
 
 //-----------------------------------------------------------------------------
@@ -1599,6 +1681,9 @@ void qSRPlanPathPlanModuleWidget::onDeleteAllMarkupsInListPushButtonClicked()
       listNode->RemoveAllMarkups();
       }
     }
+
+  this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+
 }
 
 //-----------------------------------------------------------------------------
@@ -1652,6 +1737,9 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupMRMLNodeChanged(vtkMRMLNode *mar
 
   // update the GUI
   this->updateWidgetFromMRML();
+
+  this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+
 }
 
 //-----------------------------------------------------------------------------
@@ -1686,6 +1774,9 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupMRMLNodeAdded(vtkMRMLNode *marku
   d->doseCalculatePushButton->setEnabled(true);
   d->realTracePushButton->setEnabled(true);
 
+  //this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+
+
 }
 
 //-----------------------------------------------------------------------------
@@ -1712,6 +1803,9 @@ void qSRPlanPathPlanModuleWidget::onSelectionNodeActivePlaceNodeIDChanged()
       d->activeMarkupMRMLNodeComboBox->setCurrentNodeID(activePlaceNodeID);
       }
     }
+
+  this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+
 }
 
 //-----------------------------------------------------------------------------
@@ -1909,6 +2003,8 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
     qDebug() << QString("Cell Changed: unknown column: ") + QString::number(column);
     }
 	
+  this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+
 }
 
 //-----------------------------------------------------------------------------
@@ -1971,7 +2067,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCurrentCellChanged(
     this->markupsLogic()->JumpSlicesToNthPointInMarkup(mrmlNode->GetID(), currentRow, jumpCentered);
     }
 
-	
+ // this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
 }
 
 //-----------------------------------------------------------------------------
@@ -2942,3 +3038,21 @@ void qSRPlanPathPlanModuleWidget::PlaceSnakeHead(double centerX, double centerY,
 }
 
 */
+
+
+vtkSRPlanBDoseCalculateLogic* qSRPlanPathPlanModuleWidget::getBDoseCalculateLogic()
+{
+	return vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic())->GetBDoseCalculateLogic();
+}
+
+
+vtkSlicerMarkupsLogic*  qSRPlanPathPlanModuleWidget::getMarkupsLogic()
+{
+	return vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic())->GetMarkupsLogic();
+}
+
+
+vtkSlicerIsodoseLogic * qSRPlanPathPlanModuleWidget::getIsodoseLogic()
+{
+	return vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic())->GetISODoseLogic();
+}

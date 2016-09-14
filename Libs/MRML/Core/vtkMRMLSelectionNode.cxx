@@ -38,6 +38,8 @@ vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, ActiveLayoutID);
 vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, ActiveVolumeID);
 vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, PlanPrimaryVolumeID);
 vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, ActiveSegmentationID);
+vtkCxxSetReferenceStringMacro(vtkMRMLSelectionNode, ActiveDoseGridID);
+
 
 
 const char* vtkMRMLSelectionNode::UnitNodeReferenceRole = "unit/";
@@ -66,7 +68,7 @@ vtkMRMLSelectionNode::vtkMRMLSelectionNode()
   this->ActiveLayoutID = NULL;
   this->PlanPrimaryVolumeID = NULL;
   this->ActiveSegmentationID = NULL;
-
+  this->ActiveDoseGridID = NULL;
 
   this->AddNodeReferenceRole(this->GetUnitNodeReferenceRole(),
                              this->GetUnitNodeReferenceMRMLAttributeName());
@@ -140,8 +142,13 @@ vtkMRMLSelectionNode::~vtkMRMLSelectionNode()
 	  delete[] this->ActiveSegmentationID;
 	  this->ActiveSegmentationID = NULL;
   }
+  if (this->ActiveDoseGridID)
+  {
+	  delete[] this->ActiveDoseGridID;
+	  this->ActiveDoseGridID = NULL;
+  }
   
-
+  
 }
 
 //----------------------------------------------------------------------------
@@ -176,6 +183,8 @@ void vtkMRMLSelectionNode::WriteXML(ostream& of, int nIndent)
   of << indent << " activeLayoutID=\"" << (this->ActiveLayoutID ? this->ActiveLayoutID : "NULL") << "\"";
   of << indent << " planPrimaryVolumeID=\"" << (this->PlanPrimaryVolumeID ? this->PlanPrimaryVolumeID : "NULL") << "\"";
   of << indent << " activeSegmentationID=\"" << (this->ActiveSegmentationID ? this->ActiveSegmentationID : "NULL") << "\"";
+  of << indent << " activeDoseGridID=\"" << (this->ActiveDoseGridID ? this->ActiveDoseGridID : "NULL") << "\"";
+
   
 
   if (this->ModelHierarchyDisplayNodeClassName.size() > 0)
@@ -214,6 +223,7 @@ void vtkMRMLSelectionNode::SetSceneReferences()
   this->Scene->AddReferencedNodeID(this->ActiveLayoutID, this);
   this->Scene->AddReferencedNodeID(this->PlanPrimaryVolumeID, this);
   this->Scene->AddReferencedNodeID(this->ActiveSegmentationID, this);
+  this->Scene->AddReferencedNodeID(this->ActiveDoseGridID, this);
   
 }
 
@@ -269,6 +279,11 @@ if ( this->ActiveTableID && !strcmp (oldID, this->ActiveTableID ))
   {
 	  this->SetActiveSegmentationID(newID);
   }
+  if (this->ActiveDoseGridID && !strcmp(oldID, this->ActiveDoseGridID))
+  {
+	  this->SetActiveDoseGridID(newID);
+  }
+  
   
 }
 
@@ -325,6 +340,13 @@ void vtkMRMLSelectionNode::UpdateReferences()
   {
 	  this->SetActiveSegmentationID(NULL);
   }
+  if (this->ActiveDoseGridID != NULL && this->Scene->GetNodeByID(this->ActiveDoseGridID) == NULL)
+  {
+	  this->SetActiveDoseGridID(NULL);
+  }
+
+
+
 
   
 }
@@ -346,6 +368,13 @@ void vtkMRMLSelectionNode::ReadXMLAttributes(const char** atts)
     attValue = *(atts++);
 
 	
+		
+	if (!strcmp(attName, "activeDoseGridID"))
+	{
+		this->SetActiveDoseGridID(attValue);
+		//this->Scene->AddReferencedNodeID(this->ActiveVolumeID, this);
+	}
+
 	if (!strcmp(attName, "planPrimaryVolumeID"))
 	{
 		this->SetPlanPrimaryVolumeID(attValue);
@@ -457,7 +486,12 @@ void vtkMRMLSelectionNode::Copy(vtkMRMLNode *anode)
   Superclass::Copy(anode);
   vtkMRMLSelectionNode *node = vtkMRMLSelectionNode::SafeDownCast(anode);
 
+ 
   
+
+	  
+  this->SetActiveDoseGridID(node->GetActiveDoseGridID());
+  this->SetActiveSegmentationID(node->GetActiveSegmentationID());
   this->SetPlanPrimaryVolumeID(node->GetPlanPrimaryVolumeID());
 
   this->SetActiveVolumeID(node->GetActiveVolumeID());
@@ -479,6 +513,8 @@ void vtkMRMLSelectionNode::PrintSelf(ostream& os, vtkIndent indent)
 {
   Superclass::PrintSelf(os,indent);
 
+  os << "ActiveDoseGridID: " << ((this->ActiveDoseGridID) ? this->ActiveDoseGridID : "None") << "\n";
+  os << "ActiveSegmentationID: " << ((this->ActiveSegmentationID) ? this->ActiveSegmentationID : "None") << "\n";
   os << "PlanPrimaryVolumeID: " << ((this->PlanPrimaryVolumeID) ? this->PlanPrimaryVolumeID : "None") << "\n";
   os << "ActiveVolumeID: " << ( (this->ActiveVolumeID) ? this->ActiveVolumeID : "None" ) << "\n";
   os << "SecondaryVolumeID: " << ( (this->SecondaryVolumeID) ? this->SecondaryVolumeID : "None" ) << "\n";

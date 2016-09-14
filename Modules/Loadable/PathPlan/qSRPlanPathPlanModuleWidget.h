@@ -35,9 +35,11 @@ class qSRPlanPathPlanModuleWidgetPrivate;
 class vtkMRMLMarkupsNode;
 class vtkMRMLNode;
 class vtkSlicerMarkupsLogic;
+class vtkSlicerIsodoseLogic;
+class vtkSRPlanBDoseCalculateLogic;
 
 class vtkMRMLGeneralParametersNode;
-
+class vtkMRMLScalarVolumeNode;
 
 /// \ingroup Slicer_QtModules_Markups
 class Q_SRPlan_QTMODULES_PATHPLAN_EXPORT qSRPlanPathPlanModuleWidget :
@@ -96,6 +98,12 @@ public:
   /// the slice composite nodes
   bool sliceIntersectionsVisible();
 
+  //shot cut for logic
+ 
+  vtkSRPlanBDoseCalculateLogic* getBDoseCalculateLogic();
+
+  vtkSlicerMarkupsLogic*  getMarkupsLogic();
+  vtkSlicerIsodoseLogic * getIsodoseLogic();
 
   //added by zoulian
   void PlaceSnakeHead(double centerX,double centerY,double centerZ,double orientX, double orientY, double orientZ);
@@ -234,6 +242,10 @@ protected:
   /// \sa updateMaximumScaleFromVolumes
   /// Default: 10.0
   double volumeSpacingScaleFactor;
+
+  //Given a Dose distribution Volume, enter the ISO DoseEvaluate Function
+  void enterIsoDoseEvaluationFunction(vtkMRMLScalarVolumeNode* doseGrid);
+
 
 private:
   Q_DECLARE_PRIVATE(qSRPlanPathPlanModuleWidget);

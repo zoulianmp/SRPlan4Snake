@@ -59,6 +59,11 @@ vtkSRPlanPathPlanModuleLogic::vtkSRPlanPathPlanModuleLogic()
 	this->MarkupsLogic = vtkSmartPointer<vtkSlicerMarkupsLogic>::New();
 	
 	this->BDoseCalLogic = vtkSmartPointer<vtkSRPlanBDoseCalculateLogic>::New();
+
+	this->IsoDoseLogic = vtkSmartPointer<vtkSlicerIsodoseLogic>::New();
+
+	this->IsoDoseLogic->SetMRMLApplicationLogic(this->GetMRMLApplicationLogic());
+;
 }
 
 //----------------------------------------------------------------------------
@@ -83,7 +88,7 @@ void vtkSRPlanPathPlanModuleLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene)
  
 	this->MarkupsLogic->SetMRMLScene(newScene);
 	this->BDoseCalLogic->SetMRMLScene(newScene);
-	
+	this->IsoDoseLogic->SetMRMLScene(newScene);
 }
 
 
@@ -112,6 +117,12 @@ vtkSRPlanBDoseCalculateLogic * vtkSRPlanPathPlanModuleLogic::GetBDoseCalculateLo
 
 }
 
+vtkSlicerIsodoseLogic * vtkSRPlanPathPlanModuleLogic::GetISODoseLogic()
+{
+	return this->IsoDoseLogic.GetPointer();
+}
+
+
 vtkMRMLSelectionNode * vtkSRPlanPathPlanModuleLogic::GetSelectionNode()
 {
 	return this->selectionNode;
@@ -120,6 +131,7 @@ vtkMRMLSelectionNode * vtkSRPlanPathPlanModuleLogic::GetSelectionNode()
 void vtkSRPlanPathPlanModuleLogic::SetSelectionNode(vtkMRMLSelectionNode * selectionNode)
 {
 	this->selectionNode = selectionNode;
+	this->BDoseCalLogic->SetSelectionNode(selectionNode); 
 }
 
 

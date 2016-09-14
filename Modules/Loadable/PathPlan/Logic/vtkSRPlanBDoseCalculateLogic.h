@@ -37,6 +37,9 @@
 #include "vtkMRMLMarkupsNode.h"
 #include "vtkMRMLVolumeNode.h"
 #include <vtkMRMLScalarVolumeNode.h>
+#include "vtkMRMLSelectionNode.h"
+
+#include "vtkMRMLSliceCompositeNode.h"
 
 #include "vtkIr192SeedSource.h"
 /*
@@ -61,6 +64,13 @@ public:
    
 
 public:
+
+	//Get the SelectionNode of MRML Scene
+	vtkMRMLSelectionNode * GetSelectionNode();
+	//Get the SelectionNode of MRML Scene
+	void SetSelectionNode(vtkMRMLSelectionNode * selectionNode);
+
+
 	//Set the Primary Plan Volume
 	void SetPlanPrimaryVolumeNode(vtkMRMLScalarVolumeNode * primary);
 	vtkMRMLScalarVolumeNode * GetPlanPrimaryVolumeNode();
@@ -76,8 +86,8 @@ public:
 
 	void StartDoseCalcualte();
 
-
-	
+	//Normalize the Dose Grid to Maximum,Get the Relative distribution
+	void NormalizedToMaximum(vtkMRMLScalarVolumeNode * absDoseVolume);
 
 	void PrepareIr192SeedKernal();
 
@@ -91,7 +101,11 @@ public:
 	
 	void PrintROIDose(vtkImageData * data, int * extent);
   
+	void InvalidDoseAndRemoveDoseVolumeNodeFromScene();
 
+
+	//Set the Dose Node to Layout CompositNode, R,Y,G
+	void  SetDoseNodetoLayoutCompositeNode(char * layoutName, vtkMRMLScalarVolumeNode * absDoseVolume);
 
 protected:
 	//Create a empty IJK ImageData, Origin(0,0,0),spacing(1,1,1)
@@ -117,7 +131,7 @@ protected:
 
 	vtkMRMLScalarVolumeNode * doseVolume; //The calculated Dosevolume Node
 
-
+	vtkMRMLSelectionNode * selectionNode;
 
 	double m_gridSize; // dose voxel length unit : mm 
 

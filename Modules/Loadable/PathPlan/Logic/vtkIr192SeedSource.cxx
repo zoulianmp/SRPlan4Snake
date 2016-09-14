@@ -208,7 +208,7 @@ void vtkIr192SeedSource::UpdateDoseKernalVolume()
 	int y_s = dims[1];
 	int z_s = dims[2];
 
-	m_DoseKernal->AllocateScalars(VTK_FLOAT,1);
+	m_DoseKernal->AllocateScalars(VTK_DOUBLE,1);
 
 	float dosevalue, Px, Py, Pz;
 
@@ -238,6 +238,9 @@ void vtkIr192SeedSource::UpdateDoseKernalVolume()
 			}
 		}
 	}
+
+	//Update the dose kernal, ready for superposition
+	m_kernal_invalid = false;
 
 	//Just for debug
 	int roiExtent[6];

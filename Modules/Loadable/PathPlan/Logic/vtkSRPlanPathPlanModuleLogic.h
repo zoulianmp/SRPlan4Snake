@@ -30,6 +30,7 @@
 #include "vtkMRMLSelectionNode.h"
 #include "vtkSlicerMarkupsLogic.h"
 #include "vtkSRPlanBDoseCalculateLogic.h"
+#include "vtkSlicerIsodoseLogic.h"
 
 // MRML includes
 
@@ -59,8 +60,12 @@ public:
   //Get the SelectionNode of MRML Scene
   void SetSelectionNode(vtkMRMLSelectionNode * selectionNode);
 
+
+
   vtkSlicerMarkupsLogic * GetMarkupsLogic();
   vtkSRPlanBDoseCalculateLogic * GetBDoseCalculateLogic();
+
+  vtkSlicerIsodoseLogic * GetISODoseLogic();
 
 protected:
   vtkSRPlanPathPlanModuleLogic();
@@ -81,6 +86,8 @@ private:
 
   vtkSmartPointer<vtkSRPlanBDoseCalculateLogic> BDoseCalLogic;
 
+  vtkSmartPointer<vtkSlicerIsodoseLogic> IsoDoseLogic;
+  
 
 };
 

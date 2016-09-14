@@ -89,6 +89,8 @@ vtkSRPlanBDoseCalculateLogic::vtkSRPlanBDoseCalculateLogic()
 	this->snakePath = NULL; //the Snake Path
     this-> Ir192Seed =NULL;
     this->doseVolume = NULL; //The
+
+	this->selectionNode = NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -144,9 +146,9 @@ void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGridNode()
 	}
 
 	std::string emptyDoseGrid = std::string("DoseGrid") + std::string(snakePath->GetName());
+	
 	//Clone vtkMRMLScalarVolume without imagedata
-	if (!this->doseVolume)
-		this->doseVolume = vtkSlicerVolumesLogic::CloneVolumeWithoutImageData(this->GetMRMLScene(), planPrimaryVolume, emptyDoseGrid.c_str());
+	this->doseVolume = vtkSlicerVolumesLogic::CloneVolumeWithoutImageData(this->GetMRMLScene(), planPrimaryVolume, emptyDoseGrid.c_str());
 
 	// Set DoseGrid spacing
 	doseVolume->SetSpacing(m_gridSize, m_gridSize, m_gridSize);
@@ -279,7 +281,21 @@ void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGridNode()
 
 }
 
+void vtkSRPlanBDoseCalculateLogic::InvalidDoseAndRemoveDoseVolumeNodeFromScene()
+{
+	if (this->doseVolume)
+	{
+		this->GetMRMLScene()->RemoveNode(doseVolume);
+	}
 
+	this->doseVolume = NULL;
+
+	//Show Dose in Slice Views "Red","Yellow", ("Green"
+	this->SetDoseNodetoLayoutCompositeNode("Red", this->doseVolume);
+	this->SetDoseNodetoLayoutCompositeNode("Yellow", this->doseVolume);
+	this->SetDoseNodetoLayoutCompositeNode("Green", this->doseVolume);
+	//this->selectionNode->SetActiveDoseGridID("sasd");
+}
 
 //Given a Dose Grid dimensions as i,j,k ,and create empty Image Data.
 vtkImageData * vtkSRPlanBDoseCalculateLogic::CreateEmptyDoseGrid(int * dims)
@@ -342,6 +358,15 @@ void vtkSRPlanBDoseCalculateLogic::StartDoseCalcualte()
 
 	if (!planPrimaryVolume || !snakePath)
 		return;
+
+
+	//Remove Preexist DoseDistributionNode before clone a new one
+	if (this->doseVolume)
+	{
+		this->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+	}
+
+
 	this->InitializeEmptyDosGridNode();
 
 	// 2 . Prepare the Ir192 3D Dose Kernal
@@ -354,6 +379,14 @@ void vtkSRPlanBDoseCalculateLogic::StartDoseCalcualte()
 
 	this->DoseSuperposition(snakePath, kernal);
 
+	//Update the SelectionNode Active Dose Grid ID
+	
+	this->selectionNode->SetActiveDoseGridID(this->doseVolume->GetID());
+
+	//Show Dose in Slice Views "Red","Yellow", ("Green"
+	this->SetDoseNodetoLayoutCompositeNode("Red", this->doseVolume);
+	this->SetDoseNodetoLayoutCompositeNode("Yellow", this->doseVolume);
+	this->SetDoseNodetoLayoutCompositeNode("Green", this->doseVolume); 
 }
 
 vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::GetCalculatedDoseVolume()
@@ -526,7 +559,7 @@ void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakeP
 
 
 
-
+		//Make sure the Kernal image pixle type to double
 		vtkImageIterator<double> kernalIt(doseKernal, kenalExtent_for_extract);
 
 		double detaInc,base;
@@ -588,6 +621,46 @@ void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakeP
 
 
 }
+
+
+
+
+//Normalize the Dose Grid to Maximum,Get the Relative distribution
+void vtkSRPlanBDoseCalculateLogic::NormalizedToMaximum(vtkMRMLScalarVolumeNode * absDoseVolume)
+{
+	vtkImageData * absImageData = absDoseVolume->GetImageData();
+
+	double* range = absImageData->GetScalarRange();
+
+	double maximum = range[1];
+
+	if (maximum == 0) 
+		return;
+
+
+	// Normalized the Pixel
+	int* dims = absImageData->GetDimensions();
+	double *ptr = static_cast<double *>(absImageData->GetScalarPointer(0, 0, 0));
+
+	double  absDose;
+
+	for (int z = 0; z<dims[2]; z++)
+	{
+		for (int y = 0; y<dims[1]; y++)
+		{
+			for (int x = 0; x<dims[0]; x++)
+			{
+				absDose = *ptr;
+				*ptr = (absDose / maximum) * 100;
+
+				ptr++;
+
+			}
+		}
+	}
+
+}
+
 
 
 //Givent a RAS Point, return the IJK Index
@@ -652,3 +725,52 @@ void vtkSRPlanBDoseCalculateLogic::PrintROIDose(vtkImageData * data, int * exten
 	std::cout << "****** End in the vtkSRPlanBDoseCalculateLogic->PrintROIDose******* ";
 	std::cout << std::endl;
 }
+
+
+
+
+vtkMRMLSelectionNode * vtkSRPlanBDoseCalculateLogic::GetSelectionNode()
+{
+	return this->selectionNode;
+}
+
+void vtkSRPlanBDoseCalculateLogic::SetSelectionNode(vtkMRMLSelectionNode * selectionNode)
+{
+	this->selectionNode = selectionNode;
+}
+
+
+
+ 
+
+// "Red",  ("Yellow", ("Green" for Layout name 
+void vtkSRPlanBDoseCalculateLogic::SetDoseNodetoLayoutCompositeNode(char * layoutName, vtkMRMLScalarVolumeNode * absDoseVolume)
+{
+ 
+	int count = this->GetMRMLScene()->GetNumberOfNodesByClass("vtkMRMLSliceCompositeNode");
+
+	for (int i = 0; i < count; i++)
+	{
+		vtkMRMLNode * compNode = this->GetMRMLScene()->GetNthNodeByClass(i, "vtkMRMLSliceCompositeNode");
+
+		if (!strcmp(vtkMRMLSliceCompositeNode::SafeDownCast(compNode)->GetLayoutName(), layoutName))
+
+		{
+			vtkMRMLSliceCompositeNode* comp = vtkMRMLSliceCompositeNode::SafeDownCast(compNode);
+
+			if (absDoseVolume)
+			{
+				comp->SetForegroundVolumeID(absDoseVolume->GetID());
+				comp->SetForegroundOpacity(0.7);
+			}
+			else
+			{
+				comp->SetForegroundVolumeID(NULL);
+			}
+			break;
+
+		}
+	}
+}
+
+ 

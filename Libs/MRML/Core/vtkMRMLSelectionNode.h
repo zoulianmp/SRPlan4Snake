@@ -90,7 +90,12 @@ class VTK_MRML_EXPORT vtkMRMLSelectionNode : public vtkMRMLNode
   void SetReferenceActiveSegmentationID(const char *id) { this->SetActiveSegmentationID(id); };
 
 
-  
+  /// the ID of a active and valid Dose volume node , Used for DVH statistics calculation added by zoulian
+  vtkGetStringMacro(ActiveDoseGridID);
+  void SetActiveDoseGridID(const char* id);
+  void SetReferenceActiveDoseGridID(const char *id) { this->SetActiveDoseGridID(id); };
+
+
 
 
 
@@ -288,6 +293,7 @@ protected:
 
   char *PlanPrimaryVolumeID; //Used for Dose Calculation
   char *ActiveSegmentationID; //Structure SET
+  char *ActiveDoseGridID; //Active and valid Dose Grid Volume
 
   /// displayable/Display node class pairs for contolling
   /// to which display node to apply properties in hierarchy display widgets
