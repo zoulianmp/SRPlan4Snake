@@ -15,7 +15,7 @@
  cm we use an exponential fit to the last few cm of the polynomial fit.
 */
 
-// The x,y,z position unit should given by cm
+// The x,y,z position unit should given by cm add by zoulian
 float
 seed_pdose(SEED_SPEC *seed_spec, int exact, float x, float y, float z, float cutoff)
 {

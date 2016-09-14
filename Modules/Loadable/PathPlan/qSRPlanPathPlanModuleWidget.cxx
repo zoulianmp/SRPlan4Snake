@@ -1225,7 +1225,12 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 
 	vtkMRMLScalarVolumeNode* ScalarNode = vtkMRMLScalarVolumeNode::SafeDownCast(scene->GetNodeByID(planVolumeID));
 
-	
+	//******************************************************************************************
+	//The length in mm,to determine the range of seed source dose distribution
+
+	BDoseLogic->SetDoseCalculateGridSize(1.0);
+	BDoseLogic->SetDoseCalculateCutoff(5.0);
+
 
 
 	BDoseLogic->SetPlanPrimaryVolumeNode(vtkMRMLScalarVolumeNode::SafeDownCast(scene->GetNodeByID(planVolumeID)));

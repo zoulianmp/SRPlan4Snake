@@ -76,8 +76,8 @@ public:
 
 	void StartDoseCalcualte();
 
-	// 
-	void PrepareDoseGridVolumeNode();
+
+	
 
 	void PrepareIr192SeedKernal();
 
@@ -89,10 +89,16 @@ public:
 	//as vtkMRMLScalarVolumeNode * doseVolume; //The calculated Dosevolume Node
 	void InitializeEmptyDosGridNode();
 	
+	void PrintROIDose(vtkImageData * data, int * extent);
   
+
+
 protected:
 	//Create a empty IJK ImageData, Origin(0,0,0),spacing(1,1,1)
 	vtkImageData * CreateEmptyDoseGrid(int * dims);
+
+	//Givent a RAS Point, return the IJK Index
+    void GetIJKFromRASPostion(vtkMRMLScalarVolumeNode * VolumeNode, double * rasPosition, int * IJK);
 
 protected:
 	vtkSRPlanBDoseCalculateLogic();

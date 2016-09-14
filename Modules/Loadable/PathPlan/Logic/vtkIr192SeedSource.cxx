@@ -217,7 +217,11 @@ void vtkIr192SeedSource::UpdateDoseKernalVolume()
 		for (int y = extent[2]; y<= extent[3]; y++)
 		{
 			for (int x = extent[0]; x<= extent[1]; x++)
-			{		
+			{	
+				//*********************************************
+				// The x,y,z position unit should given by cm add by zoulian
+				///float seed_pdose(SEED_SPEC *seed_spec, int exact, float x, float y, float z, float cutoff)
+
 				Px = x*m_grid_spacing*0.1;
 				Py = y*m_grid_spacing*0.1;
 				Pz = z*m_grid_spacing*0.1;
@@ -226,6 +230,7 @@ void vtkIr192SeedSource::UpdateDoseKernalVolume()
 					Pz= m_grid_spacing*0.05; //Used for Center Voxel dose calculation
 				}
 		
+				
 			    dosevalue = seed_pdose(&m_Ir192Spec, 0, Px, Py, Pz, m_cutoff);
 
 				m_DoseKernal->SetScalarComponentFromFloat(x,y,z,0, dosevalue);
@@ -235,7 +240,16 @@ void vtkIr192SeedSource::UpdateDoseKernalVolume()
 	}
 
 	//Just for debug
-	//this->PrintROIDose(m_DoseKernal, extent);
+	int roiExtent[6];
+	roiExtent[0] = -3;
+	roiExtent[1] = 3;
+	roiExtent[2] = -3;
+	roiExtent[3] = 3;
+	roiExtent[4] = -3;
+	roiExtent[5] = 3;
+
+
+	this->PrintROIDose(m_DoseKernal, roiExtent);
 }
 
 vtkImageData * vtkIr192SeedSource::GetDoseKernalVolume()
@@ -258,7 +272,9 @@ vtkImageData * vtkIr192SeedSource::GetDoseKernalVolume()
 
 void vtkIr192SeedSource::PrintROIDose(vtkImageData * data, int * extent) 
 {
-	
+	std::cout << "******Begin In the vtkIr192SeedSource->PrintROIDose******* ";
+	std::cout << std::endl;
+
 	int numComp = data->GetNumberOfScalarComponents();
 		
 	vtkImageIterator<float> it(data, extent);		
@@ -278,5 +294,7 @@ void vtkIr192SeedSource::PrintROIDose(vtkImageData * data, int * extent)
 			it.NextSpan();
 		}
 		
-
+		
+	std::cout << "****** End in the vtkIr192SeedSource->PrintROIDose******* ";
+	std::cout << std::endl;
 }

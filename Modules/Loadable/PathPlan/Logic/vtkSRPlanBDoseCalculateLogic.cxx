@@ -72,6 +72,8 @@
 #include "vtksys/SystemTools.hxx"
 
 
+#include "vtkImageIterator.h"
+
 
 //----------------------------------------------------------------------------
 vtkStandardNewMacro(vtkSRPlanBDoseCalculateLogic);
@@ -141,9 +143,10 @@ void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGridNode()
 		return;
 	}
 
-	char * emptyDoseGrid = "DoseGrid";
+	std::string emptyDoseGrid = std::string("DoseGrid") + std::string(snakePath->GetName());
 	//Clone vtkMRMLScalarVolume without imagedata
-	this->doseVolume = vtkSlicerVolumesLogic::CloneVolumeWithoutImageData(this->GetMRMLScene(), planPrimaryVolume, emptyDoseGrid);
+	if (!this->doseVolume)
+		this->doseVolume = vtkSlicerVolumesLogic::CloneVolumeWithoutImageData(this->GetMRMLScene(), planPrimaryVolume, emptyDoseGrid.c_str());
 
 	// Set DoseGrid spacing
 	doseVolume->SetSpacing(m_gridSize, m_gridSize, m_gridSize);
@@ -293,17 +296,28 @@ vtkImageData * vtkSRPlanBDoseCalculateLogic::CreateEmptyDoseGrid(int * dims)
 	// Specify the size of the image data
 	imageData->SetDimensions(dims[0], dims[1],dims[2]);
 
+	int Extent[6];
+	Extent[0] = 0;
+	Extent[1] = dims[0]-1;
+	Extent[2] = 0;
+	Extent[3] = dims[1] - 1;
+	Extent[4] = 0;
+	Extent[5] = dims[2] - 1;
+
+	imageData->SetExtent(Extent);
+
+
 	imageData->AllocateScalars(VTK_DOUBLE, 1);
 
 	// Fill every entry of the image data with x,y,z
-	//int* dims = imageData->GetDimensions();
+	int* dimsReal = imageData->GetDimensions();
 
 	double *ptr = static_cast<double *>(imageData->GetScalarPointer(0, 0, 0));
-	for (int z = 0; z < dims[2]; z++)
+	for (int z = 0; z < dimsReal[2]; z++)
 	{
-		for (int y = 0; y < dims[1]; y++)
+		for (int y = 0; y < dimsReal[1]; y++)
 		{
-			for (int x = 0; x < dims[0]; x++)
+			for (int x = 0; x < dimsReal[0]; x++)
 			{
 				*ptr++ = 0.0;
 				
@@ -362,6 +376,279 @@ void vtkSRPlanBDoseCalculateLogic::PrepareIr192SeedKernal()
 
 void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakePath, vtkImageData * doseKernal)
 {
-	int i = 0;
+	int numMarkups = snakePath->GetNumberOfMarkups();
 
+	float doseWeight = 0.0;
+
+	vtkVector3d seedPosition;
+	double  rasPosition[3] = {0,0,0};
+
+	int IJK[3] = { 0,0,0 }; //The RAS corresponding IJK
+
+	for (int m = 0; m<numMarkups; m++)
+	{
+		Markup * markup = snakePath->GetNthMarkup(m);
+
+		//skip the Realtime Tracing Mark
+		if (!strcmp((markup->Label).c_str(), "TMark"))
+			return;
+
+
+		doseWeight = markup->Weight;
+		
+		//Skip the 0 weight markup 
+		if (!doseWeight)
+			return;
+
+		seedPosition = markup->points[0];
+
+		rasPosition[0] = seedPosition[0];
+		rasPosition[1] = seedPosition[1];
+		rasPosition[2] = seedPosition[2];
+
+		this->GetIJKFromRASPostion(this->doseVolume, rasPosition, IJK);
+
+
+		// Define the extent to be extracted
+		int baseExtent_for_extract [6]; //The Dose Grid  need to extract
+		int kenalExtent_for_extract [6]; // The kernal need to extract 
+
+
+		int* dosegridExtent = this->doseVolume->GetImageData()->GetExtent();
+
+		int* kernalExtent = doseKernal->GetExtent();
+
+
+		int Imin, Imax, Jmin, Jmax, Kmin, Kmax;
+
+		Imin = IJK[0] + kernalExtent[0];
+		Imax = IJK[0] + kernalExtent[1];
+
+		Jmin = IJK[1] + kernalExtent[2];
+		Jmax = IJK[1] + kernalExtent[3];
+
+		Kmin = IJK[2] + kernalExtent[4];
+		Kmax = IJK[2] + kernalExtent[5];
+
+		//**************************************************************************************
+		//Imin Imax Index
+		if (Imin < dosegridExtent[0])
+		{
+			baseExtent_for_extract[0] = dosegridExtent[0];
+			kenalExtent_for_extract[0] = kernalExtent[0] + (dosegridExtent[0] - Imin);
+		}
+		else
+		{
+			baseExtent_for_extract[0] = Imin;
+			kenalExtent_for_extract[0] = kernalExtent[0];
+		}
+
+		if (Imax  > dosegridExtent[1])
+		{
+			baseExtent_for_extract[1] = dosegridExtent[1];
+			kenalExtent_for_extract[1] = kernalExtent[1] - (Imax - dosegridExtent[1]);
+		}
+		else
+		{
+			baseExtent_for_extract[1] = Imax;
+			kenalExtent_for_extract[1] = kernalExtent[1];
+		}
+		//**************************************************************************************
+		//Jmin Jmax Index
+
+		if (Jmin < dosegridExtent[2])
+		{
+			baseExtent_for_extract[2] = dosegridExtent[2];
+			kenalExtent_for_extract[2] = kernalExtent[2] + (dosegridExtent[2] - Jmin);
+		}
+		else
+		{
+			baseExtent_for_extract[2] = Jmin;
+			kenalExtent_for_extract[2] = kernalExtent[2];
+		}
+
+		if (Jmax  > dosegridExtent[3])
+		{
+			baseExtent_for_extract[3] = dosegridExtent[3];
+			kenalExtent_for_extract[3] = kernalExtent[3] - (Jmax - dosegridExtent[3]);
+		}
+		else
+		{
+			baseExtent_for_extract[3] = Jmax;
+			kenalExtent_for_extract[3] = kernalExtent[3];
+		}
+
+		//**************************************************************************************
+		//Kmin Kmax Index
+
+		if (Kmin < dosegridExtent[4])
+		{
+			baseExtent_for_extract[4] = dosegridExtent[4];
+			kenalExtent_for_extract[4] = kernalExtent[4] + (dosegridExtent[4] - Kmin);
+		}
+		else
+		{
+			baseExtent_for_extract[4] = Kmin;
+			kenalExtent_for_extract[4] = kernalExtent[4];
+		}
+
+		if (Kmax  > dosegridExtent[5])
+		{
+			baseExtent_for_extract[5] = dosegridExtent[5];
+			kenalExtent_for_extract[5] = kernalExtent[5] - (Kmax - dosegridExtent[5]);
+		}
+		else
+		{
+			baseExtent_for_extract[5] = Kmax;
+			kenalExtent_for_extract[5] = kernalExtent[5];
+		}
+
+		//**************************************************************************************
+		//Image Iterator to accumulate the Dose Calculaion
+
+		vtkImageData * emptyDoseGrid = this->doseVolume->GetImageData();
+		//emptyDoseGrid->Initialize();
+
+
+		// Retrieve the entries from the image data and print them to the screen
+		vtkImageIterator<double> doseBaseIt(emptyDoseGrid, baseExtent_for_extract);
+
+
+
+
+		bool endb = doseBaseIt.IsAtEnd();
+
+	    doseBaseIt.Initialize(this->doseVolume->GetImageData(), baseExtent_for_extract);
+
+		bool beginb = doseBaseIt.IsAtEnd();
+
+
+
+
+
+
+		vtkImageIterator<double> kernalIt(doseKernal, kenalExtent_for_extract);
+
+		double detaInc,base;
+
+		while (!doseBaseIt.IsAtEnd())
+		{
+			// For Dose Grid 
+			double * doseBaseValIt = doseBaseIt.BeginSpan();
+			double * doseBaseValEnd = doseBaseIt.EndSpan();
+
+			//For Kernal 
+			double* kernalValIt = kernalIt.BeginSpan();
+			double *kernalValEnd = kernalIt.EndSpan();
+
+			while (doseBaseValIt != doseBaseValEnd)
+			{
+				base = *doseBaseValIt;
+				// Increment for each component
+				detaInc = (*kernalValIt) * doseWeight;
+
+
+				*doseBaseValIt = base + detaInc;
+
+				doseBaseValIt++;
+				kernalValIt++;
+			}
+			
+
+			doseBaseIt.NextSpan();
+			kernalIt.NextSpan();
+
+		}
+
+
+		
+		
+
+	}
+
+	
+	//**************************************************
+	//Just for debug show 
+	int roiExtent[6];
+	roiExtent[0] = IJK[0] - 3;
+	roiExtent[1] = IJK[0] + 3;
+	roiExtent[2] = IJK[1] - 3;
+	roiExtent[3] = IJK[1] + 3;
+	roiExtent[4] = IJK[2] - 3;
+	roiExtent[5] = IJK[2] + 3;
+
+
+	this->PrintROIDose(this->doseVolume->GetImageData(), roiExtent);
+
+
+
+
+	//End just for debug show
+	//*****************************************************
+
+
+}
+
+
+//Givent a RAS Point, return the IJK Index
+void vtkSRPlanBDoseCalculateLogic::GetIJKFromRASPostion(vtkMRMLScalarVolumeNode * VolumeNode, double * rasPosition, int * IJK)
+{
+
+
+	vtkNew<vtkGeneralTransform> transform;
+	transform->PostMultiply();
+	transform->Identity();
+
+
+	vtkNew<vtkMatrix4x4> rasToIJKMatrix;
+	VolumeNode->GetRASToIJKMatrix(rasToIJKMatrix.GetPointer());
+
+	transform->Concatenate(rasToIJKMatrix.GetPointer());
+
+
+//	int IJK[3] = { 0,0,0 };
+
+	double* vFromRAS;
+	vFromRAS = transform->TransformDoublePoint(rasPosition); //rasPosition double [3]
+
+
+	IJK[0] = int (vFromRAS[0]);
+
+	IJK[1] = int(vFromRAS[1]);
+
+	IJK[2] = int(vFromRAS[2]);
+
+	
+}
+
+
+// Retrieve the entries from the image data and print them to the screen
+
+void vtkSRPlanBDoseCalculateLogic::PrintROIDose(vtkImageData * data, int * extent)
+{
+
+	std::cout << "******Begin In the vtkSRPlanBDoseCalculateLogic->PrintROIDose******* ";
+	std::cout << std::endl;
+
+	int numComp = data->GetNumberOfScalarComponents();
+
+	vtkImageIterator<float> it(data, extent);
+
+	while (!it.IsAtEnd())
+	{
+		float* valIt = it.BeginSpan();
+		float *valEnd = it.EndSpan();
+		while (valIt != valEnd)
+		{
+
+			float Dose = *valIt++;
+
+			std::cout << "(Dose:" << Dose << ") ";
+		}
+		std::cout << std::endl;
+		it.NextSpan();
+	}
+
+	std::cout << "****** End in the vtkSRPlanBDoseCalculateLogic->PrintROIDose******* ";
+	std::cout << std::endl;
 }
