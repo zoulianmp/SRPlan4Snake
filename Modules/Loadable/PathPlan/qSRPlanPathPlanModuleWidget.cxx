@@ -66,6 +66,7 @@
 #include <vtkNew.h>
 #include <vtkCollection.h>
 
+#include <vtkLookupTable.h>
 
 #include <vtkConeSource.h>
 #include <vtkPolyDataMapper.h>
@@ -78,6 +79,9 @@
 #include "qSlicerApplication.h"
 #include "qMRMLThreeDWidget.h"
 #include "qMRMLThreeDView.h"
+
+#include "qMRMLSliceView.h"
+#include "qMRMLSliceWidget.h"
 
 #include "vtkRenderWindow.h"
 
@@ -161,6 +165,7 @@ int qSRPlanPathPlanModuleWidgetPrivate::columnIndex(QString label)
 //-----------------------------------------------------------------------------
 qSRPlanPathPlanModuleWidgetPrivate::~qSRPlanPathPlanModuleWidgetPrivate()
 {
+
 }
 
 //-----------------------------------------------------------------------------
@@ -270,9 +275,12 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   QObject::connect(this->doseCalculatePushButton, SIGNAL(clicked()),
 	  q, SLOT(onDoseCalculatePushButtonClicked()));
   
+  //Flash Dose Distribution show
 
+  QObject::connect(this->spinBox_RelativeDoseValue, SIGNAL(valueChanged(int)),
+	  q, SLOT(updateDoseGridFlashShowLowerThresholder(int )));
 
- 
+   
   // delete
   QObject::connect(this->deleteMarkupPushButton, SIGNAL(clicked()),
                    q, SLOT(onDeleteMarkupPushButtonClicked()));
@@ -397,12 +405,64 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
   this->volumeSpacingScaleFactor = 10.0;
 
 
+
+  ScalarBarWidget = NULL;
+  ScalarBarWidget2DRed = NULL;
+  ScalarBarWidget2DYellow = NULL;
+  ScalarBarWidget2DGreen = NULL;
+
+  ScalarBarActor = NULL;
+  ScalarBarActor2DRed = NULL;
+  ScalarBarActor2DYellow =NULL;
+  ScalarBarActor2DGreen = NULL;
+
+
 }
 
 
 //-----------------------------------------------------------------------------
 qSRPlanPathPlanModuleWidget::~qSRPlanPathPlanModuleWidget()
 {
+	if (this->ScalarBarWidget)
+	{
+		this->ScalarBarWidget->Delete();
+		this->ScalarBarWidget = 0;
+	}
+	if (this->ScalarBarActor)
+	{
+		this->ScalarBarActor->Delete();
+		this->ScalarBarActor = 0;
+	}
+	if (this->ScalarBarWidget2DRed)
+	{
+		this->ScalarBarWidget2DRed->Delete();
+		this->ScalarBarWidget2DRed = 0;
+	}
+	if (this->ScalarBarActor2DRed)
+	{
+		this->ScalarBarActor2DRed->Delete();
+		this->ScalarBarActor2DRed = 0;
+	}
+	if (this->ScalarBarWidget2DYellow)
+	{
+		this->ScalarBarWidget2DYellow->Delete();
+		this->ScalarBarWidget2DYellow = 0;
+	}
+	if (this->ScalarBarActor2DYellow)
+	{
+		this->ScalarBarActor2DYellow->Delete();
+		this->ScalarBarActor2DYellow = 0;
+	}
+	if (this->ScalarBarWidget2DGreen)
+	{
+		this->ScalarBarWidget2DGreen->Delete();
+		this->ScalarBarWidget2DGreen = 0;
+	}
+	if (this->ScalarBarActor2DGreen)
+	{
+		this->ScalarBarActor2DGreen->Delete();
+		this->ScalarBarActor2DGreen = 0;
+	}
 	
 }
 
@@ -1211,6 +1271,8 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 {
 	Q_D(qSRPlanPathPlanModuleWidget);
 
+	QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+
 	//********************************************************
 	//Get the Logic and input Data Sets
 
@@ -1261,14 +1323,19 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 	this->enterIsoDoseEvaluationFunction(DoseDistribution);
 
 	//Show the ISO Dose GUI
-	//if (d->isoDoseGroup->isHidden())
-	//	d->isoDoseGroup->show();
+	if (d->isoDoseGroup->isHidden())
+		d->isoDoseGroup->show();
 
+	QApplication::restoreOverrideCursor();
 }
 
 //Given a Dose distribution Volume, enter the ISO DoseEvaluate Function
 void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVolumeNode* doseGrid)
 {
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	//**************************************************************************
+	//	Construct the ISO Dose Node
 	vtkSlicerIsodoseLogic *	isoLogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic())->GetISODoseLogic();
 
 	std::string volumeNodeName = doseGrid->GetName();
@@ -1295,7 +1362,16 @@ void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVo
 	}
 	this->mrmlScene()->AddNode(isodoseParameterSetNode);
 
-	//TODO: Generate isodose surfaces if chosen so by the user in the hanging protocol options
+
+	isoLogic->SetAndObserveIsodoseNode(isodoseParameterSetNode);
+
+	// don't check the show ISO Dose Lines and Iso dose Surfaces as default
+	isodoseParameterSetNode->SetShowIsodoseLines(false);
+	isodoseParameterSetNode->SetShowIsodoseSurfaces(false);
+
+	//************************************************************************
+	//Setup  Dose SliceView
+
 
 	// Set default colormap to the loaded one if found or generated, or to rainbow otherwise
 	vtkSmartPointer<vtkMRMLScalarVolumeDisplayNode> volumeDisplayNode = vtkSmartPointer<vtkMRMLScalarVolumeDisplayNode>::New();
@@ -1327,7 +1403,227 @@ void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVo
 	volumeDisplayNode->SetLowerThreshold(5);
 	volumeDisplayNode->SetApplyThreshold(1);
 
+	//*************************************************************************
+	//Setup the Dose Color Table view
+
+	this->SetupScalarBarsShow();
+	this->updateScalarBarsFromSelectedColorTable();
+
+	this->SetupIsoDoseGroupGUIConnections();
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+//set dose scalar bars in views 
+void qSRPlanPathPlanModuleWidget::SetupScalarBarsShow()
+{
+	this->ScalarBarWidget = vtkScalarBarWidget::New();
+	this->ScalarBarActor = vtkSlicerRTScalarBarActor::New();
+	this->ScalarBarWidget->SetScalarBarActor(this->ScalarBarActor);
+	this->ScalarBarWidget->GetScalarBarActor()->SetOrientationToVertical();
+	this->ScalarBarWidget->GetScalarBarActor()->SetNumberOfLabels(6);
+	this->ScalarBarWidget->GetScalarBarActor()->SetMaximumNumberOfColors(6);
+	this->ScalarBarWidget->GetScalarBarActor()->SetTitle("Dose(Gy)");
+	this->ScalarBarWidget->GetScalarBarActor()->SetLabelFormat(" %s");
+
+	// it's a 2d actor, position it in screen space by percentages
+	this->ScalarBarWidget->GetScalarBarActor()->SetPosition(0.1, 0.1);
+	this->ScalarBarWidget->GetScalarBarActor()->SetWidth(0.1);
+	this->ScalarBarWidget->GetScalarBarActor()->SetHeight(0.8);
+
+	this->ScalarBarWidget2DRed = vtkScalarBarWidget::New();
+	this->ScalarBarActor2DRed = vtkSlicerRTScalarBarActor::New();
+	this->ScalarBarWidget2DRed->SetScalarBarActor(this->ScalarBarActor2DRed);
+	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetOrientationToVertical();
+	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetNumberOfLabels(6);
+	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetMaximumNumberOfColors(6);
+	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetTitle("Dose(Gy)");
+	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetLabelFormat(" %s");
+
+	// it's a 2d actor, position it in screen space by percentages
+	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetPosition(0.1, 0.1);
+	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetWidth(0.1);
+	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetHeight(0.8);
+
+	this->ScalarBarWidget2DYellow = vtkScalarBarWidget::New();
+	this->ScalarBarActor2DYellow = vtkSlicerRTScalarBarActor::New();
+	this->ScalarBarWidget2DYellow->SetScalarBarActor(this->ScalarBarActor2DYellow);
+	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetOrientationToVertical();
+	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetNumberOfLabels(6);
+	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetMaximumNumberOfColors(6);
+	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetTitle("Dose(Gy)");
+	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetLabelFormat(" %s");
+
+	// it's a 2d actor, position it in screen space by percentages
+	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetPosition(0.1, 0.1);
+	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetWidth(0.1);
+	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetHeight(0.8);
+
+	this->ScalarBarWidget2DGreen = vtkScalarBarWidget::New();
+	this->ScalarBarActor2DGreen = vtkSlicerRTScalarBarActor::New();
+	this->ScalarBarWidget2DGreen->SetScalarBarActor(this->ScalarBarActor2DGreen);
+	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetOrientationToVertical();
+	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetNumberOfLabels(6);
+	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetMaximumNumberOfColors(6);
+	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetTitle("Dose(Gy)");
+	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetLabelFormat(" %s");
+
+	// it's a 2d actor, position it in screen space by percentages
+	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetPosition(0.1, 0.1);
+	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetWidth(0.1);
+	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetHeight(0.8);
+
+}
+
+
+
+void qSRPlanPathPlanModuleWidget::updateScalarBarsFromSelectedColorTable()
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	vtkMRMLIsodoseNode* paramNode = this->getIsodoseLogic()->GetIsodoseNode();
+
+	if (!this->mrmlScene() || !paramNode)
+	{
+		return;
+	}
+
+	vtkMRMLColorTableNode* selectedColorNode = paramNode->GetColorTableNode();
+	if (!selectedColorNode)
+	{
+		qDebug() << "qSlicerIsodoseModuleWidgetPrivate::updateScalarBarsFromSelectedColorTable: No color table node is selected";
+		return;
+	}
+
+	d->tableView_IsodoseLevels->setMRMLColorNode(selectedColorNode);
+
+	
+	// 3D scalar bar
+	int numberOfColors = selectedColorNode->GetNumberOfColors();
+	this->ScalarBarWidget->GetScalarBarActor()->SetLookupTable(selectedColorNode->GetLookupTable());
+
+	for (int colorIndex = 0; colorIndex<numberOfColors; ++colorIndex)
+	{
+		this->ScalarBarActor->GetLookupTable()->SetAnnotation(colorIndex, vtkStdString(selectedColorNode->GetColorName(colorIndex)));
+	}
+	// 2D scalar bar
+	this->ScalarBarActor2DRed->SetLookupTable(selectedColorNode->GetLookupTable());
+	this->ScalarBarActor2DYellow->SetLookupTable(selectedColorNode->GetLookupTable());
+	this->ScalarBarActor2DGreen->SetLookupTable(selectedColorNode->GetLookupTable());
+
+	for (int colorIndex = 0; colorIndex<numberOfColors; ++colorIndex)
+	{
+		this->ScalarBarActor2DRed->GetLookupTable()->SetAnnotation(colorIndex, vtkStdString(selectedColorNode->GetColorName(colorIndex)));
+		this->ScalarBarActor2DYellow->GetLookupTable()->SetAnnotation(colorIndex, vtkStdString(selectedColorNode->GetColorName(colorIndex)));
+		this->ScalarBarActor2DGreen->GetLookupTable()->SetAnnotation(colorIndex, vtkStdString(selectedColorNode->GetColorName(colorIndex)));
+	}
+}
+
+//set up the Iso Dose Evalution guis
+void qSRPlanPathPlanModuleWidget::SetupIsoDoseGroupGUIConnections()
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	// Each time the node is modified, the qt widgets are updated
+	//qvtkReconnect(d->logic()->GetIsodoseNode(), paramNode, vtkCommand::ModifiedEvent, this, SLOT(updateWidgetFromMRML()));
+
+	// Make connections
+	
+
+	connect(d->spinBox_NumberOfLevels, SIGNAL(valueChanged(int)), this, SLOT(setNumberOfLevels(int)));
+	connect(d->checkBox_Isoline, SIGNAL(toggled(bool)), this, SLOT(setIsolineVisibility(bool)));
+	connect(d->checkBox_Isosurface, SIGNAL(toggled(bool)), this, SLOT(setIsosurfaceVisibility(bool)));
+	connect(d->checkBox_ScalarBar, SIGNAL(toggled(bool)), this, SLOT(setScalarBarVisibility(bool)));
+	connect(d->checkBox_ScalarBar2D, SIGNAL(toggled(bool)), this, SLOT(setScalarBar2DVisibility(bool)));
+
+	connect(d->pushButton_Apply, SIGNAL(clicked()), this, SLOT(applyClicked()));
+
+
+
+	qSlicerApplication * app = qSlicerApplication::application();
+	if (app && app->layoutManager())
+	{
+		qMRMLThreeDView* threeDView = app->layoutManager()->threeDWidget(0)->threeDView();
+		vtkRenderer* activeRenderer = app->layoutManager()->activeThreeDRenderer();
+		if (activeRenderer)
+		{
+			this->ScalarBarWidget->SetInteractor(activeRenderer->GetRenderWindow()->GetInteractor());
+		}
+		connect(d->checkBox_ScalarBar, SIGNAL(stateChanged(int)), threeDView, SLOT(scheduleRender()));
+
+		QStringList sliceViewerNames = app->layoutManager()->sliceViewNames();
+		qMRMLSliceWidget* sliceViewerWidgetRed = app->layoutManager()->sliceWidget(sliceViewerNames[0]);
+		const qMRMLSliceView* sliceViewRed = sliceViewerWidgetRed->sliceView();
+		this->ScalarBarWidget2DRed->SetInteractor(sliceViewerWidgetRed->interactorStyle()->GetInteractor());
+		qMRMLSliceWidget* sliceViewerWidgetYellow = app->layoutManager()->sliceWidget(sliceViewerNames[1]);
+		const qMRMLSliceView* sliceViewYellow = sliceViewerWidgetYellow->sliceView();
+		this->ScalarBarWidget2DYellow->SetInteractor(sliceViewerWidgetYellow->interactorStyle()->GetInteractor());
+		qMRMLSliceWidget* sliceViewerWidgetGreen = app->layoutManager()->sliceWidget(sliceViewerNames[2]);
+		const qMRMLSliceView* sliceViewGreen = sliceViewerWidgetGreen->sliceView();
+		this->ScalarBarWidget2DGreen->SetInteractor(sliceViewerWidgetGreen->interactorStyle()->GetInteractor());
+
+		connect(d->checkBox_ScalarBar2D, SIGNAL(stateChanged(int)), sliceViewRed, SLOT(scheduleRender()));
+		connect(d->checkBox_ScalarBar2D, SIGNAL(stateChanged(int)), sliceViewYellow, SLOT(scheduleRender()));
+		connect(d->checkBox_ScalarBar2D, SIGNAL(stateChanged(int)), sliceViewGreen, SLOT(scheduleRender()));
+	}
+
+	// Handle scene change event if occurs
+	//qvtkConnect(this->logic(), vtkCommand::ModifiedEvent, this, SLOT(onLogicModified()));
+
+	// Select the default color node
+	this->updateScalarBarsFromSelectedColorTable();
+
+	//this->updateButtonsState();
+
+
+
+
+
+
+
+
+}
+
+
+
+void qSRPlanPathPlanModuleWidget::updateIsoDoseGroupWidgetFromMRML()
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	vtkMRMLIsodoseNode* paramNode   = this->getIsodoseLogic()->GetIsodoseNode();
+	if (paramNode && this->mrmlScene())
+	{
+	
+		this->updateScalarBarsFromSelectedColorTable();
+
+		vtkMRMLColorTableNode* colorTableNode = paramNode->GetColorTableNode();
+		if (!colorTableNode)
+		{
+			qCritical() << "qSlicerIsodoseModuleWidget::updateWidgetFromMRML: Invalid color table node!";
+			return;
+		}
+		d->spinBox_NumberOfLevels->setValue(colorTableNode->GetNumberOfColors());
+		d->checkBox_Isoline->setChecked(paramNode->GetShowIsodoseLines());
+		d->checkBox_Isosurface->setChecked(paramNode->GetShowIsodoseSurfaces());
+	}
+}
+
+
+
+
+
+
 
 
 
@@ -2986,58 +3282,24 @@ bool qSRPlanPathPlanModuleWidget::sliceIntersectionsVisible()
     }
 }
 
-/*
-void qSRPlanPathPlanModuleWidget::PlaceSnakeHead(double centerX, double centerY, double centerZ, double orientX, double orientY, double orientZ)
+// given the Flash Dose Distribution Thresholder
+void qSRPlanPathPlanModuleWidget::updateDoseGridFlashShowLowerThresholder(int low)
 {
-	
-		
-	double Tracecolor[3];
-	Tracecolor[0] = 1.0;
-	Tracecolor[1] = 1.0;
-	Tracecolor[2] = 0.0;
+	//Get the Final Dose distribution for ISO Dose Node 
+	vtkMRMLScalarVolumeNode* DoseDistribution = this->getBDoseCalculateLogic()->GetCalculatedDoseVolume();
 
+	if (DoseDistribution)
+	{
+		 vtkMRMLScalarVolumeDisplayNode * volumeDisplayNode = vtkMRMLScalarVolumeDisplayNode::SafeDownCast(DoseDistribution->GetDisplayNode());
 
-	vtkNew<vtkConeSource> coneSource;
-	coneSource->SetResolution(30);
-	coneSource->SetHeight(20);
-	coneSource->SetAngle(40);
-	coneSource->CappingOn();
-
-	coneSource->SetCenter(centerX, centerY, centerZ);
-	coneSource->SetDirection(orientX, orientY, orientZ);
-
-	//Need update other parameters from parametersNode
-
-	coneSource->Update();
-
-	vtkNew<vtkPolyDataMapper> mapper;
-	mapper->SetInputConnection(coneSource->GetOutputPort());
-
-
-	vtkNew<vtkActor> actor;
-	actor->SetMapper(mapper.GetPointer());
-
-
-	vtkProperty *prop = actor->GetProperty();
-	prop->SetColor(Tracecolor);
-
-	//Changed the Glyph To Cone
-
-
-	qSlicerLayoutManager * layoutmanager = qSlicerApplication::application()->layoutManager();
-	qMRMLThreeDWidget * ThreeDw = layoutmanager->threeDWidget(0);
-
-	vtkRenderWindow * renderWindow = ThreeDw->threeDView()->renderWindow();
-
-	vtkRenderer * renderer = this->m_SnakeHeadRenderer;
-	renderer->AddActor(actor.GetPointer());
-
-	renderWindow->AddRenderer(renderer);
-	renderWindow->Render();
+		 if (volumeDisplayNode)
+		 {
+			 volumeDisplayNode->SetLowerThreshold(low);
+		 }
+	}
 
 }
 
-*/
 
 
 vtkSRPlanBDoseCalculateLogic* qSRPlanPathPlanModuleWidget::getBDoseCalculateLogic()

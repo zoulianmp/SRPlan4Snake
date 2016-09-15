@@ -23,6 +23,12 @@
 
 #include "qSRPlanPathPlanModuleExport.h"
 
+
+
+#include <vtkScalarBarWidget.h>
+#include "vtkSlicerRTScalarBarActor.h"
+
+
 class QTimer;
 class vtkRenderer;
 
@@ -229,6 +235,9 @@ public slots:
   /// current markups node  if set, otherwise just uses the defaults.
   void onNewMarkupWithCurrentDisplayPropertiesTriggered();
 
+  // given the Flash Dose Distribution Thresholder
+  void updateDoseGridFlashShowLowerThresholder( int low);
+
   //when timer timeout,update the TraceMark Position.
   void UpdateTraceMarkPosition();
   void SaveSnakeHeadDirectionToParametersNode(double * directionxyz);
@@ -242,9 +251,19 @@ protected:
   /// \sa updateMaximumScaleFromVolumes
   /// Default: 10.0
   double volumeSpacingScaleFactor;
-
+  //**********************************************************************************
+  // Begin ISO Dose Evaluation
   //Given a Dose distribution Volume, enter the ISO DoseEvaluate Function
   void enterIsoDoseEvaluationFunction(vtkMRMLScalarVolumeNode* doseGrid);
+
+  //set dose scalar bars in views 
+  void SetupScalarBarsShow();
+
+  void updateScalarBarsFromSelectedColorTable();
+  void updateIsoDoseGroupWidgetFromMRML();
+
+  //set up the Iso Dose Evalution guis
+  void SetupIsoDoseGroupGUIConnections();
 
 
 private:
@@ -256,6 +275,25 @@ private:
   QTimer *tracingTimer;
   vtkMRMLGeneralParametersNode* m_parametersNode=NULL;
   //vtkRenderer * m_SnakeHeadRenderer; //Used for SnakeHead Cone Show
+
+
+  //Dose Scalars in views
+
+  vtkScalarBarWidget* ScalarBarWidget;
+  vtkScalarBarWidget* ScalarBarWidget2DRed;
+  vtkScalarBarWidget* ScalarBarWidget2DYellow;
+  vtkScalarBarWidget* ScalarBarWidget2DGreen;
+
+  vtkSlicerRTScalarBarActor* ScalarBarActor;
+  vtkSlicerRTScalarBarActor* ScalarBarActor2DRed;
+  vtkSlicerRTScalarBarActor* ScalarBarActor2DYellow;
+  vtkSlicerRTScalarBarActor* ScalarBarActor2DGreen;
+
+
+
+
+
+
 };
 
 #endif

@@ -592,7 +592,7 @@
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>157</width>
+        <width>101</width>
         <height>21</height>
        </rect>
       </property>
@@ -606,9 +606,9 @@
      <widget class="QSpinBox" name="spinBox_NumberOfLevels">
       <property name="geometry">
        <rect>
-        <x>150</x>
+        <x>120</x>
         <y>30</y>
-        <width>221</width>
+        <width>71</width>
         <height>20</height>
        </rect>
       </property>
@@ -619,15 +619,48 @@
        <number>6</number>
       </property>
      </widget>
-     <zorder>checkBox_ScalarBar2D</zorder>
-     <zorder>tableView_IsodoseLevels</zorder>
-     <zorder>checkBox_ScalarBar</zorder>
-     <zorder>pushButton_Apply</zorder>
-     <zorder>checkBox_Isoline</zorder>
-     <zorder>checkBox_Isosurface</zorder>
-     <zorder>label_4</zorder>
-     <zorder>label_4</zorder>
-     <zorder>spinBox_NumberOfLevels</zorder>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>30</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>FlashShow</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>30</y>
+        <width>61</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>percent</string>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="spinBox_RelativeDoseValue">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>30</y>
+        <width>51</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="singleStep">
+       <number>5</number>
+      </property>
+      <property name="value">
+       <number>5</number>
+      </property>
+     </widget>
     </widget>
    </item>
   </layout>
