@@ -1257,8 +1257,10 @@ void qSRPlanPathPlanModuleWidget::onAddMarkupPushButtonClicked()
     }
   if (listNode)
     {
-    // for now, assume a fiducial
-    listNode->AddMarkupWithNPoints(1);
+		// for debug added by zoulian
+		char * snakePathID = listNode->GetID();  
+		// for now, assume a fiducial  
+		listNode->AddMarkupWithNPoints(1);
     }
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
