@@ -91,6 +91,9 @@ vtkSRPlanBDoseCalculateLogic::vtkSRPlanBDoseCalculateLogic()
     this->doseVolume = NULL; //The
 
 	this->selectionNode = NULL;
+
+	this->TDoseValuemaximum = 0;
+
 }
 
 //----------------------------------------------------------------------------
@@ -108,7 +111,9 @@ void vtkSRPlanBDoseCalculateLogic::PrintSelf(ostream& os, vtkIndent indent)
 
 void vtkSRPlanBDoseCalculateLogic::SetPlanPrimaryVolumeNode(vtkMRMLScalarVolumeNode * primary)
 {
-	vtkSetAndObserveMRMLNodeMacro(this->planPrimaryVolume, primary);
+	//vtkSetAndObserveMRMLNodeMacro(this->planPrimaryVolume, primary);
+
+	this->planPrimaryVolume = primary;
 }
 
 vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::GetPlanPrimaryVolumeNode()
@@ -120,7 +125,9 @@ vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::GetPlanPrimaryVolumeNode
 
 void vtkSRPlanBDoseCalculateLogic::SetSnakePlanPath(vtkMRMLMarkupsNode * snakePath)
 {
-	vtkSetAndObserveMRMLNodeMacro(this->snakePath, snakePath);
+	//vtkSetAndObserveMRMLNodeMacro(this->snakePath, snakePath);
+
+	this->snakePath = snakePath;
 
 }
 
@@ -377,7 +384,12 @@ void vtkSRPlanBDoseCalculateLogic::StartDoseCalcualte()
 
 	vtkImageData* kernal = this->Ir192Seed->GetDoseKernalVolume();
 
+	// initial the Dose Maximun to 0
+	this->TDoseValuemaximum = 0;
+
 	this->DoseSuperposition(snakePath, kernal);
+
+	this->NormalizedToMaximum(this->doseVolume,this->TDoseValuemaximum);
 
 	//Update the SelectionNode Active Dose Grid ID
 	
@@ -424,14 +436,14 @@ void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakeP
 
 		//skip the Realtime Tracing Mark
 		if (!strcmp((markup->Label).c_str(), "TMark"))
-			return;
+			continue;
 
 
 		doseWeight = markup->Weight;
 		
 		//Skip the 0 weight markup 
 		if (!doseWeight)
-			return;
+			continue;
 
 		seedPosition = markup->points[0];
 
@@ -583,6 +595,11 @@ void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakeP
 
 				*doseBaseValIt = base + detaInc;
 
+				if (this->TDoseValuemaximum < *doseBaseValIt)
+				{
+					this->TDoseValuemaximum = *doseBaseValIt;
+				}
+
 				doseBaseValIt++;
 				kernalValIt++;
 			}
@@ -626,15 +643,15 @@ void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakeP
 
 
 //Normalize the Dose Grid to Maximum,Get the Relative distribution
-void vtkSRPlanBDoseCalculateLogic::NormalizedToMaximum(vtkMRMLScalarVolumeNode * absDoseVolume)
+void vtkSRPlanBDoseCalculateLogic::NormalizedToMaximum(vtkMRMLScalarVolumeNode * absDoseVolume, double dosMax)
 {
 	vtkImageData * absImageData = absDoseVolume->GetImageData();
 
-	double* range = absImageData->GetScalarRange();
+	//double* range = absImageData->GetScalarRange();
 
-	double maximum = range[1];
+	double maximum = dosMax;
 
-	if (maximum == 0) 
+	if (maximum <= 0) 
 		return;
 
 

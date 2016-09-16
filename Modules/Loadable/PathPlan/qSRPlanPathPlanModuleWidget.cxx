@@ -1315,9 +1315,6 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 	//Get the Final Dose distribution for ISO Dose Node 
 	vtkMRMLScalarVolumeNode* DoseDistribution = BDoseLogic->GetCalculatedDoseVolume();
 
-	//Generate a relative distribution,100 is the maximum.
-	BDoseLogic->NormalizedToMaximum(DoseDistribution);
-
 	//********************************************************
 	//Begin the ISO DOSE Evaluation Function
 

@@ -87,7 +87,7 @@ public:
 	void StartDoseCalcualte();
 
 	//Normalize the Dose Grid to Maximum,Get the Relative distribution
-	void NormalizedToMaximum(vtkMRMLScalarVolumeNode * absDoseVolume);
+	void NormalizedToMaximum(vtkMRMLScalarVolumeNode * absDoseVolume , double dosMax);
 
 	void PrepareIr192SeedKernal();
 
@@ -130,6 +130,10 @@ protected:
 	vtkIr192SeedSource * Ir192Seed;
 
 	vtkMRMLScalarVolumeNode * doseVolume; //The calculated Dosevolume Node
+
+	double TDoseValuemaximum; //a Tempe digital value for normalizd relative dose calculation
+
+
 
 	vtkMRMLSelectionNode * selectionNode;
 
