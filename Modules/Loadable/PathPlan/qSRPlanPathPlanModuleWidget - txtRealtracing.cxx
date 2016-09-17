@@ -490,8 +490,6 @@ void qSRPlanPathPlanModuleWidget::enter()
 
   d->isoDoseGroup->hide();
 
-  
-
   // qDebug() << "enter widget";
 
   // set up mrml scene observations so that the GUI gets updated
@@ -1324,12 +1322,8 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 	this->enterIsoDoseEvaluationFunction(DoseDistribution);
 
 	//Show the ISO Dose GUI
-	//if (d->isoDoseGroup->isHidden())
-	//	d->isoDoseGroup->show();
-
-
-	 
-
+	if (d->isoDoseGroup->isHidden())
+		d->isoDoseGroup->show();
 
 	QApplication::restoreOverrideCursor();
 }
@@ -1638,8 +1632,6 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 	if (!d->isoDoseGroup->isHidden())
     	d->isoDoseGroup->hide();
 
-	 
-
 	bool checked = d->realTracePushButton->isChecked();
 
 	QString timestring = QString(vtksys::SystemTools::GetEnv("SNAKE_UPDATE_TIME_MS"));
@@ -1753,9 +1745,6 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 	// get the active node
 	vtkMRMLNode *mrmlNode = d->activeMarkupMRMLNodeComboBox->currentNode();
 	vtkMRMLMarkupsNode *listNode = NULL;
-
-	
-
 	if (mrmlNode)
 	{
 		listNode = vtkMRMLMarkupsNode::SafeDownCast(mrmlNode);
@@ -1765,8 +1754,6 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 		const char * realTracLabel = vtkMRMLMarkupsNode::GetRealTraceMarkupLabel();
 
 		Markup * markup = listNode->GetMarkupByLabel(realTracLabel);
-
-		 
 
 		//All the Markups have been deleted,
 		if (!markup)
@@ -1778,26 +1765,12 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 		
 
 
-		//the TMark index
+
 		int index = listNode->GetMarkupIndexByByLabel(realTracLabel);
 
-		static unsigned int file_count = 0;
 
 		std::string realTracFile;
-
-		std::stringstream count;
-		count << file_count;
-		std::string a;
-		count >> a;
-
-
-
-		realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC") + a + std::string(".raw"));
-
-
-
-
-	//	realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC_FILE"));
+		realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC_FILE"));
 
 	//	if (vtksys::SystemTools::GetEnv("OPTIC_TRAC") != NULL)
 	//	{
@@ -1808,99 +1781,31 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 		//QFile opticTracFile("E:/CodeLearn/RealtimePosition.txt");
 
 		QFile opticTracFile(realTracFile.c_str());
-		
-		bool suc = false;
-		if (opticTracFile.exists())
-		{
-			qDebug(realTracFile.c_str());
-			suc = opticTracFile.open(QIODevice::ReadOnly);
-		}
-		else
-		{
-			qDebug("don't have this file:%d.raw", file_count);
-			//   bool suc = opticTracFile.open(QIODevice::ReadOnly);
-
-		}
+		bool suc  =  opticTracFile.open(QIODevice::ReadOnly);
 
 		if (suc)
 		{
+			QTextStream tracStream(&opticTracFile);
+
+			QString line;
+			line = tracStream.readLine();
+			QStringList list = line.split(",");
+
+			opticTracFile.close();
 
 
-			QByteArray bytes = opticTracFile.readAll();
-			float x, y, z;
-			double x1, y1, z1;
-           
+			double x, y, z;
 			double Direction[3];
 
-			file_count++;
+			x = list[0].toDouble();
+			y = list[1].toDouble();
+			z = list[2].toDouble();
 
-			// Get two point coordinates
-			x = ((unsigned char)bytes[1] * 256 + (unsigned char)bytes[0] - 35000.0) / 100.0;
-			y = ((unsigned char)bytes[3] * 256 + (unsigned char)bytes[2] - 35000.0) / 100.0;
-			z = ((unsigned char)bytes[5] * 256 + (unsigned char)bytes[4] - 35000.0) / 100.0;
-			x1 = ((unsigned char)bytes[7] * 256 + (unsigned char)bytes[6] - 35000.0) / 100.0;
-			y1 = ((unsigned char)bytes[9] * 256 + (unsigned char)bytes[8] - 35000.0) / 100.0;
-			z1 = ((unsigned char)bytes[11] * 256 + (unsigned char)bytes[10] - 35000.0) / 100.0;
-
-		
-
-			//Start (x1,y1,z1) point to End (x,y,z)
-
-			Direction[0] = x - x1;
-			Direction[1] = y - y1;
-			Direction[2] = z - z1;
+			Direction[0] = list[3].toDouble();
+			Direction[1] = list[4].toDouble();
+			Direction[2] = list[5].toDouble();
 
 			int pointIndex = 0;
-
-
-			/*
-			double newPos[3];
-
-			newPos[0] = x;
-			newPos[1] = y;
-			newPos[2] = z;
-
-			vtkMRMLMarkupsFiducialNode *fidList = vtkMRMLMarkupsFiducialNode::SafeDownCast(listNode);
-			if (fidList)
-			{
-
-				fidList->SetNthFiducialPositionFromArray(index, newPos);
-	
-			}
- 
-            */
- 
-			
-			//**********************************************
-			//Only for Debug
-			//rand()%(max-min + 1) + min (range [min max])
-
-			if (x < -55 || x > 55)
-			{
-				cout << "error: " << "The optic tracing  x value out of range:  x = " << x << endl;
-				x = rand() % 24 + 5;
-				cout << "Force to :  " << " x = " << x << endl;
-
-			}
-		
-			if (y < -55 || y > 55)
-		    {
-				cout << "error: " << "The optic tracing  y value out of range:  y = " << y << endl;
-				y = rand() % 24 + 5;
-				cout << "Force to :  " << " x = " << x << endl;
-
-			}
-    
-			if (z < -55 || z > 55)
-			{
-				cout << "error: " << "The optic tracing  y value out of range:  y = " << y << endl;
-				z = rand() % 24 + 5;
-
-				cout << "Force to :  " << " x = " << x << endl;
-			}
-			//Only for Debug 
-			//**********************************************
-
 
 			markup->points[pointIndex].SetX(x);
 			markup->points[pointIndex].SetY(y);
@@ -1910,22 +1815,19 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 			listNode->Modified();
 			listNode->InvokeCustomModifiedEvent(vtkMRMLMarkupsNode::PointModifiedEvent, (void*)&index);
 
-
-			
-
 			this->SaveSnakeHeadDirectionToParametersNode(Direction);
 
 			vtkSRPlanPathPlanModuleLogic * Mlogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
-			
-		//	Mlogic->GetMarkupsLogic()->JumpSlicesToNthPointInMarkup(fidList->GetID(), index, true);
 
 			Mlogic->GetMarkupsLogic()->JumpSlicesToLocation(x, y, z, true);
-			cout << x << ' ' << y << ' ' << z << endl;
+
+			//RealTime Tracing
+			//this->PlaceSnakeHead(x, y, z, Dx, Dy, Dz);
+		
 		
 		}
 
-		opticTracFile.close();
-		opticTracFile.remove(realTracFile.c_str());
+		
 	}
 	
 	
