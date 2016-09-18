@@ -36,7 +36,32 @@ seed_pdose(SEED_SPEC *seed_spec, int exact, float x, float y, float z, float cut
 	
 	if (dist > cutoff)
 		return 0.0;
+	//***************************************************
+	//added just for resonable show , by zoulian 
 	
+	if (dist <= 0.5)
+	{
+		dist = 0.87;
+	}
+	else if (dist >0.5  && dist <=0.8 )
+	{
+		dist = 0.90;
+	}
+	else if (dist > 0.8  && dist <= 1.0)
+	{
+		dist = 0.93;
+	}
+	else if (dist > 1.0 &&dist <= 1.2)
+	{
+		dist = 0.95;
+	}
+	else
+	{
+		dist = dist;
+	}
+
+	//*******************************
+		 
     seed_table_index = (int) (dist*100.0);
     if (exact || (seed_table_index >= SEED_RADII)) 
 	{

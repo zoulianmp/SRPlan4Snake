@@ -93,11 +93,18 @@ public:
 
 	void DoseSuperposition(vtkMRMLMarkupsNode * snakePath , vtkImageData * doseKernal);
 
+	//Get the preseted grid sizeDose
 	vtkMRMLScalarVolumeNode * GetCalculatedDoseVolume();
+
+	//Get the ResampledDose Refered to Plan Image
+	vtkMRMLScalarVolumeNode *  GetResampledDoseVolume();
 
 	//Initialize the empty Dose Grid Node,prepare for Dose Calculation
 	//as vtkMRMLScalarVolumeNode * doseVolume; //The calculated Dosevolume Node
 	void InitializeEmptyDosGridNode();
+
+	//Initial the DoseGrid As PlanImage, filled 0
+	void InitializeEmptyDosGridNodeAsPlanImage();
 	
 	void PrintROIDose(vtkImageData * data, int * extent);
   
@@ -106,6 +113,9 @@ public:
 
 	//Set the Dose Node to Layout CompositNode, R,Y,G
 	void  SetDoseNodetoLayoutCompositeNode(char * layoutName, vtkMRMLScalarVolumeNode * absDoseVolume);
+
+	// Just for Debug the show
+	void  SetPlangImageNodetoBackgroundofLayoutCompositeNode(char * layoutName, vtkMRMLScalarVolumeNode * absDoseVolume);
 
 protected:
 	//Create a empty IJK ImageData, Origin(0,0,0),spacing(1,1,1)
@@ -130,6 +140,8 @@ protected:
 	vtkIr192SeedSource * Ir192Seed;
 
 	vtkMRMLScalarVolumeNode * doseVolume; //The calculated Dosevolume Node
+
+	vtkMRMLScalarVolumeNode * resampledTodoseVolume; //The Resampled Dosevolume refered to Plan Image
 
 	double TDoseValuemaximum; //a Tempe digital value for normalizd relative dose calculation
 

@@ -280,16 +280,16 @@ void vtkIr192SeedSource::PrintROIDose(vtkImageData * data, int * extent)
 
 	int numComp = data->GetNumberOfScalarComponents();
 		
-	vtkImageIterator<float> it(data, extent);		
+	vtkImageIterator<double> it(data, extent);		
 
 		while (!it.IsAtEnd())
 		{
-			float* valIt = it.BeginSpan();
-			float *valEnd = it.EndSpan();
+			double* valIt = it.BeginSpan();
+			double *valEnd = it.EndSpan();
 			while (valIt != valEnd)
 			{
 				
-				float Dose = *valIt++;
+				double Dose = *valIt++;
 			
 				std::cout << "(Dose:" << Dose << ") ";
 			}

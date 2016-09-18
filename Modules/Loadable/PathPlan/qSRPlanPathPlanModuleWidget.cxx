@@ -1317,17 +1317,21 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 	//Get the Final Dose distribution for ISO Dose Node 
 	vtkMRMLScalarVolumeNode* DoseDistribution = BDoseLogic->GetCalculatedDoseVolume();
 
+	//vtkMRMLScalarVolumeNode* DoseDistribution = BDoseLogic->GetResampledDoseVolume();
 	//********************************************************
 	//Begin the ISO DOSE Evaluation Function
 
+	if (DoseDistribution)
+	{
+		this->enterIsoDoseEvaluationFunction(DoseDistribution);
+
+		//Show the ISO Dose GUI
+		if (d->isoDoseGroup->isHidden())
+			d->isoDoseGroup->show();
+
+
+	}
 	
-	this->enterIsoDoseEvaluationFunction(DoseDistribution);
-
-	//Show the ISO Dose GUI
-	//if (d->isoDoseGroup->isHidden())
-	//	d->isoDoseGroup->show();
-
-
 	 
 
 
@@ -1405,8 +1409,11 @@ void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVo
 	// Set display threshold
 
 	volumeDisplayNode->AutoThresholdOff();
-	volumeDisplayNode->SetLowerThreshold(5);
+	volumeDisplayNode->SetLowerThreshold(80);
 	volumeDisplayNode->SetApplyThreshold(1);
+
+	d->spinBox_RelativeDoseValue->setValue(80);
+
 
 	//*************************************************************************
 	//Setup the Dose Color Table view
@@ -1870,12 +1877,12 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
  
             */
  
-			
+			/*
 			//**********************************************
 			//Only for Debug
 			//rand()%(max-min + 1) + min (range [min max])
-
-			if (x < -55 || x > 55)
+			
+			if (x < -96 || x > 55)
 			{
 				cout << "error: " << "The optic tracing  x value out of range:  x = " << x << endl;
 				x = rand() % 24 + 5;
@@ -1898,8 +1905,47 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 
 				cout << "Force to :  " << " x = " << x << endl;
 			}
+			
 			//Only for Debug 
 			//**********************************************
+			*/
+
+			vtkMRMLScalarVolumeNode * planPrimaryVolume = this->getBDoseCalculateLogic()->GetPlanPrimaryVolumeNode();
+			
+			double rasBounds[6];
+			planPrimaryVolume->GetRASBounds(rasBounds);
+
+
+			double rmin, rmax, amin, amax, smin, smax;
+			rmin = rasBounds[0];
+			rmax = rasBounds[1];
+			amin = rasBounds[2];
+			amax = rasBounds[3];
+			smin = rasBounds[4];
+			smax = rasBounds[5];
+
+
+			if (x < rmin || x > rmax)
+			{
+				cout << "error: " << "The optic tracing  x value out of range:  x = " << x << endl;
+				opticTracFile.close();
+				return;
+
+			}
+
+			if (y < amin || y > amax)
+			{
+				cout << "error: " << "The optic tracing  y value out of range:  y = " << y << endl;
+				opticTracFile.close();
+				return;
+			}
+
+			if (z < smin || z > smax)
+			{
+				cout << "error: " << "The optic tracing  z value out of range:  z = " << z << endl;
+				opticTracFile.close();
+				return;
+			}
 
 
 			markup->points[pointIndex].SetX(x);

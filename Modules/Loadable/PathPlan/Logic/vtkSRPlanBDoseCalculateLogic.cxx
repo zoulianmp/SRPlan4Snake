@@ -48,8 +48,7 @@
 #include <vtkMRMLApplicationLogic.h>
 #include <vtkMRMLScene.h>
 #include "vtkSlicerVolumesLogic.h"
-
-
+ 
 
 
 // VTK includes
@@ -288,6 +287,51 @@ void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGridNode()
 
 }
 
+
+void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGridNodeAsPlanImage()
+{
+	if (!planPrimaryVolume)
+	{
+		return;
+	}
+
+	std::string emptyDoseGrid = std::string("DoseGrid") + std::string(snakePath->GetName());
+
+	//Clone vtkMRMLScalarVolume without imagedata
+	this->doseVolume = vtkSlicerVolumesLogic::CloneVolumeWithoutImageData(this->GetMRMLScene(), planPrimaryVolume, emptyDoseGrid.c_str());
+	 
+
+	int* dimsReal = this->planPrimaryVolume->GetImageData()->GetDimensions();
+
+
+	vtkImageData * doseGrid = CreateEmptyDoseGrid(dimsReal);
+
+	doseVolume->SetAndObserveImageData(doseGrid);
+
+	/*
+	
+	vtkImageData * imageData = this->doseVolume->GetImageData();
+
+
+	// Fill every entry of the image data with x,y,z
+	int* dimsReal = imageData->GetDimensions();
+
+
+	unsigned short *ptr = static_cast<unsigned short *>(imageData->GetScalarPointer(0, 0, 0));
+	for (int z = 0; z < dimsReal[2]; z++)
+	{
+		for (int y = 0; y < dimsReal[1]; y++)
+		{
+			for (int x = 0; x < dimsReal[0]; x++)
+			{
+				*ptr++ = 0.0;
+
+			}
+		}
+	}
+	*/
+}
+
 void vtkSRPlanBDoseCalculateLogic::InvalidDoseAndRemoveDoseVolumeNodeFromScene()
 {
 	if (this->doseVolume)
@@ -374,7 +418,13 @@ void vtkSRPlanBDoseCalculateLogic::StartDoseCalcualte()
 	}
 
 
-	this->InitializeEmptyDosGridNode();
+	//this->InitializeEmptyDosGridNode();
+
+	this->InitializeEmptyDosGridNodeAsPlanImage();
+
+	double * spacing = this->doseVolume->GetSpacing();
+
+	this->m_gridSize = spacing[0];
 
 	// 2 . Prepare the Ir192 3D Dose Kernal
 
@@ -395,10 +445,25 @@ void vtkSRPlanBDoseCalculateLogic::StartDoseCalcualte()
 	
 	this->selectionNode->SetActiveDoseGridID(this->doseVolume->GetID());
 
+
+	//this->resampledTodoseVolume = 	vtkSlicerVolumesLogic::ResampleVolumeToReferenceVolume(this->doseVolume, this->planPrimaryVolume);
+
+	
+
+	//this->SetDoseNodetoLayoutCompositeNode("Red", this->resampledTodoseVolume);
+	//this->SetDoseNodetoLayoutCompositeNode("Yellow", this->resampledTodoseVolume);
+	//this->SetDoseNodetoLayoutCompositeNode("Green", this->resampledTodoseVolume);
+
+
 	//Show Dose in Slice Views "Red","Yellow", ("Green"
 	this->SetDoseNodetoLayoutCompositeNode("Red", this->doseVolume);
 	this->SetDoseNodetoLayoutCompositeNode("Yellow", this->doseVolume);
 	this->SetDoseNodetoLayoutCompositeNode("Green", this->doseVolume); 
+
+	//just for Debug 
+	//this->SetPlangImageNodetoBackgroundofLayoutCompositeNode("Red", this->planPrimaryVolume);
+	
+
 }
 
 vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::GetCalculatedDoseVolume()
@@ -406,6 +471,13 @@ vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::GetCalculatedDoseVolume(
 	return this->doseVolume;
 }
 
+
+vtkMRMLScalarVolumeNode * vtkSRPlanBDoseCalculateLogic::GetResampledDoseVolume()
+{
+	return this->resampledTodoseVolume;
+}
+
+ 
 
 //Step 2 , Prepare The SeedSource 
 void vtkSRPlanBDoseCalculateLogic::PrepareIr192SeedKernal()
@@ -757,6 +829,36 @@ void vtkSRPlanBDoseCalculateLogic::SetSelectionNode(vtkMRMLSelectionNode * selec
 }
 
 
+// Just for Debug the show
+void  vtkSRPlanBDoseCalculateLogic::SetPlangImageNodetoBackgroundofLayoutCompositeNode(char * layoutName, vtkMRMLScalarVolumeNode * absDoseVolume)
+{
+
+	int count = this->GetMRMLScene()->GetNumberOfNodesByClass("vtkMRMLSliceCompositeNode");
+
+	for (int i = 0; i < count; i++)
+	{
+		vtkMRMLNode * compNode = this->GetMRMLScene()->GetNthNodeByClass(i, "vtkMRMLSliceCompositeNode");
+
+		if (!strcmp(vtkMRMLSliceCompositeNode::SafeDownCast(compNode)->GetLayoutName(), layoutName))
+
+		{
+			vtkMRMLSliceCompositeNode* comp = vtkMRMLSliceCompositeNode::SafeDownCast(compNode);
+
+			if (absDoseVolume)
+			{
+				comp->SetBackgroundVolumeID(absDoseVolume->GetID());
+				 
+			}
+			else
+			{
+				comp->SetBackgroundVolumeID(NULL);
+			}
+			break;
+
+		}
+	}
+
+}
 
  
 
