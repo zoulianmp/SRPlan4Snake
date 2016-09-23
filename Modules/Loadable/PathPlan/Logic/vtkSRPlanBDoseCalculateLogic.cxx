@@ -688,7 +688,7 @@ void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakeP
 
 	}
 
-	
+	/*
 	//**************************************************
 	//Just for debug show 
 	int roiExtent[6];
@@ -708,7 +708,7 @@ void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakeP
 	//End just for debug show
 	//*****************************************************
 
-
+	*/
 }
 
 
@@ -794,16 +794,16 @@ void vtkSRPlanBDoseCalculateLogic::PrintROIDose(vtkImageData * data, int * exten
 
 	int numComp = data->GetNumberOfScalarComponents();
 
-	vtkImageIterator<float> it(data, extent);
+	vtkImageIterator<double> it(data, extent);
 
 	while (!it.IsAtEnd())
 	{
-		float* valIt = it.BeginSpan();
-		float *valEnd = it.EndSpan();
+		double* valIt = it.BeginSpan();
+		double *valEnd = it.EndSpan();
 		while (valIt != valEnd)
 		{
 
-			float Dose = *valIt++;
+			double Dose = *valIt++;
 
 			std::cout << "(Dose:" << Dose << ") ";
 		}

@@ -1911,7 +1911,8 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 			*/
 
 			vtkMRMLScalarVolumeNode * planPrimaryVolume = this->getBDoseCalculateLogic()->GetPlanPrimaryVolumeNode();
-			
+		
+
 			double rasBounds[6];
 			planPrimaryVolume->GetRASBounds(rasBounds);
 

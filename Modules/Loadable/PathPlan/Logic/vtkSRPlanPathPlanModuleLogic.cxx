@@ -86,9 +86,25 @@ void vtkSRPlanPathPlanModuleLogic::PrintSelf(ostream& os, vtkIndent indent)
 void vtkSRPlanPathPlanModuleLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene)
 {
  
+	//Need to do some basic initialization for sublogic
+
+
 	this->MarkupsLogic->SetMRMLScene(newScene);
 	this->BDoseCalLogic->SetMRMLScene(newScene);
 	this->IsoDoseLogic->SetMRMLScene(newScene);
+
+	//SelectionNode process
+	vtkMRMLSelectionNode * selectionNode = vtkMRMLSelectionNode::SafeDownCast(newScene->GetNthNodeByClass(0, "vtkMRMLSelectionNode"));
+	this->SetSelectionNode(selectionNode);
+
+	//PrimaryPlanImage
+	char * planVolumeID = selectionNode->GetPlanPrimaryVolumeID();
+    vtkMRMLScalarVolumeNode * planPrimaryVolume = vtkMRMLScalarVolumeNode::SafeDownCast(newScene->GetNodeByID(planVolumeID));
+
+	this->BDoseCalLogic->SetPlanPrimaryVolumeNode(planPrimaryVolume);
+
+
+
 }
 
 
@@ -132,6 +148,8 @@ void vtkSRPlanPathPlanModuleLogic::SetSelectionNode(vtkMRMLSelectionNode * selec
 {
 	this->selectionNode = selectionNode;
 	this->BDoseCalLogic->SetSelectionNode(selectionNode); 
+
+
 }
 
 
