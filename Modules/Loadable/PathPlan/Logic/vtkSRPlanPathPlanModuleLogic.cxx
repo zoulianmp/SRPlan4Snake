@@ -104,7 +104,6 @@ void vtkSRPlanPathPlanModuleLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene)
 	this->BDoseCalLogic->SetPlanPrimaryVolumeNode(planPrimaryVolume);
 
 
-
 }
 
 
