@@ -24,8 +24,10 @@ Version:   $Revision: 1.18 $
 #include "vtkMRMLGeneralParametersNode.h"
 
 #include <vtkSmartPointer.h>
+#include <vtkObjectFactory.h>
 
 
+vtkStandardNewMacro(vtkMRMLSceneUtility);
 
 //------------------------------------------------------------------------------
 vtkMRMLSceneUtility::vtkMRMLSceneUtility()
@@ -42,7 +44,7 @@ vtkMRMLSceneUtility::~vtkMRMLSceneUtility()
 
 
 
-void vtkMRMLSceneUtility::CreateParametersNode(vtkMRMLScene* scene)
+vtkMRMLGeneralParametersNode * vtkMRMLSceneUtility::CreateParametersNode(vtkMRMLScene* scene)
 {
 	vtkMRMLGeneralParametersNode* parametersNode = vtkMRMLGeneralParametersNode::New();
 	parametersNode->SetSingletonTag("Segmentation");
@@ -58,6 +60,7 @@ void vtkMRMLSceneUtility::CreateParametersNode(vtkMRMLScene* scene)
 
 	parametersNode->SetParameter("LabelmapColorTableNode", ""); //the current CorlorTableNode uid in scene, us it to get the ColorTableNode.
 
+	parametersNode->SetParameter("PrimaryPlanVolumeNodeID", ""); //the ScalarVolumeNode as a primary plan volume
 
 	parametersNode->SetParameter("SnakeHeadDirectionX", "1.0"); //the SnakeHead Direction X component.
 	parametersNode->SetParameter("SnakeHeadDirectionY", "0.0"); //the SnakeHead Direction Y component.
@@ -69,7 +72,7 @@ void vtkMRMLSceneUtility::CreateParametersNode(vtkMRMLScene* scene)
 	//	parametersNode->SetParameter("propagationMode", str(slicer.vtkMRMLApplicationLogic.BackgroundLayer | slicer.vtkMRMLApplicationLogic.LabelLayer))
 	scene->AddNode(parametersNode);
 
-	
+	return parametersNode;
 
 }
 
@@ -110,9 +113,9 @@ vtkMRMLSliceCompositeNode * vtkMRMLSceneUtility::GetCompositeNode(char * layoutN
 		{
 			return vtkMRMLSliceCompositeNode::SafeDownCast(compNode);
 		}
-		return NULL;
-		
 	}
+
+	return NULL;
 }
 
 

@@ -42,10 +42,10 @@ class VTK_MRML_EXPORT vtkMRMLSceneUtility : public vtkObject
 public:
   static vtkMRMLSceneUtility *New();
   vtkTypeMacro(vtkMRMLSceneUtility, vtkObject);
-  void PrintSelf(ostream& os, vtkIndent indent);
+  
 
- //Creat a parameters node for segmentation module
-  static void CreateParametersNode(vtkMRMLScene* scene);
+ //Creat a parameters node for segmentation module, and return the pointer
+  static vtkMRMLGeneralParametersNode* CreateParametersNode(vtkMRMLScene* scene);
 
   //Get The ParametersNode of the Scene
   static vtkMRMLGeneralParametersNode*  GetParametersNode(vtkMRMLScene* scene);

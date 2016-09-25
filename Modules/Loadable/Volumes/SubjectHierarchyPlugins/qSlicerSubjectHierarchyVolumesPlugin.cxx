@@ -70,7 +70,8 @@
 
 #include "vtkMRMLSelectionNode.h"
 
-
+#include "vtkMRMLSceneUtility.h"
+#include "vtkMRMLGeneralParametersNode.h"
 
 // STD includes
 #include <set>
@@ -898,10 +899,16 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 		//Creat and add LabelVolume to Scene and used for Lable Segmentation
 		vtkMRMLVolumeNode * mastervolume = vtkMRMLVolumeNode::SafeDownCast(currentNode->GetAssociatedNode());
 
-		//Add ID to ParametersNode
+		//Add Master Volume (Primary Plan Volume) ID to ParametersNode
 
-		vtkSlicerSegmentationsModuleLogic::
+		vtkMRMLGeneralParametersNode*  parametersNode = vtkMRMLSceneUtility::GetParametersNode(scene);
 
+		if (!parametersNode)
+		{
+			parametersNode = vtkMRMLSceneUtility::CreateParametersNode(scene);
+		}
+
+		parametersNode->SetParameter("PrimaryPlanVolumeNodeID", mastervolume->GetID());
 
 
 		vtkStdString basename = mastervolume->GetName();

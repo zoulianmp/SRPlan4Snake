@@ -50,6 +50,8 @@
 #include "vtkSlicerIsodoseLogic.h"
 
 #include "vtkMRMLScalarVolumeDisplayNode.h"
+#include "vtkMRMLSceneUtility.h"
+#include "vtkMRMLGeneralParametersNode.h"
 
 // Markups includes
 #include "qSRPlanPathPlanModuleWidget.h"
@@ -1912,6 +1914,23 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 
 			vtkMRMLScalarVolumeNode * planPrimaryVolume = this->getBDoseCalculateLogic()->GetPlanPrimaryVolumeNode();
 		
+			if (!planPrimaryVolume)
+			{
+			
+				vtkMRMLGeneralParametersNode*  parametersNode = vtkMRMLSceneUtility::GetParametersNode(this->mrmlScene());
+				std::string primaryVolumeID = parametersNode->GetParameter("PrimaryPlanVolumeNodeID");
+
+				planPrimaryVolume = vtkMRMLScalarVolumeNode::SafeDownCast( this->mrmlScene()->GetNodeByID(primaryVolumeID.c_str()) );
+				if (!planPrimaryVolume)
+				{
+					return;
+
+				}
+			}
+
+			
+			
+		
 
 			double rasBounds[6];
 			planPrimaryVolume->GetRASBounds(rasBounds);
@@ -1962,17 +1981,18 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 
 			this->SaveSnakeHeadDirectionToParametersNode(Direction);
 
-			vtkSRPlanPathPlanModuleLogic * Mlogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
+		//	vtkSRPlanPathPlanModuleLogic * Mlogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
 			
 		//	Mlogic->GetMarkupsLogic()->JumpSlicesToNthPointInMarkup(fidList->GetID(), index, true);
 
-			Mlogic->GetMarkupsLogic()->JumpSlicesToLocation(x, y, z, true);
+		//	Mlogic->GetMarkupsLogic()->JumpSlicesToLocation(x, y, z, true);
 			cout << x << ' ' << y << ' ' << z << endl;
 		
 		}
 
 		opticTracFile.close();
-		opticTracFile.remove(realTracFile.c_str());
+		//temp comment out for debug
+	//	opticTracFile.remove(realTracFile.c_str());  
 	}
 	
 	
