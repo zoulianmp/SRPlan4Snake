@@ -1883,24 +1883,9 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 			int pointIndex = 0;
 
 
-			/*
-			double newPos[3];
-
-			newPos[0] = x;
-			newPos[1] = y;
-			newPos[2] = z;
-
-			vtkMRMLMarkupsFiducialNode *fidList = vtkMRMLMarkupsFiducialNode::SafeDownCast(listNode);
-			if (fidList)
-			{
-
-				fidList->SetNthFiducialPositionFromArray(index, newPos);
-	
-			}
+			
  
-            */
- 
-			/*
+			
 			//**********************************************
 			//Only for Debug
 			//rand()%(max-min + 1) + min (range [min max])
@@ -1931,63 +1916,21 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 			
 			//Only for Debug 
 			//**********************************************
+			
+			/*
+			//***************************************************************
+			//Real needed by Real tracing
+			bool outofrange = this->isOutofPrimaryImageRange(x, y, z);
+
+			if (outofrange)
+			{
+				opticTracFile.close();
+				return;
+
+			}
+			// End Real needed by Real tracing
+			//*****************************************************************
 			*/
-
-			vtkMRMLScalarVolumeNode * planPrimaryVolume = this->getBDoseCalculateLogic()->GetPlanPrimaryVolumeNode();
-		
-			if (!planPrimaryVolume)
-			{
-			
-				vtkMRMLGeneralParametersNode*  parametersNode = vtkMRMLSceneUtility::GetParametersNode(this->mrmlScene());
-				std::string primaryVolumeID = parametersNode->GetParameter("PrimaryPlanVolumeNodeID");
-
-				planPrimaryVolume = vtkMRMLScalarVolumeNode::SafeDownCast( this->mrmlScene()->GetNodeByID(primaryVolumeID.c_str()) );
-				if (!planPrimaryVolume)
-				{
-					return;
-
-				}
-			}
-
-			
-			
-		
-
-			double rasBounds[6];
-			planPrimaryVolume->GetRASBounds(rasBounds);
-
-
-			double rmin, rmax, amin, amax, smin, smax;
-			rmin = rasBounds[0];
-			rmax = rasBounds[1];
-			amin = rasBounds[2];
-			amax = rasBounds[3];
-			smin = rasBounds[4];
-			smax = rasBounds[5];
-
-
-			if (x < rmin || x > rmax)
-			{
-				cout << "error: " << "The optic tracing  x value out of range:  x = " << x << endl;
-				opticTracFile.close();
-				return;
-
-			}
-
-			if (y < amin || y > amax)
-			{
-				cout << "error: " << "The optic tracing  y value out of range:  y = " << y << endl;
-				opticTracFile.close();
-				return;
-			}
-
-			if (z < smin || z > smax)
-			{
-				cout << "error: " << "The optic tracing  z value out of range:  z = " << z << endl;
-				opticTracFile.close();
-				return;
-			}
-
 
 			markup->points[pointIndex].SetX(x);
 			markup->points[pointIndex].SetY(y);
@@ -2019,6 +1962,73 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 	
 
 }
+
+//Test the (x,y,z) Whether in the Primary Image Range,
+bool qSRPlanPathPlanModuleWidget::isOutofPrimaryImageRange(double x, double y, double z)
+{
+	vtkMRMLScalarVolumeNode * planPrimaryVolume = this->getBDoseCalculateLogic()->GetPlanPrimaryVolumeNode();
+
+	if (!planPrimaryVolume)
+	{
+
+		vtkMRMLGeneralParametersNode*  parametersNode = vtkMRMLSceneUtility::GetParametersNode(this->mrmlScene());
+		std::string primaryVolumeID = parametersNode->GetParameter("PrimaryPlanVolumeNodeID");
+
+		planPrimaryVolume = vtkMRMLScalarVolumeNode::SafeDownCast(this->mrmlScene()->GetNodeByID(primaryVolumeID.c_str()));
+		if (!planPrimaryVolume)
+		{
+			return true;
+
+		}
+	}
+
+
+
+	double rasBounds[6];
+	planPrimaryVolume->GetRASBounds(rasBounds);
+
+
+	double rmin, rmax, amin, amax, smin, smax;
+	rmin = rasBounds[0];
+	rmax = rasBounds[1];
+	amin = rasBounds[2];
+	amax = rasBounds[3];
+	smin = rasBounds[4];
+	smax = rasBounds[5];
+
+
+	if (x < rmin || x > rmax)
+	{
+		cout << "error: " << "The optic tracing  x value out of range:  x = " << x << endl;
+		
+		return true;
+
+	}
+
+	if (y < amin || y > amax)
+	{
+		cout << "error: " << "The optic tracing  y value out of range:  y = " << y << endl;
+		 
+		return true;
+	}
+
+	if (z < smin || z > smax)
+	{
+		cout << "error: " << "The optic tracing  z value out of range:  z = " << z << endl;
+		 
+		return true;
+	}
+
+	return false;
+
+}
+
+
+
+
+
+
+
 
 
 void qSRPlanPathPlanModuleWidget::SaveSnakeHeadDirectionToParametersNode(double * directionxyz)

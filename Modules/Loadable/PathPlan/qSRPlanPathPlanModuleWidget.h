@@ -262,6 +262,9 @@ protected:
   //set dose scalar bars in views 
   void SetupScalarBarsShow();
 
+  //Test the (x,y,z) Whether in the Primary Image Range,
+  bool isOutofPrimaryImageRange(double x, double y, double z);
+
   void updateScalarBarsFromSelectedColorTable();
   void updateIsoDoseGroupWidgetFromMRML();
 
