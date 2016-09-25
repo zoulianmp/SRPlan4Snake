@@ -70,7 +70,7 @@
 
 #include "vtkMRMLSelectionNode.h"
 
-#include "vtkSlicerSegmentationsModuleLogic.h"
+
 
 // STD includes
 #include <set>

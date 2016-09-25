@@ -184,6 +184,7 @@ set(MRMLCore_SRCS
   vtkMRMLCoreTestingUtilities.cxx
   vtkMRMLCrosshairNode.cxx
   
+  vtkMRMLSceneUtility.cxx
   vtkMRMLPatientInfoNode.cxx
 
   vtkMRMLDiffusionTensorDisplayPropertiesNode.cxx
