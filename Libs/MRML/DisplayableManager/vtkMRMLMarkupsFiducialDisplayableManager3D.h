@@ -84,10 +84,11 @@ protected:
   // Clean up when scene closes
   virtual void OnMRMLSceneEndClose();
 
-  //update the snakeHeadDirectionFromeParametersNode
-  void UpdateSnakeHeadDirectionFromParametersNode(double* headDirection);
+  //update the snakeHead Parameters Frome ParametersNode,include( Direction, Opacity)
+  void UpdateSnakeHeadParametersFromParametersNode(double* parameters);
   //added by zoulian
-  void PlaceSnakeHead(double centerX, double centerY, double centerZ, double orientX, double orientY, double orientZ);
+  //parameters (double orientX, double orientY, double orientZ, double opacity)
+  void PlaceSnakeHead(double centerX, double centerY, double centerZ,double * parameters);
 
 private:
 

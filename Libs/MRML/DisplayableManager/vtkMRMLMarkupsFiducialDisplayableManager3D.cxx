@@ -34,6 +34,7 @@
 #include <vtkMRMLScene.h>
 #include <vtkMRMLSelectionNode.h>
 #include <vtkMRMLViewNode.h>
+#include "vtkMRMLSceneUtility.h"
 
 // VTK includes
 #include <vtkAbstractWidget.h>
@@ -543,12 +544,12 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::SetNthSeed(int n, vtkMRMLMarkup
 
 	  //snakehead Direction
 
-	  double direction[3] = {1.0,0,0};
+	  double parameters[4] = {1.0,0,0,0.6};
 
-	  this->UpdateSnakeHeadDirectionFromParametersNode(direction);
+	  this->UpdateSnakeHeadParametersFromParametersNode(parameters);
 
 	  //Place the snake head
-	  this->PlaceSnakeHead(centerPos[0],centerPos[1], centerPos[2], direction[0], direction[1], direction[2]);
+	  this->PlaceSnakeHead(centerPos[0],centerPos[1], centerPos[2], parameters);
 
   
 
@@ -560,47 +561,82 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::SetNthSeed(int n, vtkMRMLMarkup
 
 
 
-void  vtkMRMLMarkupsFiducialDisplayableManager3D::UpdateSnakeHeadDirectionFromParametersNode(double* headDirection)
+void  vtkMRMLMarkupsFiducialDisplayableManager3D::UpdateSnakeHeadParametersFromParametersNode(double* parameters)
 {
 	
-
-
 	if (!m_parametersNode)
 	{
-		
-		//Update the ParametersNode
-		vtkMRMLScene * scene = this->GetMRMLScene();
-
-		int size = scene->GetNumberOfNodesByClass("vtkMRMLGeneralParametersNode");
-		for (int i = 0; i < size; i++)
+		vtkMRMLGeneralParametersNode*  parametersNode = vtkMRMLSceneUtility::GetParametersNode(this->GetMRMLScene());
+		if (!parametersNode)
 		{
-			vtkMRMLGeneralParametersNode* Node;
-			Node = vtkMRMLGeneralParametersNode::SafeDownCast(scene->GetNthNodeByClass(i, "vtkMRMLGeneralParametersNode"));
-			if (!strcmp(Node->GetModuleName(), "Segmentation") && !strcmp(Node->GetSingletonTag(), "Segmentation"))
-			{
-				m_parametersNode = Node;
-			}
-
+			return;
 		}
+		else
+		{
+			m_parametersNode = parametersNode;
+		}
+
+
+
+		//Get the Direction component from parametersNode
+		std::string dx = m_parametersNode->GetParameter("SnakeHeadDirectionX");
+		std::string dy = m_parametersNode->GetParameter("SnakeHeadDirectionY");
+		std::string dz = m_parametersNode->GetParameter("SnakeHeadDirectionZ");
+
+		std::string opacity = m_parametersNode->GetParameter("SnakeHeadOpacity");
+
+
+
+		parameters[0] = atof(dx.c_str());
+		parameters[1] = atof(dy.c_str());
+		parameters[2] = atof(dz.c_str());
+
+		parameters[3] = atof(opacity.c_str());
+
+		
+	}
+	else
+	{
+
+		//Get the Direction component from parametersNode
+		std::string dx = m_parametersNode->GetParameter("SnakeHeadDirectionX");
+		std::string dy = m_parametersNode->GetParameter("SnakeHeadDirectionY");
+		std::string dz = m_parametersNode->GetParameter("SnakeHeadDirectionZ");
+
+		std::string opacity = m_parametersNode->GetParameter("SnakeHeadOpacity");
+
+
+		parameters[0] = atof(dx.c_str());
+		parameters[1] = atof(dy.c_str());
+		parameters[2] = atof(dz.c_str());
+
+		parameters[3] = atof(opacity.c_str());
+
 	}
 
-	 
-	//Get the Direction component from parametersNode
-	std::string dx = m_parametersNode->GetParameter("SnakeHeadDirectionX");
-	std::string dy = m_parametersNode->GetParameter("SnakeHeadDirectionY");
-	std::string dz = m_parametersNode->GetParameter("SnakeHeadDirectionZ");
 
-	headDirection[0] = atof(dx.c_str());
-	headDirection[1] = atof(dy.c_str());
-	headDirection[2] = atof(dz.c_str());
+
+
+
+
+
+
+	
+
 	
 }
 
 
 
 
-void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead(double centerX, double centerY, double centerZ, double orientX, double orientY, double orientZ)
+void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead(double centerX, double centerY, double centerZ, double * parameters)
 {
+	double orientX, orientY, orientZ, opacity;
+
+	orientX = parameters[0];
+	orientY = parameters[1];
+	orientZ = parameters[2];
+	opacity = parameters[3];
 	
 
 
@@ -634,6 +670,7 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead(double centerX, 
 
 	vtkProperty *prop = actor->GetProperty();
 	prop->SetColor(Tracecolor);
+	prop->SetOpacity(opacity);
 
 	//Changed the Glyph To Cone
  

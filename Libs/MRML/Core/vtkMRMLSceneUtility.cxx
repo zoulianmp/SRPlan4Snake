@@ -66,7 +66,7 @@ vtkMRMLGeneralParametersNode * vtkMRMLSceneUtility::CreateParametersNode(vtkMRML
 	parametersNode->SetParameter("SnakeHeadDirectionY", "0.0"); //the SnakeHead Direction Y component.
 	parametersNode->SetParameter("SnakeHeadDirectionZ", "0.0"); //the SnakeHead Direction Z component.
 
-
+	parametersNode->SetParameter("SnakeHeadOpacity", "0.6"); //the SnakeHead Opacity
 
 
 	//	parametersNode->SetParameter("propagationMode", str(slicer.vtkMRMLApplicationLogic.BackgroundLayer | slicer.vtkMRMLApplicationLogic.LabelLayer))

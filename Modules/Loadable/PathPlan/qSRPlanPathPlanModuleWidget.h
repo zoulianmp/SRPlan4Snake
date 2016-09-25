@@ -242,6 +242,9 @@ public slots:
   void UpdateTraceMarkPosition();
   void SaveSnakeHeadDirectionToParametersNode(double * directionxyz);
 
+  void updateTMarkOpacitytoParametersNode(double);
+
+
 protected:
   QScopedPointer<qSRPlanPathPlanModuleWidgetPrivate> d_ptr;
 

@@ -52,6 +52,8 @@
 #include "vtkMRMLScalarVolumeDisplayNode.h"
 #include "vtkMRMLSceneUtility.h"
 #include "vtkMRMLGeneralParametersNode.h"
+#
+
 
 // Markups includes
 #include "qSRPlanPathPlanModuleWidget.h"
@@ -282,6 +284,14 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   QObject::connect(this->spinBox_RelativeDoseValue, SIGNAL(valueChanged(int)),
 	  q, SLOT(updateDoseGridFlashShowLowerThresholder(int )));
 
+
+  //TMark Opacity for Snake header
+
+  QObject::connect(this->doubleSpinBox_TMOpacity, SIGNAL(valueChanged(double)),
+	  q, SLOT(updateTMarkOpacitytoParametersNode(double)));
+
+
+
    
   // delete
   QObject::connect(this->deleteMarkupPushButton, SIGNAL(clicked()),
@@ -492,6 +502,7 @@ void qSRPlanPathPlanModuleWidget::enter()
 
   d->isoDoseGroup->hide();
 
+  d->traceMarkGroup->hide();
   
 
   // qDebug() << "enter widget";
@@ -1277,6 +1288,13 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 {
 	Q_D(qSRPlanPathPlanModuleWidget);
 
+	// If the realTracing opacity show, then hide
+	if (d->traceMarkGroup->isVisible())
+	{
+		d->traceMarkGroup->hide();
+	}
+
+
 	QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 
 	//********************************************************
@@ -1331,7 +1349,9 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 		if (d->isoDoseGroup->isHidden())
 			d->isoDoseGroup->show();
 
-
+	 
+	
+		
 	}
 	
 	 
@@ -1647,6 +1667,7 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 	if (!d->isoDoseGroup->isHidden())
     	d->isoDoseGroup->hide();
 
+	d->traceMarkGroup->show();
 	 
 
 	bool checked = d->realTracePushButton->isChecked();
@@ -2004,29 +2025,54 @@ void qSRPlanPathPlanModuleWidget::SaveSnakeHeadDirectionToParametersNode(double 
 {
 	if (!m_parametersNode)
 	{
-		//Update the ParametersNode
-		vtkMRMLScene * scene = qSlicerCoreApplication::application()->mrmlScene();
-
-		int size = scene->GetNumberOfNodesByClass("vtkMRMLGeneralParametersNode");
-		for (int i = 0; i < size; i++)
+		vtkMRMLGeneralParametersNode*  parametersNode = vtkMRMLSceneUtility::GetParametersNode(this->mrmlScene());
+		if (!parametersNode)
 		{
-			vtkMRMLGeneralParametersNode* Node;
-			Node = vtkMRMLGeneralParametersNode::SafeDownCast(scene->GetNthNodeByClass(i, "vtkMRMLGeneralParametersNode"));
-			if (!strcmp(Node->GetModuleName(), "Segmentation") && !strcmp(Node->GetSingletonTag(), "Segmentation"))
-			{
-				m_parametersNode = Node;
-			}
-
+			parametersNode = vtkMRMLSceneUtility::CreateParametersNode(this->mrmlScene());
 		}
+
+		m_parametersNode = parametersNode;
+
+		m_parametersNode->SetParameter("SnakeHeadDirectionX", QString::number(directionxyz[0]).toStdString());
+		m_parametersNode->SetParameter("SnakeHeadDirectionY", QString::number(directionxyz[1]).toStdString());
+		m_parametersNode->SetParameter("SnakeHeadDirectionZ", QString::number(directionxyz[2]).toStdString());
+
+	}
+	else
+	{
+		m_parametersNode->SetParameter("SnakeHeadDirectionX", QString::number(directionxyz[0]).toStdString());
+		m_parametersNode->SetParameter("SnakeHeadDirectionY", QString::number(directionxyz[1]).toStdString());
+		m_parametersNode->SetParameter("SnakeHeadDirectionZ", QString::number(directionxyz[2]).toStdString());
+
+
 	}
 
-	
-	m_parametersNode->SetParameter("SnakeHeadDirectionX", QString::number(directionxyz[0]).toStdString());
-	m_parametersNode->SetParameter("SnakeHeadDirectionY", QString::number(directionxyz[1]).toStdString());
-	m_parametersNode->SetParameter("SnakeHeadDirectionZ", QString::number(directionxyz[2]).toStdString());
-	 
-	
+
 }
+
+
+void qSRPlanPathPlanModuleWidget::updateTMarkOpacitytoParametersNode(double opacity)
+{
+	if (!m_parametersNode)
+	{
+		vtkMRMLGeneralParametersNode*  parametersNode = vtkMRMLSceneUtility::GetParametersNode(this->mrmlScene());
+		if (!parametersNode)
+		{
+			parametersNode = vtkMRMLSceneUtility::CreateParametersNode(this->mrmlScene());
+		}
+
+		m_parametersNode = parametersNode;
+		m_parametersNode->SetParameter("SnakeHeadOpacity", QString::number(opacity).toStdString());
+	}
+	else
+	{
+		m_parametersNode->SetParameter("SnakeHeadOpacity", QString::number(opacity).toStdString());
+
+	}
+
+}
+
+
 
 //-----------------------------------------------------------------------------
 void qSRPlanPathPlanModuleWidget::onDeleteMarkupPushButtonClicked()
@@ -3445,6 +3491,15 @@ bool qSRPlanPathPlanModuleWidget::sliceIntersectionsVisible()
     return true;
     }
 }
+
+
+
+
+
+
+
+
+
 
 // given the Flash Dose Distribution Thresholder
 void qSRPlanPathPlanModuleWidget::updateDoseGridFlashShowLowerThresholder(int low)
