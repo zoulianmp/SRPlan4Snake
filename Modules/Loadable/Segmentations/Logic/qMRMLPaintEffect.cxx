@@ -38,6 +38,7 @@ Version:   $Revision: 1.11 $
 #include "vtkSlicerSegmentationsModuleLogic.h"
 #include "qSlicerCoreApplication.h"
 
+#include "vtkMRMLSceneUtility.h"
 
 #include "vtkMatrix4x4.h"
 
@@ -142,7 +143,11 @@ int  qMRMLPaintEffect::UpdateLabelFromParametersNode()
 {
 	//Update the ParametersNode
 	vtkMRMLScene * scene = qSlicerCoreApplication::application()->mrmlScene();
-	vtkMRMLGeneralParametersNode* parametersNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+	vtkMRMLGeneralParametersNode* parametersNode = vtkMRMLSceneUtility::GetParametersNode(scene);
+
+	
+
+
 
 	std::string label = parametersNode->GetParameter("label");
 	QString qlabel = QString::fromStdString(label);

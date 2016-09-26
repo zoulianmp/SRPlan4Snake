@@ -43,7 +43,7 @@
 #include <vtkObjectFactory.h>
 #include <vtkTrivialProducer.h>
 #include <vtkMatrix4x4.h>
-#include <vtkCallbackCommand.h>
+#include <vtkCallbackCommand.h> 
 #include <vtkPolyData.h>
 #include <vtkImageAccumulate.h>
 #include <vtkImageThreshold.h>
@@ -65,6 +65,7 @@
 #include <vtkMRMLModelDisplayNode.h>
 #include <vtkMRMLTransformNode.h>
 
+#include "vtkMRMLSceneUtility.h"
 
 
 // STD includes
@@ -111,6 +112,9 @@ vtkSlicerSegmentationsModuleLogic::vtkSlicerSegmentationsModuleLogic()
 
 }
 
+
+/*
+comment out because transfer this part to  vtkMRMLSceneUtility 
 
 void vtkSlicerSegmentationsModuleLogic::CreateParametersNode(vtkMRMLScene* scene)
 {
@@ -161,10 +165,19 @@ vtkMRMLGeneralParametersNode* vtkSlicerSegmentationsModuleLogic::GetParametersNo
 }
 
 
+
+
+*/
+
+
+
+
+
+
 // Test ParametersNode, If has LabelMapColorTabelNode,return True,Other return False
 bool vtkSlicerSegmentationsModuleLogic::HasLabelMapColorTableNode(vtkMRMLScene* scene)
 {
-	vtkMRMLGeneralParametersNode * parameterNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+	vtkMRMLGeneralParametersNode * parameterNode = vtkMRMLSceneUtility::GetParametersNode(scene);
 
 	std::string ctNodeID = parameterNode->GetParameter("LabelmapColorTableNode");
 
@@ -182,7 +195,7 @@ bool vtkSlicerSegmentationsModuleLogic::HasLabelMapColorTableNode(vtkMRMLScene* 
 //If ParametersNode Exist, add a ColorTableNode to the Parameters;
 void vtkSlicerSegmentationsModuleLogic::AddColorTabelNodeToParametersNode(vtkMRMLScene* scene)
 {
-	vtkMRMLGeneralParametersNode * parameterNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+	vtkMRMLGeneralParametersNode * parameterNode = vtkMRMLSceneUtility::GetParametersNode(scene);
 
 
 	vtkSmartPointer<vtkMRMLColorTableNode> ctNode = vtkSmartPointer<vtkMRMLColorTableNode>::New();
@@ -216,7 +229,7 @@ void vtkSlicerSegmentationsModuleLogic::AddColorTabelNodeToParametersNode(vtkMRM
 //If ParametersNode Exist, remove pre CTNode,add a new CTNode to ParamtersNode
 void vtkSlicerSegmentationsModuleLogic::ResetCTNodeOfParametersNode(vtkMRMLScene* scene)
 {
-	vtkMRMLGeneralParametersNode * parameterNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+	vtkMRMLGeneralParametersNode * parameterNode = vtkMRMLSceneUtility::GetParametersNode(scene);
 	std::string ctNodeid = parameterNode->GetParameter("LabelmapColorTableNode");
 
 	if (!ctNodeid.empty())
@@ -235,7 +248,7 @@ void vtkSlicerSegmentationsModuleLogic::ResetCTNodeOfParametersNode(vtkMRMLScene
 //If ParametersNode Exist, and ColorTableNode Exist, Return ColorTableNode  ;
 vtkMRMLColorTableNode* vtkSlicerSegmentationsModuleLogic::GetColorTabelNodeFromParametersNode(vtkMRMLScene* scene)
 {
-	vtkMRMLGeneralParametersNode * parameterNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+	vtkMRMLGeneralParametersNode * parameterNode = vtkMRMLSceneUtility::GetParametersNode(scene);
 
 	std::string ctNodeid =  parameterNode->GetParameter("LabelmapColorTableNode");
 

@@ -49,7 +49,7 @@
 #include "vtkMRMLColorTableNode.h"
 
 #include "vtkMRMLSelectionNode.h"
-
+#include "vtkMRMLSceneUtility.h"
 
 // VTK includes
 #include <vtkSmartPointer.h>
@@ -398,7 +398,7 @@ void qSlicerSegmentationsModuleWidget::onSegmentSelectionChanged(const QItemSele
 	  {
 		  //Update the ParametersNode
 		  vtkMRMLScene * scene = qSlicerCoreApplication::application()->mrmlScene();
-		  vtkMRMLGeneralParametersNode* parametersNode = vtkSlicerSegmentationsModuleLogic::GetParametersNode(scene);
+		  vtkMRMLGeneralParametersNode* parametersNode = vtkMRMLSceneUtility::GetParametersNode(scene);
 
 		  parametersNode->SetParameter("segment", segmentId.toStdString());
 

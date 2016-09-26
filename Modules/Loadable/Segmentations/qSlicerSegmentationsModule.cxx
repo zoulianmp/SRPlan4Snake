@@ -128,7 +128,7 @@ void qSlicerSegmentationsModule::setMRMLScene(vtkMRMLScene* scene)
 
 
   //Add the Segmentation Module's ParametersNode to Scene
-  vtkSlicerSegmentationsModuleLogic::CreateParametersNode( scene);
+  //vtkSlicerSegmentationsModuleLogic::CreateParametersNode( scene);
  
 }
 

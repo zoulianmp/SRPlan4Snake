@@ -63,10 +63,10 @@ public:
   void PrintSelf(ostream& os, vtkIndent indent);
 
   //Creat a parameters node for segmentation module
-  static void CreateParametersNode(vtkMRMLScene* scene);
+  //static void CreateParametersNode(vtkMRMLScene* scene);
 
   //Get the ParametersNode for Segmentation Module
-  static vtkMRMLGeneralParametersNode *  GetParametersNode(vtkMRMLScene* scene);
+  //static vtkMRMLGeneralParametersNode *  GetParametersNode(vtkMRMLScene* scene);
 
   // Test ParametersNode, If has LabelMapColorTabelNode,return True,Other return False
   static bool HasLabelMapColorTableNode(vtkMRMLScene* scene);

@@ -47,8 +47,8 @@ vtkMRMLSceneUtility::~vtkMRMLSceneUtility()
 vtkMRMLGeneralParametersNode * vtkMRMLSceneUtility::CreateParametersNode(vtkMRMLScene* scene)
 {
 	vtkMRMLGeneralParametersNode* parametersNode = vtkMRMLGeneralParametersNode::New();
-	parametersNode->SetSingletonTag("Segmentation");
-	parametersNode->SetModuleName("Segmentation");
+	parametersNode->SetSingletonTag("SRPlan");
+	parametersNode->SetModuleName("SRPlan");
 
 	parametersNode->SetParameter("label", "0"); //current label value	
 	parametersNode->SetParameter("effect", "None"); //current enum EffectMode { None, PaintBrush, FreeDraw, Threshold };
@@ -79,18 +79,29 @@ vtkMRMLGeneralParametersNode * vtkMRMLSceneUtility::CreateParametersNode(vtkMRML
 
 vtkMRMLGeneralParametersNode* vtkMRMLSceneUtility::GetParametersNode(vtkMRMLScene* scene)
 {
+	vtkMRMLGeneralParametersNode* Node = NULL;
 	int size = scene->GetNumberOfNodesByClass("vtkMRMLGeneralParametersNode");
+
+	// if the parametersNode is not exist, create it
+	if (size == 0)
+	{
+		return vtkMRMLSceneUtility::CreateParametersNode(scene);
+	}
+
+	// Iteration over the pool
 	for (int i=0; i < size; i++)
 	{
-		vtkMRMLGeneralParametersNode* Node;
+		
 		Node = vtkMRMLGeneralParametersNode::SafeDownCast(scene->GetNthNodeByClass(i, "vtkMRMLGeneralParametersNode"));
-		if (!strcmp(Node->GetModuleName(), "Segmentation") && !strcmp(Node->GetSingletonTag(), "Segmentation"))
+		if (!strcmp(Node->GetModuleName(), "SRPlan") && !strcmp(Node->GetSingletonTag(), "SRPlan"))
 		{
 			return Node;
 		}
 
 	}
-	return NULL;
+
+	// If there are parameters node ,but not SRPlan
+	return vtkMRMLSceneUtility::CreateParametersNode(scene);
 
 }
 
