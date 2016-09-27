@@ -95,7 +95,8 @@ private:
   vtkMRMLMarkupsFiducialDisplayableManager3D(const vtkMRMLMarkupsFiducialDisplayableManager3D&); /// Not implemented
   void operator=(const vtkMRMLMarkupsFiducialDisplayableManager3D&); /// Not Implemented
 
-  vtkActor * m_SnakeHead = NULL;
+  vtkActor * m_SnakeHead = NULL; //the Head up solidshow
+  vtkActor * m_SnakeHeadDn = NULL; // the transparent show cone partion
 
   vtkMRMLGeneralParametersNode * m_parametersNode = NULL;
 

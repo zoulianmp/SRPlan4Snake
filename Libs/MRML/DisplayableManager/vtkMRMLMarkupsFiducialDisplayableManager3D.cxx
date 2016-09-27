@@ -638,19 +638,32 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead(double centerX, 
 	orientZ = parameters[2];
 	opacity = parameters[3];
 	
-
-
 	double Tracecolor[3];
 	Tracecolor[0] = 1.0;
 	Tracecolor[1] = 1.0;
 	Tracecolor[2] = 0.0;
 
+	//Cone Visual show sets
+
+	int resolution = 30;
+	double  height = 15;
+	double  radius = 15;
+	double  angle = 20;
+
+	//double  solidpartion = 0.2;
+
+	//double  opacityGradient = 0.7;
+
+	
+
+	//************************************************
+	//The solid one
 
 	vtkNew<vtkConeSource> coneSource;
-	coneSource->SetResolution(30);
-	coneSource->SetHeight(15);
-	coneSource->SetRadius(5);
-	coneSource->SetAngle(20);
+	coneSource->SetResolution(resolution);
+	coneSource->SetHeight(height );
+	coneSource->SetRadius(radius );
+	coneSource->SetAngle(angle);
 	coneSource->CappingOn();
 
 	coneSource->SetCenter(centerX, centerY, centerZ);
@@ -672,6 +685,39 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead(double centerX, 
 	prop->SetColor(Tracecolor);
 	prop->SetOpacity(opacity);
 
+	
+	/*
+	//********************************************
+	//the transparent partion
+
+	vtkNew<vtkConeSource> coneSourceDn;
+	coneSourceDn->SetResolution(resolution);
+	coneSourceDn->SetHeight(height);
+	coneSourceDn->SetRadius(radius);
+	coneSourceDn->SetAngle(angle);
+	coneSourceDn->CappingOff();
+
+	coneSourceDn->SetCenter(centerX, centerY, centerZ);
+	coneSourceDn->SetDirection(-orientX, -orientY, -orientZ);
+
+	//Need update other parameters from parametersNode
+
+	coneSourceDn->Update();
+
+	vtkNew<vtkPolyDataMapper> mapperDn;
+	mapperDn->SetInputConnection(coneSourceDn->GetOutputPort());
+
+
+	vtkNew<vtkActor> actorDn;
+	actorDn->SetMapper(mapperDn.GetPointer());
+
+
+	vtkProperty *propDn = actorDn->GetProperty();
+	propDn->SetColor(Tracecolor);
+	propDn->SetOpacity(opacity * opacityGradient);
+
+	*/
+
 	//Changed the Glyph To Cone
  
 	vtkRenderer * render = this->GetRenderer();
@@ -681,9 +727,27 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::PlaceSnakeHead(double centerX, 
 		render->RemoveActor(m_SnakeHead);
 	}
 
+   /*
+	if (m_SnakeHeadDn)
+	{
+		render->RemoveActor(m_SnakeHeadDn);
+	}
+
+	*/
+
+	//render->AddActor(actorDn.GetPointer());
+	
 	render->AddActor(actor.GetPointer());
 
+
 	m_SnakeHead = actor.GetPointer();
+	
+	//m_SnakeHeadDn = actorDn.GetPointer();
+
+
+
+
+
 }
 
 
