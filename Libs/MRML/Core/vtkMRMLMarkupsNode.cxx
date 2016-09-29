@@ -480,7 +480,7 @@ void vtkMRMLMarkupsNode::InitMarkup(Markup *markup)
   markup->Locked = false;
   markup->Visibility = true;
   
-  markup->Weight = 0;
+  markup->Weight = 1.0;
 }
 
 //-----------------------------------------------------------
@@ -509,7 +509,7 @@ int vtkMRMLMarkupsNode::AddMarkupWithNPoints(int n, std::string label)
     }
   Markup markup;
   markup.Label = label;
-  markup.Weight = 0;
+  markup.Weight = 1.0;
 
   this->InitMarkup(&markup);
   for (int i = 0; i < n; i++)
@@ -556,7 +556,7 @@ int vtkMRMLMarkupsNode::AddPointToNewMarkup(vtkVector3d point, std::string label
   this->Markups.push_back(newmarkup);
   this->MaximumNumberOfMarkups++;
 
-  newmarkup.Weight = 0;
+  newmarkup.Weight = 1.0;
 
   markupIndex = this->Markups.size() - 1;
 

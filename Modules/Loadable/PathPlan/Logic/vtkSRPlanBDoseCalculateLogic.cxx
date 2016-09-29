@@ -418,9 +418,9 @@ void vtkSRPlanBDoseCalculateLogic::StartDoseCalcualte()
 	}
 
 
-	//this->InitializeEmptyDosGridNode();
+	this->InitializeEmptyDosGridNode();
 
-	this->InitializeEmptyDosGridNodeAsPlanImage();
+	//this->InitializeEmptyDosGridNodeAsPlanImage();
 
 	double * spacing = this->doseVolume->GetSpacing();
 
