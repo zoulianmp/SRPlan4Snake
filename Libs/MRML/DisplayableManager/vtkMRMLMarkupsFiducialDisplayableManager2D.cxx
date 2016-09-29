@@ -716,10 +716,32 @@ void vtkMRMLMarkupsFiducialDisplayableManager2D::SetNthSeed(int n, vtkMRMLMarkup
 
         vtkMRMLMarkupsDisplayNode* pointDisplayNode = fiducialNode->GetMarkupsDisplayNode();
 
-        if ((pointDisplayNode->GetSliceProjection() & pointDisplayNode->ProjectionOn) &&
-            pointDisplayNode->GetVisibility())
+		//*************************************
+		// If markup is TMark ,then show in the SliceView  // added by zoulian
+
+		int showMarkinSlice = 0;
+
+		const char* traceLable = vtkMRMLMarkupsNode::GetRealTraceMarkupLabel();
+		if (textString.compare(traceLable) == 0)
+		{
+			showMarkinSlice = 1;
+
+		}
+
+		
+
+        if ( ( (pointDisplayNode->GetSliceProjection()|showMarkinSlice)  & pointDisplayNode->ProjectionOn)
+			&& pointDisplayNode->GetVisibility())
           {
           double glyphScale = pointDisplayNode->GetGlyphScale()*2.0;
+
+		  // added by zoulian for navigation
+		  if (showMarkinSlice)
+		  {
+			  glyphScale *= 2.0;
+		  }
+
+
           int glyphType = pointDisplayNode->GetGlyphType();
           if (glyphType == vtkMRMLMarkupsDisplayNode::Sphere3D)
             {
