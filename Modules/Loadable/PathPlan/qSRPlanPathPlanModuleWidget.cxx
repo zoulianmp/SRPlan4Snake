@@ -52,8 +52,8 @@
 #include "vtkMRMLScalarVolumeDisplayNode.h"
 #include "vtkMRMLSceneUtility.h"
 #include "vtkMRMLGeneralParametersNode.h"
-#
-
+#include "vtkMRMLModelHierarchyNode.h"
+#include "vtkMRMLModelNode.h"
 
 // Markups includes
 #include "qSRPlanPathPlanModuleWidget.h"
@@ -281,8 +281,8 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   
   //Flash Dose Distribution show
 
-  QObject::connect(this->spinBox_RelativeDoseValue, SIGNAL(valueChanged(int)),
-	  q, SLOT(updateDoseGridFlashShowLowerThresholder(int )));
+ // QObject::connect(this->spinBox_RelativeDoseValue, SIGNAL(valueChanged(int)),
+ //	  q, SLOT(updateDoseGridFlashShowLowerThresholder(int )));
 
 
   //TMark Opacity for Snake header
@@ -1350,7 +1350,7 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 			d->isoDoseGroup->show();
 
 	 
-	
+		this->updateButtonsState();
 		
 	}
 	
@@ -1428,6 +1428,7 @@ void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVo
 		volumeDisplayNode->SetWindowLevelMinMax(minDoseInDefaultIsodoseLevels, maxDoseInDefaultIsodoseLevels);
 	}
 
+	/* comment the threshold
 	// Set display threshold
 
 	volumeDisplayNode->AutoThresholdOff();
@@ -1435,6 +1436,8 @@ void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVo
 	volumeDisplayNode->SetApplyThreshold(1);
 
 	d->spinBox_RelativeDoseValue->setValue(80);
+
+	*/
 
 
 	//*************************************************************************
@@ -3508,7 +3511,7 @@ bool qSRPlanPathPlanModuleWidget::sliceIntersectionsVisible()
 
 
 
-
+/*
 
 
 // given the Flash Dose Distribution Thresholder
@@ -3528,7 +3531,7 @@ void qSRPlanPathPlanModuleWidget::updateDoseGridFlashShowLowerThresholder(int lo
 	}
 
 }
-
+*/
 
 
 vtkSRPlanBDoseCalculateLogic* qSRPlanPathPlanModuleWidget::getBDoseCalculateLogic()
@@ -3547,3 +3550,231 @@ vtkSlicerIsodoseLogic * qSRPlanPathPlanModuleWidget::getIsodoseLogic()
 {
 	return vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic())->GetISODoseLogic();
 }
+
+
+
+
+
+
+
+
+//****************************************************************************************************
+//ISO Dose evalution block
+//
+//-----------------------------------------------------------------------------
+void qSRPlanPathPlanModuleWidget::setNumberOfLevels(int newNumber)
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+	if (!d->spinBox_NumberOfLevels->isEnabled() || !this->getIsodoseLogic()->GetIsodoseNode())
+	{
+		qCritical() << "qSRPlanPathPlanModuleWidget::setNumberOfLevels: Invalid parameter set node!";
+		return;
+	}
+	this->getIsodoseLogic()->SetNumberOfIsodoseLevels(newNumber);
+	vtkMRMLColorTableNode* selectedColorNode = this->getIsodoseLogic()->GetIsodoseNode()->GetColorTableNode();
+	if (!selectedColorNode)
+	{
+		qCritical() << "qSRPlanPathPlanModuleWidget::setNumberOfLevels: Invalid color table node!";
+		return;
+	}
+
+	int numberOfColors = selectedColorNode->GetNumberOfColors();
+	this->ScalarBarActor->SetMaximumNumberOfColors(numberOfColors);
+	this->ScalarBarActor->SetNumberOfLabels(numberOfColors);
+
+	this->ScalarBarActor2DRed->SetMaximumNumberOfColors(numberOfColors);
+	this->ScalarBarActor2DRed->SetNumberOfLabels(numberOfColors);
+	this->ScalarBarActor2DYellow->SetMaximumNumberOfColors(numberOfColors);
+	this->ScalarBarActor2DYellow->SetNumberOfLabels(numberOfColors);
+	this->ScalarBarActor2DGreen->SetMaximumNumberOfColors(numberOfColors);
+	this->ScalarBarActor2DGreen->SetNumberOfLabels(numberOfColors);
+}
+
+
+
+
+//------------------------------------------------------------------------------
+void qSRPlanPathPlanModuleWidget::setIsolineVisibility(bool visible)
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	if (!this->mrmlScene())
+	{
+		qCritical() << "qSlicerIsodoseModuleWidget::setIsolineVisibility: Invalid scene!";
+		return;
+	}
+
+	vtkMRMLIsodoseNode* paramNode = this->getIsodoseLogic()->GetIsodoseNode();
+	if (!paramNode)
+	{
+		return;
+	}
+
+	paramNode->DisableModifiedEventOn();
+	paramNode->SetShowIsodoseLines(visible);
+	paramNode->DisableModifiedEventOff();
+
+	vtkMRMLModelHierarchyNode* modelHierarchyNode = this->getIsodoseLogic()->GetRootModelHierarchyNode();
+	if (!modelHierarchyNode)
+	{
+		qCritical() << "qSRPlanPathPlanModuleWidget::setIsolineVisibility: Invalid isodose surface models parent hierarchy node!";
+		return;
+	}
+
+	vtkSmartPointer<vtkCollection> childModelNodes = vtkSmartPointer<vtkCollection>::New();
+	modelHierarchyNode->GetChildrenModelNodes(childModelNodes);
+	childModelNodes->InitTraversal();
+	for (int i = 0; i<childModelNodes->GetNumberOfItems(); ++i)
+	{
+		vtkMRMLModelNode* modelNode = vtkMRMLModelNode::SafeDownCast(childModelNodes->GetItemAsObject(i));
+		modelNode->GetDisplayNode()->SetSliceIntersectionVisibility(visible);
+	}
+}
+
+//------------------------------------------------------------------------------
+void qSRPlanPathPlanModuleWidget::setIsosurfaceVisibility(bool visible)
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	if (!this->mrmlScene())
+	{
+		qCritical() << "qSRPlanPathPlanModuleWidget::setIsosurfaceVisibility: Invalid scene!";
+		return;
+	}
+
+	vtkMRMLIsodoseNode* paramNode = this->getIsodoseLogic()->GetIsodoseNode();
+	if (!paramNode)
+	{
+		return;
+	}
+
+	paramNode->DisableModifiedEventOn();
+	paramNode->SetShowIsodoseSurfaces(visible);
+	paramNode->DisableModifiedEventOff();
+
+	vtkMRMLModelHierarchyNode* modelHierarchyNode = this->getIsodoseLogic()->GetRootModelHierarchyNode();
+	if (!modelHierarchyNode)
+	{
+		return;
+	}
+
+	vtkSmartPointer<vtkCollection> childModelNodes = vtkSmartPointer<vtkCollection>::New();
+	modelHierarchyNode->GetChildrenModelNodes(childModelNodes);
+	childModelNodes->InitTraversal();
+	for (int i = 0; i<childModelNodes->GetNumberOfItems(); ++i)
+	{
+		vtkMRMLModelNode* modelNode = vtkMRMLModelNode::SafeDownCast(childModelNodes->GetItemAsObject(i));
+		modelNode->GetDisplayNode()->SetVisibility(visible);
+	}
+}
+
+//------------------------------------------------------------------------------
+void qSRPlanPathPlanModuleWidget::setScalarBarVisibility(bool visible)
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	if (!this->mrmlScene())
+	{
+		qCritical() << "qSRPlanPathPlanModuleWidget::setScalarBarVisibility: Invalid scene!";
+		return;
+	}
+
+	if (this->ScalarBarWidget == 0)
+	{
+		return;
+	}
+	if (visible)
+	{
+		this->ScalarBarActor->UseAnnotationAsLabelOn();
+	}
+	vtkMRMLColorTableNode* selectedColorNode = this->getIsodoseLogic()->GetIsodoseNode()->GetColorTableNode();
+	if (!selectedColorNode)
+	{
+		qCritical() << "qSRPlanPathPlanModuleWidget::setScalarBarVisibility: Invalid color table node!";
+		return;
+	}
+	int numberOfColors = selectedColorNode->GetNumberOfColors();
+	for (int i = 0; i<numberOfColors; i++)
+	{
+		this->ScalarBarActor->GetLookupTable()->SetAnnotation(i, vtkStdString(selectedColorNode->GetColorName(i)));
+	}
+
+	this->ScalarBarWidget->SetEnabled(visible);
+}
+
+//------------------------------------------------------------------------------
+void qSRPlanPathPlanModuleWidget::setScalarBar2DVisibility(bool visible)
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	if (!this->mrmlScene())
+	{
+		qCritical() << "qSRPlanPathPlanModuleWidget::setScalarBar2DVisibility: Invalid scene!";
+		return;
+	}
+
+	if (this->ScalarBarWidget2DRed == 0 || this->ScalarBarWidget2DYellow == 0 || this->ScalarBarWidget2DGreen == 0)
+	{
+		return;
+	}
+	if (visible)
+	{
+		this->ScalarBarActor2DRed->UseAnnotationAsLabelOn();
+		this->ScalarBarActor2DYellow->UseAnnotationAsLabelOn();
+		this->ScalarBarActor2DGreen->UseAnnotationAsLabelOn();
+	}
+	vtkMRMLColorTableNode* selectedColorNode = this->getIsodoseLogic()->GetIsodoseNode()->GetColorTableNode();
+	if (!selectedColorNode)
+	{
+		qCritical() << "qSRPlanPathPlanModuleWidget::setScalarBar2DVisibility: Invalid color table node!";
+		return;
+	}
+	int numberOfColors = selectedColorNode->GetNumberOfColors();
+	for (int i = 0; i<numberOfColors; i++)
+	{
+		this->ScalarBarActor2DRed->GetLookupTable()->SetAnnotation(i, vtkStdString(selectedColorNode->GetColorName(i)));
+		this->ScalarBarActor2DYellow->GetLookupTable()->SetAnnotation(i, vtkStdString(selectedColorNode->GetColorName(i)));
+		this->ScalarBarActor2DGreen->GetLookupTable()->SetAnnotation(i, vtkStdString(selectedColorNode->GetColorName(i)));
+	}
+
+	this->ScalarBarWidget2DRed->SetEnabled(visible);
+	this->ScalarBarWidget2DYellow->SetEnabled(visible);
+	this->ScalarBarWidget2DGreen->SetEnabled(visible);
+}
+
+//-----------------------------------------------------------------------------
+void qSRPlanPathPlanModuleWidget::applyClicked()
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	if (!this->mrmlScene())
+	{
+		qCritical() << "qSRPlanPathPlanModuleWidget::applyClicked: Invalid scene!";
+		return;
+	}
+
+	QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+
+	// Compute the isodose surface for the selected dose volume
+	this->getIsodoseLogic()->CreateIsodoseSurfaces();
+
+	QApplication::restoreOverrideCursor();
+}
+
+
+
+void qSRPlanPathPlanModuleWidget::updateButtonsState()
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	bool applyEnabled = this->getIsodoseLogic()->GetIsodoseNode()
+		&& this->getIsodoseLogic()->GetIsodoseNode()->GetDoseVolumeNode()
+		&& this->getIsodoseLogic()->GetIsodoseNode()->GetColorTableNode()
+		&& this->getIsodoseLogic()->GetIsodoseNode()->GetColorTableNode()->GetNumberOfColors() > 0;
+	d->pushButton_Apply->setEnabled(applyEnabled);
+}
+
+
+
+//End ISO Dose evalution block
+//****************************************************************************************************

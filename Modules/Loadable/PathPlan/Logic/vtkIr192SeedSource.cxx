@@ -228,6 +228,7 @@ void vtkIr192SeedSource::UpdateDoseKernalVolume()
 				if (x == 0 && y == 0 && z == 0)
 				{
 					Pz= m_grid_spacing*0.05; //Used for Center Voxel dose calculation
+					//Pz = m_grid_spacing; //Used for Center Voxel dose calculation
 				}
 		
 				

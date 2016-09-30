@@ -236,13 +236,50 @@ public slots:
   void onNewMarkupWithCurrentDisplayPropertiesTriggered();
 
   // given the Flash Dose Distribution Thresholder
-  void updateDoseGridFlashShowLowerThresholder( int low);
+ // void updateDoseGridFlashShowLowerThresholder( int low);
 
   //when timer timeout,update the TraceMark Position.
   void UpdateTraceMarkPosition();
   void SaveSnakeHeadDirectionToParametersNode(double * directionxyz);
 
   void updateTMarkOpacitytoParametersNode(double);
+
+  //****************************************************************************
+  //Iso Dose  Evaluation slots
+
+  /// Set number of levels
+  void setNumberOfLevels(int newNumber);
+
+  /// Slot for changing isoline visibility
+  void setIsolineVisibility(bool);
+
+  /// Slot for changing isosurface visibility
+  void setIsosurfaceVisibility(bool);
+
+  /// Slot for changing 3D scalar bar visibility
+  void setScalarBarVisibility(bool);
+
+  /// Slot for changing 2D scalar bar visibility
+  void setScalarBar2DVisibility(bool);
+
+  /// Slot handling clicking the Apply button
+  void applyClicked();
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 protected:
@@ -271,6 +308,8 @@ protected:
   //set up the Iso Dose Evalution guis
   void SetupIsoDoseGroupGUIConnections();
 
+  /// Updates button states
+  void updateButtonsState();
 
 private:
   Q_DECLARE_PRIVATE(qSRPlanPathPlanModuleWidget);
