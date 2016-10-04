@@ -1424,21 +1424,27 @@ void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVo
 		int maxDoseInDefaultIsodoseLevels;
 		ssMax >> maxDoseInDefaultIsodoseLevels;
 
+				
+		// for debug show dose distribution
+
+
 		volumeDisplayNode->AutoWindowLevelOff();
-		volumeDisplayNode->SetWindowLevelMinMax(minDoseInDefaultIsodoseLevels, maxDoseInDefaultIsodoseLevels);
+		//volumeDisplayNode->SetWindowLevelMinMax(minDoseInDefaultIsodoseLevels, maxDoseInDefaultIsodoseLevels);
+
+
+		//set the minimun of ISO Level
+	   // volumeDisplayNode->SetLowerThreshold(minDoseInDefaultIsodoseLevels);
+	   // volumeDisplayNode->SetApplyThreshold(1);
+
 	}
 
-	/* comment the threshold
+
 	// Set display threshold
 
-	volumeDisplayNode->AutoThresholdOff();
-	volumeDisplayNode->SetLowerThreshold(80);
-	volumeDisplayNode->SetApplyThreshold(1);
+	// volumeDisplayNode->AutoThresholdOff();
 
-	d->spinBox_RelativeDoseValue->setValue(80);
 
-	*/
-
+	
 
 	//*************************************************************************
 	//Setup the Dose Color Table view
@@ -1460,6 +1466,55 @@ void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVo
 
 
 }
+
+
+/*
+
+//------------------------------------------------------------------------------
+void qSRPlanPathPlanModuleWidget::CreateDefaultDoseColorTable()
+{
+	if (!this->GetMRMLScene() || !this->IsodoseLogic)
+	{
+		vtkErrorMacro("CreateDefaultDoseColorTable: No scene or Isodose logic present!");
+		return;
+	}
+
+	// Check if default color table node already exists
+	vtkSmartPointer<vtkCollection> defaultDoseColorTableNodes = vtkSmartPointer<vtkCollection>::Take(
+		this->GetMRMLScene()->GetNodesByName(SlicerRtCommon::DICOMRTIMPORT_DEFAULT_DOSE_COLOR_TABLE_NAME));
+	if (defaultDoseColorTableNodes->GetNumberOfItems() > 0)
+	{
+		vtkDebugMacro("CreateDefaultDoseColorTable: Default dose color table already exists");
+		vtkMRMLColorTableNode* doseColorTable = vtkMRMLColorTableNode::SafeDownCast(
+			defaultDoseColorTableNodes->GetItemAsObject(0));
+		this->SetDefaultDoseColorTableNodeId(doseColorTable->GetID());
+		return;
+	}
+
+	vtkMRMLColorTableNode* defaultIsodoseColorTable = vtkMRMLColorTableNode::SafeDownCast(
+		this->GetMRMLScene()->GetNodeByID(this->IsodoseLogic->GetDefaultIsodoseColorTableNodeId()));
+	if (!defaultIsodoseColorTable)
+	{
+		vtkErrorMacro("CreateDefaultDoseColorTable: Invalid default isodose color table found in isodose logic!");
+		return;
+	}
+
+	vtkSmartPointer<vtkMRMLColorTableNode> defaultDoseColorTable = vtkSmartPointer<vtkMRMLColorTableNode>::New();
+	defaultDoseColorTable->SetName(SlicerRtCommon::DICOMRTIMPORT_DEFAULT_DOSE_COLOR_TABLE_NAME);
+	defaultDoseColorTable->SetTypeToUser();
+	defaultDoseColorTable->SetSingletonTag(SlicerRtCommon::DICOMRTIMPORT_DEFAULT_DOSE_COLOR_TABLE_NAME);
+	defaultDoseColorTable->SetAttribute("Category", SlicerRtCommon::SLICERRT_EXTENSION_NAME);
+	defaultDoseColorTable->HideFromEditorsOff();
+	defaultDoseColorTable->SetNumberOfColors(256);
+
+	SlicerRtCommon::StretchDiscreteColorTable(defaultIsodoseColorTable, defaultDoseColorTable);
+
+	this->GetMRMLScene()->AddNode(defaultDoseColorTable);
+	this->SetDefaultDoseColorTableNodeId(defaultDoseColorTable->GetID());
+}
+
+
+*/
 
 
 //set dose scalar bars in views 
@@ -3571,7 +3626,11 @@ void qSRPlanPathPlanModuleWidget::setNumberOfLevels(int newNumber)
 		return;
 	}
 	this->getIsodoseLogic()->SetNumberOfIsodoseLevels(newNumber);
+
+	
+
 	vtkMRMLColorTableNode* selectedColorNode = this->getIsodoseLogic()->GetIsodoseNode()->GetColorTableNode();
+
 	if (!selectedColorNode)
 	{
 		qCritical() << "qSRPlanPathPlanModuleWidget::setNumberOfLevels: Invalid color table node!";
@@ -3588,6 +3647,15 @@ void qSRPlanPathPlanModuleWidget::setNumberOfLevels(int newNumber)
 	this->ScalarBarActor2DYellow->SetNumberOfLabels(numberOfColors);
 	this->ScalarBarActor2DGreen->SetMaximumNumberOfColors(numberOfColors);
 	this->ScalarBarActor2DGreen->SetNumberOfLabels(numberOfColors);
+
+	
+	//Update the Dose ScalarVolume color show, change the DisplayVolumeNode. added by zoulian
+
+	vtkMRMLScalarVolumeNode* doseVolume = this->getIsodoseLogic()->GetIsodoseNode()->GetDoseVolumeNode();
+
+	this->getIsodoseLogic()->UpdateDoseVolumeDisplayNode(doseVolume, selectedColorNode);
+
+
 }
 
 
@@ -3756,7 +3824,20 @@ void qSRPlanPathPlanModuleWidget::applyClicked()
 	QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 
 	// Compute the isodose surface for the selected dose volume
-	this->getIsodoseLogic()->CreateIsodoseSurfaces();
+	//this->getIsodoseLogic()->CreateIsodoseSurfaces();
+
+
+
+	//Update the Dose ScalarVolume color show, change the DisplayVolumeNode. added by zoulian
+
+
+	vtkMRMLColorTableNode* selectedColorNode = this->getIsodoseLogic()->GetIsodoseNode()->GetColorTableNode();
+	vtkMRMLScalarVolumeNode* doseVolume = this->getIsodoseLogic()->GetIsodoseNode()->GetDoseVolumeNode();
+
+	this->getIsodoseLogic()->UpdateDoseVolumeDisplayNode(doseVolume, selectedColorNode);
+
+
+
 
 	QApplication::restoreOverrideCursor();
 }

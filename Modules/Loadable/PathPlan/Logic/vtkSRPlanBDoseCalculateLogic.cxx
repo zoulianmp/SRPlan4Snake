@@ -691,6 +691,9 @@ void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakeP
 	/*
 	//**************************************************
 	//Just for debug show 
+
+	std::cout << "IN DoseSuperposition" << std::endl;
+
 	int roiExtent[6];
 	roiExtent[0] = IJK[0] - 3;
 	roiExtent[1] = IJK[0] + 3;
@@ -708,7 +711,10 @@ void vtkSRPlanBDoseCalculateLogic::DoseSuperposition(vtkMRMLMarkupsNode * snakeP
 	//End just for debug show
 	//*****************************************************
 
+	
+	std::cout << "Dose Superposition IJK:  "<< IJK[0]<<","<<IJK[1]<<","<<IJK[2] << std::endl;
 	*/
+
 }
 
 
@@ -748,21 +754,21 @@ void vtkSRPlanBDoseCalculateLogic::NormalizedToMaximum(vtkMRMLScalarVolumeNode *
 		}
 	}
 
-	
+	/*
 	//**************************************************
 	//Just for debug show
 	int roiExtent[6];
 
 	
 
-	roiExtent[0] = (dims[0] / 2) - 3;
-	roiExtent[1] = (dims[0] / 2) + 3;
+	roiExtent[0] = 133 - 3;
+	roiExtent[1] = 133 + 3;
 
-	roiExtent[2] = (dims[1] / 2 ) - 3;
-	roiExtent[3] = (dims[1] / 2 ) + 3;
+	roiExtent[2] = 116 - 3;
+	roiExtent[3] = 116 + 3;
 
-	roiExtent[4] = (dims[2] / 2) - 3;
-	roiExtent[5] = (dims[1] / 2) + 3;
+	roiExtent[4] = 86 - 3;
+	roiExtent[5] = 86 + 3;
 
 
 	this->PrintROIDose(absDoseVolume->GetImageData(), roiExtent);
@@ -773,7 +779,7 @@ void vtkSRPlanBDoseCalculateLogic::NormalizedToMaximum(vtkMRMLScalarVolumeNode *
 	//End just for debug show
 	//*****************************************************
 
-	
+	*/
 }
 
 

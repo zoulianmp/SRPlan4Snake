@@ -33,6 +33,10 @@
 
 #include "vtkSRPlanPathPlanModuleLogicExport.h"
 
+#include "vtkMRMLColorTableNode.h"
+#include "vtkMRMLScalarVolumeNode.h"
+
+
 // MRML includes
 class vtkMRMLIsodoseNode;
 class vtkMRMLModelHierarchyNode;
@@ -58,6 +62,8 @@ public:
 
   /// Set number of isodose levels
   void SetNumberOfIsodoseLevels(int newNumberOfColors);
+
+  static void UpdateDoseVolumeDisplayNode(vtkMRMLScalarVolumeNode* doseVolume, vtkMRMLColorTableNode* newColorTable);
 
   /// Accumulates dose volumes with the given IDs and corresponding weights
   void CreateIsodoseSurfaces();
