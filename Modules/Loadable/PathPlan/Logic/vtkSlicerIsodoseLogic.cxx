@@ -258,12 +258,14 @@ void vtkSlicerIsodoseLogic::CreateDefaultIsodoseColorTable()
   colorTableNode->NamesInitialisedOn();
   colorTableNode->SetNumberOfColors(6);
   colorTableNode->GetLookupTable()->SetTableRange(0,5);
-  colorTableNode->AddColor("5", 0, 1, 0, 0.2);
-  colorTableNode->AddColor("10", 0.5, 1, 0, 0.2);
-  colorTableNode->AddColor("15", 1, 1, 0, 0.2);
-  colorTableNode->AddColor("20", 1, 0.66, 0, 0.2);
-  colorTableNode->AddColor("25", 1, 0.33, 0, 0.2);
-  colorTableNode->AddColor("30", 1, 0, 0, 0.2);
+  colorTableNode->AddColor("50", 0, 1, 0, 0.2);
+  colorTableNode->AddColor("60", 0.5, 1, 0, 0.2);
+  colorTableNode->AddColor("75", 1, 1, 0, 0.2);
+  colorTableNode->AddColor("80", 1, 0.66, 0, 0.2);
+  colorTableNode->AddColor("90", 1, 0.33, 0, 0.2);
+  colorTableNode->AddColor("95", 1, 0, 0, 0.2);
+
+  
   colorTableNode->SaveWithSceneOff();
   
   this->GetMRMLScene()->AddNode(colorTableNode);
@@ -343,12 +345,12 @@ void vtkSlicerIsodoseLogic::SetNumberOfIsodoseLevels(int newNumberOfColors)
 
   // Set the default colors in case the number of colors was less than that in the default table
   colorTableNode->SetNumberOfColors(6);
-  colorTableNode->SetColor(0, "5", 0, 1, 0, 0.2);
-  colorTableNode->SetColor(1, "10", 0.5, 1, 0, 0.2);
-  colorTableNode->SetColor(2, "15", 1, 1, 0, 0.2);
-  colorTableNode->SetColor(3, "20", 1, 0.66, 0, 0.2);
-  colorTableNode->SetColor(4, "25", 1, 0.33, 0, 0.2);
-  colorTableNode->SetColor(5, "30", 1, 0, 0, 0.2);
+  colorTableNode->SetColor(0, "50", 0, 1, 0, 0.2);
+  colorTableNode->SetColor(1, "60", 0.5, 1, 0, 0.2);
+  colorTableNode->SetColor(2, "75", 1, 1, 0, 0.2);
+  colorTableNode->SetColor(3, "80", 1, 0.66, 0, 0.2);
+  colorTableNode->SetColor(4, "90", 1, 0.33, 0, 0.2);
+  colorTableNode->SetColor(5, "95", 1, 0, 0, 0.2);
 
   colorTableNode->SetNumberOfColors(newNumberOfColors);
   colorTableNode->GetLookupTable()->SetTableRange(0, newNumberOfColors-1);

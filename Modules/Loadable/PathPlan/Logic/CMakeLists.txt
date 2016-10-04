@@ -9,6 +9,8 @@ set(${KIT}_INCLUDE_DIRECTORIES
 	${MRMLLogic_INCLUDE_DIRECTORIES}
 	${vtkSlicerRtCommon_INCLUDE_DIRECTORIES}
 	${vtkSRPlanSegmentationsModuleLogic_INCLUDE_DIRECTORIES}
+
+	${vtkSRPlanVolumesModuleLogic_INCLUDE_DIRECTORIES}
   )
 
   
@@ -52,6 +54,7 @@ set(${KIT}_TARGET_LIBRARIES
   vtkSRPlanAnnotationsModuleMRML
   vtkSlicerRtCommon
   vtkSRPlanSegmentationsModuleLogic
+  vtkSRPlanVolumesModuleLogic
   )
 
 #-----------------------------------------------------------------------------

@@ -748,6 +748,32 @@ void vtkSRPlanBDoseCalculateLogic::NormalizedToMaximum(vtkMRMLScalarVolumeNode *
 		}
 	}
 
+	
+	//**************************************************
+	//Just for debug show
+	int roiExtent[6];
+
+	
+
+	roiExtent[0] = (dims[0] / 2) - 3;
+	roiExtent[1] = (dims[0] / 2) + 3;
+
+	roiExtent[2] = (dims[1] / 2 ) - 3;
+	roiExtent[3] = (dims[1] / 2 ) + 3;
+
+	roiExtent[4] = (dims[2] / 2) - 3;
+	roiExtent[5] = (dims[1] / 2) + 3;
+
+
+	this->PrintROIDose(absDoseVolume->GetImageData(), roiExtent);
+
+	std::cout <<"Normalized DoseVolume output "<< std::endl;
+
+
+	//End just for debug show
+	//*****************************************************
+
+	
 }
 
 
