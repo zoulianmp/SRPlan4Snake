@@ -258,6 +258,11 @@ void vtkSlicerIsodoseLogic::CreateDefaultIsodoseColorTable()
   colorTableNode->SetAttribute("Category", SlicerRtCommon::SLICERRT_EXTENSION_NAME);
   colorTableNode->HideFromEditorsOn();
   colorTableNode->NamesInitialisedOn();
+
+  this->SetEqualSpaceColor(100, colorTableNode);
+
+  /*
+
   colorTableNode->SetNumberOfColors(6);
   colorTableNode->GetLookupTable()->SetTableRange(0,5);
   colorTableNode->AddColor("5", 0, 1, 0, 0.2);
@@ -267,7 +272,7 @@ void vtkSlicerIsodoseLogic::CreateDefaultIsodoseColorTable()
   colorTableNode->AddColor("25", 1, 0.33, 0, 0.2);
   colorTableNode->AddColor("30", 1, 0, 0, 0.2);
 
-  
+  */
   colorTableNode->SaveWithSceneOff();
   
   this->GetMRMLScene()->AddNode(colorTableNode);
@@ -374,41 +379,62 @@ void vtkSlicerIsodoseLogic::SetNumberOfIsodoseLevels(int newNumberOfColors)
 void vtkSlicerIsodoseLogic::SetNumberOfIsodoseLevels(int newNumberOfColors)
 {
 	vtkMRMLColorTableNode* colorTableNode = this->IsodoseNode->GetColorTableNode();
-	if (!colorTableNode || newNumberOfColors < 1)
-	{
-		return;
-	}
-
-
-	int preNum = colorTableNode->GetNumberOfColors();
-
-	if (newNumberOfColors > preNum)
-	{
-		colorTableNode->SetNumberOfColors(newNumberOfColors);
-
-		for (int colorIndex = preNum; colorIndex<newNumberOfColors; ++colorIndex)
-		{
-			colorTableNode->SetColor(colorIndex, SlicerRtCommon::COLOR_VALUE_INVALID[0], SlicerRtCommon::COLOR_VALUE_INVALID[1], SlicerRtCommon::COLOR_VALUE_INVALID[2], 0.2);
-		}
-
-	}
-	else
-	{
-		colorTableNode->SetNumberOfColors(newNumberOfColors);
-		
-	}
-
-	colorTableNode->GetLookupTable()->SetTableRange(0, newNumberOfColors - 1);
-
-
-
+	
+	this->SetEqualSpaceColor(newNumberOfColors, colorTableNode);
 
 	// Something messes up the category, it needs to be set back to SlicerRT
 	colorTableNode->SetAttribute("Category", SlicerRtCommon::SLICERRT_EXTENSION_NAME);
 }
 
 
+void vtkSlicerIsodoseLogic::SetEqualSpaceColor(int newNumberOfColors, vtkMRMLColorTableNode * colorTableNode)
+{
+	if (!colorTableNode || newNumberOfColors < 1)
+	{
+		return;
+	}
 
+
+
+	// Set the default colors in case the number of colors was less than that in the default table
+	colorTableNode->SetNumberOfColors(newNumberOfColors);
+
+	int step = (100 / newNumberOfColors);
+	int isoValue;
+
+	double r =0.0, g =0.0, b =0.0;
+
+
+
+
+	for (int colorIndex = 0; colorIndex < newNumberOfColors - 1; ++colorIndex)
+	{
+		isoValue = (colorIndex + 1) * step;
+
+		char isoLabel[3];
+
+		itoa(isoValue, isoLabel, 10);
+
+		r = (1.0 / newNumberOfColors) *(colorIndex + 1);
+
+		//g = (1.0 / newNumberOfColors) *(colorIndex + 1);
+		//b = (1.0 / newNumberOfColors) *(colorIndex + 1);
+
+		colorTableNode->SetColor(colorIndex, isoLabel, r, g, b, 0.2);
+		//colorTableNode->SetColor(colorIndex, SlicerRtCommon::COLOR_VALUE_INVALID[0], SlicerRtCommon::COLOR_VALUE_INVALID[1], SlicerRtCommon::COLOR_VALUE_INVALID[2], 0.2);
+	}
+
+	// the highest value (1,1,1)
+	colorTableNode->SetColor(newNumberOfColors - 1, "100", 1, 0, 0, 0.2);
+
+
+
+	colorTableNode->GetLookupTable()->SetTableRange(0, newNumberOfColors - 1);
+
+
+
+
+}
 
 void vtkSlicerIsodoseLogic::UpdateDoseVolumeDisplayNode(vtkMRMLScalarVolumeNode* doseVolume, vtkMRMLColorTableNode* newColorTable)
 {
@@ -434,9 +460,11 @@ void vtkSlicerIsodoseLogic::UpdateDoseVolumeDisplayNode(vtkMRMLScalarVolumeNode*
 
 
 		displayNode->AutoWindowLevelOff();
-		displayNode->SetWindowLevelMinMax(minDoseInDefaultIsodoseLevels, maxDoseInDefaultIsodoseLevels);
+		//displayNode->SetWindowLevelMinMax(minDoseInDefaultIsodoseLevels, maxDoseInDefaultIsodoseLevels);
 
+		displayNode->SetWindowLevelMinMax(0, 100);
 
+		displayNode->Modified();
 		//set the minimun of ISO Level
 		//displayNode->SetLowerThreshold(minDoseInDefaultIsodoseLevels);
 		//displayNode->SetApplyThreshold(1);

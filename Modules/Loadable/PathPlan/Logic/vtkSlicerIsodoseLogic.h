@@ -79,6 +79,10 @@ protected:
   /// Should not be called, except when updating the default isodose color table file manually, or when the file cannot be found (\sa LoadDefaultIsodoseColorTable)
   void CreateDefaultIsodoseColorTable();
 
+  //Set equal space color table, added by zoulian
+  void SetEqualSpaceColor(int newNumberOfColors, vtkMRMLColorTableNode * colorTableNode);
+
+
   /// Loads default isodose color table from the supplied color table file
   void LoadDefaultIsodoseColorTable();
 

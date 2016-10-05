@@ -556,12 +556,12 @@
       </size>
      </property>
      <property name="title">
-      <string>Iso Dose Evaluation</string>
+      <string>Plan Dose Evaluation</string>
      </property>
      <widget class="QCheckBox" name="checkBox_ScalarBar2D">
       <property name="geometry">
        <rect>
-        <x>190</x>
+        <x>10</x>
         <y>330</y>
         <width>386</width>
         <height>17</height>
@@ -596,65 +596,20 @@
        <bool>true</bool>
       </attribute>
      </widget>
-     <widget class="QCheckBox" name="checkBox_ScalarBar">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>350</y>
-        <width>386</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show scalar bar in 3D viewer</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="pushButton_Apply">
       <property name="enabled">
        <bool>false</bool>
       </property>
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>370</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Apply</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="checkBox_Isoline">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
+        <x>220</x>
         <y>350</y>
-        <width>121</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show isodose lines</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="checkBox_Isosurface">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>330</y>
         <width>141</width>
-        <height>17</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="text">
-       <string>Show isodose surfaces</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
+       <string>Update Iso Level Show</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_4">
@@ -685,8 +640,17 @@
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
       <property name="value">
-       <number>6</number>
+       <number>100</number>
       </property>
      </widget>
     </widget>

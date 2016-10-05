@@ -1414,6 +1414,7 @@ void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVo
 	// Set window/level to match the isodose levels
 	if (isoLogic && defaultIsodoseColorTable)
 	{
+		/*
 		std::stringstream ssMin;
 		ssMin << defaultIsodoseColorTable->GetColorName(0);;
 		int minDoseInDefaultIsodoseLevels;
@@ -1423,14 +1424,16 @@ void qSRPlanPathPlanModuleWidget::enterIsoDoseEvaluationFunction(vtkMRMLScalarVo
 		ssMax << defaultIsodoseColorTable->GetColorName(defaultIsodoseColorTable->GetNumberOfColors() - 1);
 		int maxDoseInDefaultIsodoseLevels;
 		ssMax >> maxDoseInDefaultIsodoseLevels;
-
+		*/
 				
 		// for debug show dose distribution
 
 
 		volumeDisplayNode->AutoWindowLevelOff();
-		//volumeDisplayNode->SetWindowLevelMinMax(minDoseInDefaultIsodoseLevels, maxDoseInDefaultIsodoseLevels);
+		volumeDisplayNode->SetWindowLevelMinMax( 0, 100);
+		volumeDisplayNode->Modified();
 
+	
 
 		//set the minimun of ISO Level
 	   // volumeDisplayNode->SetLowerThreshold(minDoseInDefaultIsodoseLevels);
@@ -1526,7 +1529,7 @@ void qSRPlanPathPlanModuleWidget::SetupScalarBarsShow()
 	this->ScalarBarWidget->GetScalarBarActor()->SetOrientationToVertical();
 	this->ScalarBarWidget->GetScalarBarActor()->SetNumberOfLabels(6);
 	this->ScalarBarWidget->GetScalarBarActor()->SetMaximumNumberOfColors(6);
-	this->ScalarBarWidget->GetScalarBarActor()->SetTitle("Dose(Gy)");
+	this->ScalarBarWidget->GetScalarBarActor()->SetTitle("RelativeDose(%)");
 	this->ScalarBarWidget->GetScalarBarActor()->SetLabelFormat(" %s");
 
 	// it's a 2d actor, position it in screen space by percentages
@@ -1540,7 +1543,7 @@ void qSRPlanPathPlanModuleWidget::SetupScalarBarsShow()
 	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetOrientationToVertical();
 	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetNumberOfLabels(6);
 	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetMaximumNumberOfColors(6);
-	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetTitle("Dose(Gy)");
+	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetTitle("RelativeDose(%)");
 	this->ScalarBarWidget2DRed->GetScalarBarActor()->SetLabelFormat(" %s");
 
 	// it's a 2d actor, position it in screen space by percentages
@@ -1554,7 +1557,7 @@ void qSRPlanPathPlanModuleWidget::SetupScalarBarsShow()
 	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetOrientationToVertical();
 	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetNumberOfLabels(6);
 	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetMaximumNumberOfColors(6);
-	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetTitle("Dose(Gy)");
+	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetTitle("RelativeDose(%)");
 	this->ScalarBarWidget2DYellow->GetScalarBarActor()->SetLabelFormat(" %s");
 
 	// it's a 2d actor, position it in screen space by percentages
@@ -1568,7 +1571,7 @@ void qSRPlanPathPlanModuleWidget::SetupScalarBarsShow()
 	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetOrientationToVertical();
 	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetNumberOfLabels(6);
 	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetMaximumNumberOfColors(6);
-	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetTitle("Dose(Gy)");
+	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetTitle("RelativeDose(%)");
 	this->ScalarBarWidget2DGreen->GetScalarBarActor()->SetLabelFormat(" %s");
 
 	// it's a 2d actor, position it in screen space by percentages
@@ -1633,10 +1636,10 @@ void qSRPlanPathPlanModuleWidget::SetupIsoDoseGroupGUIConnections()
 	// Make connections
 	
 
-	connect(d->spinBox_NumberOfLevels, SIGNAL(valueChanged(int)), this, SLOT(setNumberOfLevels(int)));
-	connect(d->checkBox_Isoline, SIGNAL(toggled(bool)), this, SLOT(setIsolineVisibility(bool)));
-	connect(d->checkBox_Isosurface, SIGNAL(toggled(bool)), this, SLOT(setIsosurfaceVisibility(bool)));
-	connect(d->checkBox_ScalarBar, SIGNAL(toggled(bool)), this, SLOT(setScalarBarVisibility(bool)));
+//	connect(d->spinBox_NumberOfLevels, SIGNAL(valueChanged(int)), this, SLOT(setNumberOfLevels(int)));
+//	connect(d->checkBox_Isoline, SIGNAL(toggled(bool)), this, SLOT(setIsolineVisibility(bool)));
+//	connect(d->checkBox_Isosurface, SIGNAL(toggled(bool)), this, SLOT(setIsosurfaceVisibility(bool)));
+//	connect(d->checkBox_ScalarBar, SIGNAL(toggled(bool)), this, SLOT(setScalarBarVisibility(bool)));
 	connect(d->checkBox_ScalarBar2D, SIGNAL(toggled(bool)), this, SLOT(setScalarBar2DVisibility(bool)));
 
 	connect(d->pushButton_Apply, SIGNAL(clicked()), this, SLOT(applyClicked()));
@@ -1652,7 +1655,7 @@ void qSRPlanPathPlanModuleWidget::SetupIsoDoseGroupGUIConnections()
 		{
 			this->ScalarBarWidget->SetInteractor(activeRenderer->GetRenderWindow()->GetInteractor());
 		}
-		connect(d->checkBox_ScalarBar, SIGNAL(stateChanged(int)), threeDView, SLOT(scheduleRender()));
+//		connect(d->checkBox_ScalarBar, SIGNAL(stateChanged(int)), threeDView, SLOT(scheduleRender()));
 
 		QStringList sliceViewerNames = app->layoutManager()->sliceViewNames();
 		qMRMLSliceWidget* sliceViewerWidgetRed = app->layoutManager()->sliceWidget(sliceViewerNames[0]);
@@ -1705,9 +1708,9 @@ void qSRPlanPathPlanModuleWidget::updateIsoDoseGroupWidgetFromMRML()
 			qCritical() << "qSlicerIsodoseModuleWidget::updateWidgetFromMRML: Invalid color table node!";
 			return;
 		}
-		d->spinBox_NumberOfLevels->setValue(colorTableNode->GetNumberOfColors());
-		d->checkBox_Isoline->setChecked(paramNode->GetShowIsodoseLines());
-		d->checkBox_Isosurface->setChecked(paramNode->GetShowIsodoseSurfaces());
+//		d->spinBox_NumberOfLevels->setValue(colorTableNode->GetNumberOfColors());
+//		d->checkBox_Isoline->setChecked(paramNode->GetShowIsodoseLines());
+//		d->checkBox_Isosurface->setChecked(paramNode->GetShowIsodoseSurfaces());
 	}
 }
 
@@ -3830,13 +3833,17 @@ void qSRPlanPathPlanModuleWidget::applyClicked()
 
 	//Update the Dose ScalarVolume color show, change the DisplayVolumeNode. added by zoulian
 
+	vtkMRMLScalarVolumeNode* doseVolume = this->getIsodoseLogic()->GetIsodoseNode()->GetDoseVolumeNode();
+	vtkMRMLScalarVolumeDisplayNode* displayNode = vtkMRMLScalarVolumeDisplayNode::SafeDownCast(doseVolume->GetDisplayNode());
+	displayNode->Modified();
 
+	/*
 	vtkMRMLColorTableNode* selectedColorNode = this->getIsodoseLogic()->GetIsodoseNode()->GetColorTableNode();
 	vtkMRMLScalarVolumeNode* doseVolume = this->getIsodoseLogic()->GetIsodoseNode()->GetDoseVolumeNode();
 
 	this->getIsodoseLogic()->UpdateDoseVolumeDisplayNode(doseVolume, selectedColorNode);
 
-
+	*/
 
 
 	QApplication::restoreOverrideCursor();
