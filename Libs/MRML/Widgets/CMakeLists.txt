@@ -183,6 +183,8 @@ set(MRMLWidgets_SRCS
   qMRMLTableViewControllerWidget_p.h
   qMRMLTableWidget.cxx
   qMRMLTableWidget.h
+  qMRMLSimpleTableWidget.h
+  qMRMLSimpleTableWidget.cxx
   qMRMLThreeDView.cxx
   qMRMLThreeDView.h
   qMRMLThreeDView_p.h
@@ -288,6 +290,7 @@ set(MRMLWidgets_MOC_SRCS
   qMRMLTableViewControllerWidget.h
   qMRMLTableViewControllerWidget_p.h
   qMRMLTableWidget.h
+  qMRMLSimpleTableWidget.h
   qMRMLThreeDView.h
   qMRMLThreeDView_p.h
   qMRMLThreeDViewControllerWidget.h

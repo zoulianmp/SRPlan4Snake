@@ -30,6 +30,8 @@
 #include <qMRMLChartWidget.h>
 #include <qMRMLTableView.h>
 #include <qMRMLTableWidget.h>
+#include <qMRMLSimpleTableWidget.h>
+
 #include <qMRMLThreeDView.h>
 #include <qMRMLThreeDWidget.h>
 
@@ -153,6 +155,9 @@ QString qMRMLLayoutTableViewFactory::viewClassName()const
   return "vtkMRMLTableViewNode";
 }
 
+
+/*
+//the raw code by slicer, commented by zoulian
 //------------------------------------------------------------------------------
 QWidget* qMRMLLayoutTableViewFactory::createViewFromNode(vtkMRMLAbstractViewNode* viewNode)
 {
@@ -175,6 +180,41 @@ QWidget* qMRMLLayoutTableViewFactory::createViewFromNode(vtkMRMLAbstractViewNode
 
   return tableWidget;
 }
+
+*/
+
+
+//------------------------------------------------------------------------------
+QWidget* qMRMLLayoutTableViewFactory::createViewFromNode(vtkMRMLAbstractViewNode* viewNode)
+{
+	if (!this->layoutManager() || !viewNode || !this->layoutManager()->viewport())
+	{
+		Q_ASSERT(viewNode);
+		return 0;
+	}
+
+	// There must be a unique TableWidget per node
+	Q_ASSERT(!this->viewWidget(viewNode));
+
+	qMRMLSimpleTableWidget* tableWidget = new qMRMLSimpleTableWidget(this->layoutManager()->viewport());
+	tableWidget->setMaximumHeight(400);
+
+
+	QString layoutName(viewNode->GetLayoutName());
+	tableWidget->setObjectName(QString("qMRMLTableWidget" + layoutName));
+	tableWidget->setViewLabel(viewNode->GetLayoutLabel());
+	tableWidget->setMRMLScene(this->mrmlScene());
+	vtkMRMLTableViewNode* tableNode = vtkMRMLTableViewNode::SafeDownCast(viewNode);
+	tableWidget->setMRMLTableViewNode(tableNode);
+
+	return tableWidget;
+}
+
+
+
+
+
+
 
 //------------------------------------------------------------------------------
 qMRMLLayoutSliceViewFactory::qMRMLLayoutSliceViewFactory(QObject* parent)

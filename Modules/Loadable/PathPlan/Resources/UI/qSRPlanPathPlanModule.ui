@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>418</width>
-    <height>920</height>
+    <height>947</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -552,7 +552,7 @@
      <property name="minimumSize">
       <size>
        <width>350</width>
-       <height>400</height>
+       <height>430</height>
       </size>
      </property>
      <property name="title">
@@ -562,7 +562,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>330</y>
+        <y>350</y>
         <width>386</width>
         <height>17</height>
        </rect>
@@ -575,7 +575,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>80</y>
         <width>381</width>
         <height>261</height>
        </rect>
@@ -603,7 +603,7 @@
       <property name="geometry">
        <rect>
         <x>220</x>
-        <y>350</y>
+        <y>370</y>
         <width>141</width>
         <height>31</height>
        </rect>
@@ -616,7 +616,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>40</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -632,7 +632,7 @@
       <property name="geometry">
        <rect>
         <x>120</x>
-        <y>30</y>
+        <y>40</y>
         <width>71</width>
         <height>20</height>
        </rect>
@@ -651,6 +651,120 @@
       </property>
       <property name="value">
        <number>100</number>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_SwitchToTableFourUpQuantitativeLayout">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>30</y>
+        <width>40</width>
+        <height>40</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>40</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>21</width>
+        <height>23</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Switch to table four-up quantitative layout</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../qSRPlanPathPlanModule.qrc">
+        <normaloff>:/Icons/LayoutTableFourUpQuantitativeView.png</normaloff>:/Icons/LayoutTableFourUpQuantitativeView.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_SwitchToOneUpQuantitativeLayout">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>30</y>
+        <width>40</width>
+        <height>40</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>40</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>21</width>
+        <height>23</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Switch to four-up quantitative layout</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../qSRPlanPathPlanModule.qrc">
+        <normaloff>:/Icons/LayoutOneUpQuantitativeView.png</normaloff>:/Icons/LayoutOneUpQuantitativeView.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>21</width>
+        <height>21</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_SwitchToFourUpQuantitativeLayout">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>30</y>
+        <width>40</width>
+        <height>40</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>40</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>21</width>
+        <height>23</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Switch to four-up quantitative layout</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../qSRPlanPathPlanModule.qrc">
+        <normaloff>:/Icons/LayoutFourUpQuantitativeView.png</normaloff>:/Icons/LayoutFourUpQuantitativeView.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>21</width>
+        <height>21</height>
+       </size>
       </property>
      </widget>
     </widget>
@@ -682,6 +796,7 @@
  </customwidgets>
  <resources>
   <include location="../qSRPlanPathPlanModule.qrc"/>
+  <include location="../../../../../../../01SnakeRobotRT/SlicerRTsrc/DoseVolumeHistogram/Resources/qSlicerDoseVolumeHistogramModule.qrc"/>
  </resources>
  <connections>
   <connection>
