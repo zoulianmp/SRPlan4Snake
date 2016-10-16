@@ -43,10 +43,11 @@ class vtkMRMLNode;
 class vtkSlicerMarkupsLogic;
 class vtkSlicerIsodoseLogic;
 class vtkSRPlanBDoseCalculateLogic;
+class vtkSlicerDoseVolumeHistogramLogic;
 
 class vtkMRMLGeneralParametersNode;
 class vtkMRMLScalarVolumeNode;
-
+class vtkMRMLSegmentationNode;
 /// \ingroup Slicer_QtModules_Markups
 class Q_SRPlan_QTMODULES_PATHPLAN_EXPORT qSRPlanPathPlanModuleWidget :
   public qSlicerAbstractModuleWidget
@@ -110,6 +111,8 @@ public:
 
   vtkSlicerMarkupsLogic*  getMarkupsLogic();
   vtkSlicerIsodoseLogic * getIsodoseLogic();
+
+  vtkSlicerDoseVolumeHistogramLogic * getDVHLogic();
 
   //added by zoulian
   void PlaceSnakeHead(double centerX,double centerY,double centerZ,double orientX, double orientY, double orientZ);
@@ -265,11 +268,12 @@ public slots:
   /// Slot handling clicking the Apply button
   void applyClicked();
 
- 
+ // Dose Volume Slots by zoulian
+  void switchToToTableFourUpQuantitativeLayout();
+  void switchToFourUpQuantitativeLayout();
+  void switchToOneUpQuantitativeLayout();
 
-
-
-
+  void updateDVHWidgetFromMRML();
 
 
 
@@ -296,6 +300,11 @@ protected:
   //Given a Dose distribution Volume, enter the ISO DoseEvaluate Function
   void enterIsoDoseEvaluationFunction(vtkMRMLScalarVolumeNode* doseGrid);
 
+  //Given the Segmentation and DoseVolume, enter the DVH Evaluation function
+  void qSRPlanPathPlanModuleWidget::enterDVHDoseEvalutaionFunction(vtkMRMLScalarVolumeNode* DoseDistribution, vtkMRMLSegmentationNode*segmentationNode);
+
+
+
   //set dose scalar bars in views 
   void SetupScalarBarsShow();
 
@@ -310,6 +319,13 @@ protected:
 
   /// Updates button states
   void updateButtonsState();
+
+  /// Updates state of show/hide chart checkboxes according to the currently selected chart
+  void updateChartCheckboxesState();
+
+  /// Refresh DVH statistics table
+  /// \param force Flag indicating if refresh is to be done in any case
+  void refreshDvhTable(bool force = false);
 
 private:
   Q_DECLARE_PRIVATE(qSRPlanPathPlanModuleWidget);

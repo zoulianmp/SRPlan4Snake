@@ -33,6 +33,7 @@ class QWidget;
 
 class qMRMLChartWidget;
 class qMRMLTableWidget;
+class qMRMLSimpleTableWidget;
 class qMRMLThreeDWidget;
 class qMRMLSliceWidget;
 class qMRMLLayoutManagerPrivate;
@@ -46,6 +47,7 @@ class vtkMRMLNode;
 class vtkMRMLChartViewNode;
 class vtkMRMLTableNode;
 class vtkMRMLTableViewNode;
+
 class vtkMRMLViewNode;
 
 class vtkCollection;
@@ -146,6 +148,9 @@ public:
   Q_INVOKABLE qMRMLThreeDWidget* threeDWidget(int id)const;
   Q_INVOKABLE qMRMLChartWidget* chartWidget(int id)const;
   Q_INVOKABLE qMRMLTableWidget* tableWidget(int id)const;
+
+  Q_INVOKABLE qMRMLSimpleTableWidget* simpleTableWidget(int id)const;
+   
 
   /// Return the up-to-date list of vtkMRMLSliceLogics associated to the slice views.
   Q_INVOKABLE vtkCollection* mrmlSliceLogics()const;

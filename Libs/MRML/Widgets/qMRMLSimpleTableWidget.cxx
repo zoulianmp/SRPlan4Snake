@@ -156,3 +156,11 @@ QString qMRMLSimpleTableWidget::viewLabel()const
   
   return this->tableViewLabel;
 }
+
+
+
+QTableWidget* qMRMLSimpleTableWidget::getTableWidget()
+{
+	Q_D(qMRMLSimpleTableWidget);
+	return d->TableWdiget;
+}

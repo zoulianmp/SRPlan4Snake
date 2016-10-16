@@ -33,6 +33,8 @@ class qMRMLTableViewControllerWidget;
 class qMRMLTableView;
 class qMRMLSimpleTableWidgetPrivate;
 
+class QTableWidget;
+
 // MRML includes
 class vtkMRMLTableViewNode;
 class vtkMRMLScene;
@@ -67,6 +69,9 @@ public:
   /// \sa qMRMLTableControllerWidget::tableViewLabel()
   /// \sa tableViewLabel()
   void setViewLabel(const QString& newTableViewLabel);
+
+  //Get the QTableWidget for DVH table show
+  QTableWidget* getTableWidget();
 
 public slots:
   /// Set the current \a viewNode to observe

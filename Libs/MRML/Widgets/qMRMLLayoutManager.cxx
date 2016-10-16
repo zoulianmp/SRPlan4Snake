@@ -197,11 +197,11 @@ QWidget* qMRMLLayoutTableViewFactory::createViewFromNode(vtkMRMLAbstractViewNode
 	Q_ASSERT(!this->viewWidget(viewNode));
 
 	qMRMLSimpleTableWidget* tableWidget = new qMRMLSimpleTableWidget(this->layoutManager()->viewport());
-	tableWidget->setMaximumHeight(400);
+	tableWidget->setMaximumHeight(300);
 
 
 	QString layoutName(viewNode->GetLayoutName());
-	tableWidget->setObjectName(QString("qMRMLTableWidget" + layoutName));
+	tableWidget->setObjectName(QString("qMRMLSimpleTableWidget" + layoutName));
 	tableWidget->setViewLabel(viewNode->GetLayoutLabel());
 	tableWidget->setMRMLScene(this->mrmlScene());
 	vtkMRMLTableViewNode* tableNode = vtkMRMLTableViewNode::SafeDownCast(viewNode);
@@ -887,6 +887,15 @@ qMRMLTableWidget* qMRMLLayoutManager::tableWidget(int id)const
   return qobject_cast<qMRMLTableWidget*>(
     this->mrmlViewFactory("vtkMRMLTableViewNode")->viewWidget(id));
 }
+
+//------------------------------------------------------------------------------
+qMRMLSimpleTableWidget* qMRMLLayoutManager::simpleTableWidget(int id)const
+{
+	Q_D(const qMRMLLayoutManager);
+	return qobject_cast<qMRMLSimpleTableWidget*>(
+		this->mrmlViewFactory("vtkMRMLTableViewNode")->viewWidget(id));
+}
+
 
 //------------------------------------------------------------------------------
 vtkCollection* qMRMLLayoutManager::mrmlSliceLogics()const

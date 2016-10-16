@@ -31,6 +31,8 @@
 #include "vtkSlicerMarkupsLogic.h"
 #include "vtkSRPlanBDoseCalculateLogic.h"
 #include "vtkSlicerIsodoseLogic.h"
+#include "vtkSlicerDoseVolumeHistogramLogic.h"
+
 
 // MRML includes
 
@@ -67,6 +69,9 @@ public:
 
   vtkSlicerIsodoseLogic * GetISODoseLogic();
 
+  vtkSlicerDoseVolumeHistogramLogic * GetDVHLogic();
+
+
 protected:
   vtkSRPlanPathPlanModuleLogic();
   virtual ~vtkSRPlanPathPlanModuleLogic();
@@ -88,7 +93,7 @@ private:
 
   vtkSmartPointer<vtkSlicerIsodoseLogic> IsoDoseLogic;
   
-
+  vtkSmartPointer<vtkSlicerDoseVolumeHistogramLogic> DVHLogic;
 };
 
 #endif

@@ -63,6 +63,9 @@ vtkSRPlanPathPlanModuleLogic::vtkSRPlanPathPlanModuleLogic()
 	this->IsoDoseLogic = vtkSmartPointer<vtkSlicerIsodoseLogic>::New();
 
 	this->IsoDoseLogic->SetMRMLApplicationLogic(this->GetMRMLApplicationLogic());
+
+	this->DVHLogic = vtkSmartPointer<vtkSlicerDoseVolumeHistogramLogic>::New();
+
 ;
 }
 
@@ -92,6 +95,10 @@ void vtkSRPlanPathPlanModuleLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene)
 	this->MarkupsLogic->SetMRMLScene(newScene);
 	this->BDoseCalLogic->SetMRMLScene(newScene);
 	this->IsoDoseLogic->SetMRMLScene(newScene);
+
+	this->DVHLogic->SetMRMLScene(newScene);
+
+
 
 	//SelectionNode process
 	vtkMRMLSelectionNode * selectionNode = vtkMRMLSelectionNode::SafeDownCast(newScene->GetNthNodeByClass(0, "vtkMRMLSelectionNode"));
@@ -135,6 +142,11 @@ vtkSRPlanBDoseCalculateLogic * vtkSRPlanPathPlanModuleLogic::GetBDoseCalculateLo
 vtkSlicerIsodoseLogic * vtkSRPlanPathPlanModuleLogic::GetISODoseLogic()
 {
 	return this->IsoDoseLogic.GetPointer();
+}
+
+vtkSlicerDoseVolumeHistogramLogic * vtkSRPlanPathPlanModuleLogic::GetDVHLogic()
+{
+	return this->DVHLogic.GetPointer();
 }
 
 
