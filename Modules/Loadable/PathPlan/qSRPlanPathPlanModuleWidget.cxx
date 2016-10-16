@@ -1279,7 +1279,7 @@ void qSRPlanPathPlanModuleWidget::onAddMarkupPushButtonClicked()
     }
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
-
+  this->updateButtonsState();
    
 }
 
@@ -2219,7 +2219,7 @@ void qSRPlanPathPlanModuleWidget::onDeleteMarkupPushButtonClicked()
   d->activeMarkupTableWidget->clearSelection();
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
-
+  this->updateButtonsState();
 }
 
 //-----------------------------------------------------------------------------
@@ -2260,7 +2260,7 @@ void qSRPlanPathPlanModuleWidget::onDeleteAllMarkupsInListPushButtonClicked()
     }
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
-
+  this->updateButtonsState();
 }
 
 //-----------------------------------------------------------------------------
@@ -2316,7 +2316,7 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupMRMLNodeChanged(vtkMRMLNode *mar
   this->updateWidgetFromMRML();
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
-
+  this->updateButtonsState();
 }
 
 //-----------------------------------------------------------------------------
@@ -2382,7 +2382,7 @@ void qSRPlanPathPlanModuleWidget::onSelectionNodeActivePlaceNodeIDChanged()
     }
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
-
+  this->updateButtonsState();
 }
 
 //-----------------------------------------------------------------------------
@@ -2532,6 +2532,10 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
     {
      float weight =  item->text().toFloat();
      listNode->SetNthMarkupWeight(n, weight);
+
+	 this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+	 this->updateButtonsState();
+
     }
   else if (column == d->columnIndex("R") ||
            column == d->columnIndex("A") ||
@@ -2574,13 +2578,16 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
       {
       //qDebug() << QString("Cell changed: no change in location bigger than ") + QString::number(minChange);
       }
+
+	//this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+	//this->updateButtonsState();
     }
   else
     {
     qDebug() << QString("Cell Changed: unknown column: ") + QString::number(column);
     }
 	
-  this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+ 
 
 }
 
@@ -3325,6 +3332,9 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodeNthMarkupModifiedEvent(vtkO
     n = *nPtr;
     }
   this->updateRow(n);
+
+
+
 }
 
 //-----------------------------------------------------------------------------
@@ -3347,6 +3357,11 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodePointModifiedEvent(vtkObjec
     }
   // qDebug() << "\tn = " << QString::number(n);
   this->updateRow(n);
+
+  //If There has dosevolume, invalidate the dosevolume added by zoulian
+
+  this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+  this->updateButtonsState();
 }
 
 //-----------------------------------------------------------------------------
@@ -3859,7 +3874,13 @@ void qSRPlanPathPlanModuleWidget::updateButtonsState()
 		&& this->getIsodoseLogic()->GetIsodoseNode()->GetDoseVolumeNode()
 		&& this->getIsodoseLogic()->GetIsodoseNode()->GetColorTableNode()
 		&& this->getIsodoseLogic()->GetIsodoseNode()->GetColorTableNode()->GetNumberOfColors() > 0;
+
 	d->pushButton_Apply->setEnabled(applyEnabled);
+
+	d->pushButton_SwitchToTableFourUpQuantitativeLayout->setEnabled(applyEnabled);
+	d->pushButton_SwitchToFourUpQuantitativeLayout->setEnabled(applyEnabled);
+	d->pushButton_SwitchToOneUpQuantitativeLayout->setEnabled(applyEnabled);
+
 }
 
 
