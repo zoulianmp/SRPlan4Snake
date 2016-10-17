@@ -276,6 +276,7 @@ public slots:
   void updateDVHWidgetFromMRML();
 
 
+  void onProgressUpdated(vtkObject*, void*, unsigned long, void*);
 
 
 
@@ -301,9 +302,10 @@ protected:
   void enterIsoDoseEvaluationFunction(vtkMRMLScalarVolumeNode* doseGrid);
 
   //Given the Segmentation and DoseVolume, enter the DVH Evaluation function
-  void qSRPlanPathPlanModuleWidget::enterDVHDoseEvalutaionFunction(vtkMRMLScalarVolumeNode* DoseDistribution, vtkMRMLSegmentationNode*segmentationNode);
+  void enterDVHDoseEvalutaionFunction(vtkMRMLScalarVolumeNode* DoseDistribution, vtkMRMLSegmentationNode*segmentationNode);
 
-
+  //compute the selected Segmentations DVH
+  void computeDvh();
 
   //set dose scalar bars in views 
   void SetupScalarBarsShow();

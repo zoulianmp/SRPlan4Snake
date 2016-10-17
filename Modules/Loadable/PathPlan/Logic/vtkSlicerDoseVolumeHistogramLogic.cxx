@@ -331,6 +331,7 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh()
     }
   }
 
+
   // Temporarily duplicate selected segments to contain binary labelmap of a different geometry (tied to dose volume)
   vtkSmartPointer<vtkSegmentation> segmentationCopy = vtkSmartPointer<vtkSegmentation>::New();
   segmentationCopy->SetMasterRepresentationName(selectedSegmentation->GetMasterRepresentationName());
@@ -340,33 +341,51 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh()
     segmentationCopy->CopySegmentFromSegmentation(selectedSegmentation, (*segmentIt));
   }
 
-  // Use dose volume geometry as reference, with oversampling of fixed 2 or automatic (as selected)
-  vtkSmartPointer<vtkMatrix4x4> doseIjkToRasMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
-  doseVolumeNode->GetIJKToRASMatrix(doseIjkToRasMatrix);
-  std::string doseGeometryString = vtkSegmentationConverter::SerializeImageGeometry(doseIjkToRasMatrix, doseVolumeNode->GetImageData());
-  segmentationCopy->SetConversionParameter( vtkSegmentationConverter::GetReferenceImageGeometryParameterName(),
-    doseGeometryString );
-  std::stringstream fixedOversamplingValuStream;
-  fixedOversamplingValuStream << this->DefaultDoseVolumeOversamplingFactor;
-  segmentationCopy->SetConversionParameter( vtkClosedSurfaceToBinaryLabelmapConversionRule::GetOversamplingFactorParameterName(),
-    this->DoseVolumeHistogramNode->GetAutomaticOversampling() ? "A" : fixedOversamplingValuStream.str().c_str() );
-  
-  // Reconvert segments to specified geometry if possible
   bool resamplingRequired = false;
-  if ( !segmentationCopy->CreateRepresentation(
-    vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName(), true) )
-  {
-    // If conversion failed and there is no binary labelmap in the segmentation, then cannot calculate DVH
-    if (!segmentationCopy->ContainsRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()))
-    {
-      std::string errorMessage("Unable to acquire binary labelmap from segmentation");
-      vtkErrorMacro("ComputeDvh: " << errorMessage);
-      return errorMessage;
-    }
 
-    // If conversion failed, then resample binary labelmaps in the segments
-    resamplingRequired = true;
+  bool rawisLabelMap = selectedSegmentation->ContainsRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName());
+
+  bool isLabelMap = segmentationCopy->ContainsRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName());
+
+  if (!segmentationCopy->ContainsRepresentation( vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName() ) )
+  {
+
+
+	  // Use dose volume geometry as reference, with oversampling of fixed 2 or automatic (as selected)
+	  vtkSmartPointer<vtkMatrix4x4> doseIjkToRasMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
+	  doseVolumeNode->GetIJKToRASMatrix(doseIjkToRasMatrix);
+	  std::string doseGeometryString = vtkSegmentationConverter::SerializeImageGeometry(doseIjkToRasMatrix, doseVolumeNode->GetImageData());
+	  segmentationCopy->SetConversionParameter(vtkSegmentationConverter::GetReferenceImageGeometryParameterName(),
+		  doseGeometryString);
+	  std::stringstream fixedOversamplingValuStream;
+	  fixedOversamplingValuStream << this->DefaultDoseVolumeOversamplingFactor;
+	  segmentationCopy->SetConversionParameter(vtkClosedSurfaceToBinaryLabelmapConversionRule::GetOversamplingFactorParameterName(),
+		  this->DoseVolumeHistogramNode->GetAutomaticOversampling() ? "A" : fixedOversamplingValuStream.str().c_str());
+
+	  // Reconvert segments to specified geometry if possible
+	  //bool resamplingRequired = false;
+	  if (!segmentationCopy->CreateRepresentation(
+		  vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName(), true))
+	  {
+		  // If conversion failed and there is no binary labelmap in the segmentation, then cannot calculate DVH
+		  if (!segmentationCopy->ContainsRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()))
+		  {
+			  std::string errorMessage("Unable to acquire binary labelmap from segmentation");
+			  vtkErrorMacro("ComputeDvh: " << errorMessage);
+			  return errorMessage;
+		  }
+
+		  // If conversion failed, then resample binary labelmaps in the segments
+		  resamplingRequired = true;
+	  }
+
   }
+  else
+  {
+	  resamplingRequired = true;
+  }
+
+ 
 
   // Calculate and store oversampling factors if automatically calculated for reporting purposes
   if (this->DoseVolumeHistogramNode->GetAutomaticOversampling())

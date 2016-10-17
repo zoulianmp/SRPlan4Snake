@@ -96,6 +96,8 @@
 #include "qMRMLSliceView.h"
 #include "qMRMLSliceWidget.h"
 
+#include "SlicerRtCommon.h"
+
 #include "vtkRenderWindow.h"
 
 #include "vtkMRMLGeneralParametersNode.h"
@@ -3980,10 +3982,10 @@ void qSRPlanPathPlanModuleWidget::enterDVHDoseEvalutaionFunction(vtkMRMLScalarVo
 		DVHNode->SetAndObserveDoseVolumeNode(DoseDistribution);
 		DVHNode->SetAndObserveSegmentationNode(segmentationNode);
 
-		std::vector<std::string> selectedSegmentIDs;
-		segmentationNode->GetSegmentation()->GetSegmentIDs(selectedSegmentIDs);
+		//std::vector<std::string> selectedSegmentIDs;
+		//segmentationNode->GetSegmentation()->GetSegmentIDs(selectedSegmentIDs);
 		
-		DVHNode->SetSelectedSegmentIDs(selectedSegmentIDs);
+		//DVHNode->SetSelectedSegmentIDs(selectedSegmentIDs);
 
 		DVHNode->DisableModifiedEventOff();
 	}
@@ -3995,6 +3997,8 @@ void qSRPlanPathPlanModuleWidget::enterDVHDoseEvalutaionFunction(vtkMRMLScalarVo
 	qvtkConnect(DVHNode, vtkCommand::ModifiedEvent, this, SLOT(updateDVHWidgetFromMRML()));
 
 	this->getDVHLogic()->SetAndObserveDoseVolumeHistogramNode(DVHNode);
+
+	this->computeDvh();
 
 	this->updateDVHWidgetFromMRML();
 
@@ -4354,3 +4358,41 @@ void qSRPlanPathPlanModuleWidget::updateChartCheckboxesState()
 }
 
 
+//-----------------------------------------------------------------------------
+void qSRPlanPathPlanModuleWidget::computeDvh()
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+
+	// Initialize progress bar
+	qvtkConnect(this->getDVHLogic(), SlicerRtCommon::ProgressUpdated, this, SLOT(onProgressUpdated(vtkObject*, void*, unsigned long, void*)));
+	d->ConvertProgressDialog = new QProgressDialog(this);
+	d->ConvertProgressDialog->setModal(true);
+	d->ConvertProgressDialog->setMinimumDuration(150);
+	d->ConvertProgressDialog->setLabelText("Computing DVH for all selected segments...");
+	d->ConvertProgressDialog->show();
+	QApplication::processEvents();
+
+	// Compute the DVH for each selected segment set using the selected dose volume
+	std::string errorMessage = this->getDVHLogic()->ComputeDvh();
+	
+
+	qvtkDisconnect(this->getDVHLogic(), SlicerRtCommon::ProgressUpdated, this, SLOT(onProgressUpdated(vtkObject*, void*, unsigned long, void*)));
+	delete d->ConvertProgressDialog;
+	QApplication::restoreOverrideCursor();
+}
+
+//-----------------------------------------------------------------------------
+void qSRPlanPathPlanModuleWidget::onProgressUpdated(vtkObject* vtkNotUsed(caller), void* callData, unsigned long vtkNotUsed(eid), void* vtkNotUsed(clientData))
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	if (!d->ConvertProgressDialog)
+	{
+		return;
+	}
+
+	double* progress = reinterpret_cast<double*>(callData);
+	d->ConvertProgressDialog->setValue((int)((*progress)*100.0));
+}
