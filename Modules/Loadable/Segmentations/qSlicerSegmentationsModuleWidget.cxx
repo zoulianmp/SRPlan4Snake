@@ -50,11 +50,15 @@
 
 #include "vtkMRMLSelectionNode.h"
 #include "vtkMRMLSceneUtility.h"
+#include "vtkOrientedImageData.h"
+
+
 
 // VTK includes
 #include <vtkSmartPointer.h>
 #include "vtkImageData.h"
 #include "vtkDataObject.h"
+
 
 
 // Qt includes
@@ -513,7 +517,7 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
   vtkSlicerVolumesLogic::ClearVolumeImageData(labelnode); //initial to zero
 
  
-  emptySegment->AddRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName(), labelnode->GetImageData());
+  emptySegment->AddRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName(), labelnode->GetOrientedImageData());
 
  //LabelMapVolume DisplayNode use the SegmentationNode CTNode
  // char* colorid = currentSegmentationNode->GetDisplayNode()->GetColorNodeID();

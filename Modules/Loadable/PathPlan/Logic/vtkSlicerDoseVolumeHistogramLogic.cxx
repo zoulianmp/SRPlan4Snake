@@ -332,8 +332,16 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh()
   }
 
 
+
+
+  /* comment out the primary code by zoulian
+
   // Temporarily duplicate selected segments to contain binary labelmap of a different geometry (tied to dose volume)
   vtkSmartPointer<vtkSegmentation> segmentationCopy = vtkSmartPointer<vtkSegmentation>::New();
+
+
+  segmentationCopy.TakeReference();
+
   segmentationCopy->SetMasterRepresentationName(selectedSegmentation->GetMasterRepresentationName());
   segmentationCopy->CopyConversionParameters(selectedSegmentation);
   for (std::vector<std::string>::iterator segmentIt = segmentIDs.begin(); segmentIt != segmentIDs.end(); ++segmentIt)
@@ -346,6 +354,16 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh()
   bool rawisLabelMap = selectedSegmentation->ContainsRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName());
 
   bool isLabelMap = segmentationCopy->ContainsRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName());
+
+  */
+
+  vtkSmartPointer<vtkSegmentation> segmentationCopy = vtkSmartPointer<vtkSegmentation>::New();
+
+
+  segmentationCopy.TakeReference(selectedSegmentation);
+
+  bool resamplingRequired = false;
+
 
   if (!segmentationCopy->ContainsRepresentation( vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName() ) )
   {
@@ -463,6 +481,11 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh()
   int numberOfSelectedSegments = segmentationCopy->GetNumberOfSegments();
   for (vtkSegmentation::SegmentMap::iterator segmentIt = segmentMap.begin(); segmentIt != segmentMap.end(); ++segmentIt, ++counter)
   {
+
+	  vtkDataObject * labelT = segmentIt->second->GetRepresentation(
+		  vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName());
+
+
     // Get segment binary labelmap
     vtkOrientedImageData* segmentBinaryLabelmap = vtkOrientedImageData::SafeDownCast( segmentIt->second->GetRepresentation(
       vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName() ) );

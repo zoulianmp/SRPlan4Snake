@@ -24,6 +24,9 @@
 // MRML includes
 #include "vtkMRMLScalarVolumeNode.h"
 
+class vtkOrientedImageData;
+
+
 /// \brief MRML node for representing a label map volume.
 ///
 /// A label map volume is typically the output of a segmentation procedure that
@@ -52,6 +55,9 @@ class VTK_MRML_EXPORT vtkMRMLLabelMapVolumeNode : public vtkMRMLScalarVolumeNode
   ///
   /// Create and observe default display node
   virtual void CreateDefaultDisplayNodes();
+
+  //Get the OrientedImageData  of the LabelMapVolumeNode, added by zoulian
+  vtkOrientedImageData * GetOrientedImageData();
 
 protected:
   vtkMRMLLabelMapVolumeNode();

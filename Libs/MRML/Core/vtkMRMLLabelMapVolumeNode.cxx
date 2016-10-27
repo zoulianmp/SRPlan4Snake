@@ -30,6 +30,50 @@
 #include <vtkObjectFactory.h>
 #include <vtkPointData.h>
 
+#include <vtkOrientedImageData.h>
+#include <vtkOrientedImageDataResample.h>
+
+#include <vtkMRMLTransformNode.h>
+#include <vtkGeneralTransform.h>
+
+
+vtkOrientedImageData * vtkMRMLLabelMapVolumeNode::GetOrientedImageData()
+{
+	vtkOrientedImageData* orientedImageData = vtkOrientedImageData::New();
+	orientedImageData->vtkImageData::DeepCopy(this->GetImageData());
+
+	vtkSmartPointer<vtkMatrix4x4> ijkToRasMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
+
+
+	this->GetIJKToRASMatrix(ijkToRasMatrix);
+	orientedImageData->SetGeometryFromImageToWorldMatrix(ijkToRasMatrix);
+
+	
+
+	// Get world to reference RAS transform
+	vtkSmartPointer<vtkGeneralTransform> nodeToWorldTransform = vtkSmartPointer<vtkGeneralTransform>::New();
+	vtkMRMLTransformNode* parentTransformNode = this->GetParentTransformNode();
+	if (parentTransformNode)
+	{
+		parentTransformNode->GetTransformToWorld(nodeToWorldTransform);
+
+		// Transform oriented image data
+		vtkOrientedImageDataResample::TransformOrientedImage(orientedImageData, nodeToWorldTransform);
+
+	}
+
+
+	return orientedImageData;
+
+
+}
+
+
+
+
+
+
+
 //----------------------------------------------------------------------------
 vtkMRMLNodeNewMacro(vtkMRMLLabelMapVolumeNode);
 
