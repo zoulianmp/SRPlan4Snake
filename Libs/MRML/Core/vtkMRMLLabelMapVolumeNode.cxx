@@ -39,31 +39,37 @@
 
 vtkOrientedImageData * vtkMRMLLabelMapVolumeNode::GetOrientedImageData()
 {
-	vtkOrientedImageData* orientedImageData = vtkOrientedImageData::New();
-	orientedImageData->vtkImageData::DeepCopy(this->GetImageData());
-
-	vtkSmartPointer<vtkMatrix4x4> ijkToRasMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
-
-
-	this->GetIJKToRASMatrix(ijkToRasMatrix);
-	orientedImageData->SetGeometryFromImageToWorldMatrix(ijkToRasMatrix);
-
-	
-
-	// Get world to reference RAS transform
-	vtkSmartPointer<vtkGeneralTransform> nodeToWorldTransform = vtkSmartPointer<vtkGeneralTransform>::New();
-	vtkMRMLTransformNode* parentTransformNode = this->GetParentTransformNode();
-	if (parentTransformNode)
+	if (this->orientedImageData == NULL)
 	{
-		parentTransformNode->GetTransformToWorld(nodeToWorldTransform);
 
-		// Transform oriented image data
-		vtkOrientedImageDataResample::TransformOrientedImage(orientedImageData, nodeToWorldTransform);
+		vtkOrientedImageData* orientedImageData = vtkOrientedImageData::New();
+		orientedImageData->vtkImageData::DeepCopy(this->GetImageData());
 
+		vtkSmartPointer<vtkMatrix4x4> ijkToRasMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
+
+
+		this->GetIJKToRASMatrix(ijkToRasMatrix);
+		orientedImageData->SetGeometryFromImageToWorldMatrix(ijkToRasMatrix);
+
+
+
+		// Get world to reference RAS transform
+		vtkSmartPointer<vtkGeneralTransform> nodeToWorldTransform = vtkSmartPointer<vtkGeneralTransform>::New();
+		vtkMRMLTransformNode* parentTransformNode = this->GetParentTransformNode();
+		if (parentTransformNode)
+		{
+			parentTransformNode->GetTransformToWorld(nodeToWorldTransform);
+
+			// Transform oriented image data
+			vtkOrientedImageDataResample::TransformOrientedImage(orientedImageData, nodeToWorldTransform);
+
+		}
+		this->orientedImageData = orientedImageData;
 	}
 
 
-	return orientedImageData;
+
+	return this->orientedImageData;
 
 
 }
@@ -80,6 +86,7 @@ vtkMRMLNodeNewMacro(vtkMRMLLabelMapVolumeNode);
 //----------------------------------------------------------------------------
 vtkMRMLLabelMapVolumeNode::vtkMRMLLabelMapVolumeNode()
 {
+	orientedImageData = NULL;
 }
 
 //----------------------------------------------------------------------------

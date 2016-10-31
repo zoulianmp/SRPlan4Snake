@@ -58,7 +58,7 @@
 #include <vtkSmartPointer.h>
 #include "vtkImageData.h"
 #include "vtkDataObject.h"
-
+#include "vtkOrientedImageData.h"
 
 
 // Qt includes
@@ -414,8 +414,9 @@ void qSlicerSegmentationsModuleWidget::onSegmentSelectionChanged(const QItemSele
 
 		  vtkSlicerSegmentationsModuleLogic * modulelogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic());
 
-		  vtkImageData * imagedata = vtkImageData::SafeDownCast(segment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
-		  vtkMRMLLabelMapVolumeNode *  currentlabelnode = modulelogic->GetLabelMapVolumeNodebyImageData(scene, imagedata);
+		  vtkOrientedImageData * imagedata = vtkOrientedImageData::SafeDownCast(segment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
+		
+		  vtkMRMLLabelMapVolumeNode *  currentlabelnode = modulelogic->GetLabelMapVolumeNodebyOrientedImageData(scene, imagedata);
 
 
 		  // Set the Editor Logic Label,used for paintbrush effect;
@@ -562,10 +563,10 @@ void qSlicerSegmentationsModuleWidget::onDeleteSelectedSegments()
      //Remove the segment corresponded labMapNode from the scene
 	 vtkSegment * currentSegment = currentSegmentationNode->GetSegmentation()->GetSegment(segmentId.toLatin1().constData());
 
-	 vtkImageData* lableMapImage = vtkImageData::SafeDownCast(currentSegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
+	 vtkOrientedImageData* lableMapImage = vtkOrientedImageData::SafeDownCast(currentSegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
 	
 	 vtkMRMLScene* scene = qSlicerCoreApplication::application()->mrmlScene();
-	 vtkMRMLLabelMapVolumeNode * labMapNode = vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyImageData(scene, lableMapImage);
+	 vtkMRMLLabelMapVolumeNode * labMapNode = vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyOrientedImageData(scene, lableMapImage);
 
      currentSegmentationNode->GetSegmentation()->RemoveSegment(segmentId.toLatin1().constData());
 

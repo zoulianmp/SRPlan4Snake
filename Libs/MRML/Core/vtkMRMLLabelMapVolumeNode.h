@@ -64,6 +64,10 @@ protected:
   ~vtkMRMLLabelMapVolumeNode();
   vtkMRMLLabelMapVolumeNode(const vtkMRMLLabelMapVolumeNode&);
   void operator=(const vtkMRMLLabelMapVolumeNode&);
+
+private:
+	vtkOrientedImageData* orientedImageData;
+
 };
 
 #endif

@@ -66,7 +66,7 @@
 #include <vtkMRMLTransformNode.h>
 
 #include "vtkMRMLSceneUtility.h"
-
+#include "vtkOrientedImageData.h"
 
 // STD includes
 #include <sstream>
@@ -875,7 +875,7 @@ vtkMRMLVolumeNode * vtkSlicerSegmentationsModuleLogic::GetRelatedVolumeNodeFromS
  
 }
 
-vtkMRMLLabelMapVolumeNode * vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyImageData(vtkMRMLScene* scene, vtkImageData* imageData)
+vtkMRMLLabelMapVolumeNode * vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyOrientedImageData(vtkMRMLScene* scene, vtkOrientedImageData* imageData)
 {
 	if (!scene || !imageData)
 	{
@@ -894,7 +894,10 @@ vtkMRMLLabelMapVolumeNode * vtkSlicerSegmentationsModuleLogic::GetLabelMapVolume
 
 		}
 
-		if (node && node->GetImageData() == imageData)
+		vtkOrientedImageData * data = node->GetOrientedImageData();
+
+
+		if (node && node->GetOrientedImageData() == imageData)
 		{
 			return node;
 		}
@@ -1276,10 +1279,10 @@ void vtkSlicerSegmentationsModuleLogic::UpdateClosedSurfaceFromLabelMapImageForS
 
 
 
-	vtkImageData * labelImage = vtkImageData::SafeDownCast(segment->GetRepresentation(masterRepresentName));
+	vtkOrientedImageData * labelImage = vtkOrientedImageData::SafeDownCast(segment->GetRepresentation(masterRepresentName));
 
 	
-    vtkMRMLLabelMapVolumeNode * labelMapNode = GetLabelMapVolumeNodebyImageData(scene, labelImage);
+    vtkMRMLLabelMapVolumeNode * labelMapNode = GetLabelMapVolumeNodebyOrientedImageData(scene, labelImage);
 
 
 	vtkOrientedImageData* orientedimage = vtkSlicerSegmentationsModuleLogic::CreateOrientedImageDataFromVolumeNode(labelMapNode);

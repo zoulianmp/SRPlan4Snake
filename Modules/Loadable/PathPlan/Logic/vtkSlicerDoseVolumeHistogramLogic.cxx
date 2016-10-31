@@ -59,6 +59,10 @@
 #include <vtkImageConstantPad.h>
 #include <vtkMath.h>
 
+//used for debug
+#include <vtkImageIterator.h>
+
+
 // VTKSYS includes
 #include <vtksys/SystemTools.hxx>
 
@@ -589,54 +593,124 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh()
 //---------------------------------------------------------------------------
 std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* segmentLabelmap, vtkOrientedImageData* oversampledDoseVolume, std::string segmentID, double segmentColor[3], double maxDoseGy)
 {
-  if (!this->GetMRMLScene() || !this->DoseVolumeHistogramNode)
-  {
-    std::string errorMessage("Invalid MRML scene or parameter set node");
-    vtkErrorMacro("ComputeDvh: " << errorMessage);
-    return errorMessage;
-  }
-  if (!segmentLabelmap)
-  {
-    std::string errorMessage("Invalid segment labelmap");
-    vtkErrorMacro("ComputeDvh: " << errorMessage);
-    return errorMessage;
-  }
-  if (!oversampledDoseVolume)
-  {
-    std::string errorMessage("Invalid oversampled dose volume");
-    vtkErrorMacro("ComputeDvh: " << errorMessage);
-    return errorMessage;
-  }
-  vtkMRMLSegmentationNode* segmentationNode = this->DoseVolumeHistogramNode->GetSegmentationNode();
-  vtkMRMLScalarVolumeNode* doseVolumeNode = this->DoseVolumeHistogramNode->GetDoseVolumeNode();
-  if ( !segmentationNode || !doseVolumeNode )
-  {
-    std::string errorMessage("Both segmentation node and dose volume node need to be set");
-    vtkErrorMacro("ComputeDvh: " << errorMessage);
-    return errorMessage;
-  }
+	if (!this->GetMRMLScene() || !this->DoseVolumeHistogramNode)
+	{
+		std::string errorMessage("Invalid MRML scene or parameter set node");
+		vtkErrorMacro("ComputeDvh: " << errorMessage);
+		return errorMessage;
+	}
+	if (!segmentLabelmap)
+	{
+		std::string errorMessage("Invalid segment labelmap");
+		vtkErrorMacro("ComputeDvh: " << errorMessage);
+		return errorMessage;
+	}
+	if (!oversampledDoseVolume)
+	{
+		std::string errorMessage("Invalid oversampled dose volume");
+		vtkErrorMacro("ComputeDvh: " << errorMessage);
+		return errorMessage;
+	}
+	vtkMRMLSegmentationNode* segmentationNode = this->DoseVolumeHistogramNode->GetSegmentationNode();
+	vtkMRMLScalarVolumeNode* doseVolumeNode = this->DoseVolumeHistogramNode->GetDoseVolumeNode();
+	if (!segmentationNode || !doseVolumeNode)
+	{
+		std::string errorMessage("Both segmentation node and dose volume node need to be set");
+		vtkErrorMacro("ComputeDvh: " << errorMessage);
+		return errorMessage;
+	}
 
-  vtkSmartPointer<vtkTimerLog> timer = vtkSmartPointer<vtkTimerLog>::New();
-  double checkpointStart = timer->GetUniversalTime();
-  UNUSED_VARIABLE(checkpointStart); // Although it is used later, a warning is logged so needs to be suppressed
+	vtkSmartPointer<vtkTimerLog> timer = vtkSmartPointer<vtkTimerLog>::New();
+	double checkpointStart = timer->GetUniversalTime();
+	UNUSED_VARIABLE(checkpointStart); // Although it is used later, a warning is logged so needs to be suppressed
 
-  // Create stencil for structure
-  vtkNew<vtkImageToImageStencil> stencil;
-  stencil->SetInputData(segmentLabelmap);
-  stencil->ThresholdByUpper(0.5); // Thresholds only the labelmap, so the point is to keep the ones bigger than 0
-  stencil->Update();
+	// Create stencil for structure
+	vtkNew<vtkImageToImageStencil> stencil;
+	stencil->SetInputData(segmentLabelmap);
+	stencil->ThresholdByUpper(0.5); // Thresholds only the labelmap, so the point is to keep the ones bigger than 0
+	stencil->Update();
 
-  vtkSmartPointer<vtkImageStencilData> structureStencil = vtkSmartPointer<vtkImageStencilData>::New();
-  structureStencil->DeepCopy(stencil->GetOutput());
+	vtkSmartPointer<vtkImageStencilData> structureStencil = vtkSmartPointer<vtkImageStencilData>::New();
+	structureStencil->DeepCopy(stencil->GetOutput());
 
-  int stencilExtent[6] = {0,-1,0,-1,0,-1};
-  structureStencil->GetExtent(stencilExtent);
-  if (stencilExtent[1]-stencilExtent[0] <= 0 || stencilExtent[3]-stencilExtent[2] <= 0 || stencilExtent[5]-stencilExtent[4] <= 0)
-  {
-    std::string errorMessage("Invalid stenciled dose volume");
-    vtkErrorMacro("ComputeDvh: " << errorMessage);
-    return errorMessage;
-  }
+	int stencilExtent[6] = { 0,-1,0,-1,0,-1 };
+	structureStencil->GetExtent(stencilExtent);
+	if (stencilExtent[1] - stencilExtent[0] <= 0 || stencilExtent[3] - stencilExtent[2] <= 0 || stencilExtent[5] - stencilExtent[4] <= 0)
+	{
+		std::string errorMessage("Invalid stenciled dose volume");
+		vtkErrorMacro("ComputeDvh: " << errorMessage);
+		return errorMessage;
+	}
+
+
+	//****************************************
+	//Begin Debug for DoseVolume and LabelMap overlap  added by zoulian
+
+	//structureStencil->GetFieldData();
+
+	double* labelbound;
+	double * dosebound;
+
+	labelbound = segmentLabelmap->GetBounds();
+	dosebound = oversampledDoseVolume->GetBounds();
+
+
+	double labelBoundArray[6] = { labelbound[0],labelbound[1],labelbound[2],labelbound[3],labelbound[4],labelbound[5] };
+	double doseBoundArray[6] = { dosebound[0], dosebound[1], dosebound[2], dosebound[3], dosebound[4], dosebound[5] };
+
+
+	int dattype = segmentLabelmap->GetScalarType();
+
+	int ext[6] = { 422, 428, 422, 428, 243,248 };
+
+	 
+	vtkImageIterator<short> it(segmentLabelmap, ext);
+
+	std::cout << "****************Show the Lable of extent ************** "<<std::endl;
+
+	while (!it.IsAtEnd())
+	{
+		short* valIt = it.BeginSpan();
+		short *valEnd = it.EndSpan();
+		while (valIt != valEnd)
+		{
+
+			short label = *valIt++;
+
+			std::cout << "(Label:" << label << ") ";
+		}
+		std::cout << std::endl;
+		it.NextSpan();
+	}
+
+
+	std::cout << "**************Show the Dose of extent********************  " << std::endl;
+
+	vtkImageIterator<double> dit(oversampledDoseVolume, ext);
+
+	while (!dit.IsAtEnd())
+	{
+		double* valIt = dit.BeginSpan();
+		double *valEnd = dit.EndSpan();
+		while (valIt != valEnd)
+		{
+
+			double Dose = *valIt++;
+
+			std::cout << "(Dose:" << Dose << ") ";
+		}
+		std::cout << std::endl;
+		it.NextSpan();
+	}
+
+
+
+  //End Debug
+  //****************************************
+
+
+
+
 
   // Compute statistics
   vtkNew<vtkImageAccumulate> structureStat;
