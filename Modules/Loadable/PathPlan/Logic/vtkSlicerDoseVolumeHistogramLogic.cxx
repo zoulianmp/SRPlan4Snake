@@ -651,9 +651,21 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* 
 	double* labelbound;
 	double * dosebound;
 
+	double * spacing;
+
 	labelbound = segmentLabelmap->GetBounds();
 	dosebound = oversampledDoseVolume->GetBounds();
+	spacing = segmentLabelmap->GetSpacing();
 
+	vtkSmartPointer<vtkMatrix4x4> matrix = vtkSmartPointer<vtkMatrix4x4>::New();
+
+	segmentLabelmap->GetImageToWorldMatrix(matrix);
+
+	vtkSmartPointer<vtkMatrix4x4> invertMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
+ 
+	vtkMatrix4x4::Invert(matrix, invertMatrix);
+
+ 
 
 	double labelBoundArray[6] = { labelbound[0],labelbound[1],labelbound[2],labelbound[3],labelbound[4],labelbound[5] };
 	double doseBoundArray[6] = { dosebound[0], dosebound[1], dosebound[2], dosebound[3], dosebound[4], dosebound[5] };
@@ -661,7 +673,27 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* 
 
 	int dattype = segmentLabelmap->GetScalarType();
 
-	int ext[6] = { 422, 428, 422, 428, 243,248 };
+	float zero[4] = { 0,0,0,1 };
+
+	float zeroijk[4] = { 0,0,0,1 };
+
+	invertMatrix->MultiplyPoint(zero, zeroijk);
+
+	//Consider the Directions Vector
+	
+
+	int xn = int(zeroijk[0]);
+
+	int yn = int(zeroijk[1]);
+
+	int zn = int(zeroijk[2]);
+
+	int range = 5;
+
+
+
+	//Used for head MRI Image
+	int ext[6] = { xn - range ,xn + range, yn - range ,yn + range, zn - range ,zn + range };
 
 	 
 	vtkImageIterator<short> it(segmentLabelmap, ext);
@@ -700,7 +732,7 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* 
 			std::cout << "(Dose:" << Dose << ") ";
 		}
 		std::cout << std::endl;
-		it.NextSpan();
+		dit.NextSpan();
 	}
 
 
