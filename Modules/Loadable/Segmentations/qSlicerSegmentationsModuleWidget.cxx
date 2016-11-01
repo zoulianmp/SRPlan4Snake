@@ -414,10 +414,12 @@ void qSlicerSegmentationsModuleWidget::onSegmentSelectionChanged(const QItemSele
 
 		  vtkSlicerSegmentationsModuleLogic * modulelogic = vtkSlicerSegmentationsModuleLogic::SafeDownCast(this->logic());
 
-		  vtkOrientedImageData * imagedata = vtkOrientedImageData::SafeDownCast(segment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
+		 // vtkOrientedImageData * imagedata = vtkOrientedImageData::SafeDownCast(segment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
 		
-		  vtkMRMLLabelMapVolumeNode *  currentlabelnode = modulelogic->GetLabelMapVolumeNodebyOrientedImageData(scene, imagedata);
+		  vtkImageData * imagedata = vtkImageData::SafeDownCast(segment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
 
+		 // vtkMRMLLabelMapVolumeNode *  currentlabelnode = modulelogic->GetLabelMapVolumeNodebyOrientedImageData(scene, imagedata);
+		  vtkMRMLLabelMapVolumeNode *  currentlabelnode = modulelogic->GetLabelMapVolumeNodebyImageData(scene, imagedata);
 
 		  // Set the Editor Logic Label,used for paintbrush effect;
 		  // Update the LabelMapNode the current segment's Representation Node
@@ -517,8 +519,10 @@ void qSlicerSegmentationsModuleWidget::onAddSegment()
 
   vtkSlicerVolumesLogic::ClearVolumeImageData(labelnode); //initial to zero
 
+ // emptySegment->AddRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName(), labelnode->GetOrientedImageData());
+
  
-  emptySegment->AddRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName(), labelnode->GetOrientedImageData());
+  emptySegment->AddRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName(), labelnode->GetImageData());
 
  //LabelMapVolume DisplayNode use the SegmentationNode CTNode
  // char* colorid = currentSegmentationNode->GetDisplayNode()->GetColorNodeID();
@@ -563,10 +567,13 @@ void qSlicerSegmentationsModuleWidget::onDeleteSelectedSegments()
      //Remove the segment corresponded labMapNode from the scene
 	 vtkSegment * currentSegment = currentSegmentationNode->GetSegmentation()->GetSegment(segmentId.toLatin1().constData());
 
-	 vtkOrientedImageData* lableMapImage = vtkOrientedImageData::SafeDownCast(currentSegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
+	 vtkImageData* lableMapImage = vtkImageData::SafeDownCast(currentSegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
+
+	 //vtkOrientedImageData* lableMapImage = vtkOrientedImageData::SafeDownCast(currentSegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
 	
 	 vtkMRMLScene* scene = qSlicerCoreApplication::application()->mrmlScene();
-	 vtkMRMLLabelMapVolumeNode * labMapNode = vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyOrientedImageData(scene, lableMapImage);
+	 vtkMRMLLabelMapVolumeNode * labMapNode = vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyImageData(scene, lableMapImage);
+	// vtkMRMLLabelMapVolumeNode * labMapNode = vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyOrientedImageData(scene, lableMapImage);
 
      currentSegmentationNode->GetSegmentation()->RemoveSegment(segmentId.toLatin1().constData());
 

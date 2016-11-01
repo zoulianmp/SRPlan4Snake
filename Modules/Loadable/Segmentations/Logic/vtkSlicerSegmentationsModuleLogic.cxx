@@ -894,7 +894,7 @@ vtkMRMLLabelMapVolumeNode * vtkSlicerSegmentationsModuleLogic::GetLabelMapVolume
 
 		}
 
-		vtkOrientedImageData * data = node->GetOrientedImageData();
+		//vtkOrientedImageData * data = node->GetOrientedImageData();
 
 
 		if (node && node->GetOrientedImageData() == imageData)
@@ -905,6 +905,38 @@ vtkMRMLLabelMapVolumeNode * vtkSlicerSegmentationsModuleLogic::GetLabelMapVolume
 
 	return NULL;
 
+}
+
+vtkMRMLLabelMapVolumeNode * vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyImageData(vtkMRMLScene* scene, vtkImageData* imageData)
+{
+
+	if (!scene || !imageData)
+	{
+		return NULL;
+	}
+
+	std::vector<vtkMRMLNode*> labelMapNodes;
+	unsigned int numberOfNodes = scene->GetNodesByClass("vtkMRMLLabelMapVolumeNode", labelMapNodes);
+	for (unsigned int nodeIndex = 0; nodeIndex<numberOfNodes; nodeIndex++)
+	{
+		vtkMRMLLabelMapVolumeNode* node = vtkMRMLLabelMapVolumeNode::SafeDownCast(labelMapNodes[nodeIndex]);
+
+		if (node->IsA("vtkMRMLSegmentationNode"))
+		{
+			continue;
+
+		}
+
+		//vtkImageData * data = node->GetImageData();
+
+
+		if (node && node->GetImageData() == imageData)
+		{
+			return node;
+		}
+	}
+
+	return NULL;
 }
 
 

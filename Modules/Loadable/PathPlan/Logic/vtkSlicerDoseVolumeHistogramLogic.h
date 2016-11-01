@@ -138,6 +138,14 @@ public:
   /// \return a vtkCollection containing vtkMRMLDoubleArrayNodes. Each node represents one structure DVH and contains the vtkDoubleArray as well as the name and total volume attributes for the structure.
   vtkCollection* ReadCsvToDoubleArrayNode(std::string csvFilename);
   
+  //added by zoulian for get the orientedImageData from imagedata
+
+  static vtkOrientedImageData * GetOrientedImageDataFromImageDataSameNode(vtkImageData* imagedata);
+
+
+
+
+
 public:
   void SetAndObserveDoseVolumeHistogramNode(vtkMRMLDoseVolumeHistogramNode* node);
   vtkGetObjectMacro(DoseVolumeHistogramNode, vtkMRMLDoseVolumeHistogramNode);

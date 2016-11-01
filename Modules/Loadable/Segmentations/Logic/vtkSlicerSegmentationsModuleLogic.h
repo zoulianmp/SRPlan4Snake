@@ -165,6 +165,9 @@ public:
   //The the vtkMRMLLabelMapVolumeNode by provided vtkOrientedImageData.
   static vtkMRMLLabelMapVolumeNode * GetLabelMapVolumeNodebyOrientedImageData(vtkMRMLScene* scene, vtkOrientedImageData* imageData);
 
+  //The the vtkMRMLLabelMapVolumeNode by provided vtkOrientedImageData.
+  static vtkMRMLLabelMapVolumeNode * GetLabelMapVolumeNodebyImageData(vtkMRMLScene* scene, vtkImageData* imageData);
+  
 
   //Get the SegmentationNode related TempLabelMapNode for a given vtkMRMLSegmentationNode* segnode
   static vtkMRMLLabelMapVolumeNode * GetRelatedTempLabelMapNodeFromSegmentationNode(vtkMRMLScene* scene, vtkMRMLSegmentationNode* segnode);

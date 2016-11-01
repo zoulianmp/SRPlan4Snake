@@ -46,6 +46,8 @@
 #include <vtkMRMLScalarVolumeNode.h>
 #include <vtkMRMLScene.h>
 
+#include <qSlicerCoreApplication.h>
+
 // VTK includes
 #include <vtkDoubleArray.h>
 #include <vtkImageAccumulate.h>
@@ -421,8 +423,18 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh()
     for (vtkSegmentation::SegmentMap::iterator segmentIt = segmentMap.begin(); segmentIt != segmentMap.end(); ++segmentIt)
     {
       vtkSegment* currentSegment = segmentIt->second;
-      vtkOrientedImageData* currentBinaryLabelmap = vtkOrientedImageData::SafeDownCast(
-        currentSegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()) );
+
+	  vtkImageData * preLabelImage = vtkImageData::SafeDownCast(
+		  currentSegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()));
+
+	  vtkOrientedImageData* currentBinaryLabelmap = GetOrientedImageDataFromImageDataSameNode(preLabelImage);
+
+
+    //  vtkOrientedImageData* currentBinaryLabelmap = vtkOrientedImageData::SafeDownCast(
+    //    currentSegment->GetRepresentation(vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName()) );
+
+
+
       if (!currentBinaryLabelmap)
       {
         std::string errorMessage("Binary representation missing after converting with automatic oversampling factor!");
@@ -491,8 +503,14 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh()
 
 
     // Get segment binary labelmap
-    vtkOrientedImageData* segmentBinaryLabelmap = vtkOrientedImageData::SafeDownCast( segmentIt->second->GetRepresentation(
-      vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName() ) );
+	 vtkImageData * LabelImage = vtkImageData::SafeDownCast( segmentIt->second->GetRepresentation(
+                                  vtkSegmentationConverter::GetSegmentationBinaryLabelmapRepresentationName() ) );
+
+
+	 vtkOrientedImageData* segmentBinaryLabelmap =  GetOrientedImageDataFromImageDataSameNode(LabelImage);
+
+
+
     if (!segmentBinaryLabelmap)
     {
       std::string errorMessage("Failed to get binary labelmap for segments");
@@ -1859,4 +1877,16 @@ vtkCollection* vtkSlicerDoseVolumeHistogramLogic::ReadCsvToDoubleArrayNode(std::
   }
 
   return doubleArrayNodes;
+}
+
+
+
+
+vtkOrientedImageData * vtkSlicerDoseVolumeHistogramLogic::GetOrientedImageDataFromImageDataSameNode(vtkImageData* imagedata)
+{
+	vtkMRMLScene* scene = qSlicerCoreApplication::application()->mrmlScene();
+	vtkMRMLLabelMapVolumeNode * labMapNode = vtkSlicerSegmentationsModuleLogic::GetLabelMapVolumeNodebyImageData(scene, imagedata);
+
+	return labMapNode->GetOrientedImageData();
+
 }

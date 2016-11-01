@@ -39,10 +39,13 @@
 
 vtkOrientedImageData * vtkMRMLLabelMapVolumeNode::GetOrientedImageData()
 {
-	if (this->orientedImageData == NULL)
-	{
+	//if (this->orientedImageData == NULL)
+	//{
 
-		vtkOrientedImageData* orientedImageData = vtkOrientedImageData::New();
+	    vtkOrientedImageData* orientedImageData = vtkOrientedImageData::New();
+
+	
+
 		orientedImageData->vtkImageData::DeepCopy(this->GetImageData());
 
 		vtkSmartPointer<vtkMatrix4x4> ijkToRasMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
@@ -65,7 +68,7 @@ vtkOrientedImageData * vtkMRMLLabelMapVolumeNode::GetOrientedImageData()
 
 		}
 		this->orientedImageData = orientedImageData;
-	}
+	//}
 
 
 
@@ -92,6 +95,10 @@ vtkMRMLLabelMapVolumeNode::vtkMRMLLabelMapVolumeNode()
 //----------------------------------------------------------------------------
 vtkMRMLLabelMapVolumeNode::~vtkMRMLLabelMapVolumeNode()
 {
+	if (this->orientedImageData != NULL)
+	{
+		this->orientedImageData->Delete();
+	}
 }
 
 //-----------------------------------------------------------
