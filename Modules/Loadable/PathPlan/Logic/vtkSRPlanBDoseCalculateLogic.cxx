@@ -460,9 +460,9 @@ void vtkSRPlanBDoseCalculateLogic::StartDoseCalcualte()
 	this->SetDoseNodetoLayoutCompositeNode("Yellow", this->doseVolume);
 	this->SetDoseNodetoLayoutCompositeNode("Green", this->doseVolume); 
 
-	//just for Debug 
-	//this->SetPlangImageNodetoBackgroundofLayoutCompositeNode("Red", this->planPrimaryVolume);
-	
+
+	//Set the Attribute of the DoseVolume, aim to used by DVH Logical
+	this->doseVolume->SetAttribute(SlicerRtCommon::DICOMRTIMPORT_DOSE_VOLUME_IDENTIFIER_ATTRIBUTE_NAME.c_str(),"dose");
 
 }
 

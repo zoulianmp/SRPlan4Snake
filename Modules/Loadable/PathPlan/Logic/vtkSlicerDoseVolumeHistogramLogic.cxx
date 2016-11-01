@@ -665,7 +665,7 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* 
 	//Begin Debug for DoseVolume and LabelMap overlap  added by zoulian
 
 	//structureStencil->GetFieldData();
-
+	/*
 	double* labelbound;
 	double * dosebound;
 
@@ -754,7 +754,7 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* 
 	}
 
 
-
+*/
   //End Debug
   //****************************************
 
