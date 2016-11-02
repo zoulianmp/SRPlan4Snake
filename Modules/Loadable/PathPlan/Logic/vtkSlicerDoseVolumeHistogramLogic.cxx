@@ -808,7 +808,10 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* 
   double ccPerCubicMM = 0.001;
 
   // Get dose unit name
-  const char* doseUnitName = NULL;
+  
+  const char* doseUnitName = "Percent";
+
+  /*
   vtkMRMLSubjectHierarchyNode* doseVolumeSubjectHierarchyNode = vtkMRMLSubjectHierarchyNode::GetAssociatedSubjectHierarchyNode(doseVolumeNode);
   if (doseVolumeSubjectHierarchyNode)
   {
@@ -817,6 +820,9 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* 
   }
 
   bool isDoseVolume = this->DoseVolumeContainsDose();
+  */
+
+  bool isDoseVolume = true;
 
   // Compute and store DVH metrics
   std::ostringstream metricList;
@@ -950,11 +956,13 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* 
   arrayNode->SetNodeReferenceID(vtkSlicerDoseVolumeHistogramLogic::DVH_DOSE_VOLUME_NODE_REFERENCE_ROLE.c_str(), doseVolumeNode->GetID());
   arrayNode->SetNodeReferenceID(vtkSlicerDoseVolumeHistogramLogic::DVH_SEGMENTATION_NODE_REFERENCE_ROLE.c_str(), segmentationNode->GetID());
 
+  /*
   // Add DVH to subject hierarchy
   vtkMRMLSubjectHierarchyNode::CreateSubjectHierarchyNode(
     this->GetMRMLScene(), doseVolumeSubjectHierarchyNode, vtkMRMLSubjectHierarchyConstants::GetDICOMLevelSubseries(),
     dvhArrayNodeName.c_str(), arrayNode);
 
+  */
   // Add connection attribute to input segmentation node
   vtkMRMLSubjectHierarchyNode* segmentSubjectHierarchyNode = segmentationNode->GetSegmentSubjectHierarchyNode(segmentID);
   if (segmentSubjectHierarchyNode)

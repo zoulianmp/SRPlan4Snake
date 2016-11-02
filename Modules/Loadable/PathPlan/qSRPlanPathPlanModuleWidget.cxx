@@ -450,6 +450,9 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
   ScalarBarActor2DYellow =NULL;
   ScalarBarActor2DGreen = NULL;
 
+  ActiveDoseDistribution = NULL;
+  ActivesegmentationNode = NULL;
+
 
 }
 
@@ -1358,6 +1361,14 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 
 	BDoseLogic->StartDoseCalcualte();
 
+	//reset the Dose Staticstic funciton
+	this->DVHCalculated = false;
+
+
+	
+
+
+
 	//Get the Final Dose distribution for ISO Dose Node 
 	vtkMRMLScalarVolumeNode* DoseDistribution = BDoseLogic->GetCalculatedDoseVolume();
 
@@ -1369,7 +1380,12 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 	{
 		this->enterIsoDoseEvaluationFunction(DoseDistribution);
 
-		this->enterDVHDoseEvalutaionFunction(DoseDistribution, segmentationNode);
+		//Prepared for DVH Statistic
+		this->ActiveDoseDistribution = DoseDistribution;
+
+	    this->ActivesegmentationNode = segmentationNode;
+
+	//	this->enterDVHDoseEvalutaionFunction(DoseDistribution, segmentationNode);
 
 		//Show the ISO Dose GUI
 		if (d->isoDoseGroup->isHidden())
@@ -3909,8 +3925,16 @@ void qSRPlanPathPlanModuleWidget::updateButtonsState()
 	d->pushButton_Apply->setEnabled(applyEnabled);
 
 	d->pushButton_SwitchToTableFourUpQuantitativeLayout->setEnabled(applyEnabled);
-	d->pushButton_SwitchToFourUpQuantitativeLayout->setEnabled(applyEnabled);
-	d->pushButton_SwitchToOneUpQuantitativeLayout->setEnabled(applyEnabled);
+ 
+ 
+		
+	d->pushButton_SwitchToFourUpQuantitativeLayout->setEnabled( applyEnabled && DVHCalculated );
+		
+	d->pushButton_SwitchToOneUpQuantitativeLayout->setEnabled( applyEnabled && DVHCalculated );
+
+ 
+
+
 
 }
 
@@ -3931,6 +3955,12 @@ void qSRPlanPathPlanModuleWidget::updateButtonsState()
 void qSRPlanPathPlanModuleWidget::switchToToTableFourUpQuantitativeLayout()
 {
 	qSlicerApplication::application()->layoutManager()->setLayout(vtkMRMLLayoutNode::SlicerLayoutFourUpTableView);
+
+	if (!DVHCalculated && this->ActiveDoseDistribution && this->ActivesegmentationNode)
+	{
+		this->enterDVHDoseEvalutaionFunction(this->ActiveDoseDistribution, this->ActivesegmentationNode);
+	}
+
 }
 
 
@@ -4036,6 +4066,9 @@ void qSRPlanPathPlanModuleWidget::refreshDvhTable(bool force/*=false*/)
 	{
 	//	return;
 	}
+
+	int ntable= qSlicerApplication::application()->layoutManager()->tableViewCount();
+
 
 	qMRMLSimpleTableWidget * simpleTableWidget = qSlicerApplication::application()->layoutManager()->simpleTableWidget(0);
 

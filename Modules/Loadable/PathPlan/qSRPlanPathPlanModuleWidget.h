@@ -352,8 +352,11 @@ private:
   vtkSlicerRTScalarBarActor* ScalarBarActor2DYellow;
   vtkSlicerRTScalarBarActor* ScalarBarActor2DGreen;
 
+  bool DVHCalculated =false;
 
-
+  vtkMRMLScalarVolumeNode* ActiveDoseDistribution;
+  
+  vtkMRMLSegmentationNode* ActivesegmentationNode;
 
 
 

@@ -438,6 +438,59 @@ const char* conventionalQuantitativeView =
   " </item>"
   "</layout>";
 
+
+
+const char* tableFourUpQuantitativeView =
+
+"<layout type=\"vertical\" split=\"true\" >"
+"<layout type=\"vertical\">"
+" <item>"
+"  <layout type=\"horizontal\">"
+"   <item>"
+"    <view class=\"vtkMRMLSliceNode\" singletontag=\"Red\">"
+"     <property name=\"orientation\" action=\"default\">Axial</property>"
+"     <property name=\"viewlabel\" action=\"default\">R</property>"
+"     <property name=\"viewcolor\" action=\"default\">#F34A33</property>"
+"    </view>"
+"   </item>"
+"   <item>"
+"    <view class=\"vtkMRMLChartViewNode\" singletontag=\"ChartView1\">"
+"     <property name=\"viewlabel\" action=\"default\">1</property>"
+"    </view>"
+"   </item>"
+"  </layout>"
+" </item>"
+" <item>"
+"  <layout type=\"horizontal\">"
+"   <item>"
+"    <view class=\"vtkMRMLSliceNode\" singletontag=\"Yellow\">"
+"     <property name=\"orientation\" action=\"default\">Sagittal</property>"
+"     <property name=\"viewlabel\" action=\"default\">Y</property>"
+"     <property name=\"viewcolor\" action=\"default\">#EDD54C</property>"
+"    </view>"
+"   </item>"
+"   <item>"
+"    <view class=\"vtkMRMLSliceNode\" singletontag=\"Green\">"
+"     <property name=\"orientation\" action=\"default\">Coronal</property>"
+"     <property name=\"viewlabel\" action=\"default\">G</property>"
+"     <property name=\"viewcolor\" action=\"default\">#6EB04B</property>"
+"    </view>"
+"   </item>"
+"  </layout>"
+" </item>"
+" </layout>"
+" </item>"
+" <item>"
+"  <view class=\"vtkMRMLTableViewNode\" singletontag=\"TableView1\">"
+"    <property name=\"viewlabel\" action=\"default\">1</property>"
+"  </view>"
+" </item>"
+"</layout>";
+
+
+
+
+
 const char* fourUpQuantitativeView =
   "<layout type=\"vertical\">"
   " <item>"
@@ -1389,6 +1442,12 @@ void vtkMRMLLayoutLogic::AddDefaultLayouts()
                                          triple3DEndoscopyView);
   this->LayoutNode->AddLayoutDescription(vtkMRMLLayoutNode::SlicerLayoutConventionalQuantitativeView,
                                          conventionalQuantitativeView);
+
+  //added by zoulian
+  this->LayoutNode->AddLayoutDescription(vtkMRMLLayoutNode::SlicerLayoutTableFourUpQuantitativeView,
+	  tableFourUpQuantitativeView);
+  
+
   this->LayoutNode->AddLayoutDescription(vtkMRMLLayoutNode::SlicerLayoutFourUpQuantitativeView,
                                          fourUpQuantitativeView);
   this->LayoutNode->AddLayoutDescription(vtkMRMLLayoutNode::SlicerLayoutOneUpQuantitativeView,
