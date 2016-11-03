@@ -453,7 +453,7 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
   ActiveDoseDistribution = NULL;
   ActivesegmentationNode = NULL;
 
-
+  showDoseEvalulationWhenEnter = false;
 }
 
 
@@ -1389,7 +1389,12 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 
 		//Show the ISO Dose GUI
 		if (d->isoDoseGroup->isHidden())
+		{
 			d->isoDoseGroup->show();
+			this->showDoseEvalulationWhenEnter = true;
+
+		}
+
 
 	 
 		this->updateButtonsState();
@@ -3933,7 +3938,7 @@ void qSRPlanPathPlanModuleWidget::updateButtonsState()
 	d->pushButton_SwitchToOneUpQuantitativeLayout->setEnabled( applyEnabled && DVHCalculated );
 
  
-
+	this->showDoseEvalulationWhenEnter = applyEnabled;
 
 
 }
@@ -3954,7 +3959,8 @@ void qSRPlanPathPlanModuleWidget::updateButtonsState()
 
 void qSRPlanPathPlanModuleWidget::switchToToTableFourUpQuantitativeLayout()
 {
-	qSlicerApplication::application()->layoutManager()->setLayout(vtkMRMLLayoutNode::SlicerLayoutFourUpTableView);
+	qSlicerApplication::application()->layoutManager()->setLayout(vtkMRMLLayoutNode::SlicerLayoutTableFourUpQuantitativeView);
+
 
 	if (!DVHCalculated && this->ActiveDoseDistribution && this->ActivesegmentationNode)
 	{

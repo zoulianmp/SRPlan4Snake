@@ -358,7 +358,7 @@ private:
   
   vtkMRMLSegmentationNode* ActivesegmentationNode;
 
-
+  bool showDoseEvalulationWhenEnter;
 
 };
 

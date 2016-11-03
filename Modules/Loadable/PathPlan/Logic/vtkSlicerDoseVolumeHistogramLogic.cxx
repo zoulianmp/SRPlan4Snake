@@ -363,10 +363,14 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh()
 
   */
 
-  vtkSmartPointer<vtkSegmentation> segmentationCopy = vtkSmartPointer<vtkSegmentation>::New();
+  //vtkSmartPointer<vtkSegmentation> segmentationCopy = vtkSmartPointer<vtkSegmentation>::New();
 
 
-  segmentationCopy.TakeReference(selectedSegmentation);
+ // segmentationCopy.TakeReference(selectedSegmentation);
+
+
+  vtkSegmentation * segmentationCopy = selectedSegmentation;
+
 
   bool resamplingRequired = false;
 
@@ -962,14 +966,14 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* 
     this->GetMRMLScene(), doseVolumeSubjectHierarchyNode, vtkMRMLSubjectHierarchyConstants::GetDICOMLevelSubseries(),
     dvhArrayNodeName.c_str(), arrayNode);
 
-  */
+ 
   // Add connection attribute to input segmentation node
   vtkMRMLSubjectHierarchyNode* segmentSubjectHierarchyNode = segmentationNode->GetSegmentSubjectHierarchyNode(segmentID);
   if (segmentSubjectHierarchyNode)
   {
     segmentSubjectHierarchyNode->AddNodeReferenceID(vtkSlicerDoseVolumeHistogramLogic::DVH_CREATED_DVH_NODE_REFERENCE_ROLE.c_str(), arrayNode->GetID());
   }
-
+  */
   // Log measured time
   double checkpointEnd = timer->GetUniversalTime();
   UNUSED_VARIABLE(checkpointEnd); // Although it is used just below, a warning is logged so needs to be suppressed
