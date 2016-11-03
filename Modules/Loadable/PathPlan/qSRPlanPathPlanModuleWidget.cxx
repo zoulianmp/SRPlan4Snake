@@ -412,6 +412,11 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   QObject::connect(this->pushButton_SwitchToFourUpQuantitativeLayout, SIGNAL(clicked()), q, SLOT(switchToFourUpQuantitativeLayout()));
   QObject::connect(this->pushButton_SwitchToOneUpQuantitativeLayout, SIGNAL(clicked()), q, SLOT(switchToOneUpQuantitativeLayout()));
   QObject::connect(this->pushButton_SwitchToTableFourUpQuantitativeLayout, SIGNAL(clicked()), q, SLOT(switchToToTableFourUpQuantitativeLayout()));
+
+
+  //Connect the Dose Invalidation
+  QObject::connect(q, SIGNAL(DoseInvalided()), q, SLOT(onDoseInvalid()));
+
 }
 
 //-----------------------------------------------------------------------------
@@ -525,7 +530,12 @@ void qSRPlanPathPlanModuleWidget::enter()
 
   this->Superclass::enter();
 
-  d->isoDoseGroup->hide();
+ 
+  if (!this->showDoseEvalulationWhenEnter)
+  {
+	  d->isoDoseGroup->hide();
+  }
+
 
   d->traceMarkGroup->hide();
   
@@ -1304,6 +1314,9 @@ void qSRPlanPathPlanModuleWidget::onAddMarkupPushButtonClicked()
     }
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+
+  emit DoseInvalided();
+
   this->updateButtonsState();
    
 }
@@ -1362,7 +1375,7 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 	BDoseLogic->StartDoseCalcualte();
 
 	//reset the Dose Staticstic funciton
-	this->DVHCalculated = false;
+	this->validDVH = false;
 
 
 	
@@ -2266,6 +2279,12 @@ void qSRPlanPathPlanModuleWidget::onDeleteMarkupPushButtonClicked()
   d->activeMarkupTableWidget->clearSelection();
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+
+  emit DoseInvalided();
+
+
+ 
+
   this->updateButtonsState();
 }
 
@@ -2307,6 +2326,9 @@ void qSRPlanPathPlanModuleWidget::onDeleteAllMarkupsInListPushButtonClicked()
     }
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+
+  emit DoseInvalided();
+
   this->updateButtonsState();
 }
 
@@ -2363,6 +2385,8 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupMRMLNodeChanged(vtkMRMLNode *mar
   this->updateWidgetFromMRML();
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+  emit DoseInvalided();
+
   this->updateButtonsState();
 }
 
@@ -2429,6 +2453,8 @@ void qSRPlanPathPlanModuleWidget::onSelectionNodeActivePlaceNodeIDChanged()
     }
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+  emit DoseInvalided();
+
   this->updateButtonsState();
 }
 
@@ -2581,6 +2607,8 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupTableCellChanged(int row, int co
      listNode->SetNthMarkupWeight(n, weight);
 
 	 this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+	 emit DoseInvalided();
+
 	 this->updateButtonsState();
 
     }
@@ -3408,6 +3436,8 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodePointModifiedEvent(vtkObjec
   //If There has dosevolume, invalidate the dosevolume added by zoulian
 
   this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+  emit DoseInvalided();
+
   this->updateButtonsState();
 }
 
@@ -3933,14 +3963,15 @@ void qSRPlanPathPlanModuleWidget::updateButtonsState()
  
  
 		
-	d->pushButton_SwitchToFourUpQuantitativeLayout->setEnabled( applyEnabled && DVHCalculated );
+	d->pushButton_SwitchToFourUpQuantitativeLayout->setEnabled( applyEnabled && validDVH);
 		
-	d->pushButton_SwitchToOneUpQuantitativeLayout->setEnabled( applyEnabled && DVHCalculated );
+	d->pushButton_SwitchToOneUpQuantitativeLayout->setEnabled( applyEnabled && validDVH);
 
  
+	// SET BOOL index for other purpose.
 	this->showDoseEvalulationWhenEnter = applyEnabled;
 
-
+    
 }
 
 
@@ -3962,9 +3993,10 @@ void qSRPlanPathPlanModuleWidget::switchToToTableFourUpQuantitativeLayout()
 	qSlicerApplication::application()->layoutManager()->setLayout(vtkMRMLLayoutNode::SlicerLayoutTableFourUpQuantitativeView);
 
 
-	if (!DVHCalculated && this->ActiveDoseDistribution && this->ActivesegmentationNode)
+	if (!validDVH && this->ActiveDoseDistribution && this->ActivesegmentationNode)
 	{
 		this->enterDVHDoseEvalutaionFunction(this->ActiveDoseDistribution, this->ActivesegmentationNode);
+		//validDVH = true;
 	}
 
 }
@@ -4035,6 +4067,9 @@ void qSRPlanPathPlanModuleWidget::enterDVHDoseEvalutaionFunction(vtkMRMLScalarVo
 	this->getDVHLogic()->SetAndObserveDoseVolumeHistogramNode(DVHNode);
 
 	this->computeDvh();
+
+
+
 
 	this->updateDVHWidgetFromMRML();
 
@@ -4135,7 +4170,7 @@ void qSRPlanPathPlanModuleWidget::refreshDvhTable(bool force/*=false*/)
 
 
 	QStringList headerLabels;
-	headerLabels << "" << "Structure" << "Volume name";
+	headerLabels << "" << "Structure" << "DoseGrid name";
 	for (std::vector<std::string>::iterator it = metricList.begin(); it != metricList.end(); ++it)
 	{
 		QString metricName(it->c_str());
@@ -4416,6 +4451,10 @@ void qSRPlanPathPlanModuleWidget::computeDvh()
 	// Compute the DVH for each selected segment set using the selected dose volume
 	std::string errorMessage = this->getDVHLogic()->ComputeDvh();
 	
+	if (errorMessage.empty())
+	{
+		this->validDVH = true;
+	}
 
 	qvtkDisconnect(this->getDVHLogic(), SlicerRtCommon::ProgressUpdated, this, SLOT(onProgressUpdated(vtkObject*, void*, unsigned long, void*)));
 	delete d->ConvertProgressDialog;
@@ -4434,4 +4473,19 @@ void qSRPlanPathPlanModuleWidget::onProgressUpdated(vtkObject* vtkNotUsed(caller
 
 	double* progress = reinterpret_cast<double*>(callData);
 	d->ConvertProgressDialog->setValue((int)((*progress)*100.0));
+}
+
+
+void qSRPlanPathPlanModuleWidget::onDoseInvalid()
+{
+	
+
+	if (this->validDVH)
+	{
+		// Do some clear out jobs
+
+
+		this->validDVH = false;
+	}
+
 }

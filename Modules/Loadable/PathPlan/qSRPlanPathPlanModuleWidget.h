@@ -117,6 +117,9 @@ public:
   //added by zoulian
   void PlaceSnakeHead(double centerX,double centerY,double centerZ,double orientX, double orientY, double orientZ);
 
+
+
+
 public slots:
 
   /// Respond to the scene events
@@ -278,10 +281,14 @@ public slots:
 
   void onProgressUpdated(vtkObject*, void*, unsigned long, void*);
 
+  // Needed to update other content when dose is invalided
+  void onDoseInvalid();
 
 
 
 
+signals:
+  void DoseInvalided();
 
 
 
@@ -352,7 +359,8 @@ private:
   vtkSlicerRTScalarBarActor* ScalarBarActor2DYellow;
   vtkSlicerRTScalarBarActor* ScalarBarActor2DGreen;
 
-  bool DVHCalculated =false;
+  //A bool index for DVH Calculation
+  bool validDVH =false;
 
   vtkMRMLScalarVolumeNode* ActiveDoseDistribution;
   

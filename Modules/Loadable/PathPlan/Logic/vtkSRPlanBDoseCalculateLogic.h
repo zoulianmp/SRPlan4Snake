@@ -61,7 +61,8 @@ public:
   vtkTypeMacro(vtkSRPlanBDoseCalculateLogic, vtkMRMLAbstractLogic);
   void PrintSelf(ostream& os, vtkIndent indent);
 
-   
+ 
+
 
 public:
 
