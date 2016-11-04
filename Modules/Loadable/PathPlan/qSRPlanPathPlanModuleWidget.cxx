@@ -414,8 +414,12 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
   QObject::connect(this->pushButton_SwitchToTableFourUpQuantitativeLayout, SIGNAL(clicked()), q, SLOT(switchToToTableFourUpQuantitativeLayout()));
 
 
-  //Connect the Dose Invalidation
+  //Connect the Dose Invalidation added by zoulian
   QObject::connect(q, SIGNAL(DoseInvalided()), q, SLOT(onDoseInvalid()));
+
+  //connect the workmode changed
+  QObject::connect(q, SIGNAL(WorkModeChanged(int )), q, SLOT(onWorkModeChanged(int )));
+
 
 }
 
@@ -459,6 +463,8 @@ qSRPlanPathPlanModuleWidget::qSRPlanPathPlanModuleWidget(QWidget* _parent)
   ActivesegmentationNode = NULL;
 
   showDoseEvalulationWhenEnter = false;
+
+  currentWorkMode = PathPlanWorkMode::PathPlanning;
 }
 
 
@@ -530,15 +536,7 @@ void qSRPlanPathPlanModuleWidget::enter()
 
   this->Superclass::enter();
 
- 
-  if (!this->showDoseEvalulationWhenEnter)
-  {
-	  d->isoDoseGroup->hide();
-  }
-
-
-  d->traceMarkGroup->hide();
-  
+  this->onWorkModeChanged(currentWorkMode);
 
   // qDebug() << "enter widget";
 
@@ -570,6 +568,9 @@ void qSRPlanPathPlanModuleWidget::enter()
   //d->activeMarkupMRMLNodeComboBox->setEnabled(true);
   d->activeMarkupMRMLNodeComboBox->blockSignals(false);
 
+
+
+
   // install some shortcuts for use while in this module
   this->installShortcuts();
 
@@ -579,6 +580,17 @@ void qSRPlanPathPlanModuleWidget::enter()
   this->updateMaximumScaleFromVolumes();
 
   this->updateWidgetFromMRML();
+
+  // make sure there is a markupNode
+  QString activeMarkupsNodeID = d->activeMarkupMRMLNodeComboBox->currentNodeID();
+  if (!activeMarkupsNodeID.isEmpty())
+  {
+	  d->doseCalculatePushButton->setEnabled(true);
+	  d->realTracePushButton->setEnabled(true);
+  }
+
+
+
 }
 
 //-----------------------------------------------------------------------------
@@ -1326,98 +1338,91 @@ void qSRPlanPathPlanModuleWidget::onDoseCalculatePushButtonClicked()
 {
 	Q_D(qSRPlanPathPlanModuleWidget);
 
-	// If the realTracing opacity show, then hide
-	if (d->traceMarkGroup->isVisible())
+	if (!ValidDose)
 	{
-		d->traceMarkGroup->hide();
-	}
 
+		QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 
-	QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+		//********************************************************
+		//Get the Logic and input Data Sets
 
-	//********************************************************
-	//Get the Logic and input Data Sets
+		vtkMRMLScene *scene = this->mrmlScene();
 
-	vtkMRMLScene *scene = this->mrmlScene();
+		vtkSRPlanPathPlanModuleLogic * PathPlanLogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
 
-	vtkSRPlanPathPlanModuleLogic * PathPlanLogic = vtkSRPlanPathPlanModuleLogic::SafeDownCast(this->logic());
-
-	vtkSRPlanBDoseCalculateLogic * BDoseLogic = PathPlanLogic->GetBDoseCalculateLogic();
+		vtkSRPlanBDoseCalculateLogic * BDoseLogic = PathPlanLogic->GetBDoseCalculateLogic();
 
 	
-	vtkMRMLSelectionNode * selectionNode = PathPlanLogic->GetSelectionNode();
-	if (!selectionNode)
-	{
-		selectionNode = vtkMRMLSelectionNode::SafeDownCast(scene->GetNthNodeByClass(0, "vtkMRMLSelectionNode"));
-		PathPlanLogic->SetSelectionNode(selectionNode);
-	}
-
-
-	char * planVolumeID = selectionNode->GetPlanPrimaryVolumeID();
-	char * snakePathID = selectionNode->GetActivePlaceNodeID();
-	char * segmenatationID = selectionNode->GetActiveSegmentationID();
-
-	vtkMRMLScalarVolumeNode* ScalarNode = vtkMRMLScalarVolumeNode::SafeDownCast(scene->GetNodeByID(planVolumeID));
-
-	vtkMRMLSegmentationNode* segmentationNode = vtkMRMLSegmentationNode::SafeDownCast(scene->GetNodeByID(segmenatationID));
-
-	//******************************************************************************************
-	//The length in mm,to determine the range of seed source dose distribution
-
-	BDoseLogic->SetDoseCalculateGridSize(1.0);
-	BDoseLogic->SetDoseCalculateCutoff(50.0);
-
-
-
-	BDoseLogic->SetPlanPrimaryVolumeNode(vtkMRMLScalarVolumeNode::SafeDownCast(scene->GetNodeByID(planVolumeID)));
-	BDoseLogic->SetSnakePlanPath(vtkMRMLMarkupsNode::SafeDownCast(scene->GetNodeByID(snakePathID)));
-
-	BDoseLogic->StartDoseCalcualte();
-
-	//reset the Dose Staticstic funciton
-	this->validDVH = false;
-
-
-	
-
-
-
-	//Get the Final Dose distribution for ISO Dose Node 
-	vtkMRMLScalarVolumeNode* DoseDistribution = BDoseLogic->GetCalculatedDoseVolume();
-
-	//vtkMRMLScalarVolumeNode* DoseDistribution = BDoseLogic->GetResampledDoseVolume();
-	//********************************************************
-	//Begin the ISO DOSE Evaluation Function and DVH Evaluation Function
-
-	if (DoseDistribution)
-	{
-		this->enterIsoDoseEvaluationFunction(DoseDistribution);
-
-		//Prepared for DVH Statistic
-		this->ActiveDoseDistribution = DoseDistribution;
-
-	    this->ActivesegmentationNode = segmentationNode;
-
-	//	this->enterDVHDoseEvalutaionFunction(DoseDistribution, segmentationNode);
-
-		//Show the ISO Dose GUI
-		if (d->isoDoseGroup->isHidden())
+		vtkMRMLSelectionNode * selectionNode = PathPlanLogic->GetSelectionNode();
+		if (!selectionNode)
 		{
-			d->isoDoseGroup->show();
-			this->showDoseEvalulationWhenEnter = true;
-
+			selectionNode = vtkMRMLSelectionNode::SafeDownCast(scene->GetNthNodeByClass(0, "vtkMRMLSelectionNode"));
+			PathPlanLogic->SetSelectionNode(selectionNode);
 		}
 
 
+		char * planVolumeID = selectionNode->GetPlanPrimaryVolumeID();
+		char * snakePathID = selectionNode->GetActivePlaceNodeID();
+		char * segmenatationID = selectionNode->GetActiveSegmentationID();
+
+		vtkMRMLScalarVolumeNode* ScalarNode = vtkMRMLScalarVolumeNode::SafeDownCast(scene->GetNodeByID(planVolumeID));
+
+		vtkMRMLSegmentationNode* segmentationNode = vtkMRMLSegmentationNode::SafeDownCast(scene->GetNodeByID(segmenatationID));
+
+		//******************************************************************************************
+		//The length in mm,to determine the range of seed source dose distribution
+
+		BDoseLogic->SetDoseCalculateGridSize(1.0);
+		BDoseLogic->SetDoseCalculateCutoff(50.0);
+
+
+
+		BDoseLogic->SetPlanPrimaryVolumeNode(vtkMRMLScalarVolumeNode::SafeDownCast(scene->GetNodeByID(planVolumeID)));
+		BDoseLogic->SetSnakePlanPath(vtkMRMLMarkupsNode::SafeDownCast(scene->GetNodeByID(snakePathID)));
+
+		BDoseLogic->StartDoseCalcualte();
+
+		//reset the Dose Staticstic funciton
+
+		this->ValidDose = true;
+
+		this->validDVH = false;
+
+
+		//Get the Final Dose distribution for ISO Dose Node 
+		vtkMRMLScalarVolumeNode* DoseDistribution = BDoseLogic->GetCalculatedDoseVolume();
+
+		//vtkMRMLScalarVolumeNode* DoseDistribution = BDoseLogic->GetResampledDoseVolume();
+		//********************************************************
+		//Begin the ISO DOSE Evaluation Function and DVH Evaluation Function
+
+		if (DoseDistribution)
+		{
+			this->enterIsoDoseEvaluationFunction(DoseDistribution);
+
+			//Prepared for DVH Statistic
+			this->ActiveDoseDistribution = DoseDistribution;
+
+			this->ActivesegmentationNode = segmentationNode;
+
+		//	this->enterDVHDoseEvalutaionFunction(DoseDistribution, segmentationNode);
+
+
+
 	 
-		this->updateButtonsState();
+			this->updateButtonsState();
 		
+		}
+
+		QApplication::restoreOverrideCursor();
+
+
 	}
-	
-	 
+	//Change the mode to  Dose cal and Evaluation 
+	currentWorkMode = PathPlanWorkMode::DoseCalEvaluation;
+	emit WorkModeChanged(currentWorkMode);
 
 
-	QApplication::restoreOverrideCursor();
 }
 
 //Given a Dose distribution Volume, enter the ISO DoseEvaluate Function
@@ -1785,13 +1790,9 @@ void qSRPlanPathPlanModuleWidget::updateIsoDoseGroupWidgetFromMRML()
 void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 {
 	Q_D(qSRPlanPathPlanModuleWidget);
-	if (!d->isoDoseGroup->isHidden())
-    	d->isoDoseGroup->hide();
-
-	d->traceMarkGroup->show();
-	 
-
-	bool checked = d->realTracePushButton->isChecked();
+	
+	this->currentWorkMode = PathPlanWorkMode::RealTracking;
+	emit  WorkModeChanged(currentWorkMode);
 
 	QString timestring = QString(vtksys::SystemTools::GetEnv("SNAKE_UPDATE_TIME_MS"));
  
@@ -1799,6 +1800,7 @@ void qSRPlanPathPlanModuleWidget::onRealTracePushButtonClicked()
 
 
 
+	bool checked = d->realTracePushButton->isChecked();
 
 	//if checked ,start to tracing the snake motion,else stop the motion tracing
 	if (checked)
@@ -3435,10 +3437,18 @@ void qSRPlanPathPlanModuleWidget::onActiveMarkupsNodePointModifiedEvent(vtkObjec
 
   //If There has dosevolume, invalidate the dosevolume added by zoulian
 
-  this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
-  emit DoseInvalided();
 
-  this->updateButtonsState();
+  //if in RealTime Tracing mode, don't to invalidate the dose grid
+  if (!IsTMarkofNthNodeinActiveMarkupList(n))
+  {
+	  this->getBDoseCalculateLogic()->InvalidDoseAndRemoveDoseVolumeNodeFromScene();
+	  emit DoseInvalided();
+
+	  this->updateButtonsState();
+  }
+
+
+
 }
 
 //-----------------------------------------------------------------------------
@@ -4478,14 +4488,126 @@ void qSRPlanPathPlanModuleWidget::onProgressUpdated(vtkObject* vtkNotUsed(caller
 
 void qSRPlanPathPlanModuleWidget::onDoseInvalid()
 {
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	this->ValidDose = false;
 	
 
 	if (this->validDVH)
 	{
 		// Do some clear out jobs
 
-
 		this->validDVH = false;
+		vtkMRMLDoseVolumeHistogramNode* paramNode = this->getDVHLogic()->GetDoseVolumeHistogramNode();
+		paramNode->RemoveAllDvhDoubleArrayNodes();
+
 	}
+
+
+	//Because The Dose is invalid ,hide the does evaluation GUI
+	if (!d->isoDoseGroup->isHidden())
+	{
+		d->isoDoseGroup->hide();
+		this->showDoseEvalulationWhenEnter = false;
+
+	}
+
+	qSlicerApplication::application()->layoutManager()->setLayout(vtkMRMLLayoutNode::SlicerLayoutFourUpView);
+
+
+}
+
+
+
+bool qSRPlanPathPlanModuleWidget::IsTMarkofNthNodeinActiveMarkupList(int n)
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	QString activeMarkupsNodeID = d->activeMarkupMRMLNodeComboBox->currentNodeID();
+	vtkMRMLNode *mrmlNode = this->mrmlScene()->GetNodeByID(activeMarkupsNodeID.toLatin1());
+	vtkMRMLMarkupsNode *markupsNode = NULL;
+	if (mrmlNode)
+	{
+		markupsNode = vtkMRMLMarkupsNode::SafeDownCast(mrmlNode);
+	}
+	if (!markupsNode)
+	{
+		qDebug() << QString("update Row: unable to get markups node with id ") + activeMarkupsNodeID;
+		return false;
+	}
+
+
+	std::string label = markupsNode->GetNthMarkupLabel(n);
+
+	if ( !strcmp(label.c_str(),"TMark") )
+	{
+		return true;
+
+	}
+	else
+	{
+		return false;
+	}
+
+	
+}
+
+
+void qSRPlanPathPlanModuleWidget::onWorkModeChanged(int i)
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	if (i == PathPlanWorkMode::PathPlanning)
+	{
+
+		if (!this->showDoseEvalulationWhenEnter)
+		{
+			d->isoDoseGroup->hide();
+		}
+
+
+		d->traceMarkGroup->hide();
+
+
+	}
+	else if (i == PathPlanWorkMode::DoseCalEvaluation)
+	{
+
+		// If the realTracing opacity show, then hide
+		if (d->traceMarkGroup->isVisible())
+		{
+			d->traceMarkGroup->hide();
+		}
+
+		if (this->ValidDose)
+		{
+			//Show the ISO Dose GUI
+			if (d->isoDoseGroup->isHidden())
+			{
+				d->isoDoseGroup->show();
+				this->showDoseEvalulationWhenEnter = true;
+
+			}
+		}
+
+		if (this->validDVH)
+		{
+			this->switchToToTableFourUpQuantitativeLayout();
+
+		}
+
+	}
+	else if (i == PathPlanWorkMode::RealTracking)
+	{
+		if (!d->isoDoseGroup->isHidden())
+			d->isoDoseGroup->hide();
+
+		d->traceMarkGroup->show();
+
+		qSlicerApplication::application()->layoutManager()->setLayout(vtkMRMLLayoutNode::SlicerLayoutFourUpView);
+
+
+	}
+
 
 }

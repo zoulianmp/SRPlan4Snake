@@ -117,6 +117,15 @@ public:
   //added by zoulian
   void PlaceSnakeHead(double centerX,double centerY,double centerZ,double orientX, double orientY, double orientZ);
 
+  //Give the n index ,judge the TMark Label added by zoulian
+  bool IsTMarkofNthNodeinActiveMarkupList(int n);
+
+  enum PathPlanWorkMode
+  {
+	  PathPlanning = 0,
+	  DoseCalEvaluation = 1,
+	  RealTracking = 2
+  };
 
 
 
@@ -284,12 +293,13 @@ public slots:
   // Needed to update other content when dose is invalided
   void onDoseInvalid();
 
+  void onWorkModeChanged( int i);
 
 
 
 signals:
   void DoseInvalided();
-
+  void WorkModeChanged(int i);
 
 
 
@@ -361,13 +371,17 @@ private:
 
   //A bool index for DVH Calculation
   bool validDVH =false;
+  bool showDoseEvalulationWhenEnter;
+  bool ValidDose = false;
+
 
   vtkMRMLScalarVolumeNode* ActiveDoseDistribution;
   
   vtkMRMLSegmentationNode* ActivesegmentationNode;
 
-  bool showDoseEvalulationWhenEnter;
 
+
+  PathPlanWorkMode currentWorkMode;
 };
 
 #endif

@@ -1221,4 +1221,13 @@ void vtkMRMLMarkupsFiducialDisplayableManager3D::OnMRMLMarkupsNodeMarkupRemovedE
   // for now, recreate the widget
   this->Helper->RemoveWidgetAndNode(markupsNode);
   this->AddWidget(markupsNode);
+
+  //if the TMark then Delet the cone actor added by zoulian
+  if (!markupsNode->ExistMarkup("TMark") && this->m_SnakeHead)
+  {
+	  this->GetRenderer()->RemoveActor(this->m_SnakeHead);
+	  this->m_SnakeHead = NULL;
+  }
+
 }
+
