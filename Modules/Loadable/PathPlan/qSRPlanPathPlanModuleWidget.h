@@ -295,7 +295,7 @@ public slots:
 
   void onWorkModeChanged( int i);
 
-
+  void showInChartCheckStateChanged(int aState);
 
 signals:
   void DoseInvalided();

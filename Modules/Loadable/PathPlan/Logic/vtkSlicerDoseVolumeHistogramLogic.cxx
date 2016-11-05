@@ -1053,9 +1053,11 @@ void vtkSlicerDoseVolumeHistogramLogic::AddDvhToChart(const char* dvhArrayNodeId
     vtkMRMLSubjectHierarchyNode* doseSubjectHierarchyNode = vtkMRMLSubjectHierarchyNode::GetAssociatedSubjectHierarchyNode(doseVolumeNode);
     if (doseSubjectHierarchyNode)
     {
-      const char* doseUnitName = doseSubjectHierarchyNode->GetAttributeFromAncestor(
-        SlicerRtCommon::DICOMRTIMPORT_DOSE_UNIT_NAME_ATTRIBUTE_NAME.c_str(), vtkMRMLSubjectHierarchyConstants::GetDICOMLevelStudy());
-      doseAxisName=std::string("Dose [")+doseUnitName+"]";
+ //     const char* doseUnitName = doseSubjectHierarchyNode->GetAttributeFromAncestor(
+//        SlicerRtCommon::DICOMRTIMPORT_DOSE_UNIT_NAME_ATTRIBUTE_NAME.c_str(), vtkMRMLSubjectHierarchyConstants::GetDICOMLevelStudy());
+		//Only used for snake added by zoulian for simplified 
+		const char* doseUnitName = "Percent";
+        doseAxisName=std::string("Dose [")+doseUnitName+"]";
     }
     else
     {
@@ -1209,8 +1211,9 @@ vtkMRMLChartViewNode* vtkSlicerDoseVolumeHistogramLogic::GetChartViewNode()
     vtkErrorMacro("GetChartViewNode: Unable to get layout node!");
     return NULL;
   }
-  layoutNode->SetViewArrangement( vtkMRMLLayoutNode::SlicerLayoutConventionalQuantitativeView );
-  
+  //layoutNode->SetViewArrangement( vtkMRMLLayoutNode::SlicerLayoutConventionalQuantitativeView );
+  layoutNode->SetViewArrangement(vtkMRMLLayoutNode::SlicerLayoutTableFourUpQuantitativeView);
+ 
   vtkSmartPointer<vtkCollection> chartViewNodes =
     vtkSmartPointer<vtkCollection>::Take( this->GetMRMLScene()->GetNodesByClass("vtkMRMLChartViewNode") );
   chartViewNodes->InitTraversal();

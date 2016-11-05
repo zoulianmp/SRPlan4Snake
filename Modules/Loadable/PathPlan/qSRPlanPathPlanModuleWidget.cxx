@@ -4611,3 +4611,43 @@ void qSRPlanPathPlanModuleWidget::onWorkModeChanged(int i)
 
 
 }
+
+
+
+//-----------------------------------------------------------------------------
+void qSRPlanPathPlanModuleWidget::showInChartCheckStateChanged(int aState)
+{
+	Q_D(qSRPlanPathPlanModuleWidget);
+
+	if (!this->mrmlScene())
+	{
+		qCritical() << "qSRPlanPathPlanModuleWidget::showInChartCheckStateChanged: Invalid scene!";
+		return;
+	}
+
+	
+	vtkMRMLDoseVolumeHistogramNode* paramNode = this->getDVHLogic()->GetDoseVolumeHistogramNode();
+	if (!paramNode)
+	{
+		return;
+	}
+
+	QCheckBox* senderCheckbox = dynamic_cast<QCheckBox*>(sender());
+	if (!senderCheckbox)
+	{
+		std::cerr << "Error: Invalid sender checkbox for show/hide in chart checkbox state change" << std::endl;
+		return;
+	}
+
+	if (aState)
+	{
+		this->getDVHLogic()->AddDvhToSelectedChart(d->PlotCheckboxToStructureNameMap[senderCheckbox].toLatin1().constData());
+	}
+	else
+	{
+		this->getDVHLogic()->RemoveDvhFromSelectedChart(d->PlotCheckboxToStructureNameMap[senderCheckbox].toLatin1().constData());
+	}
+
+	this->updateChartCheckboxesState();
+	this->updateButtonsState();
+}
