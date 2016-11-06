@@ -409,6 +409,8 @@ void qSRPlanPathPlanModuleWidgetPrivate::setupUi(qSlicerWidget* widget)
 
 
   //Set up the enter DVH Function Button signal and slots added by zoulian
+  QObject::connect(this->pushButton_ForeUpdateDVH, SIGNAL(clicked()), q, SLOT(onManualRefreshDVHClicked()));
+
   QObject::connect(this->pushButton_SwitchToFourUpQuantitativeLayout, SIGNAL(clicked()), q, SLOT(switchToFourUpQuantitativeLayout()));
   QObject::connect(this->pushButton_SwitchToOneUpQuantitativeLayout, SIGNAL(clicked()), q, SLOT(switchToOneUpQuantitativeLayout()));
   QObject::connect(this->pushButton_SwitchToTableFourUpQuantitativeLayout, SIGNAL(clicked()), q, SLOT(switchToToTableFourUpQuantitativeLayout()));
@@ -3969,6 +3971,8 @@ void qSRPlanPathPlanModuleWidget::updateButtonsState()
 
 	d->pushButton_Apply->setEnabled(applyEnabled);
 
+	d->pushButton_ForeUpdateDVH->setEnabled(applyEnabled);
+
 	d->pushButton_SwitchToTableFourUpQuantitativeLayout->setEnabled(applyEnabled);
  
  
@@ -3998,6 +4002,14 @@ void qSRPlanPathPlanModuleWidget::updateButtonsState()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
+//SlicerLayoutFourUpTableView
+
+//void qSRPlanPathPlanModuleWidget::switchToToTableFourUpQuantitativeLayout()
+//{
+
+//}
+
+
 void qSRPlanPathPlanModuleWidget::switchToToTableFourUpQuantitativeLayout()
 {
 	qSlicerApplication::application()->layoutManager()->setLayout(vtkMRMLLayoutNode::SlicerLayoutTableFourUpQuantitativeView);
@@ -4010,6 +4022,28 @@ void qSRPlanPathPlanModuleWidget::switchToToTableFourUpQuantitativeLayout()
 	}
 
 }
+
+void qSRPlanPathPlanModuleWidget::onManualRefreshDVHClicked()
+{
+	if (validDVH)
+	{
+		validDVH = false;
+	
+		vtkMRMLDoseVolumeHistogramNode* paramNode = this->getDVHLogic()->GetDoseVolumeHistogramNode();
+		paramNode->RemoveAllDvhDoubleArrayNodes();
+
+		//Remove the DVH Curve from Chart
+		vtkMRMLChartNode* chartNode = paramNode->GetChartNode();
+		if (chartNode)
+		{
+			chartNode->ClearArrays();
+		}
+
+	}
+
+	this->switchToToTableFourUpQuantitativeLayout();
+}
+
 
 
 void qSRPlanPathPlanModuleWidget::switchToFourUpQuantitativeLayout()
@@ -4498,9 +4532,19 @@ void qSRPlanPathPlanModuleWidget::onDoseInvalid()
 		// Do some clear out jobs
 
 		this->validDVH = false;
+		//Remove the DVH Double ArrayNodes
 		vtkMRMLDoseVolumeHistogramNode* paramNode = this->getDVHLogic()->GetDoseVolumeHistogramNode();
 		paramNode->RemoveAllDvhDoubleArrayNodes();
 
+		//Remove the DVH Curve from Chart
+		vtkMRMLChartNode* chartNode = paramNode->GetChartNode();
+		if (chartNode)
+		{
+			chartNode->ClearArrays();
+		}
+	
+
+		
 	}
 
 
@@ -4650,4 +4694,10 @@ void qSRPlanPathPlanModuleWidget::showInChartCheckStateChanged(int aState)
 
 	this->updateChartCheckboxesState();
 	this->updateButtonsState();
+
+	//Refresh the Chart View content added by zoulian
+	
+	qSlicerApplication::application()->layoutManager()->setLayout(vtkMRMLLayoutNode::SlicerLayoutTableFourUpQuantitativeView);
+	
+ 
 }

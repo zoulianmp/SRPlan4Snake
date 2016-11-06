@@ -1005,6 +1005,10 @@ void vtkSlicerDoseVolumeHistogramLogic::AddDvhToSelectedChart(const char* dvhArr
   }
   
   this->AddDvhToChart(dvhArrayNodeId, chartNode->GetID());
+
+  //Test for update chart view added by zoulian
+  
+ 
 }
 
 //---------------------------------------------------------------------------

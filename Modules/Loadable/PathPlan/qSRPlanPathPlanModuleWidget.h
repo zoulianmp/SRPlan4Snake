@@ -281,6 +281,7 @@ public slots:
   void applyClicked();
 
  // Dose Volume Slots by zoulian
+  void onManualRefreshDVHClicked();
   void switchToToTableFourUpQuantitativeLayout();
   void switchToFourUpQuantitativeLayout();
   void switchToOneUpQuantitativeLayout();

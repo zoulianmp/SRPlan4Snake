@@ -602,14 +602,14 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>220</x>
-        <y>370</y>
+        <x>50</x>
+        <y>380</y>
         <width>141</width>
         <height>31</height>
        </rect>
       </property>
       <property name="text">
-       <string>Update Iso Level Show</string>
+       <string>Manual Refresh IsoLevel</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_4">
@@ -765,6 +765,19 @@
         <width>21</width>
         <height>21</height>
        </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_ForeUpdateDVH">
+      <property name="geometry">
+       <rect>
+        <x>224</x>
+        <y>380</y>
+        <width>121</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Manual Refresh DVH </string>
       </property>
      </widget>
     </widget>
