@@ -190,12 +190,15 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   // ModuleSelector ToolBar
   //----------------------------------------------------------------------------
   // Create a Module selector
+  
   this->ModuleSelectorToolBar = new qSlicerModuleSelectorToolBar("Module Selection",q);
   this->ModuleSelectorToolBar->setObjectName(QString::fromUtf8("ModuleSelectorToolBar"));
   this->ModuleSelectorToolBar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
   this->ModuleSelectorToolBar->setModuleManager(moduleManager);
   q->insertToolBar(this->ModuleToolBar, this->ModuleSelectorToolBar);
   this->ModuleSelectorToolBar->stackUnder(this->ModuleToolBar);
+
+  this->ModuleSelectorToolBar->hide();
 
   // Connect the selector with the module panel
   this->ModulePanel->setModuleManager(moduleManager);
@@ -205,6 +208,32 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   // Ensure the panel dock widget is visible
   QObject::connect(this->ModuleSelectorToolBar, SIGNAL(moduleSelected(QString)),
                    this->PanelDockWidget, SLOT(show()));
+ 
+
+  //----------------------------------------------------------------------------
+  // Module ToolBar
+  //----------------------------------------------------------------------------
+  // Switch to Aim Modules
+
+  QObject::connect(this->actionSwithtoWelcome, SIGNAL(triggered()),
+	 q, SLOT(on_ActionSwithtoWelcome_triggered()));
+
+
+  QObject::connect(this->actionSwitchtoSubjectHierarchy, SIGNAL(triggered()),
+	  q, SLOT(on_ActionSwitchtoSubjectHierarchy_triggered()));
+
+
+  QObject::connect(this->actionSwitchtoSegmentation, SIGNAL(triggered()),
+	  q, SLOT(on_ActionSwitchtoSegmentation_triggered()));
+
+
+
+  QObject::connect(this->actionSwitchtoPathPlan, SIGNAL(triggered()),
+	  q, SLOT(on_ActionSwitchtoPathPlan_triggered()));
+
+
+
+
 
 
 
@@ -362,6 +391,13 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   QObject::connect(this->LayoutManager, SIGNAL(selectModule(QString)),
                    this->ModuleSelectorToolBar, SLOT(selectModule(QString)));
 
+  //added by zoulian
+//  QObject::connect(this->LayoutManager, SIGNAL(selectModule(QString)),
+//	  this->ModulePanel, SLOT(setModule(QString)));
+
+
+
+
   // Add menus for configuring compare view
   QMenu *compareMenu = new QMenu(q->tr("Select number of viewers..."), mainWindow);
   compareMenu->setObjectName("CompareMenuView");
@@ -442,6 +478,7 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
                    SIGNAL(mrmlSceneChanged(vtkMRMLScene*)),
                    this->ViewersToolBar,
                    SLOT(setMRMLScene(vtkMRMLScene*)));
+
 
   //----------------------------------------------------------------------------
   // Undo/Redo Toolbar
@@ -773,6 +810,55 @@ ctkErrorLogWidget* qSlicerAppMainWindow::errorLogWidget()const
   Q_D(const qSlicerAppMainWindow);
   return d->ErrorLogWidget;
 }
+
+
+
+//---------------------------------------------------------------------------
+
+void qSlicerAppMainWindow::on_ActionSwithtoWelcome_triggered()
+{
+	Q_D(const qSlicerAppMainWindow);
+	QString  moduleName = "Welcome";
+
+	d->ModulePanel->setModule(moduleName);
+
+}
+
+
+void qSlicerAppMainWindow::on_ActionSwitchtoSubjectHierarchy_triggered()
+{
+	Q_D(const qSlicerAppMainWindow);
+	QString  moduleName = "SubjectHierarchy";
+
+	d->ModulePanel->setModule(moduleName);
+
+}
+
+
+
+void qSlicerAppMainWindow::on_ActionSwitchtoSegmentation_triggered()
+{
+	Q_D(const qSlicerAppMainWindow);
+	QString  moduleName = "Segmentations";
+
+	d->ModulePanel->setModule(moduleName);
+
+}
+
+
+
+void qSlicerAppMainWindow::on_ActionSwitchtoPathPlan_triggered()
+{
+	Q_D(const qSlicerAppMainWindow);
+	QString  moduleName = "PathPlan";
+
+	d->ModulePanel->setModule(moduleName);
+
+}
+
+
+
+
 
 //---------------------------------------------------------------------------
 void qSlicerAppMainWindow::on_FileAddDataAction_triggered()
@@ -1491,7 +1577,11 @@ void qSlicerAppMainWindow::setHomeModuleCurrent()
   Q_D(qSlicerAppMainWindow);
   QSettings settings;
   QString homeModule = settings.value("Modules/HomeModule").toString();
+ // d->ModulePanel->setModule(homeModule); //added by zoulian
+
   d->ModuleSelectorToolBar->selectModule(homeModule);
+
+
 }
 
 //---------------------------------------------------------------------------

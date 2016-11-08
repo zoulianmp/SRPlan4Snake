@@ -185,7 +185,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="FileLoadDataAction"/>
-   <addaction name="LoadDICOMAction"/>
    <addaction name="FileSaveSceneAction"/>
   </widget>
   <widget class="QToolBar" name="ModuleToolBar">
@@ -198,6 +197,10 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionSwithtoWelcome"/>
+   <addaction name="actionSwitchtoSubjectHierarchy"/>
+   <addaction name="actionSwitchtoSegmentation"/>
+   <addaction name="actionSwitchtoPathPlan"/>
   </widget>
   <widget class="QToolBar" name="UndoRedoToolBar">
    <property name="windowTitle">
@@ -1217,6 +1220,54 @@
    </property>
    <property name="toolTip">
     <string>Three by three slice</string>
+   </property>
+  </action>
+  <action name="actionSwithtoWelcome">
+   <property name="icon">
+    <iconset resource="../SRPlanApp.qrc">
+     <normaloff>:/Icons/Large/DesktopIcon.png</normaloff>:/Icons/Large/DesktopIcon.png</iconset>
+   </property>
+   <property name="text">
+    <string>SwithtoWelcome</string>
+   </property>
+   <property name="toolTip">
+    <string>Switch to Welcom Module</string>
+   </property>
+  </action>
+  <action name="actionSwitchtoSubjectHierarchy">
+   <property name="icon">
+    <iconset resource="../../../../Base/QTGUI/Resources/qSlicerBaseQTGUI.qrc">
+     <normaloff>:/Icons/Medium/SlicerAddHierarchy.png</normaloff>:/Icons/Medium/SlicerAddHierarchy.png</iconset>
+   </property>
+   <property name="text">
+    <string>SwitchtoSubjectHierarchy</string>
+   </property>
+   <property name="toolTip">
+    <string>Switch to Subject Hierarchy Module</string>
+   </property>
+  </action>
+  <action name="actionSwitchtoSegmentation">
+   <property name="icon">
+    <iconset resource="../../../../Base/QTGUI/Resources/qSlicerBaseQTGUI.qrc">
+     <normaloff>:/Icons/Large/SlicerDownloadMRHead.png</normaloff>:/Icons/Large/SlicerDownloadMRHead.png</iconset>
+   </property>
+   <property name="text">
+    <string>SwitchtoSegmentation</string>
+   </property>
+   <property name="toolTip">
+    <string>Swith to Segmentation Module</string>
+   </property>
+  </action>
+  <action name="actionSwitchtoPathPlan">
+   <property name="icon">
+    <iconset resource="../../../../Base/QTGUI/Resources/qSlicerBaseQTGUI.qrc">
+     <normaloff>:/Icons/Medium/SlicerAddTransform.png</normaloff>:/Icons/Medium/SlicerAddTransform.png</iconset>
+   </property>
+   <property name="text">
+    <string>SwitchtoPathPlan</string>
+   </property>
+   <property name="toolTip">
+    <string>Switch to Path Plan Module</string>
    </property>
   </action>
  </widget>

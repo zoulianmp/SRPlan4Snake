@@ -343,6 +343,12 @@ void qSlicerSegmentationsModuleWidget::onSegmentationNodeChanged(vtkMRMLNode* no
   qvtkDisconnect( 0, vtkSegmentation::MasterRepresentationModified, this, SLOT( updateWidgetFromMRML() ) );
 
   vtkMRMLSegmentationNode* segmentationNode =  vtkMRMLSegmentationNode::SafeDownCast(node);
+
+  if (!segmentationNode)
+  {
+	  return;
+  }
+
   if (segmentationNode)
   {
     // Connect node modified events to update widgets in display group function

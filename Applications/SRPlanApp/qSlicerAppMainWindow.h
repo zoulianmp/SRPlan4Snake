@@ -116,6 +116,16 @@ public slots:
   virtual void on_PasteAction_triggered();
   virtual void on_ViewExtensionsManagerAction_triggered();
 
+
+
+
+  void  on_ActionSwithtoWelcome_triggered();
+  void  on_ActionSwitchtoSubjectHierarchy_triggered();
+  void  on_ActionSwitchtoSegmentation_triggered();
+  void  on_ActionSwitchtoPathPlan_triggered();
+	
+
+
 protected slots:
   virtual void onModuleLoaded(const QString& moduleName);
   virtual void onModuleAboutToBeUnloaded(const QString& moduleName);

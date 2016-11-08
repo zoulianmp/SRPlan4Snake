@@ -955,6 +955,7 @@ std::string vtkSlicerDoseVolumeHistogramLogic::ComputeDvh(vtkOrientedImageData* 
 
   // Add DVH node to the scene
   this->GetMRMLScene()->AddNode(arrayNode);
+ 
 
   // Set array node references
   arrayNode->SetNodeReferenceID(vtkSlicerDoseVolumeHistogramLogic::DVH_DOSE_VOLUME_NODE_REFERENCE_ROLE.c_str(), doseVolumeNode->GetID());

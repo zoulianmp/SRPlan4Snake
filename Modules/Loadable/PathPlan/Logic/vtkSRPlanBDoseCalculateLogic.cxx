@@ -300,6 +300,8 @@ void vtkSRPlanBDoseCalculateLogic::InitializeEmptyDosGridNodeAsPlanImage()
 	//Clone vtkMRMLScalarVolume without imagedata
 	this->doseVolume = vtkSlicerVolumesLogic::CloneVolumeWithoutImageData(this->GetMRMLScene(), planPrimaryVolume, emptyDoseGrid.c_str());
 	 
+	//only for not saving the Dose Grid when save Scene
+	
 
 	int* dimsReal = this->planPrimaryVolume->GetImageData()->GetDimensions();
 
