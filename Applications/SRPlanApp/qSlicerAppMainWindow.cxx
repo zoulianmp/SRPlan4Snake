@@ -191,6 +191,7 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   //----------------------------------------------------------------------------
   // Create a Module selector
   
+  /*
   this->ModuleSelectorToolBar = new qSlicerModuleSelectorToolBar("Module Selection",q);
   this->ModuleSelectorToolBar->setObjectName(QString::fromUtf8("ModuleSelectorToolBar"));
   this->ModuleSelectorToolBar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
@@ -209,11 +210,15 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   QObject::connect(this->ModuleSelectorToolBar, SIGNAL(moduleSelected(QString)),
                    this->PanelDockWidget, SLOT(show()));
  
+ */
 
   //----------------------------------------------------------------------------
   // Module ToolBar
   //----------------------------------------------------------------------------
   // Switch to Aim Modules
+
+  // Connect the selector with the module panel
+  this->ModulePanel->setModuleManager(moduleManager);
 
   QObject::connect(this->actionSwithtoWelcome, SIGNAL(triggered()),
 	 q, SLOT(on_ActionSwithtoWelcome_triggered()));
@@ -230,8 +235,13 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
 
   QObject::connect(this->actionSwitchtoPathPlan, SIGNAL(triggered()),
 	  q, SLOT(on_ActionSwitchtoPathPlan_triggered()));
+ 
 
 
+
+  // Ensure the panel dock widget is visible
+  QObject::connect(q, SIGNAL(moduleChanged()),
+	  this->PanelDockWidget, SLOT(show()));
 
 
 
@@ -285,9 +295,9 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   QList<QAction*> toolBarActions;
   toolBarActions << this->MainToolBar->toggleViewAction();
   //toolBarActions << this->UndoRedoToolBar->toggleViewAction();
-  toolBarActions << this->ModuleSelectorToolBar->toggleViewAction();
+ // toolBarActions << this->ModuleSelectorToolBar->toggleViewAction();
   toolBarActions << this->ModuleToolBar->toggleViewAction();
-  toolBarActions << this->ViewToolBar->toggleViewAction();
+//  toolBarActions << this->ViewToolBar->toggleViewAction();
   toolBarActions << this->LayoutToolBar->toggleViewAction();
  // toolBarActions << this->MouseModeToolBar->toggleViewAction();
  // toolBarActions << this->CaptureToolBar->toggleViewAction();
@@ -308,12 +318,12 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   // minimizing the application and restore it doesn't hide the module panel. check
   // also the geometry and the state of the menu qactions are correctly restored when
   // loading slicer.
-  this->UndoRedoToolBar->toggleViewAction()->trigger();
+ // this->UndoRedoToolBar->toggleViewAction()->trigger();
   this->LayoutToolBar->toggleViewAction()->trigger();
   //q->removeToolBar(this->UndoRedoToolBar);
   //q->removeToolBar(this->LayoutToolBar);
-  delete this->UndoRedoToolBar;
-  this->UndoRedoToolBar = 0;
+ // delete this->UndoRedoToolBar;
+//  this->UndoRedoToolBar = 0;
   delete this->LayoutToolBar;
   this->LayoutToolBar = 0;
 
@@ -388,12 +398,12 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
 
   // TODO: When module will be managed by the layoutManager, this should be
   //       revisited.
-  QObject::connect(this->LayoutManager, SIGNAL(selectModule(QString)),
-                   this->ModuleSelectorToolBar, SLOT(selectModule(QString)));
+ // QObject::connect(this->LayoutManager, SIGNAL(selectModule(QString)),
+ //                  this->ModuleSelectorToolBar, SLOT(selectModule(QString)));
 
   //added by zoulian
-//  QObject::connect(this->LayoutManager, SIGNAL(selectModule(QString)),
-//	  this->ModulePanel, SLOT(setModule(QString)));
+  QObject::connect(this->LayoutManager, SIGNAL(selectModule(QString)),
+	  this->ModulePanel, SLOT(setModule(QString)));
 
 
 
@@ -438,13 +448,14 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
 
 
   // Capture tool bar needs to listen to the layout manager
+  /*
   QObject::connect(this->LayoutManager,
                    SIGNAL(activeMRMLThreeDViewNodeChanged(vtkMRMLViewNode*)),
                    this->CaptureToolBar,
                    SLOT(setActiveMRMLThreeDViewNode(vtkMRMLViewNode*)));
   this->CaptureToolBar->setActiveMRMLThreeDViewNode(
       this->LayoutManager->activeMRMLThreeDViewNode());
-
+  */
   // Authorize Drops action from outside
   q->setAcceptDrops(true);
 
@@ -471,6 +482,7 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   // Viewers Toolbar
   //----------------------------------------------------------------------------
   // Viewers toolBar should listen the MRML scene
+  
   this->ViewersToolBar->setApplicationLogic(
     qSlicerApplication::application()->applicationLogic());
   this->ViewersToolBar->setMRMLScene(qSlicerApplication::application()->mrmlScene());
@@ -821,7 +833,7 @@ void qSlicerAppMainWindow::on_ActionSwithtoWelcome_triggered()
 	QString  moduleName = "Welcome";
 
 	d->ModulePanel->setModule(moduleName);
-
+	emit moduleChanged();
 }
 
 
@@ -831,7 +843,7 @@ void qSlicerAppMainWindow::on_ActionSwitchtoSubjectHierarchy_triggered()
 	QString  moduleName = "SubjectHierarchy";
 
 	d->ModulePanel->setModule(moduleName);
-
+	emit moduleChanged();
 }
 
 
@@ -842,7 +854,7 @@ void qSlicerAppMainWindow::on_ActionSwitchtoSegmentation_triggered()
 	QString  moduleName = "Segmentations";
 
 	d->ModulePanel->setModule(moduleName);
-
+	emit moduleChanged();
 }
 
 
@@ -853,7 +865,7 @@ void qSlicerAppMainWindow::on_ActionSwitchtoPathPlan_triggered()
 	QString  moduleName = "PathPlan";
 
 	d->ModulePanel->setModule(moduleName);
-
+	emit moduleChanged();
 }
 
 
@@ -1150,7 +1162,7 @@ void qSlicerAppMainWindow::closeEvent(QCloseEvent *event)
     {
     // Exit current module to leave it a chance to change the UI (e.g. layout)
     // before writting settings.
-    d->ModuleSelectorToolBar->selectModule("");
+  //  d->ModuleSelectorToolBar->selectModule("");
 
     d->writeSettings();
     event->accept();
@@ -1577,9 +1589,10 @@ void qSlicerAppMainWindow::setHomeModuleCurrent()
   Q_D(qSlicerAppMainWindow);
   QSettings settings;
   QString homeModule = settings.value("Modules/HomeModule").toString();
- // d->ModulePanel->setModule(homeModule); //added by zoulian
+  d->ModulePanel->setModule(homeModule); //added by zoulian
+  emit moduleChanged();
 
-  d->ModuleSelectorToolBar->selectModule(homeModule);
+ // d->ModuleSelectorToolBar->selectModule(homeModule);
 
 
 }

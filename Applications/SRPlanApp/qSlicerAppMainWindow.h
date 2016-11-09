@@ -124,7 +124,8 @@ public slots:
   void  on_ActionSwitchtoSegmentation_triggered();
   void  on_ActionSwitchtoPathPlan_triggered();
 	
-
+signals:
+  void moduleChanged();
 
 protected slots:
   virtual void onModuleLoaded(const QString& moduleName);
