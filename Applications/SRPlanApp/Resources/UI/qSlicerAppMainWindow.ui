@@ -202,17 +202,6 @@
    <addaction name="actionSwitchtoSegmentation"/>
    <addaction name="actionSwitchtoPathPlan"/>
   </widget>
-  <widget class="QToolBar" name="UndoRedoToolBar">
-   <property name="windowTitle">
-    <string>Undo Redo ToolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
   <widget class="QToolBar" name="ViewToolBar">
    <property name="windowTitle">
     <string>Layout Selection</string>
@@ -267,20 +256,6 @@
    </property>
    <property name="windowTitle">
     <string>Mouse Interaction</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="qMRMLCaptureToolBar" name="CaptureToolBar">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="windowTitle">
-    <string>Capture/Restore</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -1293,11 +1268,6 @@
    <class>qSlicerViewersToolBar</class>
    <extends>QToolBar</extends>
    <header>qSlicerViewersToolBar.h</header>
-  </customwidget>
-  <customwidget>
-   <class>qMRMLCaptureToolBar</class>
-   <extends>QToolBar</extends>
-   <header>qMRMLCaptureToolBar.h</header>
   </customwidget>
  </customwidgets>
  <resources>
