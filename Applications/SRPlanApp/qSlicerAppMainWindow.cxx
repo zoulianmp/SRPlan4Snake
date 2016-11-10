@@ -142,9 +142,9 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   //----------------------------------------------------------------------------
   // Load data shortcuts for backward compatibility
   //----------------------------------------------------------------------------
-  QList<QKeySequence> addShortcuts = this->FileAddDataAction->shortcuts();
-  addShortcuts << QKeySequence(Qt::CTRL + Qt::Key_A);
-  this->FileAddDataAction->setShortcuts(addShortcuts);
+//  QList<QKeySequence> addShortcuts = this->FileAddDataAction->shortcuts();
+//  addShortcuts << QKeySequence(Qt::CTRL + Qt::Key_A);
+//  this->FileAddDataAction->setShortcuts(addShortcuts);
 
   //----------------------------------------------------------------------------
   // Recently loaded files
@@ -156,7 +156,7 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   // Load DICOM
   //----------------------------------------------------------------------------
 #ifndef Slicer_BUILD_DICOM_SUPPORT
-  this->LoadDICOMAction->setVisible(false);
+//  this->LoadDICOMAction->setVisible(false);
 #endif
 
   //----------------------------------------------------------------------------
@@ -516,16 +516,16 @@ void qSlicerAppMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   this->HelpReportBugOrFeatureRequestAction->setIcon(questionIcon);
   this->HelpVisualBlogAction->setIcon(networkIcon);
 
-  this->CutAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  this->CopyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  this->PasteAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+//  this->CutAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+//  this->CopyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+//  this->PasteAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
   setThemeIcon(this->FileExitAction, "application-exit");
   setThemeIcon(this->EditUndoAction, "edit-undo");
   setThemeIcon(this->EditRedoAction, "edit-redo");
-  setThemeIcon(this->CutAction, "edit-cut");
-  setThemeIcon(this->CopyAction, "edit-copy");
-  setThemeIcon(this->PasteAction, "edit-paste");
+//  setThemeIcon(this->CutAction, "edit-cut");
+//  setThemeIcon(this->CopyAction, "edit-copy");
+//  setThemeIcon(this->PasteAction, "edit-paste");
   setThemeIcon(this->EditApplicationSettingsAction, "preferences-system");
   setThemeIcon(this->HelpAboutSlicerAppAction, "help-about");
   setThemeIcon(this->HelpReportBugOrFeatureRequestAction, "tools-report-bug");
@@ -1293,7 +1293,7 @@ void qSlicerAppMainWindow::setupMenuActions()
   d->ViewExtensionsManagerAction->setVisible(false);
 #endif
 #ifndef Slicer_USE_PYTHONQT
-  d->WindowPythonInteractorAction->setVisible(false);
+//  d->WindowPythonInteractorAction->setVisible(false);
 #endif
 
 #if defined Slicer_USE_QtTesting && defined Slicer_BUILD_CLI_SUPPORT

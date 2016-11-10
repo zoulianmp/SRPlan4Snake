@@ -174,15 +174,17 @@ qSlicerSaveDataDialogPrivate::qSlicerSaveDataDialogPrivate(QWidget* parentWidget
   // Connect push buttons to associated actions
   connect(this->DirectoryButton, SIGNAL(directorySelected(QString)),
           this, SLOT(setDirectory(QString)));
-  connect(this->SelectSceneDataButton, SIGNAL(clicked()),
-          this, SLOT(selectModifiedSceneData()));
-  connect(this->SelectDataButton, SIGNAL(clicked()),
-          this, SLOT(selectModifiedData()));
-  connect(this->DataBundleButton, SIGNAL(clicked()),
-          this, SLOT(saveSceneAsDataBundle()));
-  connect(this->ShowMoreCheckBox, SIGNAL(toggled(bool)),
-          this, SLOT(showMoreColumns(bool)));
-  this->showMoreColumns(this->ShowMoreCheckBox->isChecked());
+//  connect(this->SelectSceneDataButton, SIGNAL(clicked()),
+//          this, SLOT(selectModifiedSceneData()));
+//  connect(this->SelectDataButton, SIGNAL(clicked()),
+//          this, SLOT(selectModifiedData()));
+//  connect(this->DataBundleButton, SIGNAL(clicked()),
+//          this, SLOT(saveSceneAsDataBundle()));
+//  connect(this->ShowMoreCheckBox, SIGNAL(toggled(bool)),
+ //         this, SLOT(showMoreColumns(bool)));
+ // this->showMoreColumns(this->ShowMoreCheckBox->isChecked());
+
+  this->showMoreColumns(false); //added by zoulian
 }
 
 //-----------------------------------------------------------------------------

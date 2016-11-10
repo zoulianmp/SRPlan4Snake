@@ -144,8 +144,8 @@ void qSlicerWelcomeModuleWidget::setup()
   
   
 
-  connect(d->OpenPatientButton, SIGNAL(clicked()),
-          this, SLOT (loadNonDicomData()));
+//  connect(d->OpenPatientButton, SIGNAL(clicked()),
+//          this, SLOT (loadNonDicomData()));
 
   connect(d->NewPatientButton, SIGNAL(clicked()),
 	  this, SLOT(newPatientAndSelectSHModule()));
