@@ -1,5 +1,8 @@
-<!DOCTYPE RCC><RCC version="1.0">
+<RCC>
   <qresource>
+    <file>Icons/Large/MRMLNodeManagement.png</file>
+    <file>Icons/Large/PathPlanModule.ico</file>
+    <file>Icons/Large/SegmentationModule.ico</file>
     <file alias="Icons/Small/DesktopIcon.png">Icons/Small/SRPlan-DesktopIcon.png</file>
     <file alias="Icons/Medium/DesktopIcon.png">Icons/Medium/SRPlan-DesktopIcon.png</file>
     <file alias="Icons/Large/DesktopIcon.png">Icons/Large/SRPlan-DesktopIcon.png</file>

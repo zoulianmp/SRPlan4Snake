@@ -1106,8 +1106,8 @@
   </action>
   <action name="actionSwitchtoSubjectHierarchy">
    <property name="icon">
-    <iconset resource="../../../../Base/QTGUI/Resources/qSlicerBaseQTGUI.qrc">
-     <normaloff>:/Icons/Medium/SlicerAddHierarchy.png</normaloff>:/Icons/Medium/SlicerAddHierarchy.png</iconset>
+    <iconset resource="../SRPlanApp.qrc">
+     <normaloff>:/Icons/Large/MRMLNodeManagement.png</normaloff>:/Icons/Large/MRMLNodeManagement.png</iconset>
    </property>
    <property name="text">
     <string>SwitchtoSubjectHierarchy</string>
@@ -1118,8 +1118,8 @@
   </action>
   <action name="actionSwitchtoSegmentation">
    <property name="icon">
-    <iconset resource="../../../../Base/QTGUI/Resources/qSlicerBaseQTGUI.qrc">
-     <normaloff>:/Icons/Large/SlicerDownloadMRHead.png</normaloff>:/Icons/Large/SlicerDownloadMRHead.png</iconset>
+    <iconset resource="../SRPlanApp.qrc">
+     <normaloff>:/Icons/Large/SegmentationModule.ico</normaloff>:/Icons/Large/SegmentationModule.ico</iconset>
    </property>
    <property name="text">
     <string>SwitchtoSegmentation</string>
@@ -1130,8 +1130,8 @@
   </action>
   <action name="actionSwitchtoPathPlan">
    <property name="icon">
-    <iconset resource="../../../../Base/QTGUI/Resources/qSlicerBaseQTGUI.qrc">
-     <normaloff>:/Icons/Medium/SlicerAddTransform.png</normaloff>:/Icons/Medium/SlicerAddTransform.png</iconset>
+    <iconset resource="../SRPlanApp.qrc">
+     <normaloff>:/Icons/Large/PathPlanModule.ico</normaloff>:/Icons/Large/PathPlanModule.ico</iconset>
    </property>
    <property name="text">
     <string>SwitchtoPathPlan</string>
