@@ -32,7 +32,7 @@
 // Slicer includes
 #include "qSlicerCoreApplication.h"
 #include "vtkSlicerApplicationLogic.h"
-
+#include "qSlicerLayoutManager.h"
 
 #include "qSlicerIOManager.h"
 
@@ -942,6 +942,12 @@ void qSlicerSubjectHierarchyVolumesPlugin::startSegmentation()
 			}
 		}
 
+		qSlicerLayoutManager * layoutManager = qSlicerApplication::application()->layoutManager();
+		if (layoutManager)
+		{
+			layoutManager->setCurrentModule("Segmentations");
+		}
+		
 
 	}
 

@@ -257,7 +257,7 @@ void qSlicerSaveDataDialogPrivate::populateItems()
 
   this->DirectoryButton->setDirectory(this->MRMLScene->GetRootDirectory());
 
-  this->populateScene();
+ // this->populateScene();
 
   // get all storable nodes in the main scene
   // and store them in the map by ID to avoid duplicates for the scene views
@@ -313,7 +313,7 @@ void qSlicerSaveDataDialogPrivate::populateItems()
   // this->FileWidget->setSortingEnabled(oldSortingEnabled);
 
   // Enable/disable nodes depending on the scene file format
-  this->onSceneFormatChanged();
+ // this->onSceneFormatChanged();
 
   this->updateSize();
 }
@@ -781,10 +781,14 @@ bool qSlicerSaveDataDialogPrivate::save()
   // Set the root directory to the scene so that the nodes paths are points
   // to the new scene path. It's important to have the right node paths
   // relatively to the scene in the saved mrml scene file.
-  if (!this->prepareForSaving())
+ 
+/* comment out by zoulian
+	if (!this->prepareForSaving())
     {
     return false;
     }
+*/
+
   // Save the nodes first then the scene
   // Saving the nodes first ensures that the saved scene will points to the
   // potentially new path of the nodes.
@@ -792,6 +796,9 @@ bool qSlicerSaveDataDialogPrivate::save()
     {
     return false;
     }
+
+  /* comment out by zoulian
+
   if (this->mustSceneBeSaved())
     {
     if (!this->saveScene())
@@ -804,6 +811,8 @@ bool qSlicerSaveDataDialogPrivate::save()
     // restore the root directory only if the scene is not saved
     this->restoreAfterSaving();
     }
+	*/
+
   return true;
 }
 
@@ -812,14 +821,15 @@ bool qSlicerSaveDataDialogPrivate::saveNodes()
 {
   QMessageBox::StandardButton forceOverwrite = QMessageBox::Ignore;
   QList<qSlicerIO::IOProperties> files;
-  const int sceneRow = this->findSceneRow();
+  //const int sceneRow = this->findSceneRow(); by zoulian
+
   for (int row = 0; row < this->FileWidget->rowCount(); ++row)
     {
-    // only save nodes here
-    if (row == sceneRow)
-      {
-      continue;
-      }
+    // only save nodes here byzoulian
+   // if (row == sceneRow)
+   //   {
+    //  continue;
+    //  }
 
     QTableWidgetItem* selectItem = this->FileWidget->item(row, SelectColumn);
     QTableWidgetItem* nodeNameItem = this->FileWidget->item(row, NodeNameColumn);
@@ -1063,6 +1073,7 @@ QString qSlicerSaveDataDialogPrivate::sceneFileFormat()const
 //-----------------------------------------------------------------------------
 bool qSlicerSaveDataDialogPrivate::prepareForSaving()
 {
+	
   QFileInfo file = this->sceneFile();
   if (file.exists() && this->mustSceneBeSaved())
     {
@@ -1076,6 +1087,7 @@ bool qSlicerSaveDataDialogPrivate::prepareForSaving()
       return false;
       }
     }
+	
   this->MRMLSceneRootDirectoryBeforeSaving = this->MRMLScene->GetRootDirectory();
   this->setSceneRootDirectory(file.absoluteDir().absolutePath().toLatin1());
   return true;
