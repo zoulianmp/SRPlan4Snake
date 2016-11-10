@@ -52,6 +52,8 @@
 #include <vtkMRMLStorageNode.h>
 #include <vtkMRMLSceneViewNode.h>
 
+#include <vtkMRMLMarkupsFiducialNode.h>
+
 /// VTK includes
 #include <vtkStringArray.h>
 #include <vtkSmartPointer.h>
@@ -267,7 +269,15 @@ void qSlicerSaveDataDialogPrivate::populateItems()
   for (it = nodes.begin(); it != nodes.end(); it++)
     {
     vtkMRMLNode* node = (*it);
-    this->populateNode(node);
+		
+	vtkMRMLMarkupsFiducialNode * fiducialNode = vtkMRMLMarkupsFiducialNode::SafeDownCast(node);
+
+	if (fiducialNode)
+	{
+		this->populateNode(node);
+	}
+	
+
     storableNodes[std::string(node->GetID())] = node;
     }
 
