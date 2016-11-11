@@ -172,24 +172,34 @@ void qMRMLSegmentsEditorWidget::onPaintBrushClicked()
 //		d->pushButton_poly->setChecked(false);
 //	}
 
-	if (d->pushButton_threshold->isChecked())
+/*	if (d->pushButton_threshold->isChecked())
 	{
 		d->pushButton_threshold->setChecked(false);
 		d->groupBox_threshould->setEnabled(false);
 	}
-
+*/
 
 	if (d->pushButton_paintbrush->isChecked())
 	{
 		qMRMLSegmentsEditorLogic * editorLogic = this->GetSegmentsEditorLogic();
 		editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::PaintBrush);
 
+		//Only out of PaintBrush,you can use the threshold Function
+		d->pushButton_threshold->setEnabled(false);
+		d->groupBox_threshould->setEnabled(false);
 		
 	}
 	else
 	{
 		qMRMLSegmentsEditorLogic * editorLogic = this->GetSegmentsEditorLogic();
 		editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::None);	 
+
+		//Only out of PaintBrush,you can use the threshold Function
+		d->pushButton_threshold->setEnabled(true);
+		d->pushButton_threshold->setChecked(false);
+		d->groupBox_threshould->setEnabled(false);
+		
+
 	}
 
 
@@ -238,12 +248,13 @@ void qMRMLSegmentsEditorWidget::onThresholdClicked()
 	Q_D(qMRMLSegmentsEditorWidget);
 //	d->stackedWidget_options->setCurrentIndex(2);
 
-
+/*
 	if (d->pushButton_paintbrush->isChecked())
 	{
 		d->pushButton_paintbrush->setChecked(false);
 	}
 
+	*/
 //	if (d->pushButton_poly->isChecked())
 //	{
 //		d->pushButton_poly->setChecked(false);
@@ -252,11 +263,18 @@ void qMRMLSegmentsEditorWidget::onThresholdClicked()
 	{
 		this->editorLogic->SetCurrentEffectMode(qMRMLSegmentsEditorLogic::Threshold);
 		d->groupBox_threshould->setEnabled(true);
+
+		//Only out of threshold you can visit painbrush
+		d->pushButton_paintbrush->setEnabled(false);
 	}
 	else
 	{
 		d->groupBox_threshould->setEnabled(false);
 		qMRMLThresholdEffect::SafeDownCast(this->editorLogic->GetCurrentEffect())->HidePreviewContent();
+
+		//Only out of threshold you can visit painbrush
+		d->pushButton_paintbrush->setEnabled(true);
+		d->pushButton_paintbrush->setChecked(false);
 	}
 	
 	//Use the Background Image Scalar lo,hi to set the DoubleRangeSlider

@@ -1311,10 +1311,10 @@ void vtkSlicerSegmentationsModuleLogic::UpdateClosedSurfaceFromLabelMapImageForS
 
 
 
-	vtkOrientedImageData * labelImage = vtkOrientedImageData::SafeDownCast(segment->GetRepresentation(masterRepresentName));
+	vtkImageData * labelImage = vtkImageData::SafeDownCast(segment->GetRepresentation(masterRepresentName));
 
 	
-    vtkMRMLLabelMapVolumeNode * labelMapNode = GetLabelMapVolumeNodebyOrientedImageData(scene, labelImage);
+    vtkMRMLLabelMapVolumeNode * labelMapNode = GetLabelMapVolumeNodebyImageData(scene, labelImage);
 
 
 	vtkOrientedImageData* orientedimage = vtkSlicerSegmentationsModuleLogic::CreateOrientedImageDataFromVolumeNode(labelMapNode);

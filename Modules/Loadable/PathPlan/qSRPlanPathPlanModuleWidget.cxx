@@ -1947,7 +1947,7 @@ void qSRPlanPathPlanModuleWidget::UpdateTraceMarkPosition()
 
 
 
-		realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC") + a + std::string(".raw"));
+		realTracFile = std::string(vtksys::SystemTools::GetEnv("OPTIC_TRAC") + std::string("\\") + a + std::string(".raw"));
 
 
 
