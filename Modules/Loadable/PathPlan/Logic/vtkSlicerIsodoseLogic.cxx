@@ -420,12 +420,12 @@ void vtkSlicerIsodoseLogic::SetEqualSpaceColor(int newNumberOfColors, vtkMRMLCol
 		//g = (1.0 / newNumberOfColors) *(colorIndex + 1);
 		//b = (1.0 / newNumberOfColors) *(colorIndex + 1);
 
-		colorTableNode->SetColor(colorIndex, isoLabel, r, g, b, 0.2);
+		colorTableNode->SetColor(colorIndex, isoLabel, r, g, b, 0.0);
 		//colorTableNode->SetColor(colorIndex, SlicerRtCommon::COLOR_VALUE_INVALID[0], SlicerRtCommon::COLOR_VALUE_INVALID[1], SlicerRtCommon::COLOR_VALUE_INVALID[2], 0.2);
 	}
 
 	// the highest value (1,1,1)
-	colorTableNode->SetColor(newNumberOfColors - 1, "100", 1, 0, 0, 0.2);
+	colorTableNode->SetColor(newNumberOfColors - 1, "100", 1, 0, 0, 0.0);
 
 
 
